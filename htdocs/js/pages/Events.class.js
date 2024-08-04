@@ -522,16 +522,7 @@ Page.Events = class Events extends Page.Base {
 				html += '<div class="box_title_widget" style="overflow:visible; min-width:120px; max-width:200px; font-size:13px;">' + this.getFormMenuSingle({
 					id: 'fe_ve_filter',
 					title: 'Filter job list',
-					options: [
-						{ id: '', title: 'All Jobs', icon: 'calendar-search' },
-						{ id: 'z_success', title: 'Successes', icon: 'check-circle-outline' },
-						{ id: 'z_error', title: 'Errors', icon: 'alert-decagram-outline' },
-						{ id: 'z_warning', title: 'Warnings', icon: 'alert-circle-outline' },
-						{ id: 'z_critical', title: 'Criticals', icon: 'fire-alert' },
-						{ id: 'z_abort', title: 'Aborts', icon: 'cancel' }
-					].concat(
-						this.buildOptGroup( app.tags, "Tags:", 'tag-outline', 't_' )
-					),
+					options: this.buildJobFilterOpts(),
 					value: args.filter || '',
 					onChange: '$P().applyHistoryFilters()',
 					'data-shrinkwrap': 1
@@ -794,6 +785,7 @@ Page.Events = class Events extends Page.Base {
 	applyHistoryFilters() {
 		// menu change for job history filter popdown
 		this.args.filter = this.div.find('#fe_ve_filter').val();
+		this.div.find('#d_ve_history > .box_content').html( '<div class="loading_container"><div class="loading"></div></div>' );
 		this.fetchJobHistory();
 	}
 	
@@ -803,7 +795,7 @@ Page.Events = class Events extends Page.Base {
 		
 		// { query, offset, limit, sort_by, sort_dir }
 		args.query = 'event:' + this.event.id;
-		args.limit = 25;
+		args.limit = 25; // TODO: this should be configurable
 		
 		// apply filters if any
 		if (args.filter) {
@@ -2007,7 +1999,7 @@ Page.Events = class Events extends Page.Base {
 					{ id: 'continuous', title: "Continuous", icon: 'all-inclusive' },
 					{ id: 'single', title: "Single Shot", icon: 'alarm-check' },
 					
-					{ id: 'catchup', title: "Catch-Up", icon: 'run-fast', group: "Options" },
+					{ id: 'catchup', title: "Catch-Up", icon: 'run-fast' /* , group: "Options" */ },
 					{ id: 'destruct', title: "Self-Destruct", icon: 'fire' },
 					{ id: 'range', title: "Range", icon: 'calendar-range-outline' },
 					{ id: 'blackout', title: "Blackout", icon: 'circle' },
