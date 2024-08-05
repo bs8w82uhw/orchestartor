@@ -778,6 +778,204 @@ Page.ServerUtils = class ServerUtils extends Page.Base {
 	// Date/Time stuff for historical views
 	// 
 	
+	chooseHistoricalView() {
+		// show dialog to select historical view for server
+		var self = this;
+		var args = this.args;
+		var title = "View Historical Server Data";
+		var btn = "Apply Changes";
+		
+		var html = '<div class="dialog_box_content maximize" style="width:400px; max-height:75vh; overflow-x:hidden; overflow-y:auto;">';
+		
+		if (!args.mode) {
+			// default to "today" daily view, or whatever day snap was taken
+			var dargs = get_date_args( this.snapshot ? this.snapshot.date : time_now() );
+			args.mode = 'daily';
+			args.year = dargs.year;
+			args.month = dargs.mon; // this is already 1-based
+			args.day = dargs.mday;
+			args.limit = 1;
+		}
+		
+		// timing mode
+		html += this.getFormRow({
+			id: 'd_esh_mode',
+			label: 'Zoom Level:',
+			content: this.getFormMenuSingle({
+				id: 'fe_esh_mode',
+				title: "Select Zoom Level",
+				options: [ 
+					{ id: 'yearly', title: "Yearly", icon: 'earth' },
+					{ id: 'monthly', title: "Monthly", icon: 'calendar-month-outline' },
+					{ id: 'daily', title: "Daily", icon: 'calendar-today-outline' },
+					{ id: 'hourly', title: "Hourly", icon: 'clock-outline' }
+				],
+				value: args.mode,
+				'data-shrinkwrap': 1
+			}),
+			caption: 'Select the desired zoom level for the timeline view.'
+		});
+		
+		// year
+		html += this.getFormRow({
+			id: 'd_esh_year',
+			label: 'Year:',
+			content: this.getFormMenuSingle({
+				id: 'fe_esh_year',
+				title: 'Select Year',
+				options: this.getYearOptions(),
+				value: args.year || '',
+				'data-shrinkwrap': 1
+			})
+		});
+		
+		// month
+		html += this.getFormRow({
+			id: 'd_esh_month',
+			label: 'Month:',
+			content: this.getFormMenuSingle({
+				id: 'fe_esh_month',
+				title: 'Select Month',
+				options: this.getMonthOptions(),
+				value: args.month || '',
+				'data-shrinkwrap': 1
+			})
+		});
+		
+		// day
+		html += this.getFormRow({
+			id: 'd_esh_day',
+			label: 'Day:',
+			content: this.getFormMenuSingle({
+				id: 'fe_esh_day',
+				title: 'Select Day',
+				options: this.getDayOptions(),
+				value: args.day || '',
+				'data-shrinkwrap': 1
+			})
+		});
+		
+		// hour
+		html += this.getFormRow({
+			id: 'd_esh_hour',
+			label: 'Hour:',
+			content: this.getFormMenuSingle({
+				id: 'fe_esh_hour',
+				title: 'Select Hour',
+				options: this.getHourOptions(),
+				value: args.hour || '',
+				'data-shrinkwrap': 1
+			})
+		});
+		
+		// limit
+		html += this.getFormRow({
+			id: 'd_esh_limit',
+			label: 'Limit:',
+			content: this.getFormMenuSingle({
+				id: 'fe_esh_limit',
+				title: 'Select Limit',
+				options: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+				value: args.limit || '',
+				'data-shrinkwrap': 1
+			})
+		});
+		
+		html += '</div>';
+		Dialog.confirm( title, html, btn, function(result) {
+			if (!result) return;
+			app.clearError();
+			
+			args.mode = $('#fe_esh_mode').val();
+			args.limit = parseInt( $('#fe_esh_limit').val() );
+			
+			switch (args.mode) {
+				case 'yearly':
+					args.year = parseInt( $('#fe_esh_year').val() );
+					delete args.month;
+					delete args.day;
+					delete args.hour;
+				break;
+				
+				case 'monthly':
+					args.year = parseInt( $('#fe_esh_year').val() );
+					args.month = parseInt( $('#fe_esh_month').val() );
+					delete args.day;
+					delete args.hour;
+				break;
+				
+				case 'daily':
+					args.year = parseInt( $('#fe_esh_year').val() );
+					args.month = parseInt( $('#fe_esh_month').val() );
+					args.day = parseInt( $('#fe_esh_day').val() );
+					delete args.hour;
+				break;
+				
+				case 'hourly':
+					args.year = parseInt( $('#fe_esh_year').val() );
+					args.month = parseInt( $('#fe_esh_month').val() );
+					args.day = parseInt( $('#fe_esh_day').val() );
+					args.hour = parseInt( $('#fe_esh_hour').val() );
+				break;
+			} // switch mode
+			
+			Dialog.hide();
+			Nav.go( '#ServerHist' + compose_query_string(args) );
+			
+		}); // Dialog.confirm
+		
+		var change_mode = function(new_mode) {
+			// $('.dialog_box_content .form_row').hide();
+			// $('#d_esh_mode').show();
+			
+			switch (new_mode) {
+				case 'yearly':
+					$('#d_esh_year').show();
+					$('#d_esh_month').hide();
+					$('#d_esh_day').hide();
+					$('#d_esh_hour').hide();
+					$('#d_esh_limit > .fr_label').html( 'Number of Years:' );
+				break;
+				
+				case 'monthly':
+					$('#d_esh_year').show();
+					$('#d_esh_month').show();
+					$('#d_esh_day').hide();
+					$('#d_esh_hour').hide();
+					$('#d_esh_limit > .fr_label').html( 'Number of Months:' );
+				break;
+				
+				case 'daily':
+					$('#d_esh_year').show();
+					$('#d_esh_month').show();
+					$('#d_esh_day').show();
+					$('#d_esh_hour').hide();
+					$('#d_esh_limit > .fr_label').html( 'Number of Days:' );
+				break;
+				
+				case 'hourly':
+					$('#d_esh_year').show();
+					$('#d_esh_month').show();
+					$('#d_esh_day').show();
+					$('#d_esh_hour').show();
+					$('#d_esh_limit > .fr_label').html( 'Number of Hours:' );
+				break;
+			} // switch new_mode
+			
+			app.clearError();
+			Dialog.autoResize();
+		}; // change_mode
+		
+		$('#fe_esh_mode').on('change', function() {
+			change_mode( $(this).val() );
+			$('#fe_esh_limit').val(1);
+		}); // type change
+		
+		SingleSelect.init( $('#fe_esh_mode, #fe_esh_year, #fe_esh_month, #fe_esh_day, #fe_esh_hour, #fe_esh_limit') );
+		
+		change_mode( args.mode );
+	}
+	
 	getYearOptions() {
 		// get locale-formatted year numbers for menu
 		var start_year = yyyy( this.server.created );
@@ -842,6 +1040,21 @@ Page.ServerUtils = class ServerUtils extends Page.Base {
 		}
 		
 		return options;
+	}
+	
+	applyMonitorFilter(elem) {
+		// hide or show specific monitors based on substring match on title
+		var filter = this.monitorFilter = $(elem).val();
+		var re = new RegExp( escape_regexp(filter), 'i' );
+		
+		for (var key in this.charts) {
+			var chart = this.charts[key];
+			if (!chart._quick) {
+				var $cont = $(chart.canvas).parent();
+				if (chart.title.match(re)) $cont.show();
+				else $cont.hide();
+			}
+		}
 	}
 	
 };
