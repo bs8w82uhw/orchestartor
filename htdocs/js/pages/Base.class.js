@@ -211,7 +211,7 @@ Page.Base = class Base extends Page {
 		if (!item) return '(None)';
 		
 		var html = '<span class="nowrap">';
-		var icon = '<i class="mdi mdi-' + (item.icon || 'console') + '"></i>';
+		var icon = '<i class="mdi mdi-' + (item.icon || 'pound-box-outline') + '"></i>';
 		if (link) {
 			html += '<a href="#Commands?sub=edit&id=' + item.id + '">';
 			html += icon + '<span>' + item.title + '</span></a>';
@@ -353,7 +353,9 @@ Page.Base = class Base extends Page {
 		if (!tags) return '(None)';
 		if (!glue) glue = ', ';
 		if (typeof(tags) == 'string') tags = tags.split(/\,\s*/);
-		return tags.filter( function(tag) { return !tag.match(/^_/); } ).map( function(tag) { return self.getNiceTag(tag, link); } ).join(glue);
+		tags = tags.filter( function(tag) { return !tag.match(/^_/); } );
+		if (!tags.length) return '(None)';
+		return tags.map( function(tag) { return self.getNiceTag(tag, link); } ).join(glue);
 	}
 	
 	getNiceTag(tag, link) {
