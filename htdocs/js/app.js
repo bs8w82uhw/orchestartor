@@ -217,6 +217,14 @@ app.extend({
 		this.updateAlertCounter();
 	},
 	
+	goAlerts: function() {
+		Nav.go('Alerts');
+	},
+	
+	goJobs: function() {
+		Nav.go('Dashboard');
+	},
+	
 	updateAlertCounter: function() {
 		// update alert counter
 		var num_alerts = num_keys( this.activeAlerts || {} );
