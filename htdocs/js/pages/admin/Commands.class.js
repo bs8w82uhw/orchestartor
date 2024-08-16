@@ -17,7 +17,6 @@ Page.Commands = class Commands extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-console">&nbsp;</i>Monitor Command Setup' );
 		
 		this.loading();
 		this['gosub_'+args.sub](args);
@@ -27,7 +26,8 @@ Page.Commands = class Commands extends Page.Base {
 	
 	gosub_list(args) {
 		// show command list
-		app.setWindowTitle( "Commands" );
+		app.setWindowTitle( "Monitor Commands" );
+		app.setHeaderTitle( '<i class="mdi mdi-console">&nbsp;</i>Monitor Commands' );
 		
 		// this.loading();
 		// app.api.post( 'app/get_commands', copy_object(args), this.receive_commands.bind(this) );
@@ -77,7 +77,7 @@ Page.Commands = class Commands extends Page.Base {
 			
 			if (!item.enabled) tds.className = 'disabled';
 			return tds;
-		} ); // getBasicTable
+		} ); // getBasicGrid
 		
 		html += '</div>'; // box_content
 		
@@ -123,6 +123,11 @@ Page.Commands = class Commands extends Page.Base {
 		// create new command
 		var html = '';
 		app.setWindowTitle( "New Command" );
+		
+		app.setHeaderNav([
+			{ icon: 'console', loc: '#Commands?sub=list', title: 'Monitor Commands' },
+			{ icon: 'pound-box-outline', title: "New Command" }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
@@ -205,9 +210,14 @@ Page.Commands = class Commands extends Page.Base {
 		
 		app.setWindowTitle( "Editing Command \"" + (this.command.title) + "\"" );
 		
+		app.setHeaderNav([
+			{ icon: 'console', loc: '#Commands?sub=list', title: 'Monitor Commands' },
+			{ icon: this.command.icon || 'pound-box-outline', title: this.command.title }
+		]);
+		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing Server Command &ldquo;' + (this.command.title) + '&rdquo;';
+			html += 'Edit Command Details';
 			html += '<div class="box_subtitle"><a href="#Commands?sub=list">&laquo; Back to Command List</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';

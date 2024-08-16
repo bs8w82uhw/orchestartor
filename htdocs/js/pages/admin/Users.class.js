@@ -16,7 +16,6 @@ Page.Users = class Users extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-account-supervisor">&nbsp;</i>User Management' );
 		
 		this.loading();
 		this['gosub_'+args.sub](args);
@@ -26,7 +25,8 @@ Page.Users = class Users extends Page.Base {
 	
 	gosub_list(args) {
 		// list all users
-		app.setWindowTitle( "User List" );
+		app.setWindowTitle( "Users" );
+		app.setHeaderTitle( '<i class="mdi mdi-account-supervisor">&nbsp;</i>Users' );
 		
 		// show user list
 		this.loading();
@@ -137,7 +137,12 @@ Page.Users = class Users extends Page.Base {
 	gosub_new(args) {
 		// create new user
 		var html = '';
-		app.setWindowTitle( "Add New User" );
+		app.setWindowTitle( "New User" );
+		
+		app.setHeaderNav([
+			{ icon: 'account-supervisor', loc: '#Users?sub=list', title: 'Users' },
+			{ icon: 'account-plus', title: "New User" }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
@@ -276,16 +281,21 @@ Page.Users = class Users extends Page.Base {
 		var html = '';
 		if (!this.active) return; // sanity
 		
+		this.user = resp.user;
+		
 		app.setWindowTitle( "Editing User \"" + (this.args.username) + "\"" );
+		
+		app.setHeaderNav([
+			{ icon: 'account-supervisor', loc: '#Users?sub=list', title: 'Users' },
+			{ icon: this.user.icon || 'account', title: this.user.full_name || this.user.username }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing User &ldquo;' + (this.args.username) + '&rdquo;';
+			html += 'Edit User Details';
 			html += '<div class="box_subtitle"><a href="#Users?sub=list">&laquo; Back to User List</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';
-		
-		this.user = resp.user;
 		
 		html += this.get_user_edit_html();
 		

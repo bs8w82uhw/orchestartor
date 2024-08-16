@@ -17,7 +17,6 @@ Page.AlertSetup = class AlertSetup extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-bell-ring-outline">&nbsp;</i>Alert Setup' );
 		
 		this.loading();
 		this['gosub_'+args.sub](args);
@@ -28,6 +27,7 @@ Page.AlertSetup = class AlertSetup extends Page.Base {
 	gosub_list(args) {
 		// show alert list
 		app.setWindowTitle( "Alert Setup" );
+		app.setHeaderTitle( '<i class="mdi mdi-bell-ring-outline">&nbsp;</i>Alert Setup' );
 		
 		// this.loading();
 		// app.api.post( 'app/get_alerts', copy_object(args), this.receive_alerts.bind(this) );
@@ -77,7 +77,7 @@ Page.AlertSetup = class AlertSetup extends Page.Base {
 			
 			if (!item.enabled) tds.className = 'disabled';
 			return tds;
-		} ); // getBasicTable
+		} ); // getBasicGrid
 		
 		html += '</div>'; // box_content
 		
@@ -123,6 +123,11 @@ Page.AlertSetup = class AlertSetup extends Page.Base {
 		// create new alert
 		var html = '';
 		app.setWindowTitle( "New Alert Definition" );
+		
+		app.setHeaderNav([
+			{ icon: 'bell-ring-outline', loc: '#AlertSetup?sub=list', title: 'Alert Setup' },
+			{ icon: 'bell-plus-outline', title: "New Alert Definition" }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
@@ -205,9 +210,15 @@ Page.AlertSetup = class AlertSetup extends Page.Base {
 		
 		app.setWindowTitle( "Editing Alert \"" + (this.alert.title) + "\"" );
 		
+		app.setHeaderNav([
+			{ icon: 'bell-ring-outline', loc: '#AlertSetup?sub=list', title: 'Alert Setup' },
+			{ icon: this.alert.icon || 'bell-outline', title: this.alert.title },
+			// { icon: 'file-edit-outline', title: "Edit Alert" }
+		]);
+		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing Alert &ldquo;' + (this.alert.title) + '&rdquo;';
+			html += 'Edit Alert Details';
 			html += '<div class="box_subtitle"><a href="#AlertSetup?sub=list">&laquo; Back to Alert List</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';

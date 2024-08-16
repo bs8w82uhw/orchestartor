@@ -17,7 +17,6 @@ Page.Monitors = class Monitors extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-chart-areaspline">&nbsp;</i>Monitor Setup' );
 		
 		this.loading();
 		this['gosub_'+args.sub](args);
@@ -28,6 +27,7 @@ Page.Monitors = class Monitors extends Page.Base {
 	gosub_list(args) {
 		// show monitor list
 		app.setWindowTitle( "Monitors" );
+		app.setHeaderTitle( '<i class="mdi mdi-chart-areaspline">&nbsp;</i>Monitors' );
 		
 		// this.loading();
 		// app.api.post( 'app/get_monitors', copy_object(args), this.receive_monitors.bind(this) );
@@ -77,7 +77,7 @@ Page.Monitors = class Monitors extends Page.Base {
 			
 			if (!item.display) tds.className = 'disabled';
 			return tds;
-		} ); // getBasicTable
+		} ); // getBasicGrid
 		
 		html += '</div>'; // box_content
 		
@@ -136,6 +136,11 @@ Page.Monitors = class Monitors extends Page.Base {
 		// create new monitor
 		var html = '';
 		app.setWindowTitle( "New Monitor" );
+		
+		app.setHeaderNav([
+			{ icon: 'chart-areaspline', loc: '#Monitors?sub=list', title: 'Monitors' },
+			{ icon: 'chart-line', title: "New Monitor" }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
@@ -214,9 +219,14 @@ Page.Monitors = class Monitors extends Page.Base {
 		
 		app.setWindowTitle( "Editing Monitor \"" + (this.monitor.title) + "\"" );
 		
+		app.setHeaderNav([
+			{ icon: 'chart-areaspline', loc: '#Monitors?sub=list', title: 'Monitors' },
+			{ icon: this.monitor.icon || 'chart-line', title: this.monitor.title }
+		]);
+		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing Monitor &ldquo;' + (this.monitor.title) + '&rdquo;';
+			html += 'Edit Monitor Details';
 			html += '<div class="box_subtitle"><a href="#Monitors?sub=list">&laquo; Back to Monitor List</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';

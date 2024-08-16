@@ -17,7 +17,6 @@ Page.Tags = class Tags extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-tag-multiple-outline">&nbsp;</i>Tag Setup' );
 		
 		this.loading();
 		this['gosub_'+args.sub](args);
@@ -28,6 +27,7 @@ Page.Tags = class Tags extends Page.Base {
 	gosub_list(args) {
 		// show tag list
 		app.setWindowTitle( "Tags" );
+		app.setHeaderTitle( '<i class="mdi mdi-tag-multiple-outline">&nbsp;</i>Tags' );
 		app.api.post( 'app/get_tags', {}, this.receive_tags.bind(this) );
 	}
 	
@@ -67,7 +67,7 @@ Page.Tags = class Tags extends Page.Base {
 				
 				actions.join(' | ')
 			];
-		} ); // getBasicTable
+		} ); // getBasicGrid
 		
 		html += '</div>'; // box_content
 		
@@ -97,6 +97,11 @@ Page.Tags = class Tags extends Page.Base {
 		// create new tag
 		var html = '';
 		app.setWindowTitle( "New Tag" );
+		
+		app.setHeaderNav([
+			{ icon: 'tag-multiple-outline', loc: '#Tags?sub=list', title: 'Tags' },
+			{ icon: 'tag-plus-outline', title: "New Tag" }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
@@ -170,9 +175,14 @@ Page.Tags = class Tags extends Page.Base {
 		
 		app.setWindowTitle( "Editing Tag \"" + (this.tag.title) + "\"" );
 		
+		app.setHeaderNav([
+			{ icon: 'tag-multiple-outline', loc: '#Tags?sub=list', title: 'Tags' },
+			{ icon: this.tag.icon || 'tag-outline', title: this.tag.title }
+		]);
+		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing Tag &ldquo;' + (this.tag.title) + '&rdquo;';
+			html += 'Edit Tag Details';
 			html += '<div class="box_subtitle"><a href="#Tags?sub=list">&laquo; Back to Tag List</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';

@@ -31,7 +31,6 @@ Page.Plugins = class Plugins extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-power-plug">&nbsp;</i>Plugin Setup' );
 		
 		this.loading();
 		this['gosub_'+args.sub](args);
@@ -42,6 +41,7 @@ Page.Plugins = class Plugins extends Page.Base {
 	gosub_list(args) {
 		// show plugin list
 		app.setWindowTitle( "Plugins" );
+		app.setHeaderTitle( '<i class="mdi mdi-power-plug">&nbsp;</i>Plugins' );
 		
 		// this.loading();
 		// app.api.post( 'app/get_plugins', copy_object(args), this.receive_plugins.bind(this) );
@@ -94,7 +94,7 @@ Page.Plugins = class Plugins extends Page.Base {
 			
 			if (!item.enabled) tds.className = 'disabled';
 			return tds;
-		} ); // getBasicTable
+		} ); // getBasicGrid
 		
 		html += '</div>'; // box_content
 		
@@ -140,6 +140,11 @@ Page.Plugins = class Plugins extends Page.Base {
 		// create new plugin
 		var html = '';
 		app.setWindowTitle( "New Plugin" );
+		
+		app.setHeaderNav([
+			{ icon: 'power-plug', loc: '#Plugins?sub=list', title: 'Plugins' },
+			{ icon: 'power-plug-outline', title: "New Plugin" }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
@@ -230,9 +235,14 @@ Page.Plugins = class Plugins extends Page.Base {
 		
 		app.setWindowTitle( "Editing Plugin \"" + (this.plugin.title) + "\"" );
 		
+		app.setHeaderNav([
+			{ icon: 'power-plug', loc: '#Plugins?sub=list', title: 'Plugins' },
+			{ icon: this.plugin.icon || 'power-plug-outline', title: this.plugin.title }
+		]);
+		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing Plugin &ldquo;' + (this.plugin.title) + '&rdquo;';
+			html += 'Edit Plugin Details';
 			html += '<div class="box_subtitle"><a href="#Plugins?sub=list">&laquo; Back to Plugin List</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';

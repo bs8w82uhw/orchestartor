@@ -16,7 +16,7 @@ Page.APIKeys = class APIKeys extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-key-chain">&nbsp;</i>API Key Management' );
+		// app.setHeaderTitle( '<i class="mdi mdi-key-chain">&nbsp;</i>API Key Management' );
 		
 		this.loading();
 		this['gosub_'+args.sub](args);
@@ -27,6 +27,7 @@ Page.APIKeys = class APIKeys extends Page.Base {
 	gosub_list(args) {
 		// show API Key list
 		app.setWindowTitle( "API Keys" );
+		app.setHeaderTitle( '<i class="mdi mdi-key-chain">&nbsp;</i>API Keys' );
 		this.loading();
 		app.api.post( 'app/get_api_keys', copy_object(args), this.receive_keys.bind(this), this.fullPageError.bind(this) );
 	}
@@ -67,7 +68,7 @@ Page.APIKeys = class APIKeys extends Page.Base {
 				'<span title="'+self.getNiceDateTimeText(item.created)+'">'+self.getNiceDate(item.created)+'</span>',
 				actions.join(' | ')
 			];
-		} ); // getBasicTable
+		} ); // getBasicGrid
 		
 		html += '</div>'; // box_content
 		
@@ -97,6 +98,11 @@ Page.APIKeys = class APIKeys extends Page.Base {
 		// create new API Key
 		var html = '';
 		app.setWindowTitle( "New API Key" );
+		
+		app.setHeaderNav([
+			{ icon: 'key-chain', loc: '#APIKeys?sub=list', title: 'API Keys' },
+			{ icon: 'key-plus', title: "New API Key" }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
@@ -176,9 +182,14 @@ Page.APIKeys = class APIKeys extends Page.Base {
 		
 		app.setWindowTitle( "Editing API Key \"" + (this.api_key.title) + "\"" );
 		
+		app.setHeaderNav([
+			{ icon: 'key-chain', loc: '#APIKeys?sub=list', title: 'API Keys' },
+			{ icon: this.api_key.icon || 'key', title: this.api_key.title }
+		]);
+		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing API Key &ldquo;' + (this.api_key.title) + '&rdquo;';
+			html += 'Edit API Key Details';
 			html += '<div class="box_subtitle"><a href="#APIKeys?sub=list">&laquo; Back to Key List</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';

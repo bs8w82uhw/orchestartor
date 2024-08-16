@@ -17,7 +17,6 @@ Page.Channels = class Channels extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-bullhorn-outline">&nbsp;</i>Notification Setup' );
 		
 		this.loading();
 		this['gosub_'+args.sub](args);
@@ -28,6 +27,7 @@ Page.Channels = class Channels extends Page.Base {
 	gosub_list(args) {
 		// show channel list
 		app.setWindowTitle( "Notification Channels" );
+		app.setHeaderTitle( '<i class="mdi mdi-bullhorn-outline">&nbsp;</i>Notification Channels' );
 		
 		// this.loading();
 		// app.api.post( 'app/get_channels', copy_object(args), this.receive_channels.bind(this) );
@@ -76,7 +76,7 @@ Page.Channels = class Channels extends Page.Base {
 			
 			if (!item.enabled) tds.className = 'disabled';
 			return tds;
-		} ); // getBasicTable
+		} ); // getBasicGrid
 		
 		html += '</div>'; // box_content
 		
@@ -122,6 +122,11 @@ Page.Channels = class Channels extends Page.Base {
 		// create new channel
 		var html = '';
 		app.setWindowTitle( "New Channel" );
+		
+		app.setHeaderNav([
+			{ icon: 'bullhorn-outline', loc: '#Channels?sub=list', title: 'Channels' },
+			{ icon: 'bullhorn-outline', title: "New Channel" }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
@@ -202,9 +207,14 @@ Page.Channels = class Channels extends Page.Base {
 		
 		app.setWindowTitle( "Editing Channel \"" + (this.channel.title) + "\"" );
 		
+		app.setHeaderNav([
+			{ icon: 'bullhorn-outline', loc: '#Channels?sub=list', title: 'Channels' },
+			{ icon: this.channel.icon || 'bullhorn-outline', title: this.channel.title }
+		]);
+		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing Channel &ldquo;' + (this.channel.title) + '&rdquo;';
+			html += 'Edit Channel Details';
 			html += '<div class="box_subtitle"><a href="#Channels?sub=list">&laquo; Back to Channel List</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';

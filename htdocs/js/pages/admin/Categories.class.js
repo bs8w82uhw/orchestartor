@@ -17,7 +17,6 @@ Page.Categories = class Categories extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-folder-multiple-outline">&nbsp;</i>Event Category Setup' );
 		
 		this.loading();
 		this['gosub_'+args.sub](args);
@@ -28,6 +27,7 @@ Page.Categories = class Categories extends Page.Base {
 	gosub_list(args) {
 		// show category list
 		app.setWindowTitle( "Event Categories" );
+		app.setHeaderTitle( '<i class="mdi mdi-folder-multiple-outline">&nbsp;</i>Event Categories' );
 		
 		// this.loading();
 		// app.api.post( 'app/get_categories', copy_object(args), this.receive_categories.bind(this) );
@@ -88,7 +88,7 @@ Page.Categories = class Categories extends Page.Base {
 			if (item.color) classes.push( 'clr_' + item.color );
 			if (classes.length) tds.className = classes.join(' ');
 			return tds;
-		} ); // getBasicTable
+		} ); // getBasicGrid
 		
 		html += '</div>'; // box_content
 		
@@ -147,6 +147,11 @@ Page.Categories = class Categories extends Page.Base {
 		// create new category
 		var html = '';
 		app.setWindowTitle( "New Category" );
+		
+		app.setHeaderNav([
+			{ icon: 'folder-multiple-outline', loc: '#Categories?sub=list', title: 'Categories' },
+			{ icon: 'folder-plus-outline', title: "New Category" }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
@@ -231,9 +236,14 @@ Page.Categories = class Categories extends Page.Base {
 		
 		app.setWindowTitle( "Editing Category \"" + (this.category.title) + "\"" );
 		
+		app.setHeaderNav([
+			{ icon: 'folder-multiple-outline', loc: '#Categories?sub=list', title: 'Categories' },
+			{ icon: this.category.icon || 'folder-open-outline', title: this.category.title }
+		]);
+		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing Event Category &ldquo;' + (this.category.title) + '&rdquo;';
+			html += 'Edit Category Details';
 			html += '<div class="box_subtitle"><a href="#Categories?sub=list">&laquo; Back to Category List</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';

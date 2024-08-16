@@ -331,12 +331,15 @@ Page.Alerts = class Alerts extends Page.Base {
 		var def = this.def = find_object( app.alerts, { id: alert.alert } );
 		if (!def) def = { title: '(' + alert.alert + ')' };
 		
-		var icon = '<i class="mdi mdi-' + (alert.active ? 'progress-alert' : 'alert-circle-outline') + '">&nbsp;</i>';
+		// var icon = '<i class="mdi mdi-' + (alert.active ? 'progress-alert' : 'alert-circle-outline') + '">&nbsp;</i>';
 		
-		// this.div.html( '<pre>' + encode_entities( JSON.stringify(alert, null, "\t") ) + '</pre>' );
+		app.setHeaderNav([
+			{ icon: 'restore-alert', loc: '#Alerts?sub=list', title: 'Alert History' },
+			{ icon: (alert.active ? 'progress-alert' : 'alert-circle-outline'), title: "Alert Details" }
+		]);
 		
-		app.setHeaderTitle( icon + 'Alert Details' );
-		app.setWindowTitle( "Viewing Alert \"" + (this.alert.title) + "\"" );
+		// app.setHeaderTitle( icon + 'Alert Details' );
+		app.setWindowTitle( "Viewing Alert \"" + (this.def.title) + "\"" );
 		
 		html += '<div class="box">';
 			html += '<div class="box_title">';

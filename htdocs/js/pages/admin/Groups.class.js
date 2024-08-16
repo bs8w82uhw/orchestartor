@@ -17,7 +17,6 @@ Page.Groups = class Groups extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-lan">&nbsp;</i>Server Groups' );
 		
 		this.loading();
 		this['gosub_'+args.sub](args);
@@ -28,6 +27,7 @@ Page.Groups = class Groups extends Page.Base {
 	gosub_list(args) {
 		// show group list
 		app.setWindowTitle( "Server Groups" );
+		app.setHeaderTitle( '<i class="mdi mdi-lan">&nbsp;</i>Server Groups' );
 		
 		// this.loading();
 		// app.api.post( 'app/get_groups', copy_object(args), this.receive_groups.bind(this) );
@@ -85,7 +85,7 @@ Page.Groups = class Groups extends Page.Base {
 			// if (app.isGroupLimited()) tds.shift();
 			
 			return tds;
-		} ); // getBasicTable
+		} ); // getBasicGrid
 		
 		html += '</div>'; // box_content
 		
@@ -144,6 +144,11 @@ Page.Groups = class Groups extends Page.Base {
 		// create new group
 		var html = '';
 		app.setWindowTitle( "New Group" );
+		
+		app.setHeaderNav([
+			{ icon: 'lan', loc: '#Groups?sub=list', title: 'Server Groups' },
+			{ icon: 'server-network', title: "New Group" }
+		]);
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
@@ -218,9 +223,14 @@ Page.Groups = class Groups extends Page.Base {
 		
 		app.setWindowTitle( "Editing Group \"" + (this.group.title) + "\"" );
 		
+		app.setHeaderNav([
+			{ icon: 'lan', loc: '#Groups?sub=list', title: 'Server Groups' },
+			{ icon: this.group.icon || 'server-network', title: this.group.title }
+		]);
+		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing Server Group &ldquo;' + (this.group.title) + '&rdquo;';
+			html += 'Edit Server Group Details';
 			html += '<div class="box_subtitle"><a href="#Groups?sub=list">&laquo; Back to Group List</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';

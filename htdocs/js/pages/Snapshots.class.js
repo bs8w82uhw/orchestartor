@@ -30,7 +30,7 @@ Page.Snapshots = class Snapshots extends Page.ServerUtils {
 		if (!args.limit) args.limit = 25;
 		
 		app.setWindowTitle('Snapshot History');
-		app.setHeaderTitle( '<i class="mdi mdi-monitor-screenshot">&nbsp;</i>Snapshot History' ); // or: cloud-snapshot-outline
+		app.setHeaderTitle( '<i class="mdi mdi-camera-outline">&nbsp;</i>Snapshot History' ); // or: cloud-snapshot-outline
 		
 		var html = '';
 		html += '<div class="box" style="border:none;">';
@@ -332,11 +332,16 @@ Page.Snapshots = class Snapshots extends Page.ServerUtils {
 		var snapshot = this.snapshot = resp.rows.shift();
 		if (!snapshot) return this.doFullPageError("Snapshot ID not found: " + this.args.id);
 		
-		var icon = '<i class="mdi mdi-monitor-screenshot">&nbsp;</i>';
+		// var icon = '<i class="mdi mdi-monitor-screenshot">&nbsp;</i>';
 		
 		// this.div.html( '<pre>' + encode_entities( JSON.stringify(snapshot, null, "\t") ) + '</pre>' );
 		
-		app.setHeaderTitle( icon + 'Snapshot Details' );
+		app.setHeaderNav([
+			{ icon: 'camera-outline', loc: '#Snapshots?sub=list', title: 'Snapshots' },
+			{ icon: 'monitor-screenshot', title: "Snapshot Details" }
+		]);
+		
+		// app.setHeaderTitle( icon + 'Snapshot Details' );
 		app.setWindowTitle( "Viewing Snapshot #" + (this.snapshot.id) + "" );
 		
 		html += '<div class="box">';
