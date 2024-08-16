@@ -434,64 +434,86 @@ Page.Events = class Events extends Page.Base {
 			html += '<div class="box_content table">';
 				html += '<div class="summary_grid">';
 					
-					// column 1
+					// row 1
 					html += '<div>';
 						html += '<div class="info_label">Event ID</div>';
 						html += '<div class="info_value monospace" style="font-weight:bold">' + event.id + '</div>';
-						
+					html += '</div>';
+					
+					html += '<div>';
+						html += '<div class="info_label">Event Title</div>';
+						html += '<div class="info_value">' + this.getNiceEvent(event) + '</div>';
+					html += '</div>';
+				
+					html += '<div>';
 						html += '<div class="info_label">Category</div>';
 						html += '<div class="info_value">' + this.getNiceCategory(event.category, true) + '</div>';
-						
-						html += '<div class="info_label">Workflow</div>';
-						html += '<div class="info_value">' + this.getNiceWorkflow(event.workflow, true) + '</div>';
-						// TODO: fuck, events don't have workflows!  JOBS may have a workflow, but an event does NOT!
-						// well, an event may be used in one or more workflows -- do we want to do a cross-ref search like that here?  FUCK!
-						
+					html += '</div>';
+				
+					html += '<div>';
 						html += '<div class="info_label">Timing</div>';
 						html += '<div class="info_value"><i class="mdi mdi-calendar-multiselect">&nbsp;</i>' + summarize_event_timings(event) + '</div>';
 					html += '</div>';
 					
-					// column 2
+					// row 2
 					html += '<div>';
 						html += '<div class="info_label">Author</div>';
 						html += '<div class="info_value">' + this.getNiceUser(event.username, true) + '</div>';
-						
+					html += '</div>';
+				
+					html += '<div>';
 						html += '<div class="info_label">Plugin</div>';
 						html += '<div class="info_value">' + this.getNicePlugin(event.plugin, true) + '</div>';
-						
+					html += '</div>';
+				
+					html += '<div>';
 						html += '<div class="info_label">Targets</div>';
 						html += '<div class="info_value">' + this.getNiceTargetList(event.targets, ', ', 3) + '</div>';
-						
+					html += '</div>';
+					
+					html += '<div>';
 						html += '<div class="info_label">Tags</div>';
 						html += '<div class="info_value">' + this.getNiceTagList(event.tags, true, ', ') + '</div>';
 					html += '</div>';
 					
-					// column 3
+					// row 3
 					html += '<div>';
 						html += '<div class="info_label">Avg Elapsed</div>';
 						html += '<div class="info_value" id="d_ve_avg_elapsed">...</div>';
-						
+					html += '</div>';
+				
+					html += '<div>';
 						html += '<div class="info_label">Avg CPU</div>';
 						html += '<div class="info_value" id="d_ve_avg_cpu">...</div>';
-						
+					html += '</div>';
+				
+					html += '<div>';
 						html += '<div class="info_label">Avg Mem</div>';
 						html += '<div class="info_value" id="d_ve_avg_mem">...</div>';
-						
+					html += '</div>';
+				
+					html += '<div>';
 						html += '<div class="info_label">Avg Log Size</div>';
 						html += '<div class="info_value" id="d_ve_log_size">...</div>';
 					html += '</div>';
 					
-					// column 4
+					// row 4
 					html += '<div>';
 						html += '<div class="info_label">Success Rate</div>';
 						html += '<div class="info_value" id="d_ve_success_rate">...</div>';
-						
+					html += '</div>';
+				
+					html += '<div>';
 						html += '<div class="info_label">Last Result</div>';
 						html += '<div class="info_value" id="d_ve_last_result">...</div>';
-						
+					html += '</div>';
+				
+					html += '<div>';
 						html += '<div class="info_label">Last Run</div>';
 						html += '<div class="info_value" id="d_ve_last_run">...</div>';
-						
+					html += '</div>';
+				
+					html += '<div>';
 						html += '<div class="info_label">Next Run</div>';
 						html += '<div class="info_value" id="d_ve_next_run">...</div>';
 					html += '</div>';
@@ -1187,7 +1209,7 @@ Page.Events = class Events extends Page.Base {
 			case 'schedule': msg += '  Since this is a scheduled timing rule, a new "Blackout" range will be added to disable it.'; break;
 		}
 		
-		Dialog.confirm( 'Skip Upcoming Job', msg, 'Skip Job', function(result) {
+		Dialog.confirmDanger( 'Skip Upcoming Job', msg, 'Skip Job', function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Skipping Job..." );
@@ -1230,7 +1252,12 @@ Page.Events = class Events extends Page.Base {
 		var html = '';
 		var do_snap = true;
 		
-		app.setHeaderTitle( '<i class="mdi mdi-calendar-plus">&nbsp;</i>New Event' );
+		app.setHeaderNav([
+			{ icon: 'calendar-multiple', loc: '#Events?sub=list', title: 'Events' },
+			{ icon: 'file-edit-outline', title: "New Event" }
+		]);
+		
+		// app.setHeaderTitle( '<i class="mdi mdi-calendar-plus">&nbsp;</i>New Event' );
 		app.setWindowTitle( "New Event" );
 		
 		html += '<div class="box" style="overflow:hidden">';
@@ -1290,8 +1317,9 @@ Page.Events = class Events extends Page.Base {
 		// delete draft + snap
 		this.deletePageDraft();
 		this.deletePageSnapshot();
-		// Nav.go( '#Events?sub=list' );
-		Nav.go( '#Events?sub=view&id=' + this.event.id );
+		
+		if (this.event.id) Nav.go( '#Events?sub=view&id=' + this.event.id );
+		else Nav.go( '#Events?sub=list' );
 	}
 	
 	do_new_event(force) {
@@ -1325,7 +1353,7 @@ Page.Events = class Events extends Page.Base {
 		// app.api.post( 'app/get_event', { id: args.id }, this.receive_event.bind(this), this.fullPageError.bind(this) );
 		var event = find_object( app.events, { id: args.id } );
 		if (!event) return this.doFullPageError("Event not found: " + args.id);
-		this.receive_event({ code: 0, event: event });
+		this.receive_event({ code: 0, event: deep_copy_object(event) });
 	}
 	
 	receive_event(resp) {
@@ -1345,13 +1373,19 @@ Page.Events = class Events extends Page.Base {
 		this.limits = this.event.limits; // for res limit editor
 		this.actions = this.event.actions; // for job action editor
 		
-		app.setHeaderTitle( '<i class="mdi mdi-calendar-edit">&nbsp;</i>Event Editor' );
+		app.setHeaderNav([
+			{ icon: 'calendar-multiple', loc: '#Events?sub=list', title: 'Events' },
+			{ icon: this.event.icon || 'file-clock-outline', loc: '#Events?sub=view&id=' + this.event.id, title: this.event.title },
+			{ icon: 'file-edit-outline', title: "Edit Event" }
+		]);
+		
+		// app.setHeaderTitle( '<i class="mdi mdi-calendar-edit">&nbsp;</i>Event Editor' );
 		app.setWindowTitle( "Editing Event \"" + (this.event.title) + "\"" );
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Editing Event &ldquo;' + (this.event.title) + '&rdquo;';
-			html += '<div class="box_subtitle"><a href="#Events?sub=list">&laquo; Back to Event List</a></div>';
+			html += 'Edit Event Details';
+			html += '<div class="box_subtitle"><a href="#Events?sub=view&id=' + this.event.id + '">&laquo; Back to Event</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';
 		
