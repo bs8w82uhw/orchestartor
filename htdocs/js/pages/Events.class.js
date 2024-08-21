@@ -1615,7 +1615,7 @@ Page.Events = class Events extends Page.Base {
 			{ id:'least_mem', title:"Least Memory Usage", icon:"memory" }
 		].
 		concat(
-			this.buildOptGroup( app.monitors, "Least Monitor Value:", 'chart-line' )
+			this.buildOptGroup( app.monitors, "Least Monitor Value:", 'chart-line', 'monitor:' )
 		);
 		
 		html += this.getFormRow({
