@@ -228,7 +228,7 @@ Page.Job = class Job extends Page.Base {
 					// row 3
 					html += '<div>';
 						html += '<div class="info_label">Workflow</div>';
-						html += '<div class="info_value">' + this.getNiceWorkflow(job.workflow, true) + '</div>';
+						html += '<div class="info_value">' + this.getNiceWorkflowJob(job.workflow, true) + '</div>';
 					html += '</div>';
 					
 					html += '<div>';
@@ -889,7 +889,8 @@ Page.Job = class Job extends Page.Base {
 		this.div.find('#d_live_mem').html( '<i class="mdi mdi-memory">&nbsp;</i>' + this.getNiceJobAvgMem(job) );
 		
 		if (state_changed) {
-			// job state has changed, so update some more items
+			// job state has changed, or redraw token changed, so update some more items
+			// (trying to avoid redrawing these every second for no reason)
 			this.div.find('#d_live_state').html( this.getNiceJobState(job) );
 			this.div.find('#d_live_server').html( this.getNiceServer(job.server, true) );
 			this.div.find('#d_live_tags').html( this.getNiceTagList(job.tags, true, ', ') );
@@ -1678,12 +1679,14 @@ Page.Job = class Job extends Page.Base {
 		if (!this.job || (this.job.state == 'complete')) return;
 		
 		var old_state = this.job.state;
+		var old_redraw = this.job.redraw || '';
 		
 		var updates = app.activeJobs[ this.job.id ];
 		if (updates) {
 			for (var key in updates) this.job[key] = updates[key];
 			var state_changed = !!(this.job.state != old_state);
-			this.updateLiveJobStats( state_changed );
+			var redraw_changed = !!(this.job.redraw != old_redraw);
+			this.updateLiveJobStats( state_changed || redraw_changed );
 			this.updateSecondTimeline();
 			this.refreshLiveCharts();
 			this.updateLiveProcessTable();
