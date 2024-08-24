@@ -91,9 +91,25 @@ Page.Search = class Search extends Page.Base {
 							id: 'fe_s_event',
 							title: 'Select Event',
 							placeholder: 'All Events',
-							options: [['', 'Any Event']].concat( app.events ),
+							options: [['', 'Any Event']].concat( app.events.filter( function(event) { return event.type != 'workflow'; } ) ),
 							value: args.event || '',
 							default_icon: 'calendar-clock',
+							'data-shrinkwrap': 1
+						})
+					});
+				html += '</div>';
+				
+				// workflow
+				html += '<div class="form_cell">';
+					html += this.getFormRow({
+						label: '<i class="icon mdi mdi-clipboard-flow-outline">&nbsp;</i>Workflow:',
+						content: this.getFormMenuSingle({
+							id: 'fe_s_workflow',
+							title: 'Select Workflow',
+							placeholder: 'All Workflows',
+							options: [['', 'Any Workflow']].concat( app.events.filter( function(event) { return event.type == 'workflow'; } ) ),
+							value: args.workflow || '',
+							default_icon: 'clipboard-flow-outline',
 							'data-shrinkwrap': 1
 						})
 					});
@@ -125,42 +141,14 @@ Page.Search = class Search extends Page.Base {
 							placeholder: 'Any Source',
 							options: [
 								['', 'Any Source'], 
-								['scheduler', 'Scheduler'], 
-								['user', 'Manual (User)'], 
-								['key', 'Manual (API Key)'], 
-								['action', 'Action Trigger'], 
-								['alert', 'Server Alert'], 
-								['workflow', 'Workflow']
+								{ id: 'scheduler', title: "Scheduler", icon: 'update' },
+								{ id: 'user', title: "Manual (User)", icon: 'account' },
+								{ id: 'key', title: "Manual (API Key)", icon: 'key' },
+								{ id: 'action', title: "Action Trigger", icon: 'eye-outline' },
+								{ id: 'alert', title: "Server Alert", icon: 'bell-outline' },
+								{ id: 'workflow', title: "Workflow", icon: 'clipboard-flow-outline' }
 							],
 							value: args.source || '',
-							'data-shrinkwrap': 1
-						})
-					});
-				html += '</div>';
-				
-				// date
-				html += '<div class="form_cell">';
-					var date_items = [
-						['', 'All Dates'],
-						['now', 'This Hour'],
-						['lasthour', 'Last Hour'],
-						['today', 'Today'],
-						['yesterday', 'Yesterday'],
-						['month', 'This Month'],
-						['lastmonth', 'Last Month'],
-						['year', 'This Year'],
-						['lastyear', 'Last Year'],
-						['older', 'Older']
-					];
-					html += this.getFormRow({
-						label: '<i class="icon mdi mdi-calendar-multiple">&nbsp;</i>Date Range:',
-						content: this.getFormMenuSingle({
-							id: 'fe_s_date',
-							title: 'Date Range',
-							options: date_items.map( function(item) { 
-								return item[0] ? { id: item[0], title: item[1], icon: 'calendar-range' } : item; 
-							} ),
-							value: args.date,
 							'data-shrinkwrap': 1
 						})
 					});
@@ -216,17 +204,29 @@ Page.Search = class Search extends Page.Base {
 					});
 				html += '</div>';
 				
-				// workflow
+				// date
 				html += '<div class="form_cell">';
+					var date_items = [
+						['', 'All Dates'],
+						['now', 'This Hour'],
+						['lasthour', 'Last Hour'],
+						['today', 'Today'],
+						['yesterday', 'Yesterday'],
+						['month', 'This Month'],
+						['lastmonth', 'Last Month'],
+						['year', 'This Year'],
+						['lastyear', 'Last Year'],
+						['older', 'Older']
+					];
 					html += this.getFormRow({
-						label: '<i class="icon mdi mdi-clipboard-list-outline">&nbsp;</i>Workflow:',
+						label: '<i class="icon mdi mdi-calendar-multiple">&nbsp;</i>Date Range:',
 						content: this.getFormMenuSingle({
-							id: 'fe_s_workflow',
-							title: 'Select Workflow',
-							placeholder: 'All Workflows',
-							options: [['', 'Any Workflow']].concat( app.events.filter( function(event) { return event.type == 'workflow'; } ) ),
-							value: args.workflow || '',
-							default_icon: 'clipboard-list-outline',
+							id: 'fe_s_date',
+							title: 'Date Range',
+							options: date_items.map( function(item) { 
+								return item[0] ? { id: item[0], title: item[1], icon: 'calendar-range' } : item; 
+							} ),
+							value: args.date,
 							'data-shrinkwrap': 1
 						})
 					});
@@ -235,8 +235,8 @@ Page.Search = class Search extends Page.Base {
 				// sort
 				html += '<div class="form_cell">';
 					var sort_items = [
-						{ id: 'date_desc', title: 'Newest', icon: 'sort-descending' },
-						{ id: 'date_asc', title: 'Oldest', icon: 'sort-ascending' }
+						{ id: 'date_desc', title: 'Newest to Oldest', icon: 'sort-descending' },
+						{ id: 'date_asc', title: 'Oldest to Newest', icon: 'sort-ascending' }
 					];
 					html += this.getFormRow({
 						label: '<i class="icon mdi mdi-sort">&nbsp;</i>Sort Results:',
@@ -261,7 +261,7 @@ Page.Search = class Search extends Page.Base {
 			if (preset) {
 				html += '<div class="button danger mobile_collapse" onMouseUp="$P().doDeletePreset()"><i class="mdi mdi-trash-can-outline">&nbsp;</i><span>Delete Preset...</span></div>';
 			}
-			html += '<div id="btn_s_save" class="button mobile_collapse" onMouseUp="$P().doSavePreset()"><i class="mdi mdi-floppy">&nbsp;</i><span>' + (preset ? 'Edit' : 'Save') + ' Preset...</span></div>';
+			html += '<div id="btn_s_save" class="button secondary mobile_collapse" onMouseUp="$P().doSavePreset()"><i class="mdi mdi-floppy">&nbsp;</i><span>' + (preset ? 'Edit' : 'Save') + ' Preset...</span></div>';
 			// html += '<div class="button" id="btn_s_download" onMouseUp="$P().doDownload()"><i class="mdi mdi-cloud-download-outline">&nbsp;</i>Download All...</div>';
 			html += '<div class="button primary" onMouseUp="$P().navSearch()"><i class="mdi mdi-magnify">&nbsp;</i>Search</div>';
 			// html += '<div class="clear"></div>';
@@ -457,7 +457,6 @@ Page.Search = class Search extends Page.Base {
 				'<b>' + self.getNiceJob(job.id, true) + '</b>',
 				self.getNiceEvent(job.event, true),
 				self.getNiceCategory(job.category, true),
-				// self.getNiceWorkflow(job.workflow, true),
 				self.getNiceServer(job.server, true),
 				self.getNiceJobSource(job),
 				self.getShortDateTime( job.started ),
