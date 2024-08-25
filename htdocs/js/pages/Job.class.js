@@ -161,7 +161,8 @@ Page.Job = class Job extends Page.Base {
 					// job is complete
 					html += 'Job Summary';
 					
-					html += '<div class="button right" onMouseUp="$P().do_run_again()"><i class="mdi mdi-run-fast">&nbsp;</i>Run Again</div>';
+					html += '<div class="button right" onMouseUp="$P().do_confirm_run_again()"><i class="mdi mdi-run-fast">&nbsp;</i>Run Again</div>';
+					html += '<div class="button right secondary" onClick="$P().do_view_job_data()"><i class="mdi mdi-code-json">&nbsp;</i>View JSON...</div>';
 					html += '<div class="button right danger" onMouseUp="$P().do_delete_job()"><i class="mdi mdi-trash-can-outline">&nbsp;</i>Delete Job...</div>';
 					html += '<div class="clear"></div>';
 				}
@@ -277,6 +278,16 @@ Page.Job = class Job extends Page.Base {
 			html += '</div>';
 		html += '</div>';
 		
+		// plugin parameters
+		html += '<div class="box" id="d_job_params" style="display:none">';
+			html += '<div class="box_title">';
+				html += '';
+			html += '</div>';
+			html += '<div class="box_content table">';
+				// html += '<div class="loading_container"><div class="loading"></div></div>';
+			html += '</div>'; // box_content
+		html += '</div>'; // box
+		
 		// alerts (hidden unless needed)
 		html += '<div class="box" id="d_job_alerts" style="display:none">';
 			html += '<div class="box_title">';
@@ -317,31 +328,6 @@ Page.Job = class Job extends Page.Base {
 			html += '<div class="box_content table"></div>';
 		html += '</div>'; // box
 		
-		// charts
-		html += '<div class="box">';
-			html += '<div class="box_content">';
-				html += '<div class="chart_grid_horiz">';
-				
-					html += '<div><canvas id="c_live_cpu" class="chart"></canvas></div>';
-					html += '<div><canvas id="c_live_mem" class="chart"></canvas></div>';
-					
-					html += '<div><canvas id="c_live_disk" class="chart"></canvas></div>';
-					html += '<div><canvas id="c_live_net" class="chart"></canvas></div>';
-				
-				html += '</div>';
-			html += '</div>';
-		html += '</div>';
-		
-		// pid table
-		html += '<div class="box">';
-			html += '<div class="box_title">';
-				html += 'Job Processes';
-			html += '</div>';
-			html += '<div class="box_content table">';
-				html += '<div id="d_process_table">' + this.getProcessTable() + '</div>';
-			html += '</div>'; // box_content
-		html += '</div>'; // box
-		
 		// uploaded files (completed job only)
 		if ((job.state == 'complete') && job.files && job.files.length) {
 			html += '<div class="box" id="d_job_files">';
@@ -369,6 +355,31 @@ Page.Job = class Job extends Page.Base {
 			html += '</div>';
 			html += '<div class="box_content table">';
 				html += '<div id="d_live_job_log"></div>';
+			html += '</div>'; // box_content
+		html += '</div>'; // box
+		
+		// charts
+		html += '<div class="box">';
+			html += '<div class="box_content">';
+				html += '<div class="chart_grid_horiz">';
+				
+					html += '<div><canvas id="c_live_cpu" class="chart"></canvas></div>';
+					html += '<div><canvas id="c_live_mem" class="chart"></canvas></div>';
+					
+					html += '<div><canvas id="c_live_disk" class="chart"></canvas></div>';
+					html += '<div><canvas id="c_live_net" class="chart"></canvas></div>';
+				
+				html += '</div>';
+			html += '</div>';
+		html += '</div>';
+		
+		// process table
+		html += '<div class="box">';
+			html += '<div class="box_title">';
+				html += 'Job Processes';
+			html += '</div>';
+			html += '<div class="box_content table">';
+				html += '<div id="d_process_table">' + this.getProcessTable() + '</div>';
 			html += '</div>'; // box_content
 		html += '</div>'; // box
 		
@@ -407,7 +418,8 @@ Page.Job = class Job extends Page.Base {
 			// completed
 			this.getCompletedJobLog();
 			this.getAdditionalJobs();
-			this.showJobData();
+			// this.showJobData();
+			this.renderPluginParams('#d_job_params');
 		}
 		
 		this.setupCharts();
@@ -1544,6 +1556,16 @@ Page.Job = class Job extends Page.Base {
 		} ); // confirm
 	}
 	
+	do_confirm_run_again() {
+		// confirm user wants to run job
+		var self = this;
+		
+		Dialog.confirm( 'Run Job Again', "Are you sure you want to run the current job again?", 'Run Now', function(result) {
+			if (!result) return;
+			self.do_run_again();
+		} ); // confirm
+	}
+	
 	do_run_again() {
 		// run current job again
 		var self = this;
@@ -1613,6 +1635,11 @@ Page.Job = class Job extends Page.Base {
 			}
 		}
 		$('.pxc_tt_overlay').remove();
+	}
+	
+	do_view_job_data() {
+		// show job json in dialog
+		this.viewCodeAuto("Job Data JSON", this.getJobJSON());
 	}
 	
 	do_copy_job_data() {
