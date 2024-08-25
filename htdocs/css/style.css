@@ -1902,3 +1902,30 @@ body.dark .CodeMirror-selected, body.dark .CodeMirror-focused .CodeMirror-select
 .cm-s-shadowfox.CodeMirror {
 	background: var(--form-background-color) !important;
 }
+
+div.code_viewer {
+	min-width: 400px; 
+	max-width: 50vw; 
+	max-height: 50vh; 
+	margin: 20px; 
+	overflow-x: hidden; 
+	overflow-y: scroll;
+}
+
+div.code_viewer pre {
+	margin-top: 0;
+}
+
+div.code_viewer pre code.hljs {
+	padding: 0;
+}
+
+pre code.hljs {
+	background: transparent !important;
+	font-family: var(--font-family-monospace);
+	font-size: 13px;
+	line-height: 15px;
+	tab-size: 4;
+	overflow-x: hidden;
+	white-space: pre-wrap;
+}
