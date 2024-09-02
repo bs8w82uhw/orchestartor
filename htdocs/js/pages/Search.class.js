@@ -123,7 +123,10 @@ Page.Search = class Search extends Page.Base {
 							id: 'fe_s_tags',
 							title: 'Select Tags',
 							placeholder: 'Any Tag',
-							options: app.tags,
+							options: app.tags.concat([ 
+								{ id: '_retried', title: "Retried", icon: 'refresh', group: "System Tags:" },
+								{ id: '_last', title: "Last in Set", icon: 'page-last' } 
+							]),
 							values: args.tags ? args.tags.split(/\,\s*/) : [],
 							default_icon: 'tag-outline',
 							'data-shrinkwrap': 1
