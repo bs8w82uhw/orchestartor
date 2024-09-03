@@ -191,7 +191,7 @@ Page.AlertSetup = class AlertSetup extends Page.Base {
 		Dialog.hideProgress();
 		if (!this.active) return; // sanity
 		
-		Nav.go('Alerts?sub=list');
+		Nav.go('#AlertSetup?sub=list');
 		app.showMessage('success', "The new alert was created successfully.");
 	}
 	
@@ -263,7 +263,7 @@ Page.AlertSetup = class AlertSetup extends Page.Base {
 		Dialog.hideProgress();
 		if (!this.active) return; // sanity
 		
-		Nav.go( 'Alerts?sub=list' );
+		Nav.go( '#AlertSetup?sub=list' );
 		app.showMessage('success', "The alert was saved successfully.");
 	}
 	
@@ -285,7 +285,7 @@ Page.AlertSetup = class AlertSetup extends Page.Base {
 		Dialog.hideProgress();
 		if (!this.active) return; // sanity
 		
-		Nav.go('Alerts?sub=list', 'force');
+		Nav.go('#AlertSetup?sub=list', 'force');
 		app.showMessage('success', "The alert &ldquo;" + this.alert.title + "&rdquo; was deleted successfully.");
 	}
 	
