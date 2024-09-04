@@ -372,7 +372,7 @@ Page.Job = class Job extends Page.Base {
 		html += '</div>'; // box
 		
 		// charts
-		html += '<div class="box">';
+		html += '<div class="box" id="d_job_graphs" >';
 			html += '<div class="box_content">';
 				html += '<div class="chart_grid_horiz">';
 				
@@ -1040,6 +1040,11 @@ Page.Job = class Job extends Page.Base {
 		var timelines = job.timelines;
 		var tline = (job.final && (job.elapsed > 300)) ? 'minute' : 'second';
 		this.charts = {};
+		
+		if (!timelines.second || !timelines.second.length) {
+			this.div.find('#d_job_graphs').hide();
+			return;
+		}
 		
 		this.charts.cpu = this.createChart({
 			"canvas": '#c_live_cpu',
