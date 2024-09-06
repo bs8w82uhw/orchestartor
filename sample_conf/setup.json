@@ -145,7 +145,7 @@
 		[ "listPush", "global/tags", { 
 			"id": "important", 
 			"title": "Important", 
-			"icon": "alert-rhombus-outline", 
+			"icon": "alert-rhombus", 
 			"username": "admin", 
 			"modified": 1611173740, 
 			"created": 1611173740 

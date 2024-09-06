@@ -1013,6 +1013,14 @@ body.dark .pxc_tt_content {
 	height: 13px;
 }
 
+#d_job_banner_tags i.mdi:before {
+	transform: scale(1.3);
+}
+
+#d_job_banner_tags > span.nowrap {
+	padding-left: 15px;
+}
+
 /* Snapshots Page */
 
 div.data_grid > ul.grid_row_header > div.st_col_header {
@@ -1670,6 +1678,7 @@ div.box.toggle.expanded > div.box_title > div {
 	
 	.dialog_box_content {
 		max-width: 500px;
+		margin: 30px 0px 30px 0px;
 	}
 	
 	.dash_grid {

@@ -603,7 +603,8 @@ Page.Base = class Base extends Page {
 		}
 		else {
 			// some other day
-			result += '<span title="' + this.getNiceDateTimeText(epoch) + '">' + this.getNiceDateText(epoch) + '</span>';
+			result += this.getShortDateTimeText(epoch);
+			// result += '<span title="' + this.getNiceDateTimeText(epoch) + '">' + this.getNiceDateText(epoch) + '</span>';
 		}
 		
 		return result;

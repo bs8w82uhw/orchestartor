@@ -36,6 +36,7 @@ Page.Job = class Job extends Page.Base {
 		this.token = resp.token;
 		this.job = resp.job;
 		var job = this.job;
+		var self = this;
 		
 		if (!this.active) return; // sanity
 		
@@ -44,7 +45,7 @@ Page.Job = class Job extends Page.Base {
 		if (!job.timelines.second) job.timelines.second = [];
 		if (!job.timelines.minute) job.timelines.minute = [];
 		
-		var event = find_object(app.events, { id: job.event }) || { title: job.event };
+		// var event = find_object(app.events, { id: job.event }) || { title: job.event };
 		var icon = '';
 		
 		if (job.final) {
@@ -115,6 +116,7 @@ Page.Job = class Job extends Page.Base {
 				if (!job.description) job.description = 'Job completed successfully.';
 			}
 			
+			// icon for banner
 			var banner_icon = '';
 			var prefix = '';
 			switch (banner_class) {
@@ -125,8 +127,10 @@ Page.Job = class Job extends Page.Base {
 				case 'abort': banner_icon = 'cancel'; prefix = 'Job Aborted: '; break;
 			}
 			
+			// render inline banner
 			html += '<div class="box message inline ' + banner_class + '">';
 				html += '<div class="message_inner">';
+					html += '<div id="d_job_banner_tags" style="float:right;"></div>';
 					html += '<i class="mdi mdi-' + banner_icon + '">&nbsp;&nbsp;&nbsp;</i>';
 					html += prefix + encode_entities( job.description );
 				html += '</div>';
@@ -162,9 +166,9 @@ Page.Job = class Job extends Page.Base {
 					html += '<div class="button icon right" title="Run Again" onClick="$P().do_confirm_run_again()"><i class="mdi mdi-run-fast"></i></div>';
 					
 					html += '<div class="button icon right secondary" title="Add Comment..." onClick="$P().do_add_comment()"><i class="mdi mdi-comment-processing-outline"></i></div>';
-					html += '<div class="button icon right secondary" title="Edit Tags..." onClick="$P().do_edit_tags()"><i class="mdi mdi-tag-plus-outline"></i></div>';
+					html += '<div class="button icon right secondary" title="Update Tags..." onClick="$P().do_update_tags(this)"><i class="mdi mdi-tag-plus-outline"></i></div>';
 					
-					html += '<div class="button icon right secondary" title="View JSON..." onClick="$P().do_view_job_data()"><i class="mdi mdi-code-json"></i></div>';
+					// html += '<div class="button icon right secondary" title="View JSON..." onClick="$P().do_view_job_data()"><i class="mdi mdi-code-json"></i></div>';
 					html += '<div class="button icon right danger" title="Delete Job..." onClick="$P().do_delete_job()"><i class="mdi mdi-trash-can-outline"></i></div>';
 					
 					html += '<div class="clear"></div>';
@@ -236,8 +240,8 @@ Page.Job = class Job extends Page.Base {
 					html += '</div>';
 					
 					html += '<div>';
-						html += '<div class="info_label">Tags</div>';
-						html += '<div class="info_value" id="d_live_tags">' + this.getNiceTagList(job.tags, true, ', ') + '</div>';
+						html += '<div class="info_label">Parent Job</div>';
+						html += '<div class="info_value">' + this.getNiceJob(job.parent, true) + '</div>';
 					html += '</div>';
 					
 					html += '<div>';
@@ -434,12 +438,53 @@ Page.Job = class Job extends Page.Base {
 			// this.showJobData();
 			this.renderPluginParams('#d_job_params');
 			this.renderJobActions();
+			this.renderJobTags();
 		}
 		
 		this.setupCharts();
 		this.updateUserContent();
 		this.getJobAlerts();
 		this.setupToggleBoxes();
+	}
+	
+	renderJobTags() {
+		// render job tags in banner at top
+		var self = this;
+		var nice_tags = (this.job.tags || [])
+			.filter( function(tag) { return !tag.match(/^_/); } ) // filter out system tags
+			.map( function(tag) { return self.getNiceTag(tag, '#Search?tags=' + tag); } )
+			.join(' ');
+		
+		this.div.find('#d_job_banner_tags').html(nice_tags);
+	}
+	
+	do_update_tags(elem) {
+		// update tags for job
+		var self = this;
+		var job = this.job;
+		
+		// separate system tags from user tags
+		var system_tags = (job.tags || []).filter( function(tag) { return !!tag.match(/^_/); } );
+		var user_tags = (job.tags || []).filter( function(tag) { return !tag.match(/^_/); } );
+		
+		MultiSelect.popupQuickMenu({
+			elem: elem,
+			title: 'Update Job Tags',
+			items: app.tags,
+			values: user_tags,
+			
+			callback: function(values) {
+				app.clearError();
+				var new_tags = values.concat(system_tags);
+				
+				app.api.post( 'app/update_job', { id: job.id, tags: new_tags }, function(resp) {
+					Dialog.hideProgress();
+					// app.showMessage('success', "The job tags were updated successfully.");
+					job.tags = new_tags;
+					self.renderJobTags();
+				} ); // api.post
+			} // callback
+		}); // popupQuickMenu
 	}
 	
 	renderJobActions() {
@@ -987,7 +1032,6 @@ Page.Job = class Job extends Page.Base {
 			// (trying to avoid redrawing these every second for no reason)
 			this.div.find('#d_live_state').html( this.getNiceJobState(job) );
 			this.div.find('#d_live_server').html( this.getNiceServer(job.server, true) );
-			this.div.find('#d_live_tags').html( this.getNiceTagList(job.tags, true, ', ') );
 		}
 	}
 	
@@ -1845,6 +1889,12 @@ Page.Job = class Job extends Page.Base {
 			
 			case 'minute_append':
 				this.updateMinuteTimeline(pdata);
+			break;
+			
+			case 'job_updated':
+				merge_hash_into(this.job, pdata);
+				this.renderJobTags();
+				// TODO: render comments
 			break;
 		} // switch
 	}

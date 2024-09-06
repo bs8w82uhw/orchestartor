@@ -294,7 +294,7 @@ app.extend({
 		// show scheduler toggler
 		var self = this;
 		
-		this.popupQuickMenu({
+		SingleSelect.popupQuickMenu({
 			elem: '#d_header_clock',
 			title: 'Job Scheduler',
 			items: [
@@ -319,7 +319,7 @@ app.extend({
 		// show light/dark/auto theme selector
 		var self = this;
 		
-		this.popupQuickMenu({
+		SingleSelect.popupQuickMenu({
 			elem: '#d_theme_ctrl',
 			title: 'Select Theme',
 			items: [
@@ -333,47 +333,6 @@ app.extend({
 				app.setTheme(value);
 			} // callback
 		}); // popupQuickMenu
-	},
-	
-	popupQuickMenu: function(opts) {
-		// show popup menu on custom element
-		// opts: { elem, title, items, value, callback }
-		// item: { id, title, icon }
-		var self = this;
-		var $elem = $(opts.elem);
-		var items = opts.items;
-		var callback = opts.callback;
-		var html = '';
-		
-		html += '<div class="sel_dialog_label">' + opts.title + '</div>';
-		html += '<div id="d_sel_dialog_scrollarea" class="sel_dialog_scrollarea">';
-		for (var idy = 0, ley = items.length; idy < ley; idy++) {
-			var item = items[idy];
-			var sel = (item.id == opts.value);
-			html += '<div class="sel_dialog_item check ' + (sel ? 'selected' : '') + '" data-value="' + item.id + '">';
-			if (item.icon) html += '<i class="mdi mdi-' + item.icon + '">&nbsp;</i>';
-			html += '<span>' + item.title + '</span>';
-			html += '<div class="sel_dialog_item_check"><i class="mdi mdi-check"></i></div>';
-			html += '</div>';
-		}
-		html += '</div>';
-		
-		Popover.attach( $elem, '<div style="padding:15px;">' + html + '</div>', true );
-		
-		$('#d_sel_dialog_scrollarea > div.sel_dialog_item').on('mouseup', function() {
-			// select item, close dialog and update state
-			var $item = $(this);
-			var value = $item.data('value');
-			
-			Popover.detach();
-			callback(value);
-		}); // mouseup
-		
-		Popover.onDetach = function() {
-			$elem.removeClass('popped');
-		};
-		
-		$elem.addClass('popped');
 	},
 	
 	qsKeyDown: function(elem, event) {

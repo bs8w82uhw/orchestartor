@@ -499,7 +499,7 @@ Page.Dashboard = class Dashboard extends Page.Base {
 				self.getNiceCategory(event.category, true),
 				self.getNicePlugin(event.plugin, true),
 				nice_source,
-				self.getShortDateTime( job.epoch ),
+				self.getRelativeDateTime( job.epoch ),
 				'<i class="mdi mdi-clock-outline">&nbsp;</i>' + get_text_from_seconds_round( countdown ),
 				'<span class="link danger" onClick="$P().doSkipUpcomingJob(' + idx + ')"><b>Skip Job...</b></span>'
 				// '<a href="#Job?id=' + job.id + '">Details</a>'
