@@ -165,7 +165,7 @@ Page.Job = class Job extends Page.Base {
 					
 					html += '<div class="button icon right" title="Run Again" onClick="$P().do_confirm_run_again()"><i class="mdi mdi-run-fast"></i></div>';
 					
-					html += '<div class="button icon right secondary" title="Add Comment..." onClick="$P().do_add_comment()"><i class="mdi mdi-comment-processing-outline"></i></div>';
+					html += '<div class="button icon right secondary" title="Add Comment..." onClick="$P().do_edit_comment(-1)"><i class="mdi mdi-comment-processing-outline"></i></div>';
 					html += '<div class="button icon right secondary" title="Update Tags..." onClick="$P().do_update_tags(this)"><i class="mdi mdi-tag-plus-outline"></i></div>';
 					
 					// html += '<div class="button icon right secondary" title="View JSON..." onClick="$P().do_view_job_data()"><i class="mdi mdi-code-json"></i></div>';
@@ -230,7 +230,7 @@ Page.Job = class Job extends Page.Base {
 					
 					html += '<div>';
 						html += '<div class="info_label">Job Started</div>';
-						html += '<div class="info_value">' + this.getNiceDateTime( job.started, true ) + '</div>';
+						html += '<div class="info_value">' + this.getRelativeDateTime( job.started, true ) + '</div>';
 					html += '</div>';
 					
 					// row 3
@@ -252,7 +252,7 @@ Page.Job = class Job extends Page.Base {
 					html += '<div>';
 						if (job.final) {
 							html += '<div class="info_label">Job Completed</div>';
-							html += '<div class="info_value">' + this.getNiceDateTime( job.completed, true ) + '</div>';
+							html += '<div class="info_value">' + this.getRelativeDateTime( job.completed, true ) + '</div>';
 						}
 						else {
 							html += '<div class="info_label">Remaining Time</div>';
@@ -289,6 +289,16 @@ Page.Job = class Job extends Page.Base {
 		html += '<div class="box toggle" id="d_job_params" style="display:none">';
 			html += '<div class="box_title">';
 				html += '<i></i><span></span>';
+			html += '</div>';
+			html += '<div class="box_content table">';
+				// html += '<div class="loading_container"><div class="loading"></div></div>';
+			html += '</div>'; // box_content
+		html += '</div>'; // box
+		
+		// comments (hidden unless needed)
+		html += '<div class="box toggle" id="d_job_comments" style="display:none">';
+			html += '<div class="box_title">';
+				html += '<i></i><span>Comments</span>';
 			html += '</div>';
 			html += '<div class="box_content table">';
 				// html += '<div class="loading_container"><div class="loading"></div></div>';
@@ -439,6 +449,7 @@ Page.Job = class Job extends Page.Base {
 			this.renderPluginParams('#d_job_params');
 			this.renderJobActions();
 			this.renderJobTags();
+			this.renderJobComments();
 		}
 		
 		this.setupCharts();
@@ -477,14 +488,116 @@ Page.Job = class Job extends Page.Base {
 				app.clearError();
 				var new_tags = values.concat(system_tags);
 				
-				app.api.post( 'app/update_job', { id: job.id, tags: new_tags }, function(resp) {
+				Dialog.showProgress( 1.0, "Saving Tags..." );
+				
+				app.api.post( 'app/manage_job_tags', { id: job.id, tags: new_tags }, function(resp) {
 					Dialog.hideProgress();
-					// app.showMessage('success', "The job tags were updated successfully.");
-					job.tags = new_tags;
-					self.renderJobTags();
 				} ); // api.post
 			} // callback
 		}); // popupQuickMenu
+	}
+	
+	renderJobComments() {
+		// show job comments if any, otherwise hide
+		var self = this;
+		var job = this.job;
+		
+		var $box = this.div.find('#d_job_comments');
+		if (!job.comments || !job.comments.length) {
+			$box.hide();
+			return;
+		}
+		
+		var cols = [ 'User', 'Comment', 'Date/Time', 'Actions' ];
+		var html = '';
+		
+		html += this.getBasicTable({
+			attribs: { class: 'data_table' },
+			compact: false,
+			cols: cols,
+			rows: sort_by( job.comments, 'date', { type: 'number', dir: -1 } ),
+			data_type: 'comment',
+			
+			callback: function(comment, idx) {
+				var actions = [];
+				if ((comment.username == app.username) || app.isAdmin()) {
+					actions.push('<span class="link" onClick="$P().do_edit_comment(' + idx + ')"><b>Edit</b></span>');
+					actions.push('<span class="link danger" onClick="$P().do_delete_comment(' + idx + ')"><b>Delete</b></span>');
+				}
+				return [
+					self.getNiceUser(comment.username, app.isAdmin()),
+					comment.msg,
+					'<span style="white-space:nowrap;">' + self.getRelativeDateTime(comment.date) + (comment.edited ? ' (Edited)' : '') + '</span>',
+					'<span class="nowrap">' + actions.join(' | ') + '</span>'
+				];
+			}
+		});
+		
+		$box.show();
+		$box.find('div.box_content').html( html );
+	}
+	
+	do_edit_comment(idx) {
+		// show dialog to edit or add comment
+		var self = this;
+		var job = this.job;
+		if (!job.comments) job.comments = [];
+		
+		var comment = (idx > -1) ? job.comments[idx] : { msg: '' };
+		var title = (idx > -1) ? "Editing Comment" : "New Comment";
+		var btn = (idx > -1) ? "Save Changes" : "Add Comment";
+		
+		var html = '<div class="dialog_box_content maximize" style="max-height:75vh; overflow-x:hidden; overflow-y:auto;">';
+		
+		html += this.getFormRow({
+			label: 'Comment:',
+			content: this.getFormTextarea({
+				id: 'fe_ej_comment',
+				rows: 5,
+				autocomplete: 'off',
+				maxlength: 8192,
+				value: comment.msg
+			}),
+			caption: 'Enter a comment to attach to the current job.'
+		});
+		
+		html += '</div>';
+		Dialog.confirm( title, html, btn, function(result) {
+			if (!result) return;
+			app.clearError();
+			
+			comment.msg = $('#fe_ej_comment').val().trim();
+			Dialog.hide();
+			
+			if (!comment.msg.length) return;
+			
+			Dialog.showProgress( 1.0, "Saving Comments..." );
+			
+			app.api.post( 'app/manage_job_comments', { id: job.id, comments: [comment] }, function(resp) {
+				Dialog.hideProgress();
+				app.showMessage('success', (idx > -1) ? "The comment was updated successfully." : "Your comment was added successfully.");
+			} ); // api.post
+		}); // Dialog.confirm
+		
+		$('#fe_ej_comment').focus();
+	}
+	
+	do_delete_comment(idx) {
+		// delete single comment
+		var self = this;
+		var job = this.job;
+		
+		var comment = {
+			id: job.comments[idx].id,
+			delete: true
+		};
+		
+		Dialog.showProgress( 1.0, "Deleting Comment..." );
+		
+		app.api.post( 'app/manage_job_comments', { id: job.id, comments: [comment] }, function(resp) {
+			Dialog.hideProgress();
+			app.showMessage('success', "The comment was deleted successfully.");
+		} ); // api.post
 	}
 	
 	renderJobActions() {
@@ -524,7 +637,7 @@ Page.Job = class Job extends Page.Base {
 				'<b><i class="mdi mdi-eye-outline">&nbsp;</i>' + disp.trigger + '</b>',
 				'<i class="mdi mdi-' + disp.icon + '">&nbsp;</i>' + disp.type,
 				disp.desc,
-				self.getNiceDateTime(item.date, true),
+				self.getRelativeDateTime(item.date, true),
 				'<i class="mdi mdi-clock-check-outline">&nbsp;</i>' + get_text_from_ms_round( Math.floor(item.elapsed_ms), true),
 				self.getNiceJobResult(item), // yes, this works for actions too
 				'<b>' + link + '</b>'
@@ -599,7 +712,7 @@ Page.Job = class Job extends Page.Base {
 				item.message,
 				self.getNiceServer(item.server, true),
 				self.getNiceAlertStatus(item),
-				self.getNiceDateTime(item.date),
+				self.getRelativeDateTime(item.date),
 				self.getNiceAlertElapsedTime(item, true, true)
 			];
 		}); // grid
@@ -951,6 +1064,9 @@ Page.Job = class Job extends Page.Base {
 			if (row.server.match(/^\w+$/)) nice_server = this.getNiceServer(row.server);
 			else nice_server = this.getNiceMaster(row.server);
 		}
+		else if (row.username) {
+			nice_server = this.getNiceUser(row.username);
+		}
 		
 		return [
 			'<span class="nowrap">' + nice_timestamp + '</span>',
@@ -969,7 +1085,7 @@ Page.Job = class Job extends Page.Base {
 		html += this.getBasicTable({
 			attribs: { class: 'data_table' },
 			compact: true,
-			cols: ['Timestamp', 'Server', 'Message'],
+			cols: ['Timestamp', 'Author', 'Message'],
 			rows: activity,
 			data_type: 'row',
 			callback: function(row) {
@@ -1723,27 +1839,16 @@ Page.Job = class Job extends Page.Base {
 	
 	do_notify_me() {
 		// toggle email notification for current user
+		var self = this;
 		var job = this.job;
-		var notify_me = !!find_object( job.actions, { trigger: 'complete', type: 'email', email: app.user.email } );
-		
-		if (!notify_me) {
-			// add notification
-			job.actions.push({ trigger: 'complete', type: 'email', email: app.user.email, enabled: true });
-			notify_me = true;
-		}
-		else {
-			// remove notification
-			delete_object( job.actions, { trigger: 'complete', type: 'email', email: app.user.email } );
-			notify_me = false;
-		}
 		
 		app.clearError();
-		app.api.post( 'app/update_job', { id: job.id, actions: job.actions }, function(resp) {
-			app.showMessage('success', notify_me ? 'You will be notified via email when the job completes.' : 'You will no longer be notified regarding this job.');
+		app.api.post( 'app/job_toggle_notify_me', { id: job.id }, function(resp) {
+			app.showMessage('success', resp.enabled ? 'You will be notified via email when the job completes.' : 'You will no longer be notified regarding this job.');
+			
+			var notify_icon = resp.enabled ? 'checkbox-marked-circle-outline' : 'email-outline';
+			self.div.find('#btn_job_notify > i').removeClass().addClass('mdi mdi-' + notify_icon);
 		} ); // api.post
-		
-		var notify_icon = notify_me ? 'checkbox-marked-circle-outline' : 'email-outline';
-		this.div.find('#btn_job_notify > i').removeClass().addClass('mdi mdi-' + notify_icon);
 	}
 	
 	do_download_job_log() {
@@ -1853,6 +1958,7 @@ Page.Job = class Job extends Page.Base {
 			this.refreshLiveCharts();
 			this.updateLiveProcessTable();
 			this.updateUserContent();
+			this.updateLiveMetaLog();
 		}
 		
 		// special behavior for queued jobs, they are NOT in app.activeJobs client-side, so just wait for it to appear
@@ -1894,7 +2000,8 @@ Page.Job = class Job extends Page.Base {
 			case 'job_updated':
 				merge_hash_into(this.job, pdata);
 				this.renderJobTags();
-				// TODO: render comments
+				this.renderJobComments();
+				this.updateLiveMetaLog();
 			break;
 		} // switch
 	}
