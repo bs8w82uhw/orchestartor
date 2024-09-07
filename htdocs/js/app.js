@@ -727,6 +727,13 @@ app.extend({
 		return( !!app.user.privileges[priv_id] );
 	},
 	
+	requirePrivilege: function(priv_id) {
+		// check if user has priv, show error toast if not
+		var priv = find_object( config.privilege_list, { id: priv_id } ) || { title: priv_id };
+		if (!this.hasPrivilege(priv_id)) return this.doError("Your account requires the &ldquo;" + priv.title + "&rdquo; privilege to perform this action.");
+		return true;
+	},
+	
 	includesAny: function(haystack, needles) {
 		// return true if haystack contains any needles
 		for (var idx = 0, len = needles.length; idx < len; idx++) {
