@@ -473,6 +473,7 @@ Page.Job = class Job extends Page.Base {
 		// update tags for job
 		var self = this;
 		var job = this.job;
+		if (!app.requirePrivilege('tag_jobs')) return;
 		
 		// separate system tags from user tags
 		var system_tags = (job.tags || []).filter( function(tag) { return !!tag.match(/^_/); } );
@@ -541,6 +542,7 @@ Page.Job = class Job extends Page.Base {
 		// show dialog to edit or add comment
 		var self = this;
 		var job = this.job;
+		if (!app.requirePrivilege('comment_jobs')) return;
 		if (!job.comments) job.comments = [];
 		
 		var comment = (idx > -1) ? job.comments[idx] : { msg: '' };
@@ -586,6 +588,7 @@ Page.Job = class Job extends Page.Base {
 		// delete single comment
 		var self = this;
 		var job = this.job;
+		if (!app.requirePrivilege('comment_jobs')) return;
 		
 		var comment = {
 			id: job.comments[idx].id,
@@ -1769,6 +1772,7 @@ Page.Job = class Job extends Page.Base {
 		// delete job and leave page
 		var self = this;
 		var job = this.job;
+		if (!app.requirePrivilege('delete_jobs')) return;
 		
 		Dialog.confirmDanger( 'Delete Job', "Are you sure you want to permanently delete the current job, including all logs and files?  There is no way to undo this operation.", 'Delete', function(result) {
 			if (!result) return;
@@ -1790,6 +1794,7 @@ Page.Job = class Job extends Page.Base {
 		// abort current job (page should automatically update via data stream)
 		var self = this;
 		var job = this.job;
+		if (!app.requirePrivilege('abort_jobs')) return;
 		
 		Dialog.confirmDanger( 'Abort Job', "Are you sure you want to abort the current job?", 'Abort', function(result) {
 			if (!result) return;
@@ -1806,6 +1811,7 @@ Page.Job = class Job extends Page.Base {
 	do_confirm_run_again() {
 		// confirm user wants to run job
 		var self = this;
+		if (!app.requirePrivilege('run_jobs')) return;
 		
 		Dialog.confirm( 'Run Job Again', "Are you sure you want to run the current job again?", 'Run Now', function(result) {
 			if (!result) return;
