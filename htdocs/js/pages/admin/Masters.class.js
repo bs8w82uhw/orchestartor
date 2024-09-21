@@ -97,7 +97,7 @@ Page.Masters = class Masters extends Page.Base {
 			commands: cmds
 		};
 		
-		Dialog.confirm( '<span style="">' + ucfirst(cmds[0]) + ' Master Server</span>', "Are you sure you want to " + cmds[0] + " the master server &ldquo;" + item.id + "&rdquo;?", 'Confirm', function(result) {
+		Dialog.confirmDanger( '<span style="">' + ucfirst(cmds[0]) + ' Master Server</span>', "Are you sure you want to " + cmds[0] + " the master server &ldquo;" + item.id + "&rdquo;?", 'Confirm', function(result) {
 			if (result) {
 				Dialog.hide();
 				app.api.post( 'app/master_command', params, function(resp) {
