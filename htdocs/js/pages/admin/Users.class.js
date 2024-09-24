@@ -334,7 +334,7 @@ Page.Users = class Users extends Page.Base {
 	
 	upload_avatar() {
 		// upload profile pic using ZeroUpload
-		ZeroUpload.chooseFiles({
+		ZeroUpload.chooseFiles({}, {
 			session_id: app.getPref('session_id'),
 			username: this.user.username
 		});
