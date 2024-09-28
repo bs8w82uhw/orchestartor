@@ -45,7 +45,7 @@ request.json( 'https://random-data-api.com/api/company/random_company?size=100',
 		var event = {
 			"id": "event" + idx,
 			"title": phrases.shift(),
-			"enabled": Math.random() > 0.1,
+			"enabled": true,
 			"username": "admin",
 			"modified": now,
 			"created": now,
@@ -53,7 +53,24 @@ request.json( 'https://random-data-api.com/api/company/random_company?size=100',
 			"targets": ["main"],
 			"algo": "random",
 			"notes": "",
-			"limits": [],
+			"limits": [
+				{
+					"type": "job",
+					"enabled": true,
+					"amount": 1
+				},
+				{
+					"type": "queue",
+					"enabled": true,
+					"amount": 0
+				},
+				{
+					"type": "retry",
+					"enabled": true,
+					"amount": 0,
+					"duration": 0
+				}
+			],
 			"actions": [],
 			"tags": []
 		};
@@ -181,7 +198,7 @@ request.json( 'https://random-data-api.com/api/company/random_company?size=100',
 			break;
 		}
 		
-		if (Math.random() < 0.1) event.timings.push({ type: 'catchup', enabled: true });
+		// if (Math.random() < 0.1) event.timings.push({ type: 'catchup', enabled: true });
 		
 		data.storage.push([ "listPush", "global/events", event ]);
 	}
