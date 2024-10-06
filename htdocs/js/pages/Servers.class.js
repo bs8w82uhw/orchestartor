@@ -13,6 +13,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		if (!this.requireLogin(args)) return true;
 		
 		if (!args) args = {};
+		if (!args.sub && args.id) args.sub = 'view';
 		if (!args.sub) args.sub = this.default_sub;
 		this.args = args;
 		
