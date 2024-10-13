@@ -426,7 +426,7 @@ Page.Plugins = class Plugins extends Page.Base {
 				spellcheck: 'false',
 				value: plugin.command || ''
 			}),
-			caption: 'Enter the filesystem path to your executable, including any command-line arguments you requre.  This can be an interpreter like <code>/bin/sh</code> or <code>/usr/bin/python</code>, or your own custom binary.  Do not include any pipes or redirects here.'
+			caption: 'Enter the filesystem path to your executable, including any command-line arguments you require.  This can be an interpreter like <code>/bin/sh</code> or <code>/usr/bin/python</code>, or your own custom binary.  Do not include any pipes or redirects here.'
 		});
 		
 		// script
@@ -722,13 +722,13 @@ Page.Plugins = class Plugins extends Page.Base {
 		});
 		html += this.getFormRow({
 			id: 'd_epa_value_select',
-			label: 'Default Items:',
+			label: 'Menu Items:',
 			content: this.getFormText({
 				id: 'fe_epa_value_select',
 				spellcheck: 'false',
 				value: param.value || ''
 			}),
-			caption: "Enter default items for the menu, separated by commas.  The first will be selected by default."
+			caption: "Enter items for the menu, separated by commas.  The first will be selected by default."
 		});
 		html += this.getFormRow({
 			id: 'd_epa_value_hidden',
@@ -843,7 +843,7 @@ Page.Plugins = class Plugins extends Page.Base {
 		
 		switch (plugin.type) {
 			case 'monitor':
-				plugin.params = [];
+				this.params = plugin.params = [];
 				plugin.groups = $('#fe_ep_groups').val();
 				plugin.format = $('#fe_ep_format').val();
 			break;
@@ -896,6 +896,9 @@ Page.Plugins = class Plugins extends Page.Base {
 	
 	onDeactivate() {
 		// called when page is deactivated
+		delete this.plugins;
+		delete this.plugin;
+		delete this.params;
 		this.div.html( '' );
 		return true;
 	}
