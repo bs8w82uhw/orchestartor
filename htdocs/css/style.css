@@ -702,7 +702,7 @@ div.td_big {
 	/* padding-bottom: 15px; */
 }
 .dialog_box_content.scroll {
-	max-height: 50vh;
+	max-height: 75vh;
 	overflow-x: hidden; 
 	overflow-y: auto;
 }
