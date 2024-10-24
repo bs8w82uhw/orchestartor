@@ -115,19 +115,18 @@ Page.Search = class Search extends Page.Base {
 					});
 				html += '</div>';
 				
-				// tags
+				// tag
 				html += '<div class="form_cell">';
 					html += this.getFormRow({
-						label: '<i class="icon mdi mdi-tag-multiple-outline">&nbsp;</i>Tags:',
-						content: this.getFormMenuMulti({
-							id: 'fe_s_tags',
-							title: 'Select Tags',
-							placeholder: 'Any Tag',
-							options: app.tags.concat([ 
+						label: '<i class="icon mdi mdi-tag-multiple-outline">&nbsp;</i>Tag:',
+						content: this.getFormMenuSingle({
+							id: 'fe_s_tag',
+							title: 'Select Tag',
+							options: [['', 'Any Tag']].concat( app.tags, [ 
 								{ id: '_retried', title: "Retried", icon: 'refresh', group: "System Tags:" },
 								{ id: '_last', title: "Last in Set", icon: 'page-last' } 
 							]),
-							values: args.tags ? args.tags.split(/\,\s*/) : [],
+							value: args.tag || '',
 							default_icon: 'tag-outline',
 							'data-shrinkwrap': 1
 						})
@@ -149,7 +148,8 @@ Page.Search = class Search extends Page.Base {
 								{ id: 'key', title: "Manual (API Key)", icon: 'key' },
 								{ id: 'action', title: "Action Trigger", icon: 'eye-outline' },
 								{ id: 'alert', title: "Server Alert", icon: 'bell-outline' },
-								{ id: 'workflow', title: "Workflow", icon: 'clipboard-flow-outline' }
+								{ id: 'workflow', title: "Workflow", icon: 'clipboard-flow-outline' },
+								{ id: 'plugin', title: "Plugin", icon: 'power-plug' }
 							],
 							value: args.source || '',
 							'data-shrinkwrap': 1
@@ -238,8 +238,8 @@ Page.Search = class Search extends Page.Base {
 				// sort
 				html += '<div class="form_cell">';
 					var sort_items = [
-						{ id: 'date_desc', title: 'Newest to Oldest', icon: 'sort-descending' },
-						{ id: 'date_asc', title: 'Oldest to Newest', icon: 'sort-ascending' }
+						{ id: 'date_desc', title: 'Newest on Top', icon: 'sort-descending' },
+						{ id: 'date_asc', title: 'Oldest on Top', icon: 'sort-ascending' }
 					];
 					html += this.getFormRow({
 						label: '<i class="icon mdi mdi-sort">&nbsp;</i>Sort Results:',
@@ -258,13 +258,12 @@ Page.Search = class Search extends Page.Base {
 		// buttons at bottom
 		html += '<div class="box_buttons" style="padding:0">';
 			// html += '<div class="search_help"><a href="http://source.dev.ca.admission.net/doc/codepress/#searching" target="_blank">Search Help<i class="mdi mdi-open-in-new"></i></a></div>';
-			
-			// html += '<div id="btn_s_adv" class="button mobile_collapse" onMouseUp="$P().toggleAdvanced()"><i class="mdi mdi-tune-variant">&nbsp;</i><span>' + (options_open ? 'Hide Options' : 'Show Options') + '</span></div>';
+			html += '<div id="btn_s_reset" class="button danger" style="display:none" onClick="$P().resetFilters()"><i class="mdi mdi-undo-variant">&nbsp;</i>Reset Filters</div>';
 			
 			if (preset) {
-				html += '<div class="button danger mobile_collapse" onMouseUp="$P().doDeletePreset()"><i class="mdi mdi-trash-can-outline">&nbsp;</i><span>Delete Preset...</span></div>';
+				html += '<div class="button danger" onMouseUp="$P().doDeletePreset()"><i class="mdi mdi-trash-can-outline">&nbsp;</i><span>Delete Preset...</span></div>';
 			}
-			html += '<div id="btn_s_save" class="button secondary mobile_collapse" onMouseUp="$P().doSavePreset()"><i class="mdi mdi-floppy">&nbsp;</i><span>' + (preset ? 'Edit' : 'Save') + ' Preset...</span></div>';
+			html += '<div id="btn_s_save" class="button secondary" onMouseUp="$P().doSavePreset()"><i class="mdi mdi-floppy">&nbsp;</i><span>' + (preset ? 'Edit' : 'Save') + ' Preset...</span></div>';
 			// html += '<div class="button" id="btn_s_download" onMouseUp="$P().doDownload()"><i class="mdi mdi-cloud-download-outline">&nbsp;</i>Download All...</div>';
 			html += '<div class="button primary" onMouseUp="$P().navSearch(true)"><i class="mdi mdi-magnify">&nbsp;</i>Search</div>';
 			// html += '<div class="clear"></div>';
@@ -280,11 +279,11 @@ Page.Search = class Search extends Page.Base {
 		var sargs = this.getSearchArgs();
 		// if (!sargs) this.div.find('#btn_s_save').addClass('disabled');
 		
-		MultiSelect.init( this.div.find('#fe_s_tags') );
-		SingleSelect.init( this.div.find('#fe_s_result, #fe_s_event, #fe_s_source, #fe_s_date, #fe_s_category, #fe_s_plugin, #fe_s_server, #fe_s_workflow, #fe_s_sort') );
+		// MultiSelect.init( this.div.find('#fe_s_tags') );
+		SingleSelect.init( this.div.find('#fe_s_tag, #fe_s_result, #fe_s_event, #fe_s_source, #fe_s_date, #fe_s_category, #fe_s_plugin, #fe_s_server, #fe_s_workflow, #fe_s_sort') );
 		// $('.header_search_widget').hide();
 		
-		this.div.find('#fe_s_tags, #fe_s_result, #fe_s_event, #fe_s_source, #fe_s_date, #fe_s_category, #fe_s_plugin, #fe_s_server, #fe_s_workflow, #fe_s_sort').on('change', function() {
+		this.div.find('#fe_s_tag, #fe_s_result, #fe_s_event, #fe_s_source, #fe_s_date, #fe_s_category, #fe_s_plugin, #fe_s_server, #fe_s_workflow, #fe_s_sort').on('change', function() {
 			self.navSearch();
 		});
 		
@@ -302,6 +301,11 @@ Page.Search = class Search extends Page.Base {
 		return true;
 	}
 	
+	resetFilters() {
+		// reset all filters to default and re-search
+		Nav.go( this.selfNav({}) );
+	}
+	
 	getSearchArgs() {
 		// get form values, return search args object
 		var args = {};
@@ -309,8 +313,8 @@ Page.Search = class Search extends Page.Base {
 		var query = this.div.find('#fe_s_query').val().trim()
 		if (query.length) args.query = query;
 		
-		var tags = this.div.find('#fe_s_tags').val();
-		if (tags.length) args.tags = tags.join(',');
+		var tag = this.div.find('#fe_s_tag').val();
+		if (tag) args.tag = tag;
 		
 		var result = this.div.find('#fe_s_result').val();
 		if (result) args.result = result;
@@ -365,7 +369,7 @@ Page.Search = class Search extends Page.Base {
 	getSearchQuery(args) {
 		// construct actual unbase simple query syntax
 		var query = args.query ? args.query.toString().toLowerCase().trim() : '';
-		if (args.tags) query += ' tags:' + args.tags.split(/\,\s*/).join('&');
+		if (args.tag) query += ' tags:' + args.tag;
 		
 		switch (args.result) {
 			case 'success': query += ' tags:_success'; break;
@@ -397,10 +401,13 @@ Page.Search = class Search extends Page.Base {
 		var args = this.args;
 		var query = this.getSearchQuery(args);
 		
+		if (query) this.div.find('#btn_s_reset').show();
+		else this.div.find('#btn_s_reset').hide();
+		
 		// compose search query
 		this.records = [];
 		this.opts = {
-			query: query.trim(),
+			query: query,
 			offset: args.offset || 0,
 			limit: args.limit || config.items_per_page,
 			compact: 1
