@@ -136,6 +136,7 @@ Page.ActivityLog = class ActivityLog extends Page.Base {
 		
 		// buttons at bottom
 		html += '<div class="box_buttons" style="padding:0">';
+			html += '<div id="btn_sa_reset" class="button" style="display:none" onClick="$P().resetFilters()"><i class="mdi mdi-undo-variant">&nbsp;</i>Reset Filters</div>';
 			html += '<div class="button primary" onMouseUp="$P().navSearch()"><i class="mdi mdi-magnify">&nbsp;</i>Search</div>';
 		html += '</div>'; // box_buttons
 		
@@ -166,6 +167,11 @@ Page.ActivityLog = class ActivityLog extends Page.Base {
 		
 		$('#fe_sa_query').focus();
 		this.doSearch();
+	}
+	
+	resetFilters() {
+		// reset all filters to default and re-search
+		Nav.go( this.selfNav({}) );
 	}
 	
 	getSearchArgs() {
@@ -233,10 +239,13 @@ Page.ActivityLog = class ActivityLog extends Page.Base {
 		var args = this.args;
 		var query = this.getSearchQuery(args);
 		
+		if (query) this.div.find('#btn_sa_reset').show();
+		else this.div.find('#btn_sa_reset').hide();
+		
 		// compose search query
 		this.records = [];
 		this.opts = {
-			query: query.trim(),
+			query: query,
 			offset: args.offset || 0,
 			limit: args.limit || config.items_per_page,
 		};

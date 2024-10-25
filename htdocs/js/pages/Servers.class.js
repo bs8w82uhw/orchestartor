@@ -322,6 +322,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 	
 	receiveSearchSummaries(resp) {
 		// convert summaries to menu items for search box
+		var self = this;
 		var args = this.args;
 		
 		if (!this.active) return; // sanity
@@ -369,11 +370,11 @@ Page.Servers = class Servers extends Page.ServerUtils {
 					html += this.getFormRow({
 						label: '<i class="icon mdi mdi-server-network">&nbsp;</i>Group:',
 						content: this.getFormMenuSingle({
-							id: 'fe_ss_group',
+							id: 'fe_ss_groups',
 							title: 'Select Group',
 							placeholder: 'All Groups',
 							options: [['', 'Any Group']].concat( app.groups ),
-							value: args.group || '',
+							value: args.groups || '',
 							default_icon: 'server-network',
 							'data-shrinkwrap': 1
 						})
@@ -528,7 +529,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		
 		// buttons at bottom
 		html += '<div class="box_buttons" style="padding:0">';
-			
+			html += '<div id="btn_ss_reset" class="button" style="display:none" onClick="$P().resetFilters()"><i class="mdi mdi-undo-variant">&nbsp;</i>Reset Filters</div>';
 			html += '<div class="button primary" onMouseUp="$P().navSearch()"><i class="mdi mdi-magnify">&nbsp;</i>Search</div>';
 			// html += '<div class="clear"></div>';
 		html += '</div>'; // box_buttons
@@ -544,10 +545,10 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		// if (!sargs) this.div.find('#btn_s_save').addClass('disabled');
 		
 		// MultiSelect.init( this.div.find('#fe_s_tags') );
-		SingleSelect.init( this.div.find('#fe_ss_group, #fe_ss_os_platform, #fe_ss_os_distro, #fe_ss_os_release, #fe_ss_os_arch, #fe_ss_cpu_virt, #fe_ss_cpu_brand, #fe_ss_cpu_cores, #fe_ss_created, #fe_ss_modified') );
+		SingleSelect.init( this.div.find('#fe_ss_groups, #fe_ss_os_platform, #fe_ss_os_distro, #fe_ss_os_release, #fe_ss_os_arch, #fe_ss_cpu_virt, #fe_ss_cpu_brand, #fe_ss_cpu_cores, #fe_ss_created, #fe_ss_modified') );
 		// $('.header_search_widget').hide();
 		
-		this.div.find('#fe_ss_group, #fe_ss_os_platform, #fe_ss_os_distro, #fe_ss_os_release, #fe_ss_os_arch, #fe_ss_cpu_virt, #fe_ss_cpu_brand, #fe_ss_cpu_cores, #fe_ss_created, #fe_ss_modified').on('change', function() {
+		this.div.find('#fe_ss_groups, #fe_ss_os_platform, #fe_ss_os_distro, #fe_ss_os_release, #fe_ss_os_arch, #fe_ss_cpu_virt, #fe_ss_cpu_brand, #fe_ss_cpu_cores, #fe_ss_created, #fe_ss_modified').on('change', function() {
 			self.navSearch();
 		});
 		
@@ -563,6 +564,11 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		this.doSearch();
 	}
 	
+	resetFilters() {
+		// reset all filters to default and re-search
+		Nav.go( this.selfNav({ sub: 'search' }) );
+	}
+	
 	getSearchArgs() {
 		// get form values, return search args object
 		var self = this;
@@ -571,7 +577,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		var query = this.div.find('#fe_ss_query').val().trim()
 		if (query.length) args.query = query;
 		
-		['group', 'os_platform', 'os_distro', 'os_release', 'os_arch', 'cpu_virt', 'cpu_brand', 'cpu_cores', 'created', 'modified'].forEach( function(key) {
+		['groups', 'os_platform', 'os_distro', 'os_release', 'os_arch', 'cpu_virt', 'cpu_brand', 'cpu_cores', 'created', 'modified'].forEach( function(key) {
 			var value = self.div.find('#fe_ss_' + key).val();
 			if (value) args[key] = value;
 		} );
@@ -589,10 +595,11 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		if (!args) {
 			// return app.badField('#fe_ss_query', "Please enter a search query.");
 			// args = { query: '*' };
-			Nav.go( this.selfNav({}) );
+			Nav.go( this.selfNav({ sub: 'search' }) );
 			return;
 		}
 		
+		args.sub = 'search';
 		Nav.go( this.selfNav(args) );
 	}
 	
@@ -601,7 +608,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		var self = this;
 		var query = args.query ? args.query.toString().toLowerCase().trim() : '';
 		
-		['group', 'os_platform', 'os_distro', 'os_release', 'os_arch', 'cpu_virt', 'cpu_brand', 'cpu_cores'].forEach( function(key) {
+		['groups', 'os_platform', 'os_distro', 'os_release', 'os_arch', 'cpu_virt', 'cpu_brand', 'cpu_cores'].forEach( function(key) {
 			if (args[key]) query += ' ' + key + ':' + args[key];
 		} );
 		
@@ -618,10 +625,13 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		var args = this.args;
 		var query = this.getSearchQuery(args);
 		
+		if (query) this.div.find('#btn_ss_reset').show();
+		else this.div.find('#btn_ss_reset').hide();
+		
 		// compose search query
 		this.records = [];
 		this.opts = {
-			query: query.trim(),
+			query: query,
 			offset: args.offset || 0,
 			limit: args.limit || config.items_per_page,
 		};
