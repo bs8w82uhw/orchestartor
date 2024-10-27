@@ -154,7 +154,10 @@ Page.WebHooks = class WebHooks extends Page.Base {
 			"enabled": true,
 			"url": "",
 			"method": "POST",
-			"headers": "Content-Type: application/json\nUser-Agent: Orchestra/WebHook",
+			"headers": [
+				{ "name": "Content-Type", "value": "application/json" },
+				{ "name": "User-Agent", "value": "Orchestra/WebHook" }
+			],
 			"body": JSON.stringify({ content: '[description]', text: '[description]' }, null, "\t"),
 			"timeout": 30,
 			"retries": 0,
@@ -162,6 +165,7 @@ Page.WebHooks = class WebHooks extends Page.Base {
 			"ssl_cert_bypass": false,
 			"notes": ""
 		};
+		this.headers = this.web_hook.headers;
 		
 		html += this.get_web_hook_edit_html();
 		
@@ -221,6 +225,7 @@ Page.WebHooks = class WebHooks extends Page.Base {
 		// edit existing web hook
 		var html = '';
 		this.web_hook = resp.web_hook;
+		this.headers = this.web_hook.headers;
 		if (!this.active) return; // sanity
 		
 		app.setWindowTitle( "Editing Web Hook \"" + (this.web_hook.title) + "\"" );
@@ -415,15 +420,10 @@ Page.WebHooks = class WebHooks extends Page.Base {
 		});
 		
 		// headers
+		// (requires this.headers to be populated)
 		html += this.getFormRow({
 			label: 'Request Headers:',
-			content: this.getFormTextarea({
-				id: 'fe_ewh_headers',
-				rows: 5,
-				class: 'monospace',
-				spellcheck: 'false',
-				value: web_hook.headers
-			}),
+			content: '<div id="d_ewh_header_table">' + this.getHeaderGrid() + '</div>',
 			caption: 'Optionally enter HTTP request headers to send along with the request.'
 		});
 		
@@ -496,10 +496,129 @@ Page.WebHooks = class WebHooks extends Page.Base {
 				rows: 5,
 				value: web_hook.notes
 			}),
-			caption: 'Optionally enter notes for the web_hook, which will be included in all e-mail notifications.'
+			caption: 'Optionally enter notes for the web_hook, for your own internal use.'
 		});
 		
 		return html;
+	}
+	
+	renderHeaderEditor() {
+		// render header editor
+		var dom_prefix = this.dom_prefix;
+		var html = this.getHeaderGrid();
+		this.div.find('#d_' + dom_prefix + '_header_table').html( html );
+	}
+	
+	getHeaderGrid() {
+		// get html for header grid
+		var self = this;
+		var html = '';
+		var rows = this.headers;
+		var cols = ['Header Name', 'Header Value', 'Actions'];
+		var add_link = '<div class="button small secondary" onMouseUp="$P().editHeader(-1)">New Header...</div>';
+		
+		var targs = {
+			rows: rows,
+			cols: cols,
+			data_type: 'header',
+			class: 'data_grid',
+			empty_msg: add_link,
+			always_append_empty_msg: true
+		};
+		
+		html += this.getCompactGrid(targs, function(item, idx) {
+			var links = [];
+			links.push( '<span class="link" onMouseUp="$P().editHeader('+idx+')"><b>Edit</b></span>' );
+			links.push( '<span class="link danger" onMouseUp="$P().deleteHeader('+idx+')"><b>Delete</b></span>' );
+			
+			var tds = [
+				'<div class="td_big ellip"><i class="mdi mdi-form-textbox">&nbsp;</i><span class="link" onClick="$P().editHeader('+idx+')">' + encode_entities(item.name) + '</span></div>',
+				'<div class="ellip">' + encode_entities(item.value) + '</div>',
+				'<div class="ellip">' + links.join(' | ') + '</div>'
+			];
+			
+			// if (!item.enabled) tds.className = 'disabled';
+			return tds;
+		} ); // getCompactGrid
+		
+		return html;
+	}
+	
+	editHeader(idx) {
+		// show dialog to edit header
+		// header: { name, value }
+		var self = this;
+		var header = (idx > -1) ? this.headers[idx] : { name: '', value: '' };
+		var title = (idx > -1) ? "Editing Header" : "New Header";
+		var btn = (idx > -1) ? "Apply Changes" : "Add Header";
+		
+		var html = '<div class="dialog_box_content scroll">';
+		
+		html += this.getFormRow({
+			id: 'd_eh_name',
+			label: 'Header Name:',
+			content: this.getFormText({
+				id: 'fe_eh_name',
+				spellcheck: 'false',
+				maxlength: 8192,
+				placeholder: '',
+				value: header.name || ''
+			}),
+			caption: 'Enter the name of the HTTP request header.'
+		});
+		
+		html += this.getFormRow({
+			id: 'd_eh_value',
+			label: 'Header Value:',
+			content: this.getFormText({
+				id: 'fe_eh_value',
+				spellcheck: 'false',
+				maxlength: 8192,
+				placeholder: '',
+				value: header.value || ''
+			}),
+			caption: 'Enter the value for the HTTP request header.'
+		});
+		
+		html += '</div>';
+		Dialog.confirm( title, html, btn, function(result) {
+			if (!result) return;
+			
+			header = {
+				name: $('#fe_eh_name').val(),
+				value: $('#fe_eh_value').val()
+			};
+			
+			if (!header.name.match(/^[A-Za-z0-9!#$%&'*+.^_`|~-]+$/)) {
+				return app.badField('fe_eh_name', "Please enter a valid HTTP header name.");
+			}
+			if (!header.value.match(/^[\t\x20-\x7E\x80-\xFF]*$/)) {
+				return app.badField('fe_eh_value', "Please enter a valid HTTP header value.");
+			}
+			
+			// see if we need to add or replace
+			if (idx == -1) {
+				self.headers.push(header);
+			}
+			else self.headers[idx] = header;
+			
+			// keep list sorted
+			sort_by(self.headers, 'name');
+			
+			// self.dirty = true;
+			self.renderHeaderEditor();
+			Dialog.hide();
+		} ); // Dialog.confirm
+		
+		if (idx == -1) $('#fe_eh_name').focus();
+		
+		Dialog.autoResize();
+	}
+	
+	deleteHeader(idx) {
+		// delete selected header
+		this.headers.splice( idx, 1 );
+		this.renderHeaderEditor();
 	}
 	
 	get_web_hook_form_json() {
@@ -513,7 +632,6 @@ Page.WebHooks = class WebHooks extends Page.Base {
 		
 		web_hook.url = $('#fe_ewh_url').val();
 		web_hook.method = $('#fe_ewh_method').val();
-		web_hook.headers = $('#fe_ewh_headers').val();
 		web_hook.body = $('#fe_ewh_body').val();
 		web_hook.timeout = parseInt( $('#fe_ewh_timeout').val() );
 		web_hook.retries = parseInt( $('#fe_ewh_retries').val() );
