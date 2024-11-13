@@ -34,7 +34,7 @@ Page.APIKeys = class APIKeys extends Page.PageUtils {
 	
 	receive_keys(resp) {
 		// receive all API Keys from server, render them sorted
-		this.lastAPIKeysResp = resp;
+		// this.lastAPIKeysResp = resp;
 		var html = '';
 		if (!resp.rows) resp.rows = [];
 		
@@ -404,6 +404,7 @@ Page.APIKeys = class APIKeys extends Page.PageUtils {
 	
 	onDeactivate() {
 		// called when page is deactivated
+		delete this.api_keys;
 		this.div.html( '' );
 		return true;
 	}
