@@ -246,8 +246,9 @@ app.extend({
 		var num_jobs = num_keys( this.activeJobs || {} );
 		
 		// augment with internal job count
-		num_jobs += app.isAdmin() ? num_keys(this.internalJobs) : 
-			Object.values(this.internalJobs).filter( function(job) { return job.username && (job.usernane == app.username); } ).length;
+		num_jobs += app.isAdmin() ? 
+			Object.values(this.internalJobs).filter( function(job) { return !job.quiet; } ).length : 
+			Object.values(this.internalJobs).filter( function(job) { return job.username && (job.usernane == app.username) && !job.quiet; } ).length;
 		
 		if (num_jobs) {
 			this.$jobCounter.show().html( '<i class="mdi mdi-run-fast"></i><span><b>' + commify(num_jobs) + ' ' + pluralize('Job', num_jobs) + '</b></span>' );

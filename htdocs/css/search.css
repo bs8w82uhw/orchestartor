@@ -41,6 +41,39 @@ div.search_box > input[type="text"]:focus {
 	border: 1px solid var(--theme-color-half);
 }
 
+.search_widget {
+	width: 32px;
+	height: 28px;
+	line-height: 28px;
+	font-size: 18px;
+	text-align: center;
+	white-space: nowrap;
+	margin-left: 10px;
+	
+	color: var(--label-color);
+	border: 1px solid var(--shadow-color);
+	background: var(--box-background-color);
+	border-radius: 4px;
+	cursor: pointer;
+	opacity: 0.95;
+	transition: 0.2s ease all;
+	
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+}
+body.dark div.search_widget {
+	border: 1px solid var(--border-color);
+}
+div.search_widget:hover, div.search_widget.selected {
+	/* top: -1px; */
+	color: var(--theme-color);
+	/* background-color: var(--box-background-color); */
+	border: 1px solid var(--theme-color-half) !important;
+	box-shadow: 0px 2px 1px var(--shadow-color);
+	opacity: 1.0;
+}
+
 .search_total {
 	position: relative;
 	top: -1px;
@@ -73,6 +106,11 @@ div.search_help a i {
 }
 div.search_help a:hover i {
 	color: var(--theme-color);
+}
+
+div.load_more {
+	margin-top: 30px; 
+	text-align: center;
 }
 
 /* Form Grid */

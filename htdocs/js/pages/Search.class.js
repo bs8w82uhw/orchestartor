@@ -2,6 +2,7 @@ Page.Search = class Search extends Page.Base {
 	
 	onInit() {
 		// called once at page load
+		this.bar_width = 200;
 	}
 	
 	onActivate(args) {
@@ -13,7 +14,7 @@ Page.Search = class Search extends Page.Base {
 		this.args = args;
 		
 		if (!args.offset) args.offset = 0;
-		if (!args.limit) args.limit = 25;
+		if (!args.limit) args.limit = config.items_per_page;
 		
 		app.showSidebar(true);
 		
@@ -53,9 +54,13 @@ Page.Search = class Search extends Page.Base {
 			
 			// search box
 			html += '<div class="search_box">';
-				html += '<i class="mdi mdi-magnify" onMouseUp="$(\'#fe_s_query\').focus()">&nbsp;</i>'; // TODO: fix search help url below:
-				html += '<div class="search_help"><a href="https://github.com/jhuckaby/orchestra#search" target="_blank">Search Help<i class="mdi mdi-open-in-new"></i></a></div>';
-				html += '<input type="text" id="fe_s_query" maxlength="128" placeholder="Search Job Result Codes..." value="' + escape_text_field_value(args.query || '') + '">';
+				html += '<i class="mdi mdi-magnify" onMouseUp="$(\'#fe_s_match\').focus()">&nbsp;</i>';
+				// html += '<div class="search_help"><a href="https://github.com/jhuckaby/orchestra#search" target="_blank">Search Help<i class="mdi mdi-open-in-new"></i></a></div>';
+				html += '<input type="text" id="fe_s_match" maxlength="128" placeholder="Search Job Files..." value="' + escape_text_field_value(args.match || '') + '">';
+				// html += '<div class="search_widget"><i class="mdi mdi-checkbox-marked">&nbsp;</i>RegExp</div>';
+				// html += '<div class="search_widget"><i class="mdi mdi-checkbox-marked">&nbsp;</i>Case</div>';
+				html += '<div id="d_search_opt_case" class="search_widget ' + (args.case ? 'selected' : '') + '" title="Case Sensitive" onClick="$P().toggleSearchOption(this)"><i class="mdi mdi-format-letter-case"></i></div>';
+				html += '<div id="d_search_opt_regex" class="search_widget ' + (args.regex ? 'selected' : '') + '" title="Regular Expression" onClick="$P().toggleSearchOption(this)"><i class="mdi mdi-regex"></i></div>';
 			html += '</div>';
 			
 			// options
@@ -181,7 +186,7 @@ Page.Search = class Search extends Page.Base {
 							id: 'fe_s_plugin',
 							title: 'Select Plugin',
 							placeholder: 'All Plugins',
-							options: [['', 'Any Plugin']].concat( app.plugins ),
+							options: [['', 'Any Plugin']].concat( app.plugins.filter( function(plugin) { return plugin.type == 'event'; } ) ),
 							value: args.plugin || '',
 							default_icon: 'power-plug-outline',
 							'data-shrinkwrap': 1
@@ -265,7 +270,7 @@ Page.Search = class Search extends Page.Base {
 		
 		this.div.html( html );
 		
-		var sargs = this.getSearchArgs();
+		// var sargs = this.getSearchArgs();
 		// if (!sargs) this.div.find('#btn_s_save').addClass('disabled');
 		
 		// MultiSelect.init( this.div.find('#fe_s_tags') );
@@ -276,7 +281,7 @@ Page.Search = class Search extends Page.Base {
 			self.navSearch();
 		});
 		
-		$('#fe_s_query').on('keydown', function(event) {
+		$('#fe_s_match').on('keydown', function(event) {
 			// capture enter key
 			if (event.keyCode == 13) {
 				event.preventDefault();
@@ -284,10 +289,20 @@ Page.Search = class Search extends Page.Base {
 			}
 		});
 		
-		$('#fe_s_query').focus();
-		this.doSearch();
+		setTimeout( function() { 
+			// do this in another thread to ensure that Nav.loc is updated
+			// not to mention user_nav
+			self.doSearch();
+		}, 1 );
 		
 		return true;
+	}
+	
+	toggleSearchOption(elem) {
+		// toggle search opt (case or regex) on/off
+		var $elem = $(elem);
+		if ($elem.hasClass('selected')) $elem.removeClass('selected');
+		else $elem.addClass('selected');
 	}
 	
 	resetFilters() {
@@ -299,8 +314,13 @@ Page.Search = class Search extends Page.Base {
 		// get form values, return search args object
 		var args = {};
 		
-		var query = this.div.find('#fe_s_query').val().trim()
-		if (query.length) args.query = query;
+		var match = this.div.find('#fe_s_match').val().trim()
+		if (match.length) {
+			args.match = match;
+			
+			if (this.div.find('#d_search_opt_case').hasClass('selected')) args.case = 1;
+			if (this.div.find('#d_search_opt_regex').hasClass('selected')) args.regex = 1;
+		}
 		
 		var tag = this.div.find('#fe_s_tag').val();
 		if (tag) args.tag = tag;
@@ -343,7 +363,6 @@ Page.Search = class Search extends Page.Base {
 		
 		var args = this.getSearchArgs();
 		if (!args) {
-			// return app.badField('#fe_s_query', "Please enter a search query.");
 			// args = { query: '*' };
 			Nav.go( this.selfNav({}) );
 			return;
@@ -357,7 +376,7 @@ Page.Search = class Search extends Page.Base {
 	
 	getSearchQuery(args) {
 		// construct actual unbase simple query syntax
-		var query = args.query ? args.query.toString().toLowerCase().trim() : '';
+		var query = '';
 		if (args.tag) query += ' tags:' + args.tag;
 		
 		switch (args.result) {
@@ -389,6 +408,7 @@ Page.Search = class Search extends Page.Base {
 		// actually perform the search
 		var args = this.args;
 		var query = this.getSearchQuery(args);
+		var match = this.div.find('#fe_s_match').val().trim();
 		
 		if (query) this.div.find('#btn_s_reset').show();
 		else this.div.find('#btn_s_reset').hide();
@@ -412,7 +432,169 @@ Page.Search = class Search extends Page.Base {
 			break;
 		} // sort
 		
-		app.api.get( 'app/search_jobs', sopts, this.receiveResults.bind(this) );
+		if (match.length) {
+			// search inside job files
+			if (args.regex) sopts.regex = true;
+			if (args.case) sopts.case = true;
+			
+			// validate user's regexp
+			if (sopts.regex) {
+				try { new RegExp(match); }
+				catch (err) {
+					this.div.find('#d_search_results').empty(); // remove loading indicator
+					return app.badField('fe_s_match', "" + err);
+				}
+			}
+			
+			sopts.max = config.items_per_page;
+			sopts.match = match;
+			sopts.loc = Nav.loc; // for race condition with user_nav
+			
+			delete sopts.limit;
+			delete sopts.compact;
+			
+			this.doSearchJobFiles(sopts);
+		}
+		else {
+			// standard job search
+			app.api.get( 'app/search_jobs', sopts, this.receiveResults.bind(this) );
+		}
+	}
+	
+	doSearchJobFiles(sopts) {
+		// start websocket spooling search job
+		var self = this;
+		var $results = this.div.find('#d_search_results');
+		var html = '';
+		
+		var gopts = {
+			rows: [],
+			cols: ['Job ID', 'Event', 'File', 'Preview', 'Matches', 'Job Completed'],
+			data_type: 'file',
+			// grid_template_columns: 'min-content' + ' auto'.repeat( cols.length - 1 )
+		};
+		
+		html += '<div class="box">';
+		
+		html += '<div class="box_title">';
+			html += this.getNiceJobProgressBar({ progress: 0 }, ['right']);
+			html += 'Job File Results';
+			html += '<div class="clear"></div>';
+		html += '</div>';
+		
+		html += '<div class="box_content table">';
+			html += this.getBasicGrid(gopts, function() {});
+			html += '<div class="loading_container streaming"><div class="loading"></div></div>';
+		html += '</div>'; // box_content
+		
+		html += '</div>'; // box
+		
+		$results.html( html );
+		var $grid_row_empty = $results.find('ul.grid_row_empty').detach();
+		
+		// { query, match, regex?, case?, offset?, max?, sort_by?, sort_dir? }
+		this.jobFileSearch = { opts: sopts, count: 0, uniques: {}, $grid_row_empty };
+		app.comm.sendCommand('search_job_files', sopts);
+	}
+	
+	handleJobFileSearchStart(pdata) {
+		// job file search has started!
+		// { id }
+		this.jobFileSearch.id = pdata.id;
+	}
+	
+	handleJobFileSearchResult(pdata) {
+		// job file search result has spooled in
+		// { id, job, event, completed, file, filename, preview, count, token }
+		var $results = this.div.find('#d_search_results');
+		var jfs = this.jobFileSearch;
+		
+		// generate unique id for each row, because of the "load more" offset overlap thing
+		var row_id = pdata.job + '/' + pdata.file;
+		if (row_id in jfs.uniques) return; // dupe row
+		jfs.uniques[row_id] = 1;
+		jfs.count++;
+		
+		// massage preview
+		if (pdata.preview.before.length == 25) pdata.preview.before = '&hellip;' + pdata.preview.before;
+		if (pdata.preview.after.length == 25) pdata.preview.after += '&hellip;';
+		
+		// construct our row
+		// ['Job ID', 'Event', 'Filename', 'Preview', 'Matches', 'Job Completed']
+		var nice_file = '';
+		if (pdata.file.match(/^logs\/jobs\//)) {
+			var url = app.base_api_url + '/app/view_job_log?id=' + pdata.job + '&t=' + pdata.token;
+			nice_file = this.getNiceFile( 'Job Output', url, 'file-document-outline');
+		}
+		else {
+			nice_file = this.getNiceFile( pdata.filename, '/' + pdata.file);
+		}
+		
+		var tds = [
+			'<b>' + this.getNiceJob( pdata.job, true ) + '</b>',
+			'<b>' + this.getNiceEvent( pdata.event, true ) + '</b>',
+			'<b>' + nice_file + '</b>',
+			
+			'<span class="mono">' + pdata.preview.before + '</span>' + 
+				'<span class="mono bold">' + pdata.preview.matched + '</span>' + 
+				'<span class="mono">' + pdata.preview.after + '</span>',
+			
+			commify( pdata.count ),
+			this.getRelativeDateTime( pdata.completed )
+		];
+		
+		var html = '';
+		html += '<ul class="grid_row ' + (tds.className || '') + '"' + '>';
+		html += '<div>' + tds.join('</div><div>') + '</div>';
+		html += '</ul>';
+		
+		// append it
+		$results.find('div.data_grid').append( html );
+		
+		// update table header (# of matches)
+		$results.find('.data_grid_pagination > div').first().html( commify(jfs.count) + ' ' + pluralize('file', jfs.count) );
+	}
+	
+	updateJobFileSearchProgress() {
+		// update progress bar by sniffing out the internal job that is controlling our search
+		var $results = this.div.find('#d_search_results');
+		var id = this.jobFileSearch.id;
+		var job = app.internalJobs[id];
+		if (job) this.updateJobProgressBar(job, $results.find('.box_title .progress_bar_container'));
+	}
+	
+	handleJobFileSearchComplete(pdata) {
+		// job file search has completed
+		// { id, offset, hit_max }
+		delete this.jobFileSearch.id;
+		var $results = this.div.find('#d_search_results');
+		
+		$results.find('.box_title .progress_bar_container').hide();
+		$results.find('.box_content .loading_container').hide();
+		
+		// was anything found at all?
+		if (!this.jobFileSearch.count) {
+			$results.find('div.data_grid').append( this.jobFileSearch.$grid_row_empty );
+		}
+		
+		// we need to know if the search is DONE DONE, or just "hit max done"
+		else if (pdata.hit_max) {
+			var html = '<div class="load_more"><div class="button" onClick="$P().loadMoreFileResults()"><i class="mdi mdi-arrow-down-circle-outline">&nbsp;</i>Load More...</div></div>';
+			$results.find('.box_content').append(html);
+			this.jobFileSearch.opts.offset = pdata.offset; // resume at last offset
+		}
+	}
+	
+	loadMoreFileResults() {
+		// user clicked the "load more" button
+		var $results = this.div.find('#d_search_results');
+		
+		$results.find('.box_title .progress_bar_container').show();
+		$results.find('.box_content .loading_container').show();
+		$results.find('.box_content .load_more').remove();
+		
+		var sopts = this.jobFileSearch.opts;
+		app.comm.sendCommand('search_job_files', sopts);
 	}
 	
 	receiveResults(resp) {
@@ -457,7 +639,7 @@ Page.Search = class Search extends Page.Base {
 				self.getNiceCategory(job.category, true),
 				self.getNiceServer(job.server, true),
 				self.getNiceJobSource(job),
-				self.getShortDateTime( job.completed ),
+				self.getRelativeDateTime( job.completed ),
 				self.getNiceJobElapsedTime(job, true, false),
 				self.getNiceJobResult(job)
 			];
@@ -465,7 +647,7 @@ Page.Search = class Search extends Page.Base {
 		
 		if (this.jobs.length && app.hasPrivilege('delete_jobs')) {
 			html += '<div style="margin-top: 30px;">';
-			html += '<div class="button right danger" onMouseUp="$P().do_bulk_delete()"><i class="mdi mdi-trash-can-outline">&nbsp;</i>Delete Results...</div>';
+			html += '<div class="button right danger" onClick="$P().do_bulk_delete()"><i class="mdi mdi-trash-can-outline">&nbsp;</i>Delete All...</div>';
 			html += '<div class="clear"></div>';
 			html += '</div>';
 		}
@@ -508,7 +690,6 @@ Page.Search = class Search extends Page.Base {
 		app.clearError();
 		
 		var sargs = this.getSearchArgs() || {};
-		// if (!sargs) return app.badField('#fe_s_query', "Please enter a search query before saving a preset.");
 		
 		var preset = {};
 		if (this.args.preset) {
@@ -619,10 +800,23 @@ Page.Search = class Search extends Page.Base {
 	onStatusUpdate(data) {
 		// refresh search results if jobsChanged
 		if (data.jobsChanged) this.doSearch();
+		if (this.jobFileSearch && this.jobFileSearch.id) this.updateJobFileSearchProgress();
+	}
+	
+	onPageUpdate(pcmd, pdata) {
+		// received update for page
+		if (!this.active) return; // sanity
+		
+		switch (pcmd) {
+			case 'search_started': this.handleJobFileSearchStart(pdata); break;
+			case 'search_result': this.handleJobFileSearchResult(pdata); break;
+			case 'search_complete': this.handleJobFileSearchComplete(pdata); break;
+		}
 	}
 	
 	onDeactivate() {
 		// called when page is deactivated
+		delete this.jobFileSearch;
 		this.div.html( '' );
 		return true;
 	}

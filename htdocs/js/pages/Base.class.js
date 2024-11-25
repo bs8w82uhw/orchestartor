@@ -421,9 +421,9 @@ Page.Base = class Base extends Page {
 		return html;
 	}
 	
-	getNiceFile(filename, link) {
+	getNiceFile(filename, link, icon) {
 		// get nice file with type-appropriate icon
-		var icon = 'file-outline';
+		if (!icon) icon = 'file-outline';
 		var html = '';
 		var ext = '';
 		if (filename.replace(/\.(gz|xz)$/i, '').match(/\.(\w+)$/)) ext = RegExp.$1.toLowerCase();
@@ -937,16 +937,16 @@ Page.Base = class Base extends Page {
 		return '<i class="mdi mdi-' + icon + '">&nbsp;</i>' + get_text_from_seconds( elapsed, abbrev, no_secondary );
 	}
 	
-	getNiceJobProgressBar(job) {
+	getNiceJobProgressBar(job, extra_classes = []) {
 		// render nice progress bar for job
 		var html = '';
 		var counter = Math.min(1, Math.max(0, job.progress || 1));
 		var bar_width = this.bar_width || 100;
 		var cx = Math.floor( counter * bar_width );
 		var label = '' + Math.floor( (counter / 1.0) * 100 ) + '%';
-		var extra_classes = (counter == 1.0) ? 'indeterminate' : '';
+		if (counter == 1.0) extra_classes.push('indeterminate');
 		
-		html += '<div class="progress_bar_container ' + extra_classes + '" style="width:' + bar_width + 'px; margin:0;">';
+		html += '<div class="progress_bar_container ' + extra_classes.join(' ') + '" style="width:' + bar_width + 'px; margin:0;">';
 			html += '<div class="progress_bar_label first_half" style="width:' + bar_width + 'px;">' + label + '</div>';
 			html += '<div class="progress_bar_inner" style="width:' + cx + 'px;">';
 				html += '<div class="progress_bar_label second_half" style="width:' + bar_width + 'px;">' + label + '</div>';
@@ -954,6 +954,23 @@ Page.Base = class Base extends Page {
 		html += '</div>';
 		
 		return html;
+	}
+	
+	updateJobProgressBar(job, $cont) {
+		// update job progress bar
+		if (typeof($cont) == 'string') $cont = this.div.find($cont);
+		
+		var counter = Math.min(1, Math.max(0, job.progress || 1));
+		var bar_width = this.bar_width || 100;
+		var cx = Math.floor( counter * bar_width );
+		var label = '' + Math.floor( (counter / 1.0) * 100 ) + '%';
+		var indeterminate = !!(counter == 1.0);
+		
+		if (indeterminate && !$cont.hasClass('indeterminate')) $cont.addClass('indeterminate');
+		else if (!indeterminate && $cont.hasClass('indeterminate')) $cont.removeClass('indeterminate');
+		
+		$cont.find('.progress_bar_inner').css('width', '' + cx + 'px');
+		$cont.find('.progress_bar_label').html( label );
 	}
 	
 	getNiceProgressBar(amount = 0, extra_classes = '', show_label = false) {

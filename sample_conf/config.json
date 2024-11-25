@@ -52,6 +52,9 @@
 	"alert_email_to": "",
 	"alert_web_hook": "",
 	
+	"search_file_threads": 1,
+	"search_file_regex": "\\.(txt|log|csv|tsv|xml|json)(\\.gz)?$",
+	
 	"hooks": {
 		"job_complete": { "shell_exec": "date" }
 	},

@@ -5,6 +5,7 @@ app.comm = {
 	connectTimeoutSec: 5,
 	statusTimeoutSec: 60,
 	socket: null,
+	commandQueue: [],
 	
 	init: function() {
 		// connect to server via socket.io
@@ -149,6 +150,12 @@ app.comm = {
 				
 				// immediately send our nav loc
 				socket.emit('user_nav', { loc: Nav.loc });
+				
+				// flush queue
+				this.commandQueue.forEach( function(item) {
+					self.sendCommand.apply( self, item );
+				} );
+				this.commandQueue = [];
 			break;
 			
 			case 'update':
@@ -338,6 +345,7 @@ app.comm = {
 		if (this.socket && this.socket.auth) {
 			this.socket.emit(cmd, data);
 		}
+		else this.commandQueue.push([ cmd, data ]);
 	},
 	
 	tick: function() {

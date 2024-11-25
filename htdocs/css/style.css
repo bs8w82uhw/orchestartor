@@ -390,6 +390,11 @@ body.dark div.maint_unit {
 	padding-bottom: 75px;
 }
 
+.loading_container.streaming {
+	padding-top: 60px;
+	padding-bottom: 10px;
+}
+
 .loading_container > .loading {
 	position: relative;
 	display: inline-block;
