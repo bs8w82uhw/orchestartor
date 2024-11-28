@@ -360,7 +360,7 @@ Page.Categories = class Categories extends Page.PageUtils {
 		var num_events = cat_events.length;
 		if (num_events) return app.doError("Sorry, you cannot delete a category that has events assigned to it.");
 		
-		Dialog.confirmDanger( 'Delete Category', "Are you sure you want to <b>permanently delete</b> the event category &ldquo;" + this.category.title + "&rdquo;?  There is no way to undo this action.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Category', "Are you sure you want to <b>permanently delete</b> the event category &ldquo;" + this.category.title + "&rdquo;?  There is no way to undo this action.", ['trash-can', 'Delete'], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting Category..." );
 				app.api.post( 'app/delete_category', self.category, self.delete_category_finish.bind(self) );

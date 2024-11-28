@@ -449,7 +449,7 @@ Page.Users = class Users extends Page.Base {
 			msg = "Are you sure you want to delete the user account &ldquo;" + this.user.username + "&rdquo;?  Users are managed by an external system, so this will have little effect here.";
 		}
 		
-		Dialog.confirmDanger( 'Delete Account', msg, 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Account', msg, ['trash-can', 'Delete'], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting Account..." );
 				app.api.post( 'user/admin_delete', {

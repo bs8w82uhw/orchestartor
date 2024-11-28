@@ -1251,7 +1251,7 @@ Page.Base = class Base extends Page {
 		var rows = this.limits;
 		var cols = ['<i class="mdi mdi-checkbox-marked-outline"></i>', 'Limit', 'Description', 'Actions'];
 		// var add_link = '<span class="link" onMouseUp="$P().editResLimit(-1)"><b>Add New Limit...</b></span>';
-		var add_link = '<div class="button small secondary" onMouseUp="$P().editResLimit(-1)">New Limit...</div>';
+		var add_link = '<div class="button small secondary" onMouseUp="$P().editResLimit(-1)"><i class="mdi mdi-plus-circle-outline">&nbsp;</i>New Limit...</div>';
 		
 		var targs = {
 			rows: rows,
@@ -1348,7 +1348,7 @@ Page.Base = class Base extends Page {
 		var self = this;
 		var limit = (idx > -1) ? this.limits[idx] : null;
 		var title = (idx > -1) ? "Editing Resource Limit" : "New Resource Limit";
-		var btn = (idx > -1) ? "Apply Changes" : "Add Limit";
+		var btn = (idx > -1) ? ['check-circle', "Apply Changes"] : ['plus-circle', "Add Limit"];
 		
 		if (!limit) {
 			if (!find_object(this.limits, { type: 'time' })) limit = { type: 'time' };
@@ -1655,7 +1655,7 @@ Page.Base = class Base extends Page {
 		var html = '';
 		var rows = this.actions;
 		var cols = ['<i class="mdi mdi-checkbox-marked-outline"></i>', 'Trigger', 'Type', 'Description', 'Actions'];
-		var add_link = '<div class="button small secondary" onMouseUp="$P().editJobAction(-1)">New Action...</div>';
+		var add_link = '<div class="button small secondary" onMouseUp="$P().editJobAction(-1)"><i class="mdi mdi-plus-circle-outline">&nbsp;</i>New Action...</div>';
 		
 		var targs = {
 			rows: rows,
@@ -1707,7 +1707,7 @@ Page.Base = class Base extends Page {
 		var self = this;
 		var action = (idx > -1) ? this.actions[idx] : { trigger: 'error', type: 'email', email: '', enabled: true };
 		var title = (idx > -1) ? "Editing Job Action" : "New Job Action";
-		var btn = (idx > -1) ? "Apply Changes" : "Add Action";
+		var btn = (idx > -1) ? ['check-circle', "Apply Changes"] : ['plus-circle', "Add Action"];
 		
 		var html = '<div class="dialog_box_content scroll">';
 		
@@ -2839,8 +2839,8 @@ Page.Base = class Base extends Page {
 		html += '<div id="fe_dialog_editor"><div class="CodeMirror"></div></div>';
 		
 		var buttons_html = "";
-		buttons_html += '<div id="btn_dialog_cancel" class="button" onClick="Dialog.hide()">Cancel</div>';
-		buttons_html += '<div id="btn_dialog_confirm" class="button primary">Apply Changes</div>';
+		buttons_html += '<div id="btn_dialog_cancel" class="button" onClick="Dialog.hide()"><i class="mdi mdi-close-circle-outline">&nbsp;</i>Cancel</div>';
+		buttons_html += '<div id="btn_dialog_confirm" class="button primary"><i class="mdi mdi-check-circle">&nbsp;</i>Apply Changes</div>';
 		
 		Dialog.showSimpleDialog(title, html, buttons_html);
 		

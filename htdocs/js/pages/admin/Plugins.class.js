@@ -389,7 +389,7 @@ Page.Plugins = class Plugins extends Page.PageUtils {
 		// var num_events = plugin_events.length;
 		// if (num_events) return app.doError("Sorry, you cannot delete a plugin that has events assigned to it.");
 		
-		Dialog.confirmDanger( 'Delete Plugin', "Are you sure you want to <b>permanently delete</b> the " + this.plugin.type + " plugin &ldquo;" + this.plugin.title + "&rdquo;?  There is no way to undo this action.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Plugin', "Are you sure you want to <b>permanently delete</b> the " + this.plugin.type + " plugin &ldquo;" + this.plugin.title + "&rdquo;?  There is no way to undo this action.", ['trash-can', 'Delete'], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting Plugin..." );
 				app.api.post( 'app/delete_plugin', self.plugin, self.delete_plugin_finish.bind(self) );
@@ -640,7 +640,7 @@ Page.Plugins = class Plugins extends Page.PageUtils {
 		var html = '';
 		var rows = this.params;
 		var cols = ['<i class="mdi mdi-menu"></i>', 'Label', 'Type', 'Description', 'Actions'];
-		var add_link = '<div class="button small secondary" onClick="$P().editParam(-1)">New Param...</div>';
+		var add_link = '<div class="button small secondary" onClick="$P().editParam(-1)"><i class="mdi mdi-plus-circle-outline">&nbsp;</i>New Param...</div>';
 		
 		var targs = {
 			rows: rows,
@@ -729,7 +729,7 @@ Page.Plugins = class Plugins extends Page.PageUtils {
 		var self = this;
 		var param = (idx > -1) ? this.params[idx] : { type: 'text', value: '' };
 		var title = (idx > -1) ? "Editing Parameter" : "New Parameter";
-		var btn = (idx > -1) ? "Apply Changes" : "Add Param";
+		var btn = (idx > -1) ? ['check-circle', "Apply Changes"] : ['plus-circle', "Add Param"];
 		var plugin_type = $('#fe_ep_type').val();
 		
 		// hide code type if non-event plugin

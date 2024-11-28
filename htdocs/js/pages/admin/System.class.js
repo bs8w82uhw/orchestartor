@@ -344,7 +344,7 @@ Page.System = class System extends Page.Base {
 		var self = this;
 		var html = "Use this feature to import bulk data into Orchestra by providing a file from your local machine.  The file should have been generated from a previous export.  <br><br> <b>Note:</b> It is highly recommended that you stop all running jobs before importing data.  Also note that the scheduler will automatically be paused if it is active.";
 		
-		Dialog.confirm( 'Import Data', html, 'Choose File...', function(result) {
+		Dialog.confirm( 'Import Data', html, ['database-import', 'Choose File...'], function(result) {
 			if (!result) return;
 			
 			var $file = $('<input type="file" style="display:none">');
@@ -447,7 +447,7 @@ Page.System = class System extends Page.Base {
 		});
 		
 		html += '</div>';
-		Dialog.confirm( "Export Data", html, "Export Now", function(result) {
+		Dialog.confirm( "Export Data", html, ['database-export', "Export Now"], function(result) {
 			if (!result) return;
 			app.clearError();
 			
@@ -533,7 +533,7 @@ Page.System = class System extends Page.Base {
 		});
 		
 		html += '</div>';
-		Dialog.confirmDanger( "Delete Data", html, "Delete Now", function(result) {
+		Dialog.confirmDanger( "Delete Data", html, ['trash-can', "Delete Now"], function(result) {
 			if (!result) return;
 			app.clearError();
 			
@@ -590,7 +590,7 @@ Page.System = class System extends Page.Base {
 		var self = this;
 		var html = "This runs the nightly database maintenance process manually.  The maintenance job deletes old data that has expired, and optionally backs up the database if configured.  Note that this will run multiple internal jobs in sequence.";
 		
-		Dialog.confirm( 'Run Maintenance', html, 'Run Now', function(result) {
+		Dialog.confirm( 'Run Maintenance', html, ['database-clock', 'Run Now'], function(result) {
 			if (!result) return;
 			Dialog.hide();
 			
@@ -605,7 +605,7 @@ Page.System = class System extends Page.Base {
 		var self = this;
 		var html = "This optimizes the local database by compacting it.  You should only need this if you delete a large amount of data and need to reclaim unused space.  It also runs an integrity check, and you will be sent an email report with all results.  <br><br>Please note that the database will be locked while the compaction and integrity check processes running, so it is highly recommended that you stop all jobs and pause the scheduler before running this job.";
 		
-		Dialog.confirm( 'Optimize Database', html, 'Optimize Now', function(result) {
+		Dialog.confirm( 'Optimize Database', html, ['database-refresh', 'Optimize Now'], function(result) {
 			if (!result) return;
 			Dialog.hide();
 			
@@ -620,7 +620,7 @@ Page.System = class System extends Page.Base {
 		var self = this;
 		var html = "This resets the daily statistics that are displayed on the Dashboard page.  Normally these are reset daily at midnight (local server time), but you can reset them manually if required.";
 		
-		Dialog.confirm( 'Reset Daily Stats', html, 'Reset Now', function(result) {
+		Dialog.confirm( 'Reset Daily Stats', html, ['skip-previous-circle', 'Reset Now'], function(result) {
 			if (!result) return;
 			Dialog.hide();
 			
@@ -647,7 +647,7 @@ Page.System = class System extends Page.Base {
 			commands: cmds
 		};
 		
-		Dialog.confirmDanger( '<span style="">' + ucfirst(cmds[0]) + ' Conductor</span>', "Are you sure you want to " + cmds[0] + " the conductor server &ldquo;" + item.id + "&rdquo;?", 'Confirm', function(result) {
+		Dialog.confirmDanger( '<span style="">' + ucfirst(cmds[0]) + ' Conductor</span>', "Are you sure you want to " + cmds[0] + " the conductor server &ldquo;" + item.id + "&rdquo;?", ['alert-decagram', 'Confirm'], function(result) {
 			if (result) {
 				Dialog.hide();
 				app.api.post( 'app/master_command', params, function(resp) {

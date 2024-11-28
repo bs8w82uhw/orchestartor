@@ -266,7 +266,7 @@ Page.APIKeys = class APIKeys extends Page.PageUtils {
 		// show dialog confirming api key delete action
 		var self = this;
 		
-		Dialog.confirmDanger( 'Delete API Key', "Are you sure you want to <b>permanently delete</b> the API Key &ldquo;" + this.api_key.title + "&rdquo;?  There is no way to undo this action.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete API Key', "Are you sure you want to <b>permanently delete</b> the API Key &ldquo;" + this.api_key.title + "&rdquo;?  There is no way to undo this action.", ['trash-can', 'Delete'], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting API Key..." );
 				app.api.post( 'app/delete_api_key', self.api_key, self.delete_api_key_finish.bind(self) );

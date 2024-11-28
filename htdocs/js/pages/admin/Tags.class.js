@@ -288,7 +288,7 @@ Page.Tags = class Tags extends Page.PageUtils {
 		// show dialog confirming tag delete action
 		var self = this;
 		
-		Dialog.confirmDanger( 'Delete Tag', "Are you sure you want to <b>permanently delete</b> the tag &ldquo;" + this.tag.title + "&rdquo;?  There is no way to undo this action.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Tag', "Are you sure you want to <b>permanently delete</b> the tag &ldquo;" + this.tag.title + "&rdquo;?  There is no way to undo this action.", ['trash-can', 'Delete'], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting Tag..." );
 				app.api.post( 'app/delete_tag', self.tag, self.delete_tag_finish.bind(self) );

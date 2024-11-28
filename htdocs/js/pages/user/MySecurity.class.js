@@ -153,7 +153,7 @@ Page.MySecurity = class MySecurity extends Page.Base {
 		html += '</div>';
 		html += '</form>';
 		
-		Dialog.confirmDanger( 'Logout Confirmation', html, 'Confirm', function(result) {
+		Dialog.confirmDanger( 'Logout Confirmation', html, ['alert-decagram', 'Confirm'], function(result) {
 			if (!result) return;
 			var password = $('#fe_la_password').val();
 			if (!password) return app.badField('#fe_la_password', "Please enter your current account password.");

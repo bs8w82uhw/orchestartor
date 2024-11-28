@@ -340,7 +340,7 @@ Page.Monitors = class Monitors extends Page.PageUtils {
 		// show dialog confirming monitor delete action
 		var self = this;
 		
-		Dialog.confirmDanger( 'Delete Monitor', "Are you sure you want to <b>permanently delete</b> the monitor &ldquo;" + this.monitor.title + "&rdquo;?  There is no way to undo this action.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Monitor', "Are you sure you want to <b>permanently delete</b> the monitor &ldquo;" + this.monitor.title + "&rdquo;?  There is no way to undo this action.", ['trash-can', 'Delete'], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting Monitor..." );
 				app.api.post( 'app/delete_monitor', self.monitor, self.delete_monitor_finish.bind(self) );

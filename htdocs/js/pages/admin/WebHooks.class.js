@@ -377,7 +377,7 @@ Page.WebHooks = class WebHooks extends Page.PageUtils {
 		// show dialog confirming web_hook delete action
 		var self = this;
 		
-		Dialog.confirmDanger( 'Delete Web Hook', "Are you sure you want to <b>permanently delete</b> the web hook &ldquo;" + this.web_hook.title + "&rdquo;?  There is no way to undo this action.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Web Hook', "Are you sure you want to <b>permanently delete</b> the web hook &ldquo;" + this.web_hook.title + "&rdquo;?  There is no way to undo this action.", ['trash-can', 'Delete'], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting Web Hook..." );
 				app.api.post( 'app/delete_web_hook', self.web_hook, self.delete_web_hook_finish.bind(self) );
@@ -574,7 +574,7 @@ Page.WebHooks = class WebHooks extends Page.PageUtils {
 		var html = '';
 		var rows = this.headers;
 		var cols = ['Header Name', 'Header Value', 'Actions'];
-		var add_link = '<div class="button small secondary" onClick="$P().editHeader(-1)">New Header...</div>';
+		var add_link = '<div class="button small secondary" onClick="$P().editHeader(-1)"><i class="mdi mdi-plus-circle-outline">&nbsp;</i>New Header...</div>';
 		
 		var targs = {
 			rows: rows,
@@ -609,7 +609,7 @@ Page.WebHooks = class WebHooks extends Page.PageUtils {
 		var self = this;
 		var header = (idx > -1) ? this.headers[idx] : { name: '', value: '' };
 		var title = (idx > -1) ? "Editing Header" : "New Header";
-		var btn = (idx > -1) ? "Apply Changes" : "Add Header";
+		var btn = (idx > -1) ? ['check-circle', "Apply Changes"] : ['plus-circle', "Add Header"];
 		
 		var html = '<div class="dialog_box_content scroll">';
 		

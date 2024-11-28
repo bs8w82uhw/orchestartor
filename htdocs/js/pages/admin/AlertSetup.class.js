@@ -338,7 +338,7 @@ Page.AlertSetup = class AlertSetup extends Page.PageUtils {
 		// show dialog confirming alert delete action
 		var self = this;
 		
-		Dialog.confirmDanger( 'Delete Alert', "Are you sure you want to <b>permanently delete</b> the alert &ldquo;" + this.alert.title + "&rdquo;?  There is no way to undo this action.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Alert', "Are you sure you want to <b>permanently delete</b> the alert &ldquo;" + this.alert.title + "&rdquo;?  There is no way to undo this action.", ['trash-can', 'Delete'], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting Alert..." );
 				app.api.post( 'app/delete_alert', self.alert, self.delete_alert_finish.bind(self) );

@@ -293,7 +293,7 @@ Page.MyAccount = class MyAccount extends Page.Base {
 			return app.badField('#fe_ma_old_password', "Please enter your current account password.");
 		}
 		
-		Dialog.confirmDanger( 'Delete My Account', "Are you sure you want to <b>permanently delete</b> your user account?  There is no way to undo this action, and no way to recover your data.", "Delete", function(result) {
+		Dialog.confirmDanger( 'Delete My Account', "Are you sure you want to <b>permanently delete</b> your user account?  There is no way to undo this action, and no way to recover your data.", ['trash-can', "Delete"], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting Account..." );
 				app.api.post( 'user/delete', {

@@ -664,7 +664,7 @@ Page.Search = class Search extends Page.Base {
 		var args = this.args;
 		var query = this.getSearchQuery(args);
 		
-		Dialog.confirmDanger( 'Delete All Results', "Are you sure you want to <b>permanently delete</b> all " + commify(total) + " search results?", 'Delete All', function(result) {
+		Dialog.confirmDanger( 'Delete All Results', "Are you sure you want to <b>permanently delete</b> all " + commify(total) + " search results?", ['trash-can', 'Delete All'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Starting Bulk Delete..." );
@@ -726,7 +726,11 @@ Page.Search = class Search extends Page.Base {
 		});
 		
 		html += '</div>';
-		Dialog.confirm( preset.name ? 'Edit Search Preset' : 'Save Search Preset', html, preset.name ? 'Save Changes' : 'Save Preset', function(result) {
+		
+		var title = preset.name ? 'Edit Search Preset' : 'Save Search Preset';
+		var btn = ['floppy', preset.name ? 'Save Changes' : 'Save Preset'];
+		
+		Dialog.confirm( title, html, btn, function(result) {
 			if (!result) return;
 			
 			preset = sargs;
@@ -775,7 +779,7 @@ Page.Search = class Search extends Page.Base {
 		
 		var msg = "Are you sure you want to delete the search preset &ldquo;<b>" + encode_entities(preset.name) + "</b>&rdquo;?  You cannot undo this action.";
 		
-		Dialog.confirmDanger( 'Delete Search Preset', msg, 'Delete Preset', function(result) {
+		Dialog.confirmDanger( 'Delete Search Preset', msg, ['trash-can', 'Delete Preset'], function(result) {
 			if (result) {
 				app.user.searches.splice( preset_idx, 1 );
 				Dialog.showProgress( 1.0, "Saving settings..." );

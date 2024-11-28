@@ -195,7 +195,7 @@ Page.ServerUtils = class ServerUtils extends Page.Base {
 		
 		var buttons_html = "";
 		// buttons_html += '<div class="button" onMouseUp="$P().copy_unit_results('+idx+')">Copy to Clipboard</div>';
-		buttons_html += '<div class="button primary" onMouseUp="Dialog.confirm_click(true)">Close</div>';
+		buttons_html += '<div class="button primary" onMouseUp="Dialog.confirm_click(true)"><i class="mdi mdi-close-circle-outline">&nbsp;</i>Close</div>';
 		
 		Dialog.showSimpleDialog('Process Details', html, buttons_html);
 		
@@ -783,7 +783,7 @@ Page.ServerUtils = class ServerUtils extends Page.Base {
 		var self = this;
 		var args = this.args;
 		var title = "View Historical Server Data";
-		var btn = "Apply Changes";
+		var btn = ['check-circle', "Apply Changes"];
 		
 		var html = '<div class="dialog_box_content maximize" style="width:400px; max-height:75vh; overflow-x:hidden; overflow-y:auto;">';
 		

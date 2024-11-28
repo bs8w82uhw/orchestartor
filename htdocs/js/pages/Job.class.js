@@ -548,7 +548,7 @@ Page.Job = class Job extends Page.Base {
 		
 		var comment = (idx > -1) ? job.comments[idx] : { msg: '' };
 		var title = (idx > -1) ? "Editing Comment" : "New Comment";
-		var btn = (idx > -1) ? "Save Changes" : "Add Comment";
+		var btn = (idx > -1) ? ['floppy', "Save Changes"] : ['comment-plus', "Add Comment"];
 		
 		var html = '<div class="dialog_box_content maximize" style="max-height:75vh; overflow-x:hidden; overflow-y:auto;">';
 		
@@ -1641,7 +1641,7 @@ Page.Job = class Job extends Page.Base {
 		
 		var buttons_html = "";
 		// buttons_html += '<div class="button" onMouseUp="$P().copy_unit_results('+idx+')">Copy to Clipboard</div>';
-		buttons_html += '<div class="button primary" onMouseUp="Dialog.confirm_click(true)">Close</div>';
+		buttons_html += '<div class="button primary" onMouseUp="Dialog.confirm_click(true)"><i class="mdi mdi-close-circle-outline">&nbsp;</i>Close</div>';
 		
 		Dialog.showSimpleDialog('Process Details', html, buttons_html);
 		
@@ -1765,7 +1765,7 @@ Page.Job = class Job extends Page.Base {
 		var file = job.files[idx];
 		var filename = basename(file.path || '(Unknown)');
 		
-		Dialog.confirmDanger( 'Delete File', "Are you sure you want to permanently delete the job file &ldquo;<b>" + filename + "</b>&rdquo;?  There is no way to undo this operation.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete File', "Are you sure you want to permanently delete the job file &ldquo;<b>" + filename + "</b>&rdquo;?  There is no way to undo this operation.", ['trash-can', 'Delete'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Deleting File..." );
@@ -1788,7 +1788,7 @@ Page.Job = class Job extends Page.Base {
 		var job = this.job;
 		if (!app.requirePrivilege('delete_jobs')) return;
 		
-		Dialog.confirmDanger( 'Delete Job', "Are you sure you want to permanently delete the current job, including all logs and files?  There is no way to undo this operation.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Job', "Are you sure you want to permanently delete the current job, including all logs and files?  There is no way to undo this operation.", ['trash-can', 'Delete'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Deleting Job..." );
@@ -1810,7 +1810,7 @@ Page.Job = class Job extends Page.Base {
 		var job = this.job;
 		if (!app.requirePrivilege('abort_jobs')) return;
 		
-		Dialog.confirmDanger( 'Abort Job', "Are you sure you want to abort the current job?", 'Abort', function(result) {
+		Dialog.confirmDanger( 'Abort Job', "Are you sure you want to abort the current job?", ['alert-decagram', 'Abort'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Aborting Job..." );
@@ -1827,7 +1827,7 @@ Page.Job = class Job extends Page.Base {
 		var self = this;
 		if (!app.requirePrivilege('run_jobs')) return;
 		
-		Dialog.confirm( 'Run Job Again', "Are you sure you want to run the current job again?", 'Run Now', function(result) {
+		Dialog.confirm( 'Run Job Again', "Are you sure you want to run the current job again?", ['run-fast', 'Run Now'], function(result) {
 			if (!result) return;
 			self.do_run_again();
 		} ); // confirm

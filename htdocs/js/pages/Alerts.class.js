@@ -599,7 +599,7 @@ Page.Alerts = class Alerts extends Page.Base {
 		var self = this;
 		var alert = this.alert;
 		
-		Dialog.confirmDanger( 'Delete Alert', "Are you sure you want to permanently delete the current alert invocation?  There is no way to undo this operation.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Alert', "Are you sure you want to permanently delete the current alert invocation?  There is no way to undo this operation.", ['trash-can', 'Delete'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Deleting Alert..." );

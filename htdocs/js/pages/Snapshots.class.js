@@ -603,7 +603,7 @@ Page.Snapshots = class Snapshots extends Page.ServerUtils {
 		var self = this;
 		var snapshot = this.snapshot;
 		
-		Dialog.confirmDanger( 'Delete Snapshot', "Are you sure you want to permanently delete the current snapshot?  There is no way to undo this operation.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Snapshot', "Are you sure you want to permanently delete the current snapshot?  There is no way to undo this operation.", ['trash-can', 'Delete'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Deleting Snapshot..." );

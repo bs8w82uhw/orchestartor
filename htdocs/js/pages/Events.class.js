@@ -206,10 +206,10 @@ Page.Events = class Events extends Page.PageUtils {
 			html += '</div>'; // form_grid
 		
 		// buttons at bottom
-		html += '<div class="box_buttons" style="padding:0">';
+		html += '<div class="search_buttons" style="padding:0">';
 			html += '<div id="btn_el_reset" class="button" style="display:none" onClick="$P().resetFilters()"><i class="mdi mdi-undo-variant">&nbsp;</i>Reset Filters</div>';
 			html += '<div class="button primary" onClick="$P().applyTableFilters(true)"><i class="mdi mdi-magnify">&nbsp;</i>Search</div>';
-		html += '</div>'; // box_buttons
+		html += '</div>'; // search_buttons
 		
 		html += '</div>'; // box_content
 		html += '</div>'; // box
@@ -283,7 +283,7 @@ Page.Events = class Events extends Page.PageUtils {
 			rows: this.events,
 			cols: cols,
 			data_type: 'event',
-			grid_template_columns: 'min-content' + ' auto'.repeat( cols.length - 1 ),
+			grid_template_columns: '40px' + ' auto'.repeat( cols.length - 1 ),
 			below: '<ul class="grid_row_empty" id="ul_el_none_found" style="display:none"><div style="grid-column-start: span ' + cols.length + ';">No events found matching your filters.</div></ul>'
 		};
 		
@@ -623,7 +623,7 @@ Page.Events = class Events extends Page.PageUtils {
 		this.event = this.events[idx];
 		app.clearError();
 		
-		Dialog.confirm( 'Run Event', "Are you sure you want to manually run the event &ldquo;" + this.event.title + "&rdquo;?", 'Run Now', function(result) {
+		Dialog.confirm( 'Run Event', "Are you sure you want to manually run the event &ldquo;" + this.event.title + "&rdquo;?", ['run-fast', 'Run Now'], function(result) {
 			if (!result) return;
 			self.run_event(idx);
 		} ); // confirm
@@ -892,7 +892,7 @@ Page.Events = class Events extends Page.PageUtils {
 		// confirm user wants to run job
 		var self = this;
 		
-		Dialog.confirm( 'Run Event', "Are you sure you want to manually run the current event?", 'Run Now', function(result) {
+		Dialog.confirm( 'Run Event', "Are you sure you want to manually run the current event?", ['run-fast', 'Run Now'], function(result) {
 			if (!result) return;
 			self.do_run_from_view();
 		} ); // confirm
@@ -921,7 +921,7 @@ Page.Events = class Events extends Page.PageUtils {
 		var self = this;
 		var msg = 'Are you sure you want to flush the entire job queue?';
 		
-		Dialog.confirmDanger( 'Flush Job Queue', msg, 'Flush', function(result) {
+		Dialog.confirmDanger( 'Flush Job Queue', msg, ['trash-can', 'Flush'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Flushing Queue..." );
@@ -1043,7 +1043,7 @@ Page.Events = class Events extends Page.PageUtils {
 	
 	doAbortJob(id) {
 		// abort job, clicked from active or queued tables
-		Dialog.confirmDanger( 'Abort Job', "Are you sure you want to abort the job &ldquo;<b>" + id + "</b>&rdquo;?", 'Abort', function(result) {
+		Dialog.confirmDanger( 'Abort Job', "Are you sure you want to abort the job &ldquo;<b>" + id + "</b>&rdquo;?", ['alert-decagram', 'Abort'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Aborting Job..." );
@@ -1510,7 +1510,7 @@ Page.Events = class Events extends Page.PageUtils {
 			case 'schedule': msg += '  Since this is a scheduled timing rule, a new "Blackout" range will be added to disable it.'; break;
 		}
 		
-		Dialog.confirmDanger( 'Skip Upcoming Job', msg, 'Skip Job', function(result) {
+		Dialog.confirmDanger( 'Skip Upcoming Job', msg, ['alert-decagram', 'Skip Job'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Skipping Job..." );
@@ -1960,7 +1960,7 @@ Page.Events = class Events extends Page.PageUtils {
 		});
 		
 		html += '</div>';
-		Dialog.confirm( "Test Event", html, "Run Event", function(result) {
+		Dialog.confirm( "Test Event", html, ['run-fast', 'Run Now'], function(result) {
 			if (!result) return;
 			
 			var job = deep_copy_object(event);
@@ -2041,7 +2041,7 @@ Page.Events = class Events extends Page.PageUtils {
 		var event_jobs = find_objects( app.activeJobs, { event: this.event.id } );
 		if (event_jobs.length) return app.doError("Sorry, you cannot delete a event that has active jobs running.");
 		
-		Dialog.confirmDanger( 'Delete Event', "Are you sure you want to <b>permanently delete</b> the event &ldquo;" + this.event.title + "&rdquo;?  There is no way to undo this action.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Event', "Are you sure you want to <b>permanently delete</b> the event &ldquo;" + this.event.title + "&rdquo;?  There is no way to undo this action.", ['trash-can', 'Delete'], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting Event..." );
 				app.api.post( 'app/delete_event', self.event, self.delete_event_finish.bind(self) );
@@ -2264,7 +2264,7 @@ Page.Events = class Events extends Page.PageUtils {
 		// show dialog to quickly add a new category, then redraw cat menu, and preselect the newly added
 		var self = this;
 		var title = "Quick Add Category";
-		var btn = "Add Category";
+		var btn = ['folder-plus', "Add Category"];
 		
 		var html = '<div class="dialog_box_content">';
 		
@@ -2312,7 +2312,7 @@ Page.Events = class Events extends Page.PageUtils {
 		// show dialog to quickly add a new tag, then redraw cat menu, and preselect the newly added
 		var self = this;
 		var title = "Quick Add Tag";
-		var btn = "Add Tag";
+		var btn = ['tag-plus', "Add Tag"];
 		
 		var html = '<div class="dialog_box_content">';
 		
@@ -2436,7 +2436,7 @@ Page.Events = class Events extends Page.PageUtils {
 		var self = this;
 		var html = '';
 		var cols = ['<i class="mdi mdi-checkbox-marked-outline"></i>', 'Type', 'Description', 'Actions'];
-		var add_link = '<div class="button small secondary" onClick="$P().editTiming(-1)">New Rule...</div>';
+		var add_link = '<div class="button small secondary" onClick="$P().editTiming(-1)"><i class="mdi mdi-plus-circle-outline">&nbsp;</i>New Rule...</div>';
 		
 		// custom sort
 		var rows = this.getSortedTimings();
@@ -2527,7 +2527,7 @@ Page.Events = class Events extends Page.PageUtils {
 		var new_item = { type: 'schedule', enabled: true, minutes: [0] };
 		var timing = (idx > -1) ? this.event.timings[idx] : new_item;
 		var title = (idx > -1) ? "Editing Timing Rule" : "New Timing Rule";
-		var btn = (idx > -1) ? "Apply Changes" : "Add Rule";
+		var btn = (idx > -1) ? ['check-circle', "Apply Changes"] : ['plus-circle', "Add Rule"];
 		
 		// if user's tz differs from server tz, pre-populate timezone menu with user's zone
 		var ropts = Intl.DateTimeFormat().resolvedOptions();

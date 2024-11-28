@@ -1080,7 +1080,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 	
 	doAbortJob(id) {
 		// abort job, clicked from active or queued tables
-		Dialog.confirmDanger( 'Abort Job', "Are you sure you want to abort the job &ldquo;<b>" + id + "</b>&rdquo;?", 'Abort', function(result) {
+		Dialog.confirmDanger( 'Abort Job', "Are you sure you want to abort the job &ldquo;<b>" + id + "</b>&rdquo;?", ['alert-decagram', 'Abort'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Aborting Job..." );

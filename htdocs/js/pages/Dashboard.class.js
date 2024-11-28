@@ -307,7 +307,7 @@ Page.Dashboard = class Dashboard extends Page.Base {
 	
 	doAbortJob(id) {
 		// abort job, clicked from active or queued tables
-		Dialog.confirmDanger( 'Abort Job', "Are you sure you want to abort the job &ldquo;<b>" + id + "</b>&rdquo;?", 'Abort', function(result) {
+		Dialog.confirmDanger( 'Abort Job', "Are you sure you want to abort the job &ldquo;<b>" + id + "</b>&rdquo;?", ['alert-decagram', 'Abort'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Aborting Job..." );
@@ -529,7 +529,7 @@ Page.Dashboard = class Dashboard extends Page.Base {
 		// flush specific event queue
 		var self = this;
 		
-		Dialog.confirmDanger( 'Flush Queue', "Are you sure you want to flush the event queue for <b>" + this.getNiceEvent(id, false) + "</b>?  All pending jobs will be silently deleted without triggering completion actions.", 'Flush', function(result) {
+		Dialog.confirmDanger( 'Flush Queue', "Are you sure you want to flush the event queue for <b>" + this.getNiceEvent(id, false) + "</b>?  All pending jobs will be silently deleted without triggering completion actions.", ['trash-can', 'Flush'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Flushing Queue..." );
@@ -628,7 +628,7 @@ Page.Dashboard = class Dashboard extends Page.Base {
 			case 'schedule': msg += '  Since this is a scheduled timing rule, a new "Blackout" range will be added to disable it.'; break;
 		}
 		
-		Dialog.confirmDanger( 'Skip Upcoming Job', msg, 'Skip Job', function(result) {
+		Dialog.confirmDanger( 'Skip Upcoming Job', msg, ['alert-decagram', 'Skip Job'], function(result) {
 			if (!result) return;
 			app.clearError();
 			Dialog.showProgress( 1.0, "Skipping Job..." );

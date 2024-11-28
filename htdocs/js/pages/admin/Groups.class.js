@@ -343,7 +343,7 @@ Page.Groups = class Groups extends Page.PageUtils {
 		// show dialog confirming group delete action
 		var self = this;
 		
-		Dialog.confirmDanger( 'Delete Group', "Are you sure you want to <b>permanently delete</b> the server group &ldquo;" + this.group.title + "&rdquo;?  There is no way to undo this action.", 'Delete', function(result) {
+		Dialog.confirmDanger( 'Delete Group', "Are you sure you want to <b>permanently delete</b> the server group &ldquo;" + this.group.title + "&rdquo;?  There is no way to undo this action.", ['trash-can', 'Delete'], function(result) {
 			if (result) {
 				Dialog.showProgress( 1.0, "Deleting Group..." );
 				app.api.post( 'app/delete_group', self.group, self.delete_group_finish.bind(self) );
