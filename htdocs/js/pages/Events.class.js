@@ -608,10 +608,8 @@ Page.Events = class Events extends Page.PageUtils {
 		app.api.post( 'app/update_event', { id: item.id, enabled: item.enabled }, function(resp) {
 			if (!self.active) return; // sanity
 			
-			if (item.enabled) $(elem).closest('tr').removeClass('disabled');
-			else $(elem).closest('tr').addClass('disabled');
-			
-			$(elem).closest('tr').find('div.td_big').html( self.getNiceEvent(item, true) );
+			if (item.enabled) $(elem).closest('ul').removeClass('disabled');
+			else $(elem).closest('ul').addClass('disabled');
 			
 			app.showMessage('success', item.title + " was " + (item.enabled ? 'enabled' : 'disabled') + " successfully.");
 		} );
@@ -2517,8 +2515,8 @@ Page.Events = class Events extends Page.PageUtils {
 		var item = this.event.timings[idx];
 		item.enabled = !!$(elem).is(':checked');
 		
-		if (item.enabled) $(elem).closest('tr').removeClass('disabled');
-		else $(elem).closest('tr').addClass('disabled');
+		if (item.enabled) $(elem).closest('ul').removeClass('disabled');
+		else $(elem).closest('ul').addClass('disabled');
 	}
 	
 	editTiming(idx) {
@@ -3319,7 +3317,7 @@ Page.Events = class Events extends Page.PageUtils {
 			// check with cache
 			if (find_object(app.events, { id: id })) {
 				// event taken
-				$elem.css('color','red').html('<span class="mdi mdi-event-circle"></span>').attr('title', "Event ID is taken.");
+				$elem.css('color','red').html('<span class="mdi mdi-alert-circle"></span>').attr('title', "Event ID is taken.");
 				$field.addClass('warning');
 			}
 			else {
