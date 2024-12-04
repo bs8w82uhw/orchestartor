@@ -348,7 +348,7 @@ Page.Base = class Base extends Page {
 		var html = '<span class="nowrap">';
 		var icon = '<i class="mdi mdi-' + (item.offline ? 'close-network-outline' : (item.icon || 'router-network')) + '"></i>';
 		if (link) {
-			html += '<a href="#Servers?sub=view&id=' + item.id + '">';
+			html += '<a href="#Servers?id=' + item.id + '">';
 			html += icon + '<span>' + (item.title || this.formatHostname(item.hostname)) + '</span></a>';
 		}
 		else {
