@@ -1148,6 +1148,10 @@ div.data_grid > ul.grid_row_header > div.st_col_header.active {
 
 /* Toggle Boxes */
 
+div.box > div.box_title > i:before {
+	transform: scale(1.2);
+}
+
 div.box.toggle > div.box_title {
 	position: relative;
 }
