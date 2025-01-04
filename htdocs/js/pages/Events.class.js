@@ -975,7 +975,7 @@ Page.Events = class Events extends Page.PageUtils {
 		
 		html += this.getPaginatedGrid( grid_args, function(job, idx) {
 			return [
-				'<b>' + self.getNiceJob(job.id, true) + '</b>',
+				'<b>' + self.getNiceJob(job, true) + '</b>',
 				self.getNiceJobState(job),
 				self.getNiceJobSource(job),
 				self.getNiceTargetList(job.targets),
@@ -1023,7 +1023,7 @@ Page.Events = class Events extends Page.PageUtils {
 		
 		html += this.getPaginatedGrid( grid_args, function(job, idx) {
 			return [
-				'<b>' + self.getNiceJob(job.id, true) + '</b>',
+				'<b>' + self.getNiceJob(job, true) + '</b>',
 				// self.getNiceJobSource(job),
 				// self.getShortDateTime( job.started ),
 				'<div id="d_ve_jt_server_' + job.id + '">' + self.getNiceServer(job.server, true) + '</div>',
@@ -1167,7 +1167,7 @@ Page.Events = class Events extends Page.PageUtils {
 		
 		html += this.getPaginatedGrid( grid_args, function(job, idx) {
 			return [
-				'<b>' + self.getNiceJob(job.id, true) + '</b>',
+				'<b>' + self.getNiceJob(job, true) + '</b>',
 				self.getNiceServer(job.server, true),
 				self.getNiceJobSource(job),
 				self.getShortDateTime( job.started ),

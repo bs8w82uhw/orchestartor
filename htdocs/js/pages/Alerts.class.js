@@ -520,7 +520,7 @@ Page.Alerts = class Alerts extends Page.Base {
 		
 		html += this.getBasicGrid( grid_args, function(job, idx) {
 			return [
-				'<b>' + self.getNiceJob(job.id, true) + '</b>',
+				'<b>' + self.getNiceJob(job, true) + '</b>',
 				self.getNiceServer(job.server, true),
 				self.getNiceJobSource(job),
 				self.getShortDateTime( job.started ),

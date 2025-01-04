@@ -195,7 +195,7 @@ Page.Job = class Job extends Page.Base {
 					// row 1
 					html += '<div>';
 						html += '<div class="info_label">Job ID</div>';
-						html += '<div class="info_value">' + this.getNiceJob(job.id) + '</div>';
+						html += '<div class="info_value">' + this.getNiceJob(job) + '</div>';
 					html += '</div>';
 					
 					html += '<div>';
@@ -749,7 +749,7 @@ Page.Job = class Job extends Page.Base {
 			html += this.getBasicGrid( grid_args, function(item, idx) {
 				var reason = job.jobs[idx].reason;
 				return [
-					self.getNiceJob(item.id, true),
+					self.getNiceJob(item, true),
 					ucfirst(reason),
 					self.getNiceEvent(item.event, true),
 					self.getNiceCategory(item.category, true),

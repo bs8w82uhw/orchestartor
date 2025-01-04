@@ -942,18 +942,25 @@ Page.Base = class Base extends Page {
 		return '<span class="color_label ' + color + ' nowrap">' + icon + text + '</span>';
 	}
 	
-	getNiceJob(id, link) {
+	getNiceJob(job, link) {
 		// get formatted job ID with icon, plus optional link
-		if (!id) return '(None)';
+		if (!job) return '(None)';
+		if (typeof(job) == 'string') {
+			if (app.activeJobs[job]) job = app.activeJobs[job];
+			else job = { id: job };
+		}
+		
+		var nice_id = job.id;
+		if (job.label) nice_id = job.label + ' (' + job.id + ')';
 		
 		var html = '<span class="nowrap">';
 		var icon = '<i class="mdi mdi-timer-outline"></i>';
 		if (link) {
-			html += '<a href="#Job?id=' + id + '">';
-			html += icon + '<span>' + id + '</span></a>';
+			html += '<a href="#Job?id=' + job.id + '">';
+			html += icon + '<span>' + nice_id + '</span></a>';
 		}
 		else {
-			html += icon + id;
+			html += icon + nice_id;
 		}
 		
 		html += '</span>';

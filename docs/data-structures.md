@@ -372,6 +372,10 @@ This is set to `true` by the scheduler when a job was launched from a "single-sh
 
 This is set to a Plugin ID by the scheduler when a job was launched from a Plugin based timing configuration.  Only used for UI hinting.
 
+## Job.label
+
+User writable property for providing a visual label for the Job.  Should be specified as a string, and will be displayed alongside the Job ID on completion screens and history lists.
+
 
 
 # Workflow
