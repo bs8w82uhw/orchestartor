@@ -187,7 +187,7 @@ Page.Base = class Base extends Page {
 		switch (item.source) {
 			case 'alert': icon = 'bell-outline'; break;
 			case 'user': icon = 'account'; break;
-			case 'watch': icon = 'binoculars'; break;
+			case 'watch': icon = 'bullseye-arrow'; break;
 			case 'job': icon = 'timer-outline'; break;
 		}
 		var html = '<i class="mdi mdi-' + icon + '">&nbsp;</i>';
