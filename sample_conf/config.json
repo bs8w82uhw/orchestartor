@@ -77,17 +77,17 @@
 	},
 	
 	"quick_monitors": [
-		{ "id": "_qm_cpu_load", "title": "CPU Load Average", "source": "cpu.avgLoad", "type": "float", "suffix": "", "minVertScale": 0.1 },
-		{ "id": "_qm_cpu_usage", "title": "CPU Usage %", "source": "cpu.currentLoad", "type": "float", "suffix": "%" },
+		{ "id": "_qm_cpu_load", "title": "CPU Load Average", "source": "cpu.avgLoad", "type": "float", "suffix": "", "min_vert_scale": 1.0 },
+		{ "id": "_qm_cpu_usage", "title": "CPU Usage %", "source": "cpu.currentLoad", "type": "float", "suffix": "%", "min_vert_scale": 100 },
 		
 		{ "id": "_qm_mem_used", "title": "Memory in Use", "source": "mem.used", "type": "bytes", "suffix": "" },
 		{ "id": "_qm_mem_avail", "title": "Memory Available", "source": "mem.available", "type": "bytes", "suffix": "" },
 		
-		{ "id": "_qm_disk_read_sec", "title": "Disk Read (Bytes)", "source": "fs.rx_sec", "type": "bytes", "suffix": "/sec" },
-		{ "id": "_qm_disk_write_sec", "title": "Disk Write (Bytes)", "source": "fs.wx_sec", "type": "bytes", "suffix": "/sec" },
+		{ "id": "_qm_disk_read_sec", "title": "Disk Read (Bytes)", "source": "fs.rx", "type": "bytes", "suffix": "/sec", "min_vert_scale": 1024, "delta": true, "divide_by_delta": true },
+		{ "id": "_qm_disk_write_sec", "title": "Disk Write (Bytes)", "source": "fs.wx", "type": "bytes", "suffix": "/sec", "min_vert_scale": 1024, "delta": true, "divide_by_delta": true },
 		
-		{ "id": "_qm_net_in_sec", "title": "Network In (Bytes)", "source": "net.rx_sec", "type": "bytes", "suffix": "/sec" },
-		{ "id": "_qm_net_out_sec", "title": "Network Out (Bytes)", "source": "net.tx_sec", "type": "bytes", "suffix": "/sec" }
+		{ "id": "_qm_net_in_sec", "title": "Network In (Bytes)", "source": "net.rx", "type": "bytes", "suffix": "/sec", "min_vert_scale": 1024, "delta": true, "divide_by_delta": true },
+		{ "id": "_qm_net_out_sec", "title": "Network Out (Bytes)", "source": "net.tx", "type": "bytes", "suffix": "/sec", "min_vert_scale": 1024, "delta": true, "divide_by_delta": true }
 	],
 	
 	"default_user": {
