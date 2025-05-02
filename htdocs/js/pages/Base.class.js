@@ -200,16 +200,28 @@ Page.Base = class Base extends Page {
 		// get formatted process cmd
 		var short_cmd = '' + item.command;
 		short_cmd = short_cmd.replace(/\s[\-\(\/\*].*$/, '');
-		short_cmd = basename(short_cmd);
-		if ((short_cmd.length > 32) && short_cmd.match(/\s/)) {
-			short_cmd = short_cmd.replace(/\s.*$/, '');
+		
+		if (short_cmd.match(/^\w\:\\/)) {
+			// windows path
+			short_cmd = short_cmd.replace(/\\$/, "").replace(/^(.*)\\([^\\]+)$/, "$2");
 		}
+		else if (short_cmd.match(/^\//)) {
+			// unix path
+			short_cmd = basename(short_cmd);
+		}
+		
+		if ((short_cmd.length > 32) && short_cmd.match(/\s/)) {
+			// longer commands get chopped at the first space
+			short_cmd = short_cmd.replace(/\:?\s.*$/, '');
+		}
+		
+		// colon space gets chopped
 		short_cmd = short_cmd.replace(/\:\s+.*$/, '');
 		
 		var html = '<span class="nowrap">';
 		var icon = '<i class="mdi mdi-' + (item.job ? 'console' : 'console') + '"></i>';
 		if (link) {
-			html += '<span class="link" onClick="$P().showProcessInfo(' + item.pid + ')">';
+			html += '<span class="link" onClick="$P().showProcessInfo(' + item.pid + ')" title="' + encode_attrib_entities(item.command) + '">';
 			html += icon + '<span>' + short_cmd + '</span></span>';
 		}
 		else {
@@ -357,14 +369,20 @@ Page.Base = class Base extends Page {
 		var icon = '<i class="mdi mdi-' + (item.offline ? 'close-network-outline' : (item.icon || 'router-network')) + '"></i>';
 		if (link) {
 			html += '<a href="#Servers?id=' + item.id + '">';
-			html += icon + '<span>' + (item.title || this.formatHostname(item.hostname)) + '</span></a>';
+			html += icon + '<span>' + this.getNiceServerText(item) + '</span></a>';
 		}
 		else {
-			html += icon + (item.title || this.formatHostname(item.hostname));
+			html += icon + this.getNiceServerText(item);
 		}
 		
 		html += '</span>';
 		return html;
+	}
+	
+	getNiceServerText(item) {
+		// get server label or hostname
+		if (!item) return '(None)';
+		return item.title || app.formatHostname(item.hostname);
 	}
 	
 	getNiceTarget(target) {
@@ -491,36 +509,6 @@ Page.Base = class Base extends Page {
 		return html;
 	}
 	
-	getNiceHostname(hostname, link) {
-		// get formatted hostname with icon, plus optional link
-		if (!hostname) return '(None)';
-		
-		// TODO: all this shit is from performa: -- also, this function is UNUSED!
-		var query = { hostname: hostname };
-		if (this.args && this.args.sys) query.sys = this.args.sys;
-		if (this.args && this.args.date) query.date = this.args.date;
-		if (this.args && ('offset' in this.args)) query.offset = this.args.offset;
-		if (this.args && this.args.length) query.length = this.args.length;
-		
-		var html = '<span class="nowrap">';
-		var icon = '<i class="mdi mdi-desktop-classic"></i>';
-		if (link) {
-			html += '<a href="#Server' + compose_query_string(query) + '">';
-			html += icon + '<span>' + this.formatHostname(hostname) + '</span></a>';
-		}
-		else {
-			html += icon + this.formatHostname(hostname);
-		}
-		
-		html += '</span>';
-		return html;
-	}
-	
-	formatHostname(hostname) {
-		// format hostname for display
-		return app.formatHostname(hostname);
-	}
-	
 	getNiceIP(ip) {
 		// get nice ip address for display
 		return '<i class="mdi mdi-earth">&nbsp;</i>' + ip;
@@ -529,7 +517,7 @@ Page.Base = class Base extends Page {
 	getNiceArch(arch) {
 		// get nice server architecture for display
 		var icon = arch.match(/64/) ? 'cpu-64-bit' : 'chip';
-		return '<i class="mdi mdi-' + icon + '">&nbsp;</i>' + arch.toUpperCase();
+		return '<i class="mdi mdi-' + icon + '">&nbsp;</i>' + arch;
 	}
 	
 	getNiceOS(os) {
@@ -559,7 +547,7 @@ Page.Base = class Base extends Page {
 	
 	getNiceCPUType(cpu) {
 		// get nice cpu type with icon
-		return '<i class="mdi mdi-developer-board">&nbsp;</i>' + cpu.vendor + ' ' + cpu.brand;
+		return '<i class="mdi mdi-developer-board">&nbsp;</i>' + cpu.combo || (cpu.vendor + ' ' + cpu.brand);
 	}
 	
 	getNiceUptime(secs) {
@@ -2543,7 +2531,7 @@ Page.Base = class Base extends Page {
 	}
 	
 	chartCopyJSON(key, elem) {
-		// upload image to server and copy link to it
+		// copy chart JSON to clipboard
 		var chart = this.charts[key];
 		var $elem = $(elem);
 		var json = JSON.stringify( { title: chart.title, layers: chart.layers } );
@@ -2555,7 +2543,7 @@ Page.Base = class Base extends Page {
 		// format quickmon data to be compat with pixl-chart
 		var data = [];
 		rows.forEach( function(row) {
-			data.push({ x: row.date, y: row[id] });
+			data.push({ x: row.date, y: row[id] || 0 });
 		} );
 		return data;
 	}
