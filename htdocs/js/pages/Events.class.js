@@ -467,7 +467,7 @@ Page.Events = class Events extends Page.PageUtils {
 		Nav.loc = url;
 		
 		// magic trick: replace link in sidebar for Events
-		$('#tab_Events').attr( 'href', url );
+		// $('#tab_Events').attr( 'href', url );
 	}
 	
 	resetFilters() {
