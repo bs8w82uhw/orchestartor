@@ -1,4 +1,4 @@
-Page.ServerUtils = class ServerUtils extends Page.Base {
+Page.ServerUtils = class ServerUtils extends Page.PageUtils {
 	
 	showProcessInfo(pid) {
 		// pop dialog with process details
@@ -268,7 +268,7 @@ Page.ServerUtils = class ServerUtils extends Page.Base {
 			rows: rows,
 			cols: cols,
 			data_type: 'cpu',
-			grid_template_columns: 'repeat(8, 1fr)'
+			grid_template_columns: 'repeat(7, 1fr) min-content'
 		};
 		
 		html += this.getBasicGrid( grid_args, function(item, idx) {
@@ -1072,6 +1072,145 @@ Page.ServerUtils = class ServerUtils extends Page.Base {
 				else $cont.hide();
 			}
 		}
+	}
+	
+	showAddServerDialog(default_groups) {
+		// one-liner installation for orchestra-satellite
+		var self = this;
+		var html = '<div class="dialog_box_content maximize">';
+		
+		// label
+		html += this.getFormRow({
+			label: 'Server Label:',
+			content: this.getFormText({
+				id: 'fe_as_title',
+				spellcheck: 'false',
+				placeholder: '(Use Hostname)',
+				value: '',
+				onChange: '$P().fetchServerInstallCode()'
+			}),
+			caption: 'Optionally enter a custom label for the new server.  Leave blank if adding multiple servers.'
+		});
+		
+		// status
+		html += this.getFormRow({
+			label: 'Status:',
+			content: this.getFormCheckbox({
+				id: 'fe_as_enabled',
+				label: 'Server Enabled',
+				checked: true,
+				onChange: '$P().fetchServerInstallCode()'
+			}),
+			caption: 'Enable or disable the new server(s).  Disabled servers will not be chosen for any jobs.'
+		});
+		
+		// icon
+		html += this.getFormRow({
+			label: 'Custom Icon:',
+			content: this.getFormMenuSingle({
+				id: 'fe_as_icon',
+				title: 'Select icon for server',
+				placeholder: 'Select icon for server...',
+				options: [['', '(None)']].concat( iconFontNames.map( function(name) { return { id: name, title: name, icon: name }; } ) ),
+				value: '',
+				onChange: '$P().fetchServerInstallCode()'
+				// 'data-shrinkwrap': 1
+			}),
+			caption: 'Optionally choose an icon for the new server(s).'
+		});
+		
+		// groups
+		html += this.getFormRow({
+			label: 'Server Groups:',
+			content: this.getFormMenuMulti({
+				id: 'fe_as_groups',
+				title: 'Select groups for new server',
+				placeholder: '(Automatic)',
+				options: app.groups,
+				values: default_groups || [],
+				default_icon: 'server-network',
+				onChange: '$P().fetchServerInstallCode()',
+				'data-hold': 1
+				// 'data-shrinkwrap': 1
+			}),
+			caption: 'Set the group(s) for the new server.  By default these are auto-assigned using the server hostname.'
+		});
+		
+		// select platform
+		html += this.getFormRow({
+			label: 'Platform:',
+			content: this.getFormMenu({
+				id: 'fe_as_platform',
+				options: [ ['standard','Linux / macOS'], ['windows','Windows'] ],
+				value: 'standard',
+				onChange: '$P().updateServerInstallCode()',
+			}),
+			caption: 'Select the target platform to generate the install command for.'
+		});
+		
+		// install commands
+		html += this.getFormRow({
+			label: 'Command:',
+			content: this.getFormTextarea({
+				id: 'fe_as_install_code',
+				rows: 5,
+				class: 'monospace',
+				readonly: 'readonly',
+				autocomplete: 'off',
+				maxlength: 8192,
+				value: ""
+			}),
+			caption: 'For Linux and macOS, paste this into a Terminal.  For Windows, hit <code>Win+R</code> and paste it right into the "Run" dialog.'
+		});
+		
+		html += '</div>';
+		
+		var buttons_html = "";
+		buttons_html += '<div class="button" onClick="$P().copyServerInstallCode()"><i class="mdi mdi-clipboard-text-outline">&nbsp;</i>Copy to Clipboard</div>';
+		buttons_html += '<div class="button primary" onClick="Dialog.confirm_click(true)"><i class="mdi mdi-close-circle-outline">&nbsp;</i>Close</div>';
+		
+		Dialog.showSimpleDialog('Add Server to Network', html, buttons_html);
+		
+		// special mode for key capture
+		Dialog.active = 'confirmation';
+		Dialog.confirm_callback = function(result) { 
+			if (result) Dialog.hide(); 
+		};
+		
+		MultiSelect.init( $('#fe_as_groups') );
+		Dialog.autoResize();
+		
+		this.fetchServerInstallCode();
+	}
+	
+	updateServerInstallCode() {
+		// update server install code based on platform
+		var platform = $('#fe_as_platform').val();
+		var code = substitute( config.ui.satellite_install_commands[platform], this.serverInstallArgs );
+		$('#fe_as_install_code').val( code );
+	}
+	
+	fetchServerInstallCode() {
+		// update installer code based on selection
+		var self = this;
+		var data = {
+			title: $('#fe_as_title').val().trim(),
+			enabled: $('#fe_as_enabled').is(':checked'),
+			icon: $('#fe_as_icon').val(),
+			groups: $('#fe_as_groups').val()
+		};
+		
+		app.api.post( 'app/get_satellite_token', data, function(resp) {
+			self.serverInstallArgs = resp;
+			self.updateServerInstallCode();
+		});
+	}
+	
+	copyServerInstallCode() {
+		// copy install code to clipboard
+		var code = $('#fe_as_install_code').val();
+		copyToClipboard(code);
+		app.showMessage('info', "The install command was copied to your clipboard.");
 	}
 	
 };
