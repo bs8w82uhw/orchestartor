@@ -448,4 +448,34 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		
 		$file[0].click();
 	}
+	
+	getChartSizeSelector() {
+		// get chart title widget menu selector
+		return '<div class="box_title_widget" style="overflow:visible; min-width:100px; max-width:200px; font-size:13px;">' + this.getFormMenuSingle({
+			class: 'sel_chart_size',
+			title: 'Select chart size',
+			options: [
+				{ id: 'small', title: 'Small', icon: 'view-module-outline' },
+				{ id: 'medium', title: 'Medium', icon: 'view-grid-outline' },
+				{ id: 'large', title: 'Large', icon: 'view-agenda-outline' }
+			],
+			value: app.getPref('chart_size') || 'medium',
+			onChange: '$P().applyChartSize(this)',
+			'data-shrinkwrap': 1,
+			'data-compact': 1
+		}) + '</div>';
+	}
+	
+	applyChartSize(elem) {
+		// set new chart size
+		var size = $(elem).val();
+		this.div.find('div.chart_grid_horiz').removeClass(['small', 'medium', 'large']).addClass(size);
+		ChartManager.charts.forEach( function(chart) { chart.dirty = true; } );
+		ChartManager.check();
+		app.setPref('chart_size', size);
+		
+		// also update other menus if present on page
+		this.div.find('select.sel_chart_size').val(size);
+	}
+	
 };
