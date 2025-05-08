@@ -66,7 +66,7 @@ Page.Base = class Base extends Page {
 		var html = '<span class="nowrap">';
 		var icon = '<i class="mdi mdi-' + (item.icon || 'server-network') + '"></i>';
 		if (link) {
-			if (link === true) link = '#Groups?sub=edit&id=' + item.id;
+			if (link === true) link = '#Groups?sub=view&id=' + item.id;
 			html += '<a href="' + link + '">';
 			html += icon + '<span>' + item.title + '</span></a>';
 		}
@@ -221,7 +221,11 @@ Page.Base = class Base extends Page {
 		var html = '<span class="nowrap">';
 		var icon = '<i class="mdi mdi-' + (item.job ? 'console' : 'console') + '"></i>';
 		if (link) {
-			html += '<span class="link" onClick="$P().showProcessInfo(' + item.pid + ')" title="' + encode_attrib_entities(item.command) + '">';
+			if (typeof(link) != 'string') {
+				if (item.server) link = `$P().showGroupProcessInfo(${item.pid},'${item.server}')`;
+				else link = '$P().showProcessInfo(' + item.pid + ')';
+			}
+			html += '<span class="link" onClick="' + link + '" title="' + encode_attrib_entities(item.command) + '">';
 			html += icon + '<span>' + short_cmd + '</span></span>';
 		}
 		else {
@@ -525,6 +529,11 @@ Page.Base = class Base extends Page {
 		return '<i class="mdi mdi-harddisk">&nbsp;</i>' + os.platform + ' ' + os.distro + ' ' + os.release;
 	}
 	
+	getNiceShortOS(os) {
+		// get nice server operating system for display
+		return '<i class="mdi mdi-harddisk">&nbsp;</i>' + os.distro + ' ' + os.release;
+	}
+	
 	getNiceVirtualization(virt) {
 		// get nice virtualization summary
 		if (!virt || !virt.vendor) return 'None';
@@ -553,7 +562,7 @@ Page.Base = class Base extends Page {
 	getNiceUptime(secs) {
 		// get nice server uptime
 		var nice_date = this.getNiceDateTimeText( time_now() - secs );
-		return '<span title="' + nice_date + '"><i class="mdi mdi-battery-clock-outline">&nbsp;</i>' + get_text_from_seconds(secs, false, true) + '</span>';
+		return '<span title="' + nice_date + '"><i class="mdi mdi-battery-clock-outline">&nbsp;</i>' + get_text_from_seconds(secs, false, false) + '</span>';
 	}
 	
 	getNiceInternalJobType(type) {
@@ -672,6 +681,11 @@ Page.Base = class Base extends Page {
 	formatDate(epoch, opts) {
 		// format date and/or time according to user locale settings
 		return app.formatDate(epoch, opts);
+	}
+	
+	formatDateRange(start, end, opts) {
+		// format date range based on user locale settings
+		return app.formatDateRange(start, end, opts);
 	}
 	
 	commify(number) {
@@ -2462,7 +2476,122 @@ Page.Base = class Base extends Page {
 	createChart(opts) {
 		// merge opts with overrides and add user locale, return new chart
 		opts.locale = this.getUserLocale();
+		opts.timeZone = this.getUserTimezone();
 		return new Chart( merge_objects(config.chart_defaults, opts) );
+	}
+	
+	setupChartHover(key) {
+		// setup chart hover overlay system, with custom actions
+		var chart = this.charts[key];
+		var max_zoom = 300; // 5 minutes
+		
+		chart.on('mouseover', function(event) {
+			var menu_html = '';
+			var zoom_html = '';
+			
+			if (chart._allow_flatten) {
+				menu_html = '<div class="chart_icon ci_fl" title="Change Graph Type"><i class="mdi mdi-cog"></i><select onChange="$P().setChartFlattenMode(\'' + key + '\',this)">' + render_menu_options(config.ui.chart_flatten_menu, app.getPref('charts.' + key)) + '</select></div>';
+			}
+			
+			if (chart._allow_zoom) {
+				zoom_html = '<div class="chart_icon ci_zo ' + (chart._zoom_mode ? 'selected' : '') + '" title="Toggle Zoom Mode" onClick="$P().chartToggleZoom(\'' + key + '\',this)"><i class="mdi mdi-magnify"></i></div>';
+				if (chart._zoom_mode) $('.pxc_tt_overlay').css('cursor', 'zoom-in');
+			}
+			
+			$('.pxc_tt_overlay').html(
+				'<div class="chart_toolbar ct_' + key + '">' + menu_html + 
+					'<div class="chart_icon ci_di" title="Download Image" onClick="$P().chartDownload(\'' + key + '\')"><i class="mdi mdi-cloud-download-outline"></i></div>' + 
+					'<div class="chart_icon ci_cl" title="Copy Image Link" onClick="$P().chartCopyLink(\'' + key + '\',this,event)"><i class="mdi mdi-clipboard-pulse-outline"></i></div>' + zoom_html + 
+				'</div>' 
+			);
+		}); // mouseover
+		
+		chart.on('click', function(event) {
+			// only process click if inside canvas area (if tooltip is present)
+			if (!chart.tooltip || !chart._allow_zoom || !chart._zoom_mode) return;
+			
+			// get current data limits
+			var limits = chart.dataLimits;
+			
+			// setup chart.zoom object if first zoom
+			if (!chart.zoom) chart.zoom = Object.assign({}, limits);
+			
+			// abort if zoomed in too far
+			if (limits.width <= max_zoom) return;
+			
+			// center new zoom area around mouse cursor (tooltip epoch)
+			var amt = Math.floor(limits.width / 4);
+			if (event.altKey) amt = Math.floor(limits.width * 2);
+			
+			chart.zoom.xMin = chart.tooltip.epoch - amt;
+			chart.zoom.xMax = chart.tooltip.epoch + amt;
+			
+			// constrain
+			if (chart.zoom.xMin < chart._zoom_mode.orig_zoom.xMin) chart.zoom.xMin = chart._zoom_mode.orig_zoom.xMin;
+			if (chart.zoom.xMax > chart._zoom_mode.orig_zoom.xMax) chart.zoom.xMax = chart._zoom_mode.orig_zoom.xMax;
+			
+			// update chart with new zoom level
+			chart.update();
+		});
+	}
+	
+	updateChartFlatten(id) {
+		// update flatten settings on chart, based on user prefs
+		var chart = this.charts[id];
+		if (!chart) return;
+		
+		var flatten_mode = app.getPref('charts.' + id);
+		if (flatten_mode) {
+			var menu_item = find_object( config.ui.chart_flatten_menu, { id: flatten_mode } );
+			chart.flatten = {
+				type: flatten_mode,
+				tooltipTitle: menu_item.title,
+				prefixTitle: menu_item.title,
+				color: chart.colors[ chart._idx % chart.colors.length ]
+			};
+		}
+		else {
+			chart.flatten = null;
+		}
+	}
+	
+	setChartFlattenMode(id, elem) {
+		// set new chart flatten mode based on menu selection
+		var chart = this.charts[id];
+		var mode = elem.value;
+		
+		if (mode) app.setPref('charts.' + id, mode);
+		else app.deletePref('charts.' + id);
+		
+		this.updateChartFlatten(id);
+		chart.update();
+	}
+	
+	chartToggleZoom(key, elem) {
+		// toggle zoom mode on/off
+		var chart = this.charts[key];
+		var $elem = $(elem);
+		
+		if (!chart._zoom_mode) {
+			// enable zoom mode
+			chart._zoom_mode = {
+				orig_zoom: chart.zoom ? Object.assign({}, chart.zoom) : null
+			};
+			chart.clip = true;
+			$elem.addClass('selected');
+			$('.pxc_tt_overlay').css('cursor', 'zoom-in');
+		}
+		else {
+			// disable, also zoom out here!
+			chart.zoom = chart._zoom_mode.orig_zoom;
+			delete chart._zoom_mode;
+			chart.clip = false;
+			$elem.removeClass('selected');
+			$('.pxc_tt_overlay').css('cursor', 'crosshair');
+			
+			// update chart with orig zoom level
+			chart.update();
+		}
 	}
 	
 	chartDownload(key) {
@@ -2488,10 +2617,13 @@ Page.Base = class Base extends Page {
 		});
 	}
 	
-	chartCopyLink(key, elem) {
+	chartCopyLink(key, elem, event) {
 		// upload image to server and copy link to it
 		var chart = this.charts[key];
 		var $elem = $(elem);
+		
+		// hold opt/alt to copy json instead
+		if (event.altKey) return this.chartCopyJSON(key, elem);
 		
 		// generate unique ID client-side and "predict" the URL
 		// so we can copy it to the clipboard in the click thread
@@ -2548,9 +2680,11 @@ Page.Base = class Base extends Page {
 		return data;
 	}
 	
-	getMonitorChartData(rows, id) {
+	getMonitorChartData(rows, def) {
 		// format monitor timeline data to be compat with pixl-chart
+		var id = def.id;
 		var data = [];
+		
 		rows.forEach( function(row) {
 			if (row.date && row.totals) {
 				var item = { x: row.date, y: (row.totals[id] || 0) / (row.count || 1) };
@@ -2566,6 +2700,15 @@ Page.Base = class Base extends Page {
 				data.push(item);
 			}
 		} );
+		
+		// for delta monitors: drop last sample if it has a lower count than the previous
+		// (partial counts will not avg properly for deltas)
+		if (def.delta && (rows.length > 1)) {
+			var last_row = rows[ rows.length - 1 ];
+			var last_row_2 = rows[ rows.length - 2 ];
+			if (last_row.count < last_row_2.count) data.pop();
+		}
+		
 		return data;
 	}
 	
