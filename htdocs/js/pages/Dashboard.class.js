@@ -1,4 +1,4 @@
-Page.Dashboard = class Dashboard extends Page.Base {
+Page.Dashboard = class Dashboard extends Page.PageUtils {
 	
 	onInit() {
 		// called once at page load
@@ -74,6 +74,7 @@ Page.Dashboard = class Dashboard extends Page.Base {
 		html += '<div class="box" id="d_dash_monitors">';
 			html += '<div class="box_title">';
 				html += '<div class="box_title_widget" style="overflow:visible; margin-left:0;"><i class="mdi mdi-magnify" onMouseUp="$(this).next().focus()">&nbsp;</i><input type="text" placeholder="Filter" value="" onInput="$P().applyQuickMonitorFilter(this)"></div>';
+				html += this.getChartSizeSelector();
 				html += 'Quick Look &mdash; All Servers';
 			html += '</div>';
 			html += '<div class="box_content table">';
@@ -82,6 +83,8 @@ Page.Dashboard = class Dashboard extends Page.Base {
 		html += '</div>'; // box
 		
 		this.div.html( html );
+		
+		SingleSelect.init( this.div.find('select.sel_chart_size') );
 		
 		this.updateDashGrid();
 		this.renderActiveJobs();
@@ -643,7 +646,8 @@ Page.Dashboard = class Dashboard extends Page.Base {
 		// render empty quickmon charts, then request full data
 		var self = this;
 		var html = '';
-		html += '<div class="chart_grid_horiz">';
+		var chart_size = app.getPref('chart_size') || 'medium';
+		html += '<div class="chart_grid_horiz ' + chart_size + '">';
 		
 		config.quick_monitors.forEach( function(def) {
 			// { "id": "cpu_load", "title": "CPU Load Average", "source": "cpu.avgLoad", "type": "float", "suffix": "" },
@@ -655,15 +659,6 @@ Page.Dashboard = class Dashboard extends Page.Base {
 		
 		this.charts = {};
 		
-		var render_chart_overlay = function(key) {
-			$('.pxc_tt_overlay').html(
-				'<div class="chart_toolbar ct_' + key + '">' + 
-					'<div class="chart_icon ci_di" title="Download Image" onClick="$P().chartDownload(\'' + key + '\')"><i class="mdi mdi-cloud-download-outline"></i></div>' + 
-					'<div class="chart_icon ci_cl" title="Copy Image Link" onClick="$P().chartCopyLink(\'' + key + '\',this)"><i class="mdi mdi-clipboard-pulse-outline"></i></div>' + 
-				'</div>' 
-			);
-		};
-		
 		config.quick_monitors.forEach( function(def, idx) {
 			var chart = self.createChart({
 				"canvas": '#c_dash_' + def.id,
@@ -674,10 +669,14 @@ Page.Dashboard = class Dashboard extends Page.Base {
 				"delta": def.delta || false,
 				"deltaMinValue": def.delta_min_value ?? false,
 				"divideByDelta": def.divide_by_delta || false,
-				"_quick": true
+				"fill": false,
+				"_quick": true,
+				"_allow_flatten": true,
+				"_idx": idx
 			});
-			chart.on('mouseover', function(event) { render_chart_overlay(def.id); });
 			self.charts[ def.id ] = chart;
+			self.updateChartFlatten(def.id);
+			self.setupChartHover(def.id);
 		});
 		
 		// request all data from server
