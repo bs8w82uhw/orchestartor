@@ -268,12 +268,21 @@
 		["older", "Older"]
 	],
 	
+	"chart_defaults": {
+		"emptyMessage": ""
+	},
+	
 	"chart_flatten_menu": [
 		{ "id": "", "title": "Multi-Layer" },
 		{ "id": "total", "title": "Total" },
 		{ "id": "average", "title": "Average" },
 		{ "id": "minimum", "title": "Minimum" },
 		{ "id": "maximum", "title": "Maximum" }
+	],
+	
+	"cpu_mem_merge_menu": [
+		{ "id": "total", "title": "Total", "icon": "sigma" },
+		{ "id": "average", "title": "Average", "icon": "chart-bell-curve" }
 	],
 	
 	"satellite_install_commands": {
