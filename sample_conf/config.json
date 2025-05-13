@@ -118,7 +118,13 @@
 		"region": "",
 		"num_format": "",
 		"hour_cycle": "h12",
-		"timezone": ""
+		"timezone": "",
+		"color_blind": false,
+		"effects": true,
+		"page_info": true,
+		"contrast": "auto",
+		"motion": "auto",
+		"volume": 7
 	},
 	
 	"db_maint": {
@@ -201,7 +207,8 @@
 			"fill": 0.5,
 			"horizTicks": 6,
 			"vertTicks": 6,
-			"smoothingMaxSamples": 100
+			"smoothingMaxSamples": 100,
+			"smoothingMaxTotalSamples": 1000
 		},
 		
 		"editor_defaults": {
