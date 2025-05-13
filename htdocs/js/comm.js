@@ -215,6 +215,9 @@ app.comm = {
 			app[key] = data[key];
 		}
 		
+		// keep track of hi-res time based off last known server time
+		app.serverPerfStart = performance.now();
+		
 		// bust cache if jobs changed
 		if (data.jobsChanged || data.internalJobsChanged) app.cacheBust = hires_time_now();
 		
