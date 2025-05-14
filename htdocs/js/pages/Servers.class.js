@@ -774,7 +774,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 				html += '<div class="box_title_left"><div class="button secondary" onClick="$P().chooseHistoricalView()"><i class="mdi mdi-calendar-cursor">&nbsp;</i>Change...</div></div>';
 				
 				if (online) {
-					html += '<div class="box_title_right"><div class="button primary" onClick="$P().createSnapshot()"><i class="mdi mdi-monitor-screenshot">&nbsp;</i>Snapshot</div></div>';
+					html += '<div class="box_title_right"><div class="button primary" onClick="$P().createSnapshot()"><i class="mdi mdi-monitor-eye">&nbsp;</i>Snapshot</div></div>';
 					html += '<div class="box_title_right" id="d_vs_watch_btn">' + this.getWatchButton() + '</div>';
 				}
 				
@@ -1038,7 +1038,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		var self = this;
 		var server = this.server;
 		var title = "Set Server Watch";
-		var btn = ['check-circle', "Save Changes"];
+		var btn = ['check-circle', "Apply"];
 		var cur_value = 300;
 		
 		if (app.state && app.state.watches && app.state.watches.servers && app.state.watches.servers[server.id] && (app.state.watches.servers[server.id] > app.epoch)) {
@@ -1566,21 +1566,6 @@ Page.Servers = class Servers extends Page.ServerUtils {
 			$bar.find('div.progress_bar_label').html( label ); // should update 2 elements
 			$bar.find('div.progress_bar_inner').css('width', '' + cx + 'px'); // should auto-animate
 		} );
-	}
-	
-	applyQuickMonitorFilter(elem) {
-		// hide or show specific quick monitors based on substring match on title
-		var filter = this.quickMonitorFilter = $(elem).val();
-		var re = new RegExp( escape_regexp(filter), 'i' );
-		
-		for (var key in this.charts) {
-			var chart = this.charts[key];
-			if (chart._quick) {
-				var $cont = $(chart.canvas).parent();
-				if (chart.title.match(re)) $cont.show();
-				else $cont.hide();
-			}
-		}
 	}
 	
 	setupMonitors() {
