@@ -3146,6 +3146,8 @@ Page.Base = class Base extends Page {
 		buttons_html += '<div id="btn_dialog_cancel" class="button" onClick="Dialog.hide()"><i class="mdi mdi-close-circle-outline">&nbsp;</i>Cancel</div>';
 		buttons_html += '<div id="btn_dialog_confirm" class="button primary"><i class="mdi mdi-check-circle">&nbsp;</i>Apply Changes</div>';
 		
+		title += ' <div class="dialog_title_widget mobile_hide"><span class="link" onClick="$P().toggleDialogCodeEditorSize(this)">Maximize<i style="padding-left:3px" class="mdi mdi-arrow-top-right-thick"></i></span></div>';
+		
 		Dialog.showSimpleDialog(title, html, buttons_html);
 		
 		// special mode for key capture (esc only)
@@ -3187,6 +3189,22 @@ Page.Base = class Base extends Page {
 			Dialog.hide();
 			callback(value);
 		});
+	}
+	
+	toggleDialogCodeEditorSize(span) {
+		// toggle code editor dialog size between normal and maximum
+		var $cm = $('#fe_dialog_editor > .CodeMirror');
+		
+		if ($cm.hasClass('maximize')) {
+			$cm.removeClass('maximize');
+			$(span).html( 'Maximize<i style="padding-left:3px" class="mdi mdi-arrow-top-right-thick"></i>' );
+		}
+		else {
+			$cm.addClass('maximize');
+			$(span).html( 'Minimize<i style="padding-left:3px" class="mdi mdi-arrow-bottom-left-thick"></i>' );
+		}
+		
+		Dialog.autoResize();
 	}
 	
 	doPrepImportFile(file) {

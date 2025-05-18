@@ -1310,6 +1310,13 @@ div.box.toggle.expanded > div.box_title > div {
 }
 
 #fe_dialog_editor .CodeMirror {
+	width: 600px;
+	max-width: 80vw;
+	
+	height: 350px;
+	max-height: 80vh;
+}
+#fe_dialog_editor .CodeMirror.maximize {
 	width: 60vw;
 	height: 75vh;
 }
@@ -1492,7 +1499,7 @@ i.mdi.mdi-moon-waning-crescent:before {
 		display: none;
 	}
 	
-	#fe_dialog_editor .CodeMirror {
+	#fe_dialog_editor .CodeMirror.maximize {
 		width: 70vw;
 		height: 75vh;
 	}
@@ -1758,7 +1765,7 @@ i.mdi.mdi-moon-waning-crescent:before {
 		display: none;
 	}
 	
-	#fe_dialog_editor .CodeMirror {
+	#fe_dialog_editor .CodeMirror.maximize {
 		width: 80vw;
 		height: 75vh;
 	}
@@ -2150,7 +2157,7 @@ i.mdi.mdi-moon-waning-crescent:before {
 		grid-template-columns: repeat(1, 1fr);
 	}
 	
-	#fe_dialog_editor .CodeMirror {
+	#fe_dialog_editor .CodeMirror.maximize {
 		width: 88vw;
 		height: 80vh;
 	}
