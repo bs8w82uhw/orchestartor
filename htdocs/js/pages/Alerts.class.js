@@ -345,7 +345,7 @@ Page.Alerts = class Alerts extends Page.Base {
 					// row 1
 					html += '<div>';
 						html += '<div class="info_label">Alert ID</div>';
-						html += '<div class="info_value" style="font-weight:bold">' + this.getNiceAlertID(alert) + '</div>';
+						html += '<div class="info_value monospace">' + this.getNiceCopyableID(alert.id) + '</div>';
 					html += '</div>';
 					
 					html += '<div>';
