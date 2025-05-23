@@ -891,6 +891,59 @@ Page.Base = class Base extends Page {
 		return args;
 	}
 	
+	showDateRangePicker(callback) {
+		// show dialog for picking a date range
+		var self = this;
+		var args = this.args;
+		var title = "Select Date Range";
+		var btn = ['check-circle', "Apply"];
+		
+		var html = '<div class="dialog_box_content scroll">';
+		
+		// start
+		html += this.getFormRow({
+			label: 'Start Date:',
+			content: this.getFormText({
+				id: 'fe_edr_start',
+				type: 'date',
+				value: args.start || yyyy_mm_dd(0, '-'),
+				'data-shrinkwrap': 1
+			}),
+			caption: 'Select the starting date for your range (inclusive).'
+		});
+		
+		// end
+		html += this.getFormRow({
+			label: 'End Date:',
+			content: this.getFormText({
+				id: 'fe_edr_end',
+				type: 'date',
+				value: args.end || yyyy_mm_dd(0, '-'),
+				'data-shrinkwrap': 1
+			}),
+			caption: 'Select the ending date for your range (inclusive).'
+		});
+		
+		html += '</div>';
+		Dialog.confirm( title, html, btn, function(result) {
+			if (!result) return;
+			app.clearError();
+			
+			if (!$('#fe_edr_start')[0].checkValidity()) return app.badField('#fe_edr_start', "Please enter a valid start date.");
+			if (!$('#fe_edr_end')[0].checkValidity()) return app.badField('#fe_edr_end', "Please enter a valid end date.");
+			
+			args.start = $('#fe_edr_start').val();
+			args.end = $('#fe_edr_end').val();
+			
+			var start = new Date( args.start + " 00:00:00" );
+			var end = new Date( args.end + " 00:00:00" );
+			if (start > end) return app.doError("Invalid date range. Please try again.");
+			
+			Dialog.hide();
+			callback();
+		}); // confirm
+	}
+	
 	getDateRangeQuery(key, value) {
 		// get formatted epoch/3600 date range for DB queries
 		// now, lasthour, today, yesterday, month, lastmonth, year, lastyear, older
@@ -953,6 +1006,16 @@ Page.Base = class Base extends Page {
 				dargs = this.getDateArgsTZ( before ); // get dargs for last year
 				var last_year = this.parseDateTZ( dargs.year + '-01-01 00:00:00' ); // get epoch of midnight on first day of last year
 				query += '' + key + ':<' + last_year;
+			break;
+			
+			case 'custom':
+				// custom date range stored in page args -- note: end is INCLUSIVE, so compensate here
+				if (!this.args.start) this.args.start = yyyy_mm_dd(0, '-');
+				if (!this.args.end) this.args.end = yyyy_mm_dd(0, '-');
+				var start = this.parseDateTZ( this.args.start + ' 00:00:00' );
+				var dargs = this.getDateArgsTZ( this.parseDateTZ( this.args.end + ' 12:00:00' ) + 86400 ); // next day after end
+				var end = this.parseDateTZ( dargs.year + '-' + dargs.month + '-' + dargs.day + ' 00:00:00' ); // midnight on end date
+				query += '' + key + ':' + start + '..' + Math.floor(end - 1);
 			break;
 		} // switch
 		
