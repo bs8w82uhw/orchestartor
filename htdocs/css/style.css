@@ -729,6 +729,9 @@ div.td_big {
 	text-indent: 0;
 }
 
+.wrap {
+	white-space: normal;
+}
 .nowrap {
 	white-space: nowrap;
 }
