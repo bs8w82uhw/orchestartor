@@ -70,6 +70,16 @@ Page.Dashboard = class Dashboard extends Page.PageUtils {
 			html += '</div>'; // box_content
 		html += '</div>'; // box
 		
+		// job day graph
+		html += '<div class="box" id="d_job_day_graph" style="display:none">';
+			html += '<div class="box_title">';
+				html += '<span>Job History Day Graph</span>';
+			html += '</div>';
+			html += '<div class="box_content table">';
+				html += '<div class="loading_container"><div class="loading"></div></div>';
+			html += '</div>'; // box_content
+		html += '</div>'; // box
+		
 		// quickmon charts
 		html += '<div class="box" id="d_dash_monitors">';
 			html += '<div class="box_title">';
@@ -93,6 +103,7 @@ Page.Dashboard = class Dashboard extends Page.PageUtils {
 		this.setupQuickMonitors();
 		this.renderActiveAlerts();
 		this.renderInternalJobs();
+		this.setupJobHistoryDayGraph();
 		
 		return true;
 	}
@@ -671,6 +682,7 @@ Page.Dashboard = class Dashboard extends Page.PageUtils {
 				this.updateDashGrid(); 
 				this.autoExpireUpcomingJobs();
 				this.renderUpcomingJobs();
+				this.updateJobHistoryDayGraph();
 			break;
 			
 			case 'activeAlerts': 

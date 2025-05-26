@@ -600,4 +600,148 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		}
 	}
 	
+	setupJobHistoryDayGraph() {
+		// fetch historical job stats and render as heatmap grid
+		var self = this;
+		var opts = {
+			offset: -365,
+			limit: 365,
+			path: 'currentDay',
+			key_prefix: 'job_',
+			current_day: 1
+		};
+		
+		if (this.event) opts.path += '.events.' + this.event.id;
+		else if (this.server) opts.path += '.servers.' + this.server.id;
+		else if (this.group) opts.path += '.groups.' + this.group.id;
+		else if (this.category) opts.path += '.categories.' + this.category.id;
+		else if (this.plugin) opts.path += '.plugins.' + this.plugin.id;
+		else opts.path += '.transactions';
+		
+		app.api.get( 'app/search_stat_history', opts, this.receiveJobHistoryDayGraph.bind(this) );
+	}
+	
+	getJobHistoryDaySwatch(day, epoch) {
+		// get HTML for single day history swatch (grid unit)
+		var html = '';
+		var day_code = yyyy_mm_dd(epoch);
+		var nice_date = this.formatDate(epoch, { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' });
+		
+		if (day && day.data && day.data.job_complete) {
+			var data = day.data;
+			var tooltip = nice_date + ": ";
+			var groups = [];
+			
+			// job_error means "ALL" errors (it is incremented even if job_warning, job_critical or job_abort also fired)
+			// so let's adjust the "error" count for the purpose of displaying all stats in relation
+			if (!data.job_error) data.job_error = 0;
+			if (data.job_warning) data.job_error -= data.job_warning;
+			if (data.job_critical) data.job_error -= data.job_critical;
+			if (data.job_abort) data.job_error -= data.job_abort;
+			data.job_error = Math.max(0, data.job_error); // sanity
+			
+			if (data.job_success) groups.push({ color: 'var(--green)', text: commify(data.job_success) + pluralize(' job', data.job_success) + ' succeeded' });
+			if (data.job_error) groups.push({ color: 'var(--red)', text: commify(data.job_error) + pluralize(' job', data.job_error) + ' failed' });
+			if (data.job_warning) groups.push({ color: 'var(--yellow)', text: commify(data.job_warning) + pluralize(' job', data.job_warning) + ' warned' });
+			if (data.job_critical) groups.push({ color: 'var(--purple)', text: commify(data.job_critical) + pluralize(' job', data.job_critical) + ' critical' });
+			if (data.job_abort) groups.push({ color: 'var(--gray)', text: commify(data.job_abort) + pluralize(' job', data.job_abort) + ' aborted' });
+			
+			tooltip += groups.map( function(group) { return group.text; } ).join(', ');
+			
+			// compute gradient based on groups
+			var pct_jump = 100 / groups.length;
+			var grad = 'linear-gradient(to bottom right';
+			
+			groups.forEach( function(group, idx) {
+				var start_pct = short_float( idx * pct_jump );
+				var end_pct = short_float( (idx + 1) * pct_jump );
+				if (end_pct >= 99) end_pct = 100;
+				grad += `, ${group.color} ${start_pct}%, ${group.color} ${end_pct}%`;
+			} );
+			
+			grad += ');';
+			
+			// search link
+			var alt_code = day_code.replace(/\//g, '-');
+			var url = `#Search?date=custom&start=${alt_code}&end=${alt_code}`;
+			if (this.event) url += '&event=' + this.event.id;
+			else if (this.server) url += '&server=' + this.server.id;
+			else if (this.group) url += '&groups=' + this.group.id;
+			else if (this.category) url += '&category=' + this.category.id;
+			else if (this.plugin) url += '&plugin=' + this.plugin.id;
+			
+			html += `<div style="background:${grad}" data-date="${day_code}" onClick="Nav.go('${url}')" title="${tooltip}"></div>`;
+		}
+		else html += `<div class="empty" data-date="${day_code}" title="No data for ${nice_date}"></div>`;
+		
+		return html;
+	}
+	
+	receiveJobHistoryDayGraph(resp) {
+		// receive stats to render into heatmap
+		// resp: { code, items, list }
+		// items: { epoch, date, data }
+		var self = this;
+		var days = {};
+		var html = '';
+		
+		if (!this.active) return; // sanity
+		
+		// index all days by YYYY-MM-DD
+		resp.items.forEach( function(item) {
+			days[ item.date ] = item;
+		} );
+		
+		// find start date, which must be a sunday
+		var noon_today = normalize_time( time_now(), { hour:12, min:0, sec:0 } );
+		var last_year = noon_today - (86400 * 365);
+		var wday = (new Date(last_year * 1000)).getDay();
+		var epoch = last_year - (wday * 86400);
+		
+		// header
+		html += '<div class="data_grid_pagination">';
+			html += '<div style="text-align:left">' + this.formatDate(epoch, { year: 'numeric', month: 'short' }) + '</div>';
+			html += '<div style="text-align:center">' + this.formatDate(epoch + Math.floor(((noon_today - epoch) / 2)), { year: 'numeric', month: 'short' }) + '</div>';
+			html += '<div style="text-align:right">' + this.formatDate(noon_today, { year: 'numeric', month: 'short' }) + '</div>';
+		html += '</div>';
+		
+		// grid
+		html += '<div class="job_day_graph">';
+		
+		while (epoch <= noon_today) {
+			var day_code = yyyy_mm_dd(epoch);
+			var day = days[ day_code ];
+			html += this.getJobHistoryDaySwatch(day, epoch);
+			epoch += 86400;
+		} // foreach day
+		
+		html += '</div>';
+		
+		this.div.find('#d_job_day_graph').show().find('> .box_content').removeClass('loading').html(html);
+	}
+	
+	updateJobHistoryDayGraph() {
+		// update final swatch in job day history, based on current stats
+		var day = { epoch: app.epoch, data: null };
+		var day_code = yyyy_mm_dd(day.epoch);
+		
+		var $swatch = this.div.find('#d_job_day_graph .job_day_graph > div').last();
+		if (!$swatch.length) return; // sanity
+		if ($swatch.data('date') != day_code) {
+			// day changed, need full refresh
+			this.setupJobHistoryDayGraph();
+			return;
+		}
+		
+		if (this.event) day.data = get_path( app.stats, 'currentDay.events.' + this.event.id );
+		else if (this.server) day.data = get_path( app.stats, 'currentDay.servers.' + this.server.id );
+		else if (this.group) day.data = get_path( app.stats, 'currentDay.groups.' + this.group.id );
+		else if (this.category) day.data = get_path( app.stats, 'currentDay.categories.' + this.category.id );
+		else if (this.plugin) day.data = get_path( app.stats, 'currentDay.plugins.' + this.plugin.id );
+		else day.data = get_path( app.stats, 'currentDay.transactions' );
+		
+		var html = this.getJobHistoryDaySwatch(day, app.epoch);
+		$swatch.replaceWith(html);
+	}
+	
 };

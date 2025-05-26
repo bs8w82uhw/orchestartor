@@ -855,6 +855,16 @@ Page.Events = class Events extends Page.PageUtils {
 			html += '</div>';
 		html += '</div>';
 		
+		// job day graph
+		html += '<div class="box" id="d_job_day_graph" style="display:none">';
+			html += '<div class="box_title">';
+				html += '<span>Job History Day Graph</span>';
+			html += '</div>';
+			html += '<div class="box_content table">';
+				html += '<div class="loading_container"><div class="loading"></div></div>';
+			html += '</div>'; // box_content
+		html += '</div>'; // box
+		
 		// upcoming jobs
 		html += '<div class="box" id="d_ve_upcoming">';
 			html += '<div class="box_title">';
@@ -887,6 +897,7 @@ Page.Events = class Events extends Page.PageUtils {
 		this.renderPluginParams('#d_ve_params');
 		this.setupToggleBoxes();
 		this.fetchRevisionHistory();
+		this.setupJobHistoryDayGraph();
 	}
 	
 	getTimingDetails() {
@@ -3423,6 +3434,7 @@ Page.Events = class Events extends Page.PageUtils {
 			// recompute upcoming jobs every minute
 			this.autoExpireUpcomingJobs();
 			this.renderUpcomingJobs();
+			this.updateJobHistoryDayGraph();
 		}
 	}
 	
