@@ -1251,7 +1251,7 @@ Page.Base = class Base extends Page {
 		else switch(job.code) {
 			case 'warning': icon = 'alert-rhombus'; ocon = icon + '-outline'; color = 'yellow'; break;
 			case 'critical': icon = ocon = 'fire-alert'; color = 'purple'; break;
-			case 'abort': icon = ocon = 'cancel'; color = 'red'; text = 'Aborted'; break;
+			case 'abort': icon = ocon = 'cancel'; color = 'gray'; text = 'Aborted'; break;
 			
 			default:
 				icon = 'alert-decagram';
