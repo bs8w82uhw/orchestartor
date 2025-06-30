@@ -552,7 +552,7 @@ Page.AlertSetup = class AlertSetup extends Page.PageUtils {
 				label: 'Abort Jobs',
 				checked: alert.abort_jobs
 			}),
-			caption: 'Abort all running jobs on the server when the alert is first triggered.'
+			caption: 'Abort all running jobs on the server when the alert fires.'
 		});
 		
 		// notes

@@ -2,7 +2,7 @@ To: [email_to]
 From: [config/email_from]
 Subject: Orchestra Alert: [nice_server]: [def/title]
 
-The following Orchestra alert has been triggered: [def/title]
+The following Orchestra alert has fired: [def/title]
 
 Message: [alert/message]
 Hostname: [params/hostname]
