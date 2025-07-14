@@ -371,15 +371,15 @@ Page.Base = class Base extends Page {
 		return html;
 	}
 	
-	getNiceWorkflowJob(id, link) {
-		// get formatted workflow job ID with icon, plus optional link -- TODO: is this still used?
-		if (!id) return '(None)';
+	getNiceWorkflowJob(workflow, link) {
+		// get formatted workflow job ID with icon, plus optional link
+		if (!workflow || !workflow.job) return '(None)';
 		
 		var html = '<span class="nowrap">';
 		var icon = '<i class="mdi mdi-clipboard-play-outline"></i>';
 		if (link) {
-			html += '<a href="#Workflows?job=' + id + '">';
-			html += icon + '<span>' + id + '</span></a>';
+			html += '<a href="#Job?id=' + workflow.job + '">';
+			html += icon + '<span>' + workflow.job + '</span></a>';
 		}
 		else {
 			html += icon + id;
@@ -387,6 +387,34 @@ Page.Base = class Base extends Page {
 		
 		html += '</span>';
 		return html;
+	}
+	
+	getNiceWorkflowNodeType(node) {
+		// get formatted workflow node type with suitable icon
+		if (!node) return 'n/a';
+		var title = ucfirst(node.type);
+		var info = find_object( config.ui.workflow_new_node_menu, { id: node.type } );
+		if (!info) return title;
+		return '<i class="mdi mdi-' + info.icon +'">&nbsp;</i>' + title;
+	}
+	
+	getNiceJobEvent(job, link) {
+		// get nice event formatted as running job, supporting workflows etc.
+		if (job.type == 'adhoc') {
+			var plugin = find_object( app.plugins, { id: job.plugin } );
+			if (!plugin) return 'n/a'; // sanity
+			
+			var title = job.label || plugin.title;
+			var icon_id = job.icon || plugin.icon || 'power-plug-outline';
+			
+			var html = '<span class="nowrap">';
+			var icon = '<i class="mdi mdi-' + icon_id + '"></i>';
+			html += icon + title;
+			
+			html += '</span>';
+			return html;
+		}
+		else return this.getNiceEvent(job.event, link);
 	}
 	
 	getNiceServer(item, link) {
@@ -1078,10 +1106,13 @@ Page.Base = class Base extends Page {
 		}
 		
 		var nice_id = job.id;
-		if (job.label) nice_id = job.label + ' (' + job.id + ')';
+		if (job.label && (job.type != 'adhoc')) nice_id = job.label + ' (' + job.id + ')';
+		
+		var icon = '<i class="mdi mdi-timer-outline"></i>';
+		if (job.type == 'workflow') icon = '<i class="mdi mdi-clipboard-play-outline"></i>';
+		else if (job.workflow) icon = '<i class="mdi mdi-clipboard-clock-outline"></i>';
 		
 		var html = '<span class="nowrap">';
-		var icon = '<i class="mdi mdi-timer-outline"></i>';
 		if (link) {
 			html += '<a href="#Job?id=' + job.id + '">';
 			html += icon + '<span>' + nice_id + '</span></a>';
@@ -1174,7 +1205,7 @@ Page.Base = class Base extends Page {
 		// (states: queued, start_delay, retry_delay, ready, active, finishing, complete)
 		var nice_state = ucfirst(job.state || 'unknown');
 		var now = app.epoch;
-		var icon = 'progress-helper';
+		var icon = 'progress-question';
 		
 		switch (job.state) {
 			case 'queued': icon = 'motion-pause-outline'; break;
@@ -1357,6 +1388,8 @@ Page.Base = class Base extends Page {
 		} );
 		
 		events.forEach( function(event) {
+			if (event.type == 'workflow') event.icon = 'clipboard-flow-outline';
+			
 			if (event.category != last_cat_id) {
 				last_cat_id = event.category;
 				var cat = cat_map[ event.category ] || { title: event.category };
