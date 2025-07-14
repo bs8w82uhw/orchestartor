@@ -842,8 +842,10 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		workflow.nodes.forEach( function(node) {
 			if (use_sel && !self.wfSelection[node.id]) return;
 			
-			var elem = $cont.find('#d_wfn_' + node.id).get(0);
+			var $elem = $cont.find('#d_wfn_' + node.id);
+			var elem = $elem.get(0);
 			var box = { left: node.x, top: node.y, right: node.x + elem.offsetWidth, bottom: node.y + elem.offsetHeight };
+			if ($elem.hasClass('wf_entity')) box.bottom += 34; // entities have captions that live "outside" the offsetHeight
 			if (!bounds) { bounds = box; return; }
 			
 			if (box.left < bounds.left) bounds.left = box.left;
@@ -899,8 +901,8 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			return;
 		}
 		
-		var cont_width = $cont.width() - 50; // adjust for vignette
-		var cont_height = $cont.height() - 50; // adjust for vignette
+		var cont_width = $cont.width() - 0; // adjust for vignette
+		var cont_height = $cont.height() - 0; // adjust for vignette
 		
 		// start at default zoom, and only zoom out to fit, never in
 		var dest_zoom = 1;
@@ -1074,20 +1076,27 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		}
 		
 		var params = node.data.params;
-		var icon = event.icon || config.ui.data_types.event.icon;
+		var default_icon = (event.type == 'workflow') ? 'clipboard-flow-outline' : config.ui.data_types.event.icon;
+		var icon = event.icon || default_icon;
 		var none = '<span>(None)</span>';
 		
 		html += `<div id="d_wfn_${node.id}" class="${classes.join(' ')}" style="left:${pos.x}px; top:${pos.y}px;">
 			<div class="wf_event_title"><i class="mdi mdi-drag"></i><i class="mdi mdi-${icon}"></i>${event.title}</div>
 			<div class="wf_body">
 				<div class="wf_fallback_icon"><i class="mdi mdi-${icon}"></i></div>
-				<div class="summary_grid single">
+				<div class="summary_grid double">
 		`;
 		
 		// category
 		html += '<div>'; // grid unit
 		html += '<div class="info_label">Category</div>';
 		html += '<div class="info_value">' + this.getNiceCategory(node.data.category || event.category, false) + '</div>';
+		html += '</div>'; // grid unit
+		
+		// plugin
+		html += '<div>'; // grid unit
+		html += '<div class="info_label">Plugin</div>';
+		html += '<div class="info_value">' + this.getNicePlugin(event.plugin, false) + '</div>';
 		html += '</div>'; // grid unit
 		
 		// targets
@@ -1103,6 +1112,11 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		html += '<div class="info_label">Algorithm</div>';
 		html += '<div class="info_value">' + this.getNiceAlgo(event_algo) + '</div>';
 		html += '</div>'; // grid unit
+		
+		if (event.fields && event.fields.filter( function(param) { return param.type != 'hidden'; } ).length) {
+			html += '</div>';
+			html += '<div class="summary_grid single">';
+		}
 		
 		(event.fields || []).forEach( function(param, idx) {
 			var elem_value = (param.id in params) ? params[param.id] : param.value;
@@ -1182,13 +1196,19 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			<div class="wf_event_title"><i class="mdi mdi-drag"></i><i class="mdi mdi-${icon}"></i>${title}</div>
 			<div class="wf_body">
 				<div class="wf_fallback_icon"><i class="mdi mdi-${icon}"></i></div>
-				<div class="summary_grid single">
+				<div class="summary_grid double">
 		`;
 		
 		// category
 		html += '<div>'; // grid unit
 		html += '<div class="info_label">Category</div>';
 		html += '<div class="info_value">' + this.getNiceCategory(node.data.category, false) + '</div>';
+		html += '</div>'; // grid unit
+		
+		// plugin
+		html += '<div>'; // grid unit
+		html += '<div class="info_label">Plugin</div>';
+		html += '<div class="info_value">' + this.getNicePlugin(node.data.plugin, false) + '</div>';
 		html += '</div>'; // grid unit
 		
 		// targets
@@ -1203,11 +1223,10 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		html += '<div class="info_value">' + this.getNiceAlgo(node.data.algo) + '</div>';
 		html += '</div>'; // grid unit
 		
-		// plugin
-		// html += '<div>'; // grid unit
-		// html += '<div class="info_label">Plugin</div>';
-		// html += '<div class="info_value">' + this.getNicePlugin(node.data.plugin, false) + '</div>';
-		// html += '</div>'; // grid unit
+		if (plugin.params && plugin.params.filter( function(param) { return param.type != 'hidden'; } ).length) {
+			html += '</div>';
+			html += '<div class="summary_grid single">';
+		}
 		
 		(plugin.params || []).forEach( function(param, idx) {
 			var elem_value = (param.id in params) ? params[param.id] : param.value;
@@ -1496,12 +1515,12 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				style.dest_pole = 'wf_up_pole';
 				style.start_dir = 'bottom';
 				style.end_dir = 'top';
-				style.custom = { strokeStyle: app.getCSSVar('--cyan'), lineDash: [4, 4] };
+				style.custom.lineDash = [4, 4];
 			}
-			else if (source.type == 'trigger') {
-				var trigger = find_object( self.event.triggers, { id: source.id } );
-				if (trigger && trigger.enabled) style.custom = { strokeStyle: app.getCSSVar('--orange') };
-			}
+			// else if (source.type == 'trigger') {
+			// 	var trigger = find_object( self.event.triggers, { id: source.id } );
+			// 	if (trigger && trigger.enabled) style.custom = { strokeStyle: app.getCSSVar('--orange') };
+			// }
 			
 			self.renderWFConnection({
 				conn: conn,
