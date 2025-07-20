@@ -2319,7 +2319,7 @@ Page.Events = class Events extends Page.PageUtils {
 			caption: 'Select how and when your event should run, including manual executions and scheduling options.'
 		});
 		
-		// default resource limits
+		// resource limits
 		// (requires this.limits to be populated)
 		html += this.getFormRow({
 			label: 'Resource Limits:',
