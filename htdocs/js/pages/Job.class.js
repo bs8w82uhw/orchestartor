@@ -705,6 +705,8 @@ Page.Job = class Job extends Page.PageUtils {
 		// called on status update (every 1s)
 		var self = this;
 		var div = this.div;
+		var workflow = this.job.workflow;
+		var $cont = this.wfGetContainer();
 		
 		var rows = Object.values(app.activeJobs).filter( function(job) {
 			return job.workflow && (job.workflow.job == self.job.id);
@@ -719,6 +721,17 @@ Page.Job = class Job extends Page.PageUtils {
 			// update progress bar without redrawing it (so animation doesn't jitter)
 			self.updateJobProgressBar(job, '#d_wf_jt_progress_' + job.id + ' > div.progress_bar_container');
 		} ); // foreach job
+		
+		// some node states can change without job actions, so update those here
+		workflow.nodes.filter( function(node) { return !!node.type.match(/^(trigger|controller|action)$/); } ).forEach( function(node) {
+			var state = workflow.state[node.id] || {};
+			var $elem = $cont.find(`#d_wfn_${node.id}`);
+			
+			// these node types have simple state props we can key off of
+			$elem.toggleClass('wf_active', !!state.active);
+			$elem.toggleClass('wf_completed', !!state.completed);
+			$elem.toggleClass('disabled', !state.active && !state.completed);
+		});
 	}
 	
 	renderJobTags() {
