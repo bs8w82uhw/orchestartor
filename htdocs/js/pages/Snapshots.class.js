@@ -1233,7 +1233,7 @@ Page.Snapshots = class Snapshots extends Page.ServerUtils {
 			
 			app.api.post( 'app/delete_snapshot', { id: snapshot.id }, function(resp) {
 				Dialog.hideProgress();
-				app.showMessage('success', "Snapshot ID &ldquo;<b>" + snapshot.id + "</b>&rdquo; was deleted successfully.");
+				app.showMessage('success', "Snapshot ID &ldquo;" + snapshot.id + "&rdquo; was deleted successfully.");
 				
 				if (!self.active) return; // sanity
 				

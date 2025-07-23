@@ -606,7 +606,7 @@ Page.Alerts = class Alerts extends Page.Base {
 			
 			app.api.post( 'app/delete_alert_invocation', { id: alert.id }, function(resp) {
 				Dialog.hideProgress();
-				app.showMessage('success', "Alert invocation &ldquo;<b>" + alert.id + "</b>&rdquo; was deleted successfully.");
+				app.showMessage('success', "Alert invocation &ldquo;" + alert.id + "&rdquo; was deleted successfully.");
 				
 				if (!self.active) return; // sanity
 				

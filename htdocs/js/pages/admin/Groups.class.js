@@ -1222,7 +1222,7 @@ Page.Groups = class Groups extends Page.ServerUtils {
 			
 			app.api.post( 'app/abort_job', { id: id }, function(resp) {
 				Dialog.hideProgress();
-				app.showMessage('success', "The job &ldquo;<b>" + id + "</b>&rdquo; was aborted successfully.");
+				app.showMessage('success', "The job &ldquo;" + id + "&rdquo; was aborted successfully.");
 			} ); // api.post
 		} ); // confirm
 	}
