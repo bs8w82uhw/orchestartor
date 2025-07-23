@@ -307,6 +307,25 @@ Page.Base = class Base extends Page {
 		return html;
 	}
 	
+	getNiceBucket(item, link) {
+		// get formatted bucket with icon, plus optional link
+		if (typeof(item) == 'string') item = find_object(app.buckets, { id: item });
+		if (!item) return '(None)';
+		
+		var html = '<span class="nowrap">';
+		var icon = '<i class="mdi mdi-' + (item.icon || 'pail-outline') + '"></i>';
+		if (link) {
+			html += '<a href="#Buckets?sub=edit&id=' + item.id + '">';
+			html += icon + '<span>' + item.title + '</span></a>';
+		}
+		else {
+			html += icon + item.title;
+		}
+		
+		html += '</span>';
+		return html;
+	}
+	
 	getNicePlugin(item, link) {
 		// get formatted plugin with icon, plus optional link
 		if (typeof(item) == 'string') item = find_object(app.plugins, { id: item });
@@ -563,16 +582,19 @@ Page.Base = class Base extends Page {
 		if (!icon) icon = 'file-outline';
 		var html = '';
 		var ext = '';
-		if (filename.replace(/\.(gz|xz)$/i, '').match(/\.(\w+)$/)) ext = RegExp.$1.toLowerCase();
+		if (filename.match(/\.(\w+)$/)) ext = RegExp.$1.toLowerCase();
 		
-		if (ext.match(/(jpg|jpe|jpeg|gif|bmp|png|webp)/)) icon = 'file-image-outline';
-		else if (ext.match(/(mp4|m4v|mkv|mov)/)) icon = 'file-video-outline';
-		else if (ext.match(/(mp3|m4a)/)) icon = 'file-music-outline';
-		else if (ext.match(/(txt|log)/)) icon = 'file-document-outline';
-		else if (ext.match(/(xml|dtd|json|yml|ini|js|py|pl|html|css|conf)/)) icon = 'file-code-outline';
-		else if (ext.match(/(csv|tsv)/)) icon = 'file-delimited-outline';
-		else if (ext.match(/(xls|xlsx)/)) icon = 'file-table-outline';
-		else if (ext.match(/(doc|docx)/)) icon = 'file-word-outline';
+		if (ext.match(/^(jpg|jpe|jpeg|gif|bmp|png|webp)$/)) icon = 'file-image-outline';
+		else if (ext.match(/^(mp4|m4v|mkv|mov|avi|webm)$/)) icon = 'file-video-outline';
+		else if (ext.match(/^(mp3|m4a|ogg)$/)) icon = 'file-music-outline';
+		else if (ext.match(/^(txt|log|md)$/)) icon = 'file-document-outline';
+		else if (ext.match(/^(xml|dtd|json|yml|ini|js|py|pl|rb|php|html|css|conf|c|h|cpp|hpp)$/)) icon = 'file-code-outline';
+		else if (ext.match(/^(csv|tsv)$/)) icon = 'file-delimited-outline';
+		else if (ext.match(/^(xls|xlsx)$/)) icon = 'file-table-outline';
+		else if (ext.match(/^(doc|docx)$/)) icon = 'file-word-outline';
+		else if (ext.match(/^(ppt|pptx)$/)) icon = 'file-powerpoint-outline';
+		else if (ext.match(/^(pdf)$/)) icon = 'file-sign';
+		else if (ext.match(/^(zip|tar|gz|xz)$/)) icon = 'file-cabinet';
 		
 		html += '<span class="nowrap">';
 		icon = '<i class="mdi mdi-' + icon + '"></i>';
