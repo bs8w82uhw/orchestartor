@@ -44,12 +44,19 @@
 		{ "id": "edit_web_hooks", "title": "Edit Web Hooks", "icon": "webhook" },
 		{ "id": "delete_web_hooks", "title": "Delete Web Hooks", "icon": "webhook" },
 		
+		{ "id": "create_buckets", "title": "Create Buckets", "icon": "pail-outline" },
+		{ "id": "edit_buckets", "title": "Edit Buckets", "icon": "pail-outline" },
+		{ "id": "delete_buckets", "title": "Delete Buckets", "icon": "pail-outline" },
+		
 		{ "id": "create_snapshots", "title": "Create Snapshots", "icon": "monitor-eye" }
 	],
+	
+	"globalMemoryLists": ["groups", "plugins", "categories", "events", "channels", "web_hooks", "buckets", "monitors", "alerts", "tags", "roles"],
 	
 	"list_list": [
 		{ "id": "alerts", "title": "Alerts", "icon": "bell-outline" },
 		{ "id": "api_keys", "title": "API Keys", "icon": "key-chain" },
+		{ "id": "buckets", "title": "Buckets", "icon": "pail-outline" },
 		{ "id": "categories", "title": "Categories", "icon": "folder-open-outline" },
 		{ "id": "channels", "title": "Channels", "icon": "bullhorn-outline" },
 		{ "id": "events", "title": "Events", "icon": "calendar-clock" },
@@ -124,6 +131,10 @@
 		"web_hook_update": "Web Hook updated: [description] ([web_hook.id])",
 		"web_hook_delete": "Web Hook deleted: [description] ([web_hook.id])",
 		
+		"bucket_create": "Bucket created: [description] ([bucket.id])",
+		"bucket_update": "Bucket updated: [description] ([bucket.id])",
+		"bucket_delete": "Bucket deleted: [description] ([bucket.id])",
+		
 		"user_create": "User created: [user.full_name] ([user.username])",
 		"user_update": "User updated: [user.full_name] ([user.username])",
 		"user_delete": "User deleted: [user.full_name] ([user.username])",
@@ -161,6 +172,7 @@
 		"plugins": "^(plugin_.+)$",
 		"tags": "^(tag_.+)$",
 		"web_hooks": "^(web_hook_.+)$",
+		"buckets": "^(bucket_.+)$",
 		"users": "^(user_.+)$",
 		"roles": "^(role_.+)$",
 		"servers": "^(server_.+)$",
@@ -197,6 +209,7 @@
 		"^workflow": { "icon": "clipboard-flow-outline", "label": "Workflow" },
 		"^channel": { "icon": "bullhorn-outline", "label": "Channel" },
 		"^web_hook": { "icon": "webhook", "label": "Web Hook" },
+		"^bucket": { "icon": "pail-outline", "label": "Bucket" },
 		"^plugin": { "icon": "power-plug-outline", "label": "Plugin" },
 		"^job": { "icon": "timer-outline", "label": "Job" },
 		"^queue": { "icon": "tray-full", "label": "Queue" },
@@ -216,6 +229,7 @@
 		"plugin": { "name": "plugin", "list": "plugins", "icon": "power-plug-outline", "page": "Plugins" },
 		"tag": { "name": "tag", "list": "tags", "icon": "tag-outline", "page": "Tags" },
 		"web_hook": { "name": "web hook", "list": "web_hooks", "icon": "webhook", "page": "WebHooks" },
+		"bucket": { "name": "bucket", "list": "buckets", "icon": "pail-outline", "page": "Buckets" },
 		"user": { "name": "user", "list": "users", "icon": "account", "page": "Users" },
 		"role": { "name": "role", "list": "roles", "icon": "account-group", "page": "Roles" }
 	},
