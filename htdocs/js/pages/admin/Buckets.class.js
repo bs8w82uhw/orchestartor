@@ -478,18 +478,18 @@ Page.Buckets = class Buckets extends Page.PageUtils {
 			var url = '/' + file.path;
 			
 			var actions = [];
-			actions.push( '<a href="' + url + '?download=' + encodeURIComponent(file.filename) + '"><b>Download</b></a>' );
+			// actions.push( '<a href="' + url + '?download=' + encodeURIComponent(file.filename) + '"><b>Download</b></a>' );
 			actions.push( '<span class="link danger" onClick="$P().deleteBucketFile('+idx+')"><b>Delete</b></span>' );
 			
 			var nice_author = '';
 			if (file.username) nice_author = self.getNiceUser(file.username, app.isAdmin());
-			else if (file.job) nice_author = self.getNiceJob(file.job);
-			else if (file.server) nice_author = self.getNiceServer(file.server);
+			else if (file.job) nice_author = self.getNiceJob(file.job, true);
+			else if (file.server) nice_author = self.getNiceServer(file.server, true);
 			
 			var tds = [
 				'<b>' + self.getNiceFile(file.filename, url) + '</b>',
 				// '<span class="monospace">' + file.id + '</span>',
-				get_text_from_bytes( file.size || 0 ),
+				'<i class="mdi mdi-floppy">&nbsp;</i>' + get_text_from_bytes( file.size || 0 ),
 				self.getRelativeDateTime(file.date),
 				nice_author,
 				actions.join(' | ')
