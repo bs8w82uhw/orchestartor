@@ -234,7 +234,7 @@ Page.Job = class Job extends Page.PageUtils {
 					// row 2
 					html += '<div>';
 						html += '<div class="info_label">Event</div>';
-						html += '<div class="info_value">' + (is_adhoc ? 'n/a' : this.getNiceEvent(job.event, true)) + '</div>';
+						html += '<div class="info_value">' + this.getNiceJobEvent(job, true) + '</div>';
 					html += '</div>';
 					
 					html += '<div>';
@@ -546,6 +546,8 @@ Page.Job = class Job extends Page.PageUtils {
 	renderEventParams() {
 		// render event parameters (user fields)
 		var self = this;
+		if (!this.event) return; // must be adhoc
+		
 		var params = this.job.params || {};
 		var fields = this.event.fields || [];
 		var html = '';
