@@ -159,7 +159,7 @@ Page.Events = class Events extends Page.PageUtils {
 								{ id: 'precision', title: "Precision", icon: 'progress-clock' },
 								{ id: 'plugin', title: "Plugin", icon: 'power-plug' }
 							].concat(
-								this.buildOptGroup( scheduler_plugins, "Scheduler Plugins:", 'power-plug-outline', 'p_' )
+								this.buildOptGroup( scheduler_plugins, "Trigger Plugins:", 'power-plug-outline', 'p_' )
 							),
 							value: args.trigger || '',
 							'data-shrinkwrap': 1
