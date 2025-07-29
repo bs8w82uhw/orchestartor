@@ -532,10 +532,16 @@ body.dark .wf_condition {
 }
 .wf_event.wf_error, .wf_entity.wf_error > div {
 	--active-color: var(--red);
-	border: 2px solid var(--active-color) !important;
+	border: 2px dashed var(--active-color) !important;
 	
 	animation: wf_flash_kf 1s ease-in-out;
 	animation-fill-mode: forwards;
+}
+.wf_entity.wf_error > div {
+	color: var(--active-color) !important;
+}
+.wf_entity.wf_error .wf_pole {
+	background: var(--active-color) !important;
 }
 
 /* Job Progress Indicators */
