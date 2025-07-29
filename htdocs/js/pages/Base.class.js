@@ -357,8 +357,8 @@ Page.Base = class Base extends Page {
 		switch (type) {
 			case 'event': icon = 'calendar-clock'; title = 'Event'; break;
 			case 'monitor': icon = 'console'; title = 'Monitor'; break;
-			case 'action': icon = 'eye-outline'; title = 'Action'; break;
-			case 'scheduler': icon = 'clock-time-four-outline'; title = 'Scheduler'; break;
+			case 'action': icon = 'gesture-tap'; title = 'Action'; break;
+			case 'scheduler': icon = 'rocket-launch-outline'; title = 'Trigger'; break;
 		}
 		
 		var html = '<span class="nowrap">';
@@ -1752,6 +1752,7 @@ Page.Base = class Base extends Page {
 				id: 'fe_erl_file_types',
 				placeholder: '*',
 				spellcheck: 'false',
+				autocomplete: 'off',
 				maxlength: 256,
 				value: limit.accept || ''
 			}),
@@ -2150,6 +2151,7 @@ Page.Base = class Base extends Page {
 				// type: 'email',
 				// multiple: 'multiple',
 				spellcheck: 'false',
+				autocomplete: 'off',
 				maxlength: 8192,
 				placeholder: 'email@sample.com',
 				value: action.email || ''
@@ -2233,6 +2235,7 @@ Page.Base = class Base extends Page {
 				id: 'fe_eja_bucket_glob',
 				class: 'monospace',
 				spellcheck: 'false',
+				autocomplete: 'off',
 				maxlength: 256,
 				placeholder: '*',
 				value: action.bucket_glob || ''
@@ -2413,7 +2416,7 @@ Page.Base = class Base extends Page {
 			
 			switch (param.type) {
 				case 'text':
-					html += self.getFormText({ id: elem_id, value: elem_value, disabled: elem_dis });
+					html += self.getFormText({ id: elem_id, value: elem_value, disabled: elem_dis, autocomplete: 'off' });
 				break;
 				
 				case 'code':
