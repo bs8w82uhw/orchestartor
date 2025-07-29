@@ -935,6 +935,10 @@ div.td_big {
 	background: transparent !important;
 }
 
+.data_grid > ul.grid_row.warning > div {
+	background: color-mix(in srgb, #FFFF00 20%, transparent) !important;
+}
+
 .data_grid > ul.grid_row > div > code {
 	font-size: 12px;
 }
