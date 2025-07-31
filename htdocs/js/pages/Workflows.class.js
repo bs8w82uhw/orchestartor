@@ -35,18 +35,13 @@ Page.Workflows = class Workflows extends Page.Events {
 		var html = '';
 		var do_snap = true;
 		
-		app.setHeaderNav([
-			{ icon: 'calendar-multiple', loc: '#Events?sub=list', title: 'Events' },
-			{ icon: 'clipboard-edit-outline', title: "New Workflow" }
-		]);
-		
-		// app.setHeaderTitle( '<i class="mdi mdi-calendar-plus">&nbsp;</i>New Event' );
-		app.setWindowTitle( "New Workflow" );
+		app.setHeaderNav([ 'event_list', 'new_workflow' ]);
+		app.setWindowTitle( config.ui.titles.new_workflow );
 		
 		html += '<div class="box" style="overflow:hidden">';
 		html += '<div class="box_title">';
-			html += 'New Workflow';
-			html += '<div class="box_subtitle"><a href="#Events?sub=list">&laquo; Back to Event List</a></div>';
+			html += config.ui.titles.new_workflow;
+			html += `<div class="box_subtitle"><a href="#Events?sub=list">${config.ui.links.back_to_events}</a></div>`;
 		html += '</div>';
 		html += '<div class="box_content">';
 		
@@ -57,9 +52,9 @@ Page.Workflows = class Workflows extends Page.Events {
 		}
 		else {
 			this.event = deep_copy_object( app.config.new_event_template );
-		
+			
 			this.event.triggers = []; // the user needs to add these by hand
-		
+			
 			this.event.workflow = this.workflow = {
 				nodes: [],
 				connections: []
@@ -71,7 +66,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		this.actions = this.event.actions; // for job action editor
 		
 		if (find_object(app.categories, { id: 'general' })) this.event.category = 'general';
-		else if (!app.categories.length) return this.doFullPageError("You must define at least one category to add workflows.");
+		else if (!app.categories.length) return this.doFullPageError(config.ui.errors.new_wf_no_cats);
 		else this.event.category = app.categories[0].id;
 		
 		// render form
@@ -82,19 +77,19 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		// render workflow editor
 		html += this.get_wf_editor_html(`
-			<div class="button primary right mobile_collapse" onClick="$P().do_new_workflow()"><i class="mdi mdi-floppy">&nbsp;</i><span>Save Workflow<span></div>
-			<div class="button secondary right mobile_collapse" onClick="$P().do_export()"><i class="mdi mdi-cloud-download-outline">&nbsp;</i><span>Export...</span></div>
-			<div class="button right mobile_collapse" onClick="$P().cancel_workflow_edit()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>Cancel</span></div>
+			<div class="button primary right mobile_collapse" onClick="$P().do_new_workflow()"><i class="mdi mdi-floppy">&nbsp;</i><span>${config.ui.buttons.wf_new_save}<span></div>
+			<div class="button secondary right mobile_collapse" onClick="$P().do_export()"><i class="mdi mdi-cloud-download-outline">&nbsp;</i><span>${config.ui.buttons.export}</span></div>
+			<div class="button right mobile_collapse" onClick="$P().cancel_workflow_edit()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>${config.ui.buttons.cancel}</span></div>
 		`);
 		
 		this.div.html( html );
 		
 		MultiSelect.init( this.div.find('select[multiple]') );
-		SingleSelect.init( this.div.find('#fe_ee_icon, #fe_ee_cat, #fe_ee_algo') );
+		SingleSelect.init( this.div.find('#fe_wf_icon, #fe_wf_cat, #fe_wf_algo') );
 		// this.renderPluginParamEditor();
 		this.renderParamEditor();
-		// this.updateAddRemoveMe('#fe_ee_email');
-		$('#fe_ee_title').focus();
+		// this.updateAddRemoveMe('#fe_wf_email');
+		$('#fe_wf_title').focus();
 		// this.setupBoxButtonFloater();
 		
 		this.setupWorkflowEditor();
@@ -120,7 +115,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		this.event = event;
 		
-		Dialog.showProgress( 1.0, "Creating Workflow..." );
+		Dialog.showProgress( 1.0, config.ui.progress.wf_new_save );
 		app.api.post( 'app/create_event', event, this.new_workflow_finish.bind(this) );
 	}
 	
@@ -133,7 +128,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		this.deletePageDraft();
 		
 		Nav.go('Events?sub=list');
-		app.showMessage('success', "The new workflow was created successfully.");
+		app.showMessage('success', config.ui.messages.wf_new_save);
 	}
 	
 	gosub_edit(args) {
@@ -146,7 +141,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		if (args.rollback && this.rollbackData) {
 			event = this.rollbackData;
 			delete this.rollbackData;
-			app.showMessage('info', `Revision ${event.revision} has been loaded as a draft edit.  Click 'Save Changes' to complete the rollback.  Note that a new revision number will be assigned.`);
+			app.showMessage('info', substitute(config.ui.messages.rollback_draft, { event }) );
 		}
 		
 		this.receive_workflow({ code: 0, event: deep_copy_object(event) });
@@ -160,7 +155,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		if (this.getPageDraft()) {
 			this.event = this.checkRestorePageDraft();
 			do_snap = false;
-			app.showMessage('info', "Your previous unsaved edits were restored.  Click the 'Cancel' button to discard them.");
+			app.showMessage('info', config.ui.messages.draft_restored);
 		}
 		else {
 			this.event = resp.event;
@@ -173,18 +168,17 @@ Page.Workflows = class Workflows extends Page.Events {
 		this.workflow = this.event.workflow;
 		
 		app.setHeaderNav([
-			{ icon: 'calendar-multiple', loc: '#Events?sub=list', title: 'Events' },
+			'event_list',
 			{ icon: this.event.icon || 'clipboard-flow-outline', loc: '#Events?sub=view&id=' + this.event.id, title: this.event.title },
-			{ icon: 'clipboard-edit-outline', title: "Edit Workflow" }
+			'edit_workflow'
 		]);
 		
-		// app.setHeaderTitle( '<i class="mdi mdi-calendar-edit">&nbsp;</i>Event Editor' );
-		app.setWindowTitle( "Editing Workflow \"" + (this.event.title) + "\"" );
+		app.setWindowTitle( substitute( config.ui.titles.edit_workflow, { event: this.event } ) );
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Edit Workflow Details';
-			html += '<div class="box_subtitle"><a href="#Events?sub=view&id=' + this.event.id + '">&laquo; Back to Workflow</a></div>';
+			html += config.ui.titles.edit_workflow_details;
+			html += '<div class="box_subtitle"><a href="#Events?sub=view&id=' + this.event.id + '">' + config.ui.links.back_to_workflow + '</a></div>';
 		html += '</div>';
 		html += '<div class="box_content">';
 		
@@ -195,21 +189,21 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		// render workflow editor
 		html += this.get_wf_editor_html(`
-			<div class="button primary right mobile_collapse" onClick="$P().do_save_workflow()"><i class="mdi mdi-floppy">&nbsp;</i>Save Changes</div>
-			<div class="button secondary right mobile_collapse" onClick="$P().go_edit_history()"><i class="mdi mdi-history">&nbsp;</i><span>History...</span></div>
-			<div class="button secondary right mobile_collapse" onClick="$P().do_export()"><i class="mdi mdi-cloud-download-outline">&nbsp;</i><span>Export...</span></div>
-			<div class="button danger right mobile_collapse" onClick="$P().show_delete_event_dialog()"><i class="mdi mdi-trash-can-outline">&nbsp;</i><span>Delete...</span></div>
-			<div class="button right mobile_collapse" onClick="$P().cancel_workflow_edit()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>Cancel</span></div>
+			<div class="button primary right mobile_collapse" onClick="$P().do_save_workflow()"><i class="mdi mdi-floppy">&nbsp;</i>${config.ui.buttons.save_changes}</div>
+			<div class="button secondary right mobile_collapse" onClick="$P().go_edit_history()"><i class="mdi mdi-history">&nbsp;</i><span>${config.ui.buttons.history}</span></div>
+			<div class="button secondary right mobile_collapse" onClick="$P().do_export()"><i class="mdi mdi-cloud-download-outline">&nbsp;</i><span>${config.ui.buttons.export}</span></div>
+			<div class="button danger right mobile_collapse" onClick="$P().show_delete_event_dialog()"><i class="mdi mdi-trash-can-outline">&nbsp;</i><span>${config.ui.buttons.delete}</span></div>
+			<div class="button right mobile_collapse" onClick="$P().cancel_workflow_edit()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>${config.ui.buttons.cancel}</span></div>
 		`);
 		
 		this.div.html( html );
 		
 		MultiSelect.init( this.div.find('select[multiple]') );
-		SingleSelect.init( this.div.find('#fe_ee_icon, #fe_ee_cat, #fe_ee_algo') );
+		SingleSelect.init( this.div.find('#fe_wf_icon, #fe_wf_cat, #fe_wf_algo') );
 		// this.renderPluginParamEditor();
 		this.renderParamEditor();
-		// this.updateAddRemoveMe('#fe_ee_email');
-		// $('#fe_ee_title').focus();
+		// this.updateAddRemoveMe('#fe_wf_email');
+		// $('#fe_wf_title').focus();
 		// this.setupBoxButtonFloater();
 		
 		this.setupWorkflowEditor();
@@ -226,7 +220,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		this.event = event;
 		
-		Dialog.showProgress( 1.0, "Saving Workflow..." );
+		Dialog.showProgress( 1.0, config.ui.progress.wf_edit_save );
 		app.api.post( 'app/update_event', event, this.save_workflow_finish.bind(this) );
 	}
 	
@@ -248,7 +242,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		}
 		
 		Nav.go( 'Events?sub=view&id=' + this.event.id );
-		app.showMessage('success', "The workflow was saved successfully.");
+		app.showMessage('success', config.ui.messages.wf_edit_save);
 	}
 	
 	//
@@ -339,11 +333,11 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		SingleSelect.popupQuickMenu({
 			elem: '#d_wft_' + id,
-			title: 'Select Condition',
+			title: config.ui.menu_bits.wf_select_condition,
 			items: [ 
 				...config.ui.action_condition_menu
 			].concat(
-				this.buildOptGroup( app.tags, "On Custom Tag:", 'tag-outline', 'tag:' )
+				this.buildOptGroup( app.tags, config.ui.menu_bits.wf_condition_on_custom_tag, 'tag-outline', 'tag:' )
 			),
 			value: conn.condition,
 			
@@ -686,7 +680,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		SingleSelect.popupQuickMenu({
 			elem: '#d_btn_wf_new',
-			title: 'Add New Node',
+			title: config.ui.menu_bits.wf_add_new_node,
 			items: config.ui.workflow_new_node_menu,
 			value: '',
 			nocheck: true,
@@ -750,7 +744,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		SingleSelect.popupQuickMenu({
 			elem: '#d_wf_mouse_tracker',
-			title: 'Add New Node',
+			title: config.ui.menu_bits.wf_add_new_node,
 			items: [ 
 				...config.ui.workflow_new_node_menu.filter( function(item) { return allowed_types[item.id]; } )
 			],
@@ -883,8 +877,8 @@ Page.Workflows = class Workflows extends Page.Events {
 		// test current selection
 		var self = this;
 		var event = this.event;
-		var title = "Test Workflow";
-		var btn = ['open-in-new', 'Run Now'];
+		var title = config.ui.titles.test_workflow;
+		var btn = ['open-in-new', config.ui.buttons.wfd_run_now];
 		var id = first_key(this.wfSelection);
 		var node = find_object( this.workflow.nodes, { id: id } );
 		
@@ -900,67 +894,56 @@ Page.Workflows = class Workflows extends Page.Events {
 		// test scope
 		if (node.type.match(/^(event|job)$/)) {
 			html += this.getFormRow({
-				label: 'Test Scope:',
+				id: 'd_ete_scope',
 				content: this.getFormMenuSingle({
 					id: 'fe_ete_scope',
-					title: 'Select Test Scope',
-					options: [
-						{ id: 'single', title: "Single Node", icon: 'timer-play-outline' },
-						{ id: 'entire', title: "Entire Workflow", icon: 'clipboard-play-outline' }
-					],
 					value: 'single'
-				}),
-				caption: 'Choose whether to test the selected node by itself, or the entire workflow from starting from the selected node.'
+				})
 			});
 		}
 		
 		// actions
 		html += this.getFormRow({
-			label: 'Actions:',
+			id: 'd_ete_actions',
 			content: this.getFormCheckbox({
 				id: 'fe_ete_actions',
-				label: 'Enable All Actions',
 				checked: false
-			}),
-			caption: 'Enable all actions for the test run (includes both workflow and individual node actions).'
+			})
 		});
 		
 		// limits
 		html += this.getFormRow({
-			label: 'Limits:',
+			id: 'd_ete_limits',
 			content: this.getFormCheckbox({
 				id: 'fe_ete_limits',
-				label: 'Enable All Limits',
 				checked: false
-			}),
-			caption: 'Enable all resource limits for the test run (includes both workflow and individual node limits).'
+			})
 		});
 		
 		// custom input json
 		html += this.getFormRow({
-			label: 'Custom JSON Input:',
+			id: 'd_ete_input',
 			content: this.getFormTextarea({
 				id: 'fe_ete_input',
 				rows: 1,
 				value: `{\n\t\n}`,
 				style: 'display:none'
-			}) + '<div class="button small secondary" onClick="$P().edit_test_input()"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>Edit JSON...</div>',
-			caption: 'Optionally customize the JSON input data for the first job.  This is used to simulate data being passed to it from a previous job.'
+			}) + `<div class="button small secondary" onClick="$P().edit_test_input()"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>${config.ui.buttons.wfd_edit_json}</div>`
 		});
 		
 		// user files
 		var limit = find_object( event.limits || [], { type: 'file', enabled: true } );
 		html += this.getFormRow({
-			label: 'File Input:',
-			content: this.getDialogFileUploader(limit),
-			caption: 'Optionally upload and attach files to the job as inputs.'
+			id: 'd_ete_files',
+			content: this.getDialogFileUploader(limit)
 		});
 		
 		// user form fields
 		html += this.getFormRow({
+			id: 'd_ete_params',
 			label: 'Workflow Parameters:',
 			content: '<div class="plugin_param_editor_cont">' + this.getParamEditor(event.fields, {}) + '</div>',
-			caption: (event.fields && event.fields.length) ? 'Enter values for all the event-defined parameters here.' : ''
+			caption: (event.fields && event.fields.length) ? config.ui.dom.d_ete_params.caption : ''
 		});
 		
 		html += '</div>';
@@ -1007,7 +990,7 @@ Page.Workflows = class Workflows extends Page.Events {
 				job.input.data = JSON.parse( raw_json );
 			}
 			catch (err) {
-				return app.badField( '#fe_ete_input', "Invalid JSON: " + err.message );
+				return app.badField( '#fe_ete_input', "", { err } );
 			}
 			
 			// add files if user uploaded
@@ -1037,7 +1020,7 @@ Page.Workflows = class Workflows extends Page.Events {
 			function(err) {
 				// capture error so we can close the window we just opened
 				win.close();
-				app.doError("API Error: " + err.description);
+				app.doError('api_error', { err });
 			});
 			
 			Dialog.hide();
@@ -1072,7 +1055,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		var do_create = !node;
 		
 		var sorted_events = this.getCategorizedEvents();
-		if (!sorted_events.length) return app.doError(`Please create at least one event before adding a workflow event node.`);
+		if (!sorted_events.length) return app.doError('wfde_no_events');
 		
 		if (do_create) {
 			node = { 
@@ -1083,11 +1066,11 @@ Page.Workflows = class Workflows extends Page.Events {
 		} // do_create
 		
 		var event = find_object( app.events, { id: node.data.event } );
-		if (!event) return app.doError(`Event ID "${node.data.event}" could not be found.  Did someone delete it?`);
+		if (!event) return app.doError('wfde_event_not_found', { node });
 		var params = node.data.params;
 		
-		var title = do_create ? "New Event Node" : "Editing Event Node";
-		var btn = do_create ? ['plus-circle', "Add Node"] : ['check-circle', "Apply"];
+		var title = do_create ? config.ui.titles.wfde_new : config.ui.titles.wfde_edit;
+		var btn = do_create ? ['plus-circle', config.ui.buttons.wfd_add_node] : ['check-circle', config.ui.buttons.accept];
 		
 		if (!do_create) title += ` <div class="dialog_title_widget mobile_hide"><span class="monospace">${this.getNiceCopyableID(node.id)}</span></div>`;
 		
@@ -1095,59 +1078,51 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		// event
 		html += this.getFormRow({
-			label: 'Event:',
+			id: 'd_wfde_event',
 			content: this.getFormMenuSingle({
-				id: 'fe_wfd_event',
-				title: 'Select Event',
+				id: 'fe_wfde_event',
 				options: sorted_events,
 				value: node.data.event || '',
 				default_icon: 'calendar-clock',
 				'data-shrinkwrap': 1
-			}),
-			caption: 'Select the event to use for the workflow node.'
+			})
 		});
 		
 		// targets
 		html += this.getFormRow({
-			label: 'Targets:',
+			id: 'd_wfde_targets',
 			content: this.getFormMenuMulti({
-				id: 'fe_wfd_targets',
-				title: 'Select targets for the event',
-				placeholder: '(Use event defaults)',
+				id: 'fe_wfde_targets',
 				options: [].concat(
-					this.buildOptGroup(app.groups, "Groups:", 'server-network'),
-					this.buildServerOptGroup("Servers:", 'router-network')
+					this.buildOptGroup(app.groups, config.ui.menu_bits.wf_targets_groups, 'server-network'),
+					this.buildServerOptGroup(config.ui.menu_bits.wf_targets_servers, 'router-network')
 				),
 				values: node.data.targets || [],
 				auto_add: true,
 				// 'data-hold': 1
 				// 'data-shrinkwrap': 1
-			}),
-			caption: 'Optionally override the targets for running the event.'
+			})
 		});
 		
 		// algo
 		html += this.getFormRow({
-			label: 'Algorithm:',
+			id: 'd_wfde_algo',
 			content: this.getFormMenuSingle({
-				id: 'fe_wfd_algo',
-				title: 'Select algorithm for targets',
-				options: [{ id: '', title: '(Use event default)' }].concat(config.ui.event_target_algo_menu).concat(
-					this.buildOptGroup( app.monitors, "Least Monitor Value:", 'chart-line', 'monitor:' )
+				id: 'fe_wfde_algo',
+				options: [{ id: '', title: config.ui.menu_bits.wf_algo_default }].concat(config.ui.event_target_algo_menu).concat(
+					this.buildOptGroup( app.monitors, config.ui.menu_bits.wf_algo_least, 'chart-line', 'monitor:' )
 				),
 				value: node.data.algo || '',
 				// default_icon: 'arrow-decision',
 				'data-nudgeheight': 1
 				// 'data-shrinkwrap': 1
-			}),
-			caption: 'Optionally override the target selection algorithm for the event.'
+			})
 		});
 		
 		// params
 		html += this.getFormRow({
-			label: 'User Parameters:',
-			content: '<div id="d_wfd_param_editor" class="plugin_param_editor_cont"></div>',
-			caption: 'Enter values for all the event-defined parameters here.'
+			id: 'd_wfde_user_params',
+			content: '<div id="d_wfde_param_editor" class="plugin_param_editor_cont"></div>'
 		});
 		
 		html += '</div>';
@@ -1155,9 +1130,9 @@ Page.Workflows = class Workflows extends Page.Events {
 			if (!result) return;
 			app.clearError();
 			
-			node.data.event = $('#fe_wfd_event').val();
-			node.data.targets = $('#fe_wfd_targets').val();
-			node.data.algo = $('#fe_wfd_algo').val();
+			node.data.event = $('#fe_wfde_event').val();
+			node.data.targets = $('#fe_wfde_targets').val();
+			node.data.algo = $('#fe_wfde_algo').val();
 			
 			var event = find_object( app.events, { id: node.data.event } );
 			node.data.params = self.getParamValues(event.fields);
@@ -1195,19 +1170,19 @@ Page.Workflows = class Workflows extends Page.Events {
 			self.addState();
 		}); // Dialog.confirm
 		
-		MultiSelect.init( $('#fe_wfd_targets') );
-		SingleSelect.init( $('#fe_wfd_event, #fe_wfd_algo') );
+		MultiSelect.init( $('#fe_wfde_targets') );
+		SingleSelect.init( $('#fe_wfde_event, #fe_wfde_algo') );
 		
 		// handle event change
 		var do_change_event = function() {
 			// refresh param editor
-			var event_id = $('#fe_wfd_event').val();
+			var event_id = $('#fe_wfde_event').val();
 			var event = find_object( app.events, { id: event_id } );
-			$('#d_wfd_param_editor').html( self.getParamEditor( event.fields, params ) );
+			$('#d_wfde_param_editor').html( self.getParamEditor( event.fields, params ) );
 			Dialog.autoResize();
 		}
 		
-		$('#fe_wfd_event').on('change', do_change_event);
+		$('#fe_wfde_event').on('change', do_change_event);
 		do_change_event();
 	}
 	
@@ -1226,20 +1201,20 @@ Page.Workflows = class Workflows extends Page.Events {
 			};
 			
 			if (find_object(app.categories, { id: 'general' })) node.data.category = 'general';
-			else if (!app.categories.length) return app.doError("You must define at least one category to add workflow plugin nodes.");
+			else if (!app.categories.length) return app.doError('wfdj_no_cats');
 			else node.data.category = app.categories[0].id;
 			
 			if (find_object(app.plugins, { id: 'shellplug' })) node.data.plugin = 'shellplug';
-			else if (!app.plugins.length) return app.doError("You must create at least one Plugin to add workflow plugin nodes.");
+			else if (!app.plugins.length) return app.doError('wfdj_no_plugins');
 			else node.data.plugin = app.plugins[0].id;
 		} // do_create
 		
 		var plugin = find_object( app.plugins, { id: node.data.plugin } );
-		if (!plugin) return app.doError(`Plugin ID "${node.data.plugin}" could not be found.  Did someone delete it?`);
+		if (!plugin) return app.doError('wfdj_plugin_not_found', { node });
 		var params = node.data.params;
 		
-		var title = do_create ? "New Plugin Node" : "Editing Plugin Node";
-		var btn = do_create ? ['plus-circle', "Add Node"] : ['check-circle', "Apply"];
+		var title = do_create ? config.ui.titles.wfdj_new : config.ui.titles.wfdj_edit;
+		var btn = do_create ? ['plus-circle', config.ui.buttons.wfd_add_node] : ['check-circle', config.ui.buttons.accept];
 		
 		if (!do_create) title += ` <div class="dialog_title_widget mobile_hide"><span class="monospace">${this.getNiceCopyableID(node.id)}</span></div>`;
 		
@@ -1247,102 +1222,85 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		// plugin
 		html += this.getFormRow({
-			label: 'Plugin:',
+			id: 'd_wfdj_plugin',
 			content: this.getFormMenuSingle({
-				id: 'fe_wfd_plugin',
-				title: 'Select Plugin for node',
-				placeholder: 'Select Plugin for node...',
+				id: 'fe_wfdj_plugin',
 				options: app.plugins.filter( function(plugin) { return plugin.type == 'event'; } ),
 				value: node.data.plugin || '',
 				default_icon: 'power-plug-outline'
 				// 'data-shrinkwrap': 1
-			}),
-			caption: 'Select the desired Plugin for the node.  Plugin parameters will appear below.'
+			})
 		});
 		
 		// title
 		html += this.getFormRow({
-			label: 'Custom Title:',
+			id: 'd_wfdj_title',
 			content: this.getFormText({
-				id: 'fe_wfd_title',
+				id: 'fe_wfdj_title',
 				spellcheck: 'false',
 				autocomplete: 'off',
 				value: node.data.label
-			}),
-			caption: 'Optionally customize the title for the node (defaults to the Plugin name).'
+			})
 		});
 		
 		// icon
 		html += this.getFormRow({
-			label: 'Custom Icon:',
+			id: 'd_wfdj_icon',
 			content: this.getFormMenuSingle({
-				id: 'fe_wfd_icon',
-				title: 'Select icon for job',
-				placeholder: 'Select icon for job...',
+				id: 'fe_wfdj_icon',
 				options: [['', '(None)']].concat( iconFontNames.map( function(name) { return { id: name, title: name, icon: name }; } ) ),
 				value: node.data.icon || '',
 				// 'data-shrinkwrap': 1
-			}),
-			caption: 'Optionally choose a custom icon for the plugin node (defaults to the Plugin icon).'
+			})
 		});
 		
 		// category
 		html += this.getFormRow({
-			label: 'Category:',
+			id: 'd_wfdj_cat',
 			content: this.getFormMenuSingle({
-				id: 'fe_wfd_cat',
-				title: 'Select category for job',
-				placeholder: 'Select category for job...',
+				id: 'fe_wfdj_cat',
 				options: app.categories,
 				value: node.data.category || '',
 				default_icon: 'folder-open-outline',
 				// 'data-shrinkwrap': 1
-			}),
-			caption: 'Select a category for the plugin job (category limits and actions will apply)'
+			})
 		});
 		
 		// targets
 		html += this.getFormRow({
-			label: 'Targets:',
+			id: 'd_wfdj_targets',
 			content: this.getFormMenuMulti({
-				id: 'fe_wfd_targets',
-				title: 'Select targets for job',
-				placeholder: 'Select targets for job...',
+				id: 'fe_wfdj_targets',
 				options: [].concat(
-					this.buildOptGroup(app.groups, "Groups:", 'server-network'),
-					this.buildServerOptGroup("Servers:", 'router-network')
+					this.buildOptGroup(app.groups, config.ui.menu_bits.wf_targets_groups, 'server-network'),
+					this.buildServerOptGroup(config.ui.menu_bits.wf_targets_servers, 'router-network')
 				),
 				values: node.data.targets,
 				auto_add: true,
 				// 'data-hold': 1
 				// 'data-shrinkwrap': 1
-			}),
-			caption: 'Select groups and/or servers to run the plugin job.'
+			})
 		});
 		
 		// algo
 		html += this.getFormRow({
-			label: 'Algorithm:',
+			id: 'd_wfdj_algo',
 			content: this.getFormMenuSingle({
-				id: 'fe_wfd_algo',
-				title: 'Select algorithm for targets',
-				placeholder: 'Select algorithm for targets...',
+				id: 'fe_wfdj_algo',
 				options: config.ui.event_target_algo_menu.concat(
-					this.buildOptGroup( app.monitors, "Least Monitor Value:", 'chart-line', 'monitor:' )
+					this.buildOptGroup( app.monitors, config.ui.menu_bits.wf_algo_least, 'chart-line', 'monitor:' )
 				),
 				value: node.data.algo || '',
 				default_icon: 'arrow-decision',
 				'data-nudgeheight': 1
 				// 'data-shrinkwrap': 1
-			}),
-			caption: 'Select the desired algorithm for choosing a server from the target list.'
+			})
 		});
 		
 		// params
 		html += this.getFormRow({
-			label: 'Plugin Parameters:',
-			content: '<div id="d_wfd_param_editor" class="plugin_param_editor_cont"></div>',
-			caption: 'Enter values for all the Plugin-defined parameters here.'
+			id: 'd_wfdj_user_params',
+			content: '<div id="d_wfdj_param_editor" class="plugin_param_editor_cont"></div>'
 		});
 		
 		html += '</div>';
@@ -1350,14 +1308,14 @@ Page.Workflows = class Workflows extends Page.Events {
 			if (!result) return;
 			app.clearError();
 			
-			node.data.label = strip_html( $('#fe_wfd_title').val() );
-			node.data.icon = $('#fe_wfd_icon').val();
-			node.data.category = $('#fe_wfd_cat').val();
-			node.data.plugin = $('#fe_wfd_plugin').val();
-			node.data.targets = $('#fe_wfd_targets').val();
-			node.data.algo = $('#fe_wfd_algo').val();
+			node.data.label = strip_html( $('#fe_wfdj_title').val() );
+			node.data.icon = $('#fe_wfdj_icon').val();
+			node.data.category = $('#fe_wfdj_cat').val();
+			node.data.plugin = $('#fe_wfdj_plugin').val();
+			node.data.targets = $('#fe_wfdj_targets').val();
+			node.data.algo = $('#fe_wfdj_algo').val();
 			
-			if (!node.data.targets.length) return app.badField('#fe_wfd_targets', "You must select at least one target for the plugin job.");
+			if (!node.data.targets.length) return app.badField('#fe_wfdj_targets');
 			
 			node.data.params = self.getPluginParamValues( node.data.plugin );
 			if (!node.data.params) return; // invalid
@@ -1395,19 +1353,19 @@ Page.Workflows = class Workflows extends Page.Events {
 			self.addState();
 		}); // Dialog.confirm
 		
-		MultiSelect.init( $('#fe_wfd_targets') );
-		SingleSelect.init( $('#fe_wfd_icon, #fe_wfd_cat, #fe_wfd_plugin, #fe_wfd_algo') );
+		MultiSelect.init( $('#fe_wfdj_targets') );
+		SingleSelect.init( $('#fe_wfdj_icon, #fe_wfdj_cat, #fe_wfdj_plugin, #fe_wfdj_algo') );
 		
 		// handle plugin change
 		var do_change_plugin = function() {
 			// refresh plugin param editor
-			var plugin_id = $('#fe_wfd_plugin').val();
+			var plugin_id = $('#fe_wfdj_plugin').val();
 			var plugin = find_object( app.plugins, { id: plugin_id } );
-			$('#d_wfd_param_editor').html( self.getPluginParamEditor( plugin_id, node.data.params ) );
+			$('#d_wfdj_param_editor').html( self.getPluginParamEditor( plugin_id, node.data.params ) );
 			Dialog.autoResize();
 		}
 		
-		$('#fe_wfd_plugin').on('change', do_change_plugin);
+		$('#fe_wfdj_plugin').on('change', do_change_plugin);
 		do_change_plugin();
 		
 		// if (do_create) $('#fe_wfd_title').focus();
@@ -1428,8 +1386,8 @@ Page.Workflows = class Workflows extends Page.Events {
 			};
 		} // do_create
 		
-		var title = do_create ? "New Action Node" : "Editing Action Node";
-		var btn = do_create ? ['plus-circle', "Add Action"] : ['check-circle', "Apply"];
+		var title = do_create ? config.ui.titles.wfda_new : config.ui.titles.wfda_edit;
+		var btn = do_create ? ['plus-circle', config.ui.buttons.wfd_add_action] : ['check-circle', config.ui.buttons.accept];
 		var action = node.data;
 		
 		if (!do_create) title += ` <div class="dialog_title_widget mobile_hide"><span class="monospace">${this.getNiceCopyableID(node.id)}</span></div>`;
@@ -1493,8 +1451,8 @@ Page.Workflows = class Workflows extends Page.Events {
 			};
 		} // do_create
 		
-		var title = do_create ? "New Limiter Node" : "Editing Limiter Node";
-		var btn = do_create ? ['plus-circle', "Add Limiter"] : ['check-circle', "Apply"];
+		var title = do_create ? config.ui.titles.wfdl_new : config.ui.titles.wfdl_edit;
+		var btn = do_create ? ['plus-circle', config.ui.buttons.wfd_add_limit] : ['check-circle', config.ui.buttons.accept];
 		var limit = node.data;
 		
 		if (!do_create) title += ` <div class="dialog_title_widget mobile_hide"><span class="monospace">${this.getNiceCopyableID(node.id)}</span></div>`;
@@ -1626,8 +1584,8 @@ Page.Workflows = class Workflows extends Page.Events {
 			};
 		} // do_create
 		
-		var title = do_create ? "New Controller" : "Editing Controller";
-		var btn = do_create ? ['plus-circle', "Add Controller"] : ['check-circle', "Apply"];
+		var title = do_create ? config.ui.titles.wfdc_new : config.ui.titles.wfdc_edit;
+		var btn = do_create ? ['plus-circle', config.ui.buttons.wfd_add_controller] : ['check-circle', config.ui.buttons.accept];
 		
 		if (!do_create) title += ` <div class="dialog_title_widget mobile_hide"><span class="monospace">${this.getNiceCopyableID(node.id)}</span></div>`;
 		
@@ -1635,23 +1593,20 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		// type
 		html += this.getFormRow({
-			label: 'Controller Type:',
+			id: 'd_wfd_type',
 			content: this.getFormMenuSingle({
 				id: 'fe_wfd_type',
-				title: "Select Controller Type",
 				options: config.ui.workflow_controller_type_menu,
 				value: node.data.controller,
 				'data-shrinkwrap': 1,
 				// 'data-nudgeheight': 1
-			}),
-			caption: 'Select the desired type for the controller.'
+			})
 		});
 		
 		// description
 		html += this.getFormRow({
 			id: 'd_wfd_desc',
-			label: 'Description:',
-			content: 'HERE'
+			content: '...'
 		});
 		
 		// dynamic fields based on type:
@@ -1659,29 +1614,24 @@ Page.Workflows = class Workflows extends Page.Events {
 		// multiplex stagger
 		html += this.getFormRow({
 			id: 'd_wfd_stagger',
-			label: 'Stagger Delay:',
 			content: this.getFormRelativeTime({
 				id: 'fe_wfd_stagger',
 				value: node.data.stagger || 0
-			}),
-			caption: 'Optionally enter a duration to stagger the start of each multiplexed job.'
+			})
 		});
 		
 		// wait time
 		html += this.getFormRow({
 			id: 'd_wfd_wait',
-			label: 'Wait Delay:',
 			content: this.getFormRelativeTime({
 				id: 'fe_wfd_wait',
 				value: node.data.wait || 0
-			}),
-			caption: 'Enter a duration to wait before control passes to the connected nodes.'
+			})
 		});
 		
 		// repeat iterations
 		html += this.getFormRow({
 			id: 'd_wfd_repeat',
-			label: 'Repeat Iterations:',
 			content: this.getFormText({
 				id: 'fe_wfd_repeat',
 				type: 'number',
@@ -1689,14 +1639,12 @@ Page.Workflows = class Workflows extends Page.Events {
 				maxlength: 32,
 				min: 1,
 				value: node.data.repeat || 1
-			}),
-			caption: 'Enter the number of iterations to repeat before continuing on.'
+			})
 		});
 		
 		// split path
 		html += this.getFormRow({
 			id: 'd_wfd_split',
-			label: 'Split Expression:',
 			content: this.getFormText({
 				id: 'fe_wfd_split',
 				type: 'text',
@@ -1705,14 +1653,12 @@ Page.Workflows = class Workflows extends Page.Events {
 				maxlength: 8192,
 				class: 'monospace',
 				value: node.data.split || ''
-			}) + '<div class="text_field_icon mdi mdi-database-search-outline" title="Open Expression Builder..." onClick="$P().openJobDataExplorer(this)"></div>',
-			caption: 'Specify the path to the array for splitting, using dot.path.notation.'
+			}) + '<div class="text_field_icon mdi mdi-database-search-outline" title="' + config.ui.tooltips.wfd_exp_builder + '" onClick="$P().openJobDataExplorer(this)"></div>'
 		});
 		
 		// if expression
 		html += this.getFormRow({
 			id: 'd_wfd_if',
-			label: 'Expression:',
 			content: this.getFormText({
 				id: 'fe_wfd_if',
 				type: 'text',
@@ -1721,41 +1667,34 @@ Page.Workflows = class Workflows extends Page.Events {
 				maxlength: 8192,
 				class: 'monospace',
 				value: node.data.decision || ''
-			}) + '<div class="text_field_icon mdi mdi-database-search-outline" title="Open Expression Builder..." onClick="$P().openJobDataExplorer(this)"></div>',
-			caption: 'Enter the expression to evaluate.  If true, control will pass onto the next node.'
+			}) + '<div class="text_field_icon mdi mdi-database-search-outline" title="' + config.ui.tooltips.wfd_exp_builder + '" onClick="$P().openJobDataExplorer(this)"></div>'
 		});
 		
 		// custom title
 		html += this.getFormRow({
 			id: 'd_wfd_title',
-			label: 'Custom Title:',
 			content: this.getFormText({
 				id: 'fe_wfd_title',
 				spellcheck: 'false',
 				autocomplete: 'off',
 				value: node.data.label || ''
-			}),
-			caption: 'Optionally enter a custom title for the node.'
+			})
 		});
 		
 		// custom icon
 		html += this.getFormRow({
 			id: 'd_wfd_icon',
-			label: 'Custom Icon:',
 			content: this.getFormMenuSingle({
 				id: 'fe_wfd_icon',
-				title: 'Select icon for node',
 				options: [['', '(None)']].concat( iconFontNames.map( function(name) { return { id: name, title: name, icon: name }; } ) ),
 				value: node.data.icon || '',
 				// 'data-shrinkwrap': 1
-			}),
-			caption: 'Optionally choose a custom icon for the node.'
+			})
 		});
 		
 		// continue percentage
 		html += this.getFormRow({
 			id: 'd_wfd_continue',
-			label: 'Continue Percentage:',
 			content: this.getFormText({
 				id: 'fe_wfd_continue',
 				type: 'number',
@@ -1763,8 +1702,7 @@ Page.Workflows = class Workflows extends Page.Events {
 				maxlength: 3,
 				min: 0,
 				value: node.data.continue || 0
-			}),
-			caption: 'Enter the percentage of jobs that must complete successfully before continuing on to the next node.'
+			})
 		});
 		
 		html += '</div>';
@@ -1792,7 +1730,7 @@ Page.Workflows = class Workflows extends Page.Events {
 				
 				case 'split':
 					node.data.split = $('#fe_wfd_split').val().trim();
-					if (!node.data.split.length) return app.badField('#fe_wfd_split', "Please enter a path to the array data to split on.");
+					if (!node.data.split.length) return app.badField('#fe_wfd_split');
 					node.data.continue = parseInt( $('#fe_wfd_continue').val() ) || 0;
 				break;
 				
@@ -1804,7 +1742,7 @@ Page.Workflows = class Workflows extends Page.Events {
 					node.data.label = strip_html( $('#fe_wfd_title').val() );
 					node.data.icon = $('#fe_wfd_icon').val();
 					node.data.decision = $('#fe_wfd_if').val().trim();
-					if (!node.data.decision.length) return app.badField('#fe_wfd_if', "Please enter an expression to evaluate.");
+					if (!node.data.decision.length) return app.badField('#fe_wfd_if');
 				break;
 			} // switch type
 			
@@ -1873,31 +1811,28 @@ Page.Workflows = class Workflows extends Page.Events {
 		var title = "Expression Builder";
 		var html = '';
 		
-		html += `<div class="dialog_intro">This allows you to explore output data from recently completed jobs, and pick out a specific JSON key path to use for your controller expression.</div>`;
+		html += `<div class="dialog_intro">${config.ui.intros.wfd_exp_builder}</div>`;
 		html += '<div class="dialog_box_content scroll maximize">';
 		
 		// job picker
 		html += this.getFormRow({
-			label: 'Select Previous Job:',
+			id: 'd_ex_job',
 			content: this.getFormMenuSingle({
 				id: 'fe_ex_job',
-				title: 'Select Previous Job',
 				options: [ { id: '', title: "Loading..." } ],
 				value: ''
-			}),
-			caption: 'Select a completed job to explore its data.'
+			})
 		});
 		
 		// json tree viewer
 		html += this.getFormRow({
-			label: 'Job Data Explorer:',
-			content: '<div id="d_ex_tree"><div class="ex_tree_inner"><div class="loading_container"><div class="loading"></div></div></div></div>',
-			caption: 'Click on the desired key to insert the full path into the expression below.'
+			id: 'd_ex_tree_viewer',
+			content: '<div id="d_ex_tree"><div class="ex_tree_inner"><div class="loading_container"><div class="loading"></div></div></div></div>'
 		});
 		
 		// expression
 		html += this.getFormRow({
-			label: 'Expression:',
+			id: 'd_ex_exp',
 			content: this.getFormText({
 				id: 'fe_ex_exp',
 				type: 'text',
@@ -1906,15 +1841,14 @@ Page.Workflows = class Workflows extends Page.Events {
 				maxlength: 8192,
 				class: 'monospace',
 				value: $input.val()
-			}),
-			caption: 'Build your final expression here.'
+			})
 		});
 		
 		html += '</div>'; // dialog_box_content
 		
 		var buttons_html = "";
-		buttons_html += '<div class="button" onClick="CodeEditor.hide()"><i class="mdi mdi-close-circle-outline">&nbsp;</i>Cancel</div>';
-		buttons_html += '<div id="btn_ex_apply" class="button primary"><i class="mdi mdi-check-circle">&nbsp;</i>Apply</div>';
+		buttons_html += `<div class="button" onClick="CodeEditor.hide()"><i class="mdi mdi-close-circle-outline">&nbsp;</i>${config.ui.buttons.cancel}</div>`;
+		buttons_html += `<div id="btn_ex_apply" class="button primary"><i class="mdi mdi-check-circle">&nbsp;</i>${config.ui.buttons.accept}</div>`;
 		
 		CodeEditor.showSimpleDialog(title, html, buttons_html);
 		
@@ -1962,8 +1896,8 @@ Page.Workflows = class Workflows extends Page.Events {
 			} );
 			
 			if (!items.length) {
-				$('#fe_ex_job').html( render_menu_options( [{ id: '', title: "(No jobs found)" }], '' ) ).trigger('change');
-				$('#d_ex_tree').html(`<div class="ex_tree_none">No previous jobs were found.</div>`);
+				$('#fe_ex_job').html( render_menu_options( [{ id: '', title: config.ui.errors.fe_ex_job }], '' ) ).trigger('change');
+				$('#d_ex_tree').html(`<div class="ex_tree_none">${config.ui.errors.ex_tree_none}</div>`);
 				return;
 			}
 			
@@ -2157,77 +2091,67 @@ Page.Workflows = class Workflows extends Page.Events {
 		if (event.id) {
 			// event id
 			html += this.getFormRow({
-				label: 'Workflow ID:',
+				id: 'd_wf_id',
 				content: this.getFormText({
-					id: 'fe_ee_id',
+					id: 'fe_wf_id',
 					class: 'monospace',
 					spellcheck: 'false',
 					disabled: 'disabled',
 					value: event.id
 				}),
-				suffix: '<div class="form_suffix_icon mdi mdi-clipboard-text-outline" title="Copy ID to Clipboard" onClick="$P().copyFormID(this)"></div>',
-				caption: 'This is a unique ID for the workflow, used by the API.  It cannot be changed.'
+				suffix: '<div class="form_suffix_icon mdi mdi-clipboard-text-outline" title="Copy ID to Clipboard" onClick="$P().copyFormID(this)"></div>'
 			});
 		}
 		
 		// title
 		html += this.getFormRow({
-			label: 'Workflow Title:',
+			id: 'd_wf_title',
 			content: this.getFormText({
-				id: 'fe_ee_title',
+				id: 'fe_wf_title',
 				spellcheck: 'false',
 				autocomplete: 'off',
 				value: event.title
-			}),
-			caption: 'Enter the title of the workflow, for display purposes.'
+			})
 		});
 		
 		// enabled
 		html += this.getFormRow({
-			label: 'Status:',
+			id: 'd_wf_enabled',
 			content: this.getFormCheckbox({
-				id: 'fe_ee_enabled',
-				label: 'Workflow Enabled',
+				id: 'fe_wf_enabled',
 				checked: event.enabled
-			}),
-			caption: 'Only enabled workflows can execute, including scheduled and manual runs.'
+			})
 		});
 		
 		// icon
 		html += this.getFormRow({
-			label: 'Custom Icon:',
+			id: 'd_wf_icon',
 			content: this.getFormMenuSingle({
-				id: 'fe_ee_icon',
-				title: 'Select icon for workflow',
-				placeholder: 'Select icon for workflow...',
-				options: [['', '(None)']].concat( iconFontNames.map( function(name) { return { id: name, title: name, icon: name }; } ) ),
+				id: 'fe_wf_icon',
+				options: [['', config.ui.menu_bits.generic_none]].concat( iconFontNames.map( function(name) { return { id: name, title: name, icon: name }; } ) ),
 				value: event.icon || '',
 				// 'data-shrinkwrap': 1
-			}),
-			caption: 'Optionally choose a custom icon for the workflow.'
+			})
 		});
 		
 		// category
 		html += this.getFormRow({
-			label: 'Category:',
+			id: 'd_wf_cat',
 			content: this.getFormMenuSingle({
-				id: 'fe_ee_cat',
-				title: 'Select category for workflow',
-				placeholder: 'Select category for workflow...',
+				id: 'fe_wf_cat',
 				options: app.categories,
 				value: event.category || '',
 				default_icon: 'folder-open-outline',
 				// 'data-shrinkwrap': 1
 			}),
-			suffix: '<div class="form_suffix_icon mdi mdi-folder-plus-outline" title="Quick Add Category..." onClick="$P().quickAddCategory()" onMouseDown="event.preventDefault();"></div>',
-			caption: 'Select a category for the workflow (this may limit the max concurrent jobs, etc.)'
+			suffix: `<div class="form_suffix_icon mdi mdi-folder-plus-outline" title="${config.ui.tooltips.quick_add_cat}" onClick="$P().quickAddCategory()" onMouseDown="event.preventDefault();"></div>`
 		});
 		
-		// tags
+		// tags TODO: remove this
 		html += this.getFormRow({
 			label: 'Tags:',
 			content: this.getFormMenuMulti({
-				id: 'fe_ee_tags',
+				id: 'fe_wf_tags',
 				title: 'Select tags for workflow',
 				placeholder: 'Select tags for workflow...',
 				options: app.tags,
@@ -2241,36 +2165,32 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		// user fields
 		html += this.getFormRow({
-			label: 'User Fields:',
-			content: '<div id="d_params_table"></div>',
-			caption: 'Optionally define custom parameters to be collected when a user runs your workflow manually.'
+			id: 'd_wf_user_fields',
+			content: '<div id="d_params_table"></div>'
 		});
 		
 		// resource limits
 		// (requires this.limits to be populated)
 		html += this.getFormRow({
-			label: 'Resource Limits:',
-			content: '<div id="d_ee_reslim_table">' + this.getResLimitTable() + '</div>',
-			caption: 'Optionally select resource limits to assign to jobs.  These will override limits set at the category level.'
+			id: 'd_wf_res_limits',
+			content: '<div id="d_ee_reslim_table">' + this.getResLimitTable() + '</div>'
 		});
 		
 		// actions
 		// (requires this.actions to be populated)
 		html += this.getFormRow({
-			label: 'Job Actions:',
-			content: '<div id="d_ee_jobact_table">' + this.getJobActionTable() + '</div>',
-			caption: 'Optionally select custom actions to perform for each job.  Actions may also be added at the category level.'
+			id: 'd_wf_job_actions',
+			content: '<div id="d_ee_jobact_table">' + this.getJobActionTable() + '</div>'
 		});
 		
 		// notes
 		html += this.getFormRow({
-			label: 'Notes:',
+			id: 'd_wf_notes',
 			content: this.getFormTextarea({
-				id: 'fe_ee_notes',
+				id: 'fe_wf_notes',
 				rows: 5,
 				value: event.notes
-			}),
-			caption: 'Optionally enter notes for the event, which will be included in all email notifications.'
+			})
 		});
 		
 		return html;
@@ -2289,25 +2209,25 @@ Page.Workflows = class Workflows extends Page.Events {
 		// <div class="button right"><i class="mdi mdi-clipboard-edit-outline">&nbsp;</i>Edit Info...</div>
 		
 		html += `<div class="wf_grid_header">
-			<div class="wf_title left" style="display:none"><i class="mdi mdi-clipboard-flow-outline">&nbsp;</i>Workflow Editor</div>
-			<div class="button secondary left mobile_collapse" id="d_btn_wf_edit" onClick="$P().doEditSelection()" style="display:none" title="Edit selected node"><i class="mdi mdi-note-edit-outline">&nbsp;</i><span>Edit...</span></div>
-			<div class="button secondary left mobile_collapse" id="d_btn_wf_test" onClick="$P().doTestSelection()" style="display:none" title="Test selected node"><i class="mdi mdi-test-tube">&nbsp;</i><span>Test...</span></div>
-			<div class="button icon left mobile_collapse" id="d_btn_wf_dup" onClick="$P().doDuplicateSelection()" style="display:none" title="Duplicate selection"><i class="mdi mdi-content-duplicate">&nbsp;</i><span>Duplicate</span></div>
-			<div class="button danger left mobile_collapse" id="d_btn_wf_dis" onClick="$P().doDetachSelection()" style="display:none" title="Detach selection"><i class="mdi mdi-soldering-iron">&nbsp;</i><span>Detach</span></div>
-			<div class="button danger left mobile_collapse" id="d_btn_wf_del" onClick="$P().doDeleteSelection()" style="display:none" title="Delete selection"><i class="mdi mdi-trash-can-outline">&nbsp;</i><span>Delete</span></div>
+			<div class="wf_title left" style="display:none"><i class="mdi mdi-clipboard-flow-outline">&nbsp;</i>${config.ui.titles.workflow_editor}</div>
+			<div class="button secondary left mobile_collapse" id="d_btn_wf_edit" onClick="$P().doEditSelection()" style="display:none" title="${config.ui.tooltips.wf_edit_sel_node}"><i class="mdi mdi-note-edit-outline">&nbsp;</i><span>${config.ui.buttons.wf_edit_sel_node}</span></div>
+			<div class="button secondary left mobile_collapse" id="d_btn_wf_test" onClick="$P().doTestSelection()" style="display:none" title="${config.ui.tooltips.wf_test_sel_node}"><i class="mdi mdi-test-tube">&nbsp;</i><span>${config.ui.buttons.wf_test_sel_node}</span></div>
+			<div class="button icon left mobile_collapse" id="d_btn_wf_dup" onClick="$P().doDuplicateSelection()" style="display:none" title="${config.ui.tooltips.wf_dupe_sel}"><i class="mdi mdi-content-duplicate">&nbsp;</i><span>${config.ui.buttons.wf_dupe_sel}</span></div>
+			<div class="button danger left mobile_collapse" id="d_btn_wf_dis" onClick="$P().doDetachSelection()" style="display:none" title="${config.ui.tooltips.wf_detach_sel}"><i class="mdi mdi-soldering-iron">&nbsp;</i><span>${config.ui.buttons.wf_detach_sel}</span></div>
+			<div class="button danger left mobile_collapse" id="d_btn_wf_del" onClick="$P().doDeleteSelection()" style="display:none" title="${config.ui.tooltips.wf_delete_sel}"><i class="mdi mdi-trash-can-outline">&nbsp;</i><span>${config.ui.buttons.wf_delete_sel}</span></div>
 			<div class="wf_sel_msg left tablet_hide"></div>
 			
-			<div class="button default right mobile_collapse" id="d_btn_wf_new" onClick="$P().doAddNode()"><i class="mdi mdi-plus-circle">&nbsp;</i>Add Node...</div>
+			<div class="button default right mobile_collapse" id="d_btn_wf_new" onClick="$P().doAddNode()"><i class="mdi mdi-plus-circle">&nbsp;</i>${config.ui.buttons.wf_add_node}</div>
 			<div class="clear"></div>
 		</div>`;
 		
 		html += `<div class="wf_grid_footer">
-			<div class="button icon left disabled" id="d_btn_wf_undo" onClick="$P().doUndo()" title="Undo"><i class="mdi mdi-undo"></i></div>
-			<div class="button icon left disabled" id="d_btn_wf_redo" onClick="$P().doRedo()" title="Redo"><i class="mdi mdi-redo"></i></div>
+			<div class="button icon left disabled" id="d_btn_wf_undo" onClick="$P().doUndo()" title="${config.ui.tooltips.wf_undo}"><i class="mdi mdi-undo"></i></div>
+			<div class="button icon left disabled" id="d_btn_wf_redo" onClick="$P().doRedo()" title="${config.ui.tooltips.wf_redo}"><i class="mdi mdi-redo"></i></div>
 			<div class="wf_button_separator left"></div>
-			<div class="button icon left" onClick="$P().wfZoomAuto()" title="Auto-fit workflow"><i class="mdi mdi-home"></i></div>
-			<div class="button icon left" id="d_btn_wf_zoom_out" onClick="$P().wfZoomOut()" title="Zoom out"><i class="mdi mdi-magnify-minus"></i></div>
-			<div class="button icon left" id="d_btn_wf_zoom_in" onClick="$P().wfZoomIn()" title="Zoom in"><i class="mdi mdi-magnify-plus"></i></div>
+			<div class="button icon left" onClick="$P().wfZoomAuto()" title="${config.ui.tooltips.wf_zoom_auto}"><i class="mdi mdi-home"></i></div>
+			<div class="button icon left" id="d_btn_wf_zoom_out" onClick="$P().wfZoomOut()" title="${config.ui.tooltips.wf_zoom_out}"><i class="mdi mdi-magnify-minus"></i></div>
+			<div class="button icon left" id="d_btn_wf_zoom_in" onClick="$P().wfZoomIn()" title="${config.ui.tooltips.wf_zoom_in}"><i class="mdi mdi-magnify-plus"></i></div>
 			<div class="wf_zoom_msg left tablet_hide"></div>
 			<div class="wf_button_separator left"></div>
 			
@@ -2328,16 +2248,16 @@ Page.Workflows = class Workflows extends Page.Events {
 		var event = this.event;
 		event.type = 'workflow'; // always workflow for these
 		
-		event.title = $('#fe_ee_title').val().trim();
-		event.enabled = $('#fe_ee_enabled').is(':checked') ? true : false;
-		event.icon = $('#fe_ee_icon').val();
-		event.category = $('#fe_ee_cat').val();
-		event.tags = $('#fe_ee_tags').val();
-		event.notes = $('#fe_ee_notes').val();
+		event.title = $('#fe_wf_title').val().trim();
+		event.enabled = $('#fe_wf_enabled').is(':checked') ? true : false;
+		event.icon = $('#fe_wf_icon').val();
+		event.category = $('#fe_wf_cat').val();
+		event.tags = $('#fe_wf_tags').val();
+		event.notes = $('#fe_wf_notes').val();
 		
 		if (!force) {
 			if (!event.title.length) {
-				return app.badField('#fe_ee_title', "Please enter a title for the workflow.");
+				return app.badField('#fe_wf_title');
 			}
 		}
 		
