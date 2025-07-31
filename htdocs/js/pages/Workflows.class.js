@@ -1696,7 +1696,7 @@ Page.Workflows = class Workflows extends Page.Events {
 		// split path
 		html += this.getFormRow({
 			id: 'd_wfd_split',
-			label: 'Split Path:',
+			label: 'Split Expression:',
 			content: this.getFormText({
 				id: 'fe_wfd_split',
 				type: 'text',
@@ -1705,7 +1705,7 @@ Page.Workflows = class Workflows extends Page.Events {
 				maxlength: 8192,
 				class: 'monospace',
 				value: node.data.split || ''
-			}),
+			}) + '<div class="text_field_icon mdi mdi-database-search-outline" title="Open Expression Builder..." onClick="$P().openJobDataExplorer(this)"></div>',
 			caption: 'Specify the path to the array for splitting, using dot.path.notation.'
 		});
 		
@@ -1721,7 +1721,7 @@ Page.Workflows = class Workflows extends Page.Events {
 				maxlength: 8192,
 				class: 'monospace',
 				value: node.data.decision || ''
-			}),
+			}) + '<div class="text_field_icon mdi mdi-database-search-outline" title="Open Expression Builder..." onClick="$P().openJobDataExplorer(this)"></div>',
 			caption: 'Enter the expression to evaluate.  If true, control will pass onto the next node.'
 		});
 		
@@ -1864,6 +1864,112 @@ Page.Workflows = class Workflows extends Page.Events {
 		
 		$('#fe_wfd_type').on('change', do_change_type);
 		do_change_type();
+	}
+	
+	openJobDataExplorer(elem) {
+		// open data explorer dialog
+		var self = this;
+		var $input = $(elem).closest('.fr_content').find('input');
+		var title = "Expression Builder";
+		var html = '';
+		
+		html += `<div class="dialog_intro">This allows you to explore output data from recently completed jobs, and pick out a specific JSON key path to use for your controller expression.</div>`;
+		html += '<div class="dialog_box_content scroll maximize">';
+		
+		// job picker
+		html += this.getFormRow({
+			label: 'Select Previous Job:',
+			content: this.getFormMenuSingle({
+				id: 'fe_ex_job',
+				title: 'Select Previous Job',
+				options: [ { id: '', title: "Loading..." } ],
+				value: ''
+			}),
+			caption: 'Select a completed job to explore its data.'
+		});
+		
+		// json tree viewer
+		html += this.getFormRow({
+			label: 'Job Data Explorer:',
+			content: '<div id="d_ex_tree"><div class="ex_tree_inner"><div class="loading_container"><div class="loading"></div></div></div></div>',
+			caption: 'Click on the desired key to insert the full path into the expression below.'
+		});
+		
+		// expression
+		html += this.getFormRow({
+			label: 'Expression:',
+			content: this.getFormText({
+				id: 'fe_ex_exp',
+				type: 'text',
+				spellcheck: 'false',
+				autocomplete: 'off',
+				maxlength: 8192,
+				class: 'monospace',
+				value: $input.val()
+			}),
+			caption: 'Build your final expression here.'
+		});
+		
+		html += '</div>'; // dialog_box_content
+		
+		var buttons_html = "";
+		buttons_html += '<div class="button" onClick="CodeEditor.hide()"><i class="mdi mdi-close-circle-outline">&nbsp;</i>Cancel</div>';
+		buttons_html += '<div id="btn_ex_apply" class="button primary"><i class="mdi mdi-check-circle">&nbsp;</i>Apply</div>';
+		
+		CodeEditor.showSimpleDialog(title, html, buttons_html);
+		
+		SingleSelect.init('#fe_ex_job');
+		
+		$('#fe_ex_job').on('change', function() {
+			var id = $(this).val();
+			if (!id) return; // sanity
+			
+			// now load job details
+			app.api.get( 'app/get_job', { id, remove: ['timelines', 'activity'] }, function(resp) {
+				
+				// render json tree
+				$('#d_ex_tree > .ex_tree_inner').html( self.getDataTree(resp.job) );
+				
+				// add click handler to all keys
+				$('#d_ex_tree .tree_key').on('click', function() {
+					var path = $(this).data('path');
+					var value = $('#fe_ex_exp').val();
+					if (value.match(/\S$/)) value += ' ';
+					$('#fe_ex_exp').val( value + path );
+					
+					// apply flash effect
+					$('#fe_ex_exp').addClass('iflash').focus();
+					setTimeout( function() { $('#fe_ex_exp').removeClass('iflash'); }, 1500 );
+				});
+			} ); // api.get
+		}); // on change
+		
+		$('#btn_ex_apply').on('click', function() {
+			// apply changes and exit dialog
+			$input.val( $('#fe_ex_exp').val() );
+			CodeEditor.hide();
+			
+			// apply flash effect
+			$input.addClass('iflash').focus();
+			setTimeout( function() { $input.removeClass('iflash'); }, 1500 );
+		});
+		
+		// job search
+		app.api.get( 'app/search_jobs', { query: 'source:workflow tags:_success _last', limit: config.alt_items_per_page }, function(resp) {
+			var items = (resp.rows || []).map( function(job) {
+				var args = self.getJobDisplayArgs(job);
+				return { id: job.id, title: args.title, icon: args.icon };
+			} );
+			
+			if (!items.length) {
+				$('#fe_ex_job').html( render_menu_options( [{ id: '', title: "(No jobs found)" }], '' ) ).trigger('change');
+				$('#d_ex_tree').html(`<div class="ex_tree_none">No previous jobs were found.</div>`);
+				return;
+			}
+			
+			// change menu items and fire onChange event for redraw
+			$('#fe_ex_job').html( render_menu_options( items, items[0].id ) ).trigger('change');
+		} ); // api.get
 	}
 	
 	doDuplicateSelection() {
