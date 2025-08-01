@@ -989,7 +989,7 @@ div.td_big {
 	padding: 15px;
 }
 .dialog #d_ex_tree {
-	background: rgba(233, 236, 240, 0.3);
+	background: var(--box-background-color);
 }
 body.dark .dialog #d_ex_tree {
 	background: rgba(255, 255, 255, 0.02);
@@ -997,24 +997,28 @@ body.dark .dialog #d_ex_tree {
 
 .ex_tree_inner {
 	position: relative;
-	height: 50vh;
+	height: 40vh;
+	min-height: 400px;
 	overflow-x: hidden;
 	overflow-y: auto;
 	
 	font-family: var(--font-family-monospace);
 	font-size: 12px;
 	line-height: 16px;
-	
-	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
+}
+div.ex_tree_inner pre {
+	margin-top: 0;
+}
+div.ex_tree_inner pre code.hljs {
+	padding: 0;
 }
 
 .ex_tree_none {
-	height: 50vh;
-	line-height: 50vh;
+	height: 40vh;
+	min-height: 400px;
+	line-height: 40vh;
 	text-align: center;
-	font-size: 13px;
+	font-size: 12px;
 	font-style: italic;
 	color: var(--label-color);
 }
@@ -1027,6 +1031,10 @@ body.dark .dialog #d_ex_tree {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
 }
 .tree_row .mdi:before {
 	transform: scale(1.4);
@@ -1595,11 +1603,11 @@ div.box.toggle.expanded > div.box_title > div {
 	width: 600px;
 	max-width: 80vw;
 	
-	height: 350px;
+	height: 500px;
 	max-height: 80vh;
 }
 #fe_dialog_editor .CodeMirror.maximize {
-	width: 60vw;
+	width: 65vw;
 	height: 75vh;
 }
 
@@ -1615,8 +1623,8 @@ body.dark .CodeMirror-selected, body.dark .CodeMirror-focused .CodeMirror-select
 .cm-s-default span.cm-header { color: var(--theme-color); }
 .cm-s-default span.cm-property { color: var(--purple); }
 
-.cm-s-shadowfox span.cm-comment { color: var(--label-color); }
-.cm-s-shadowfox span.cm-header { color: var(--theme-color); }
+.cm-s-one-dark span.cm-comment { color: var(--label-color) !important; }
+.cm-s-one-dark span.cm-header { color: var(--theme-color); }
 
 .CodeMirror-wrap {
 	box-shadow: 0px 0px 1px var(--label-color);
@@ -1626,7 +1634,10 @@ body.dark .CodeMirror-selected, body.dark .CodeMirror-focused .CodeMirror-select
 	background: url("../images/red-wavy-underline.gif") bottom repeat-x;
 }
 
-.cm-s-shadowfox.CodeMirror {
+.dialog .cm-s-one-light.CodeMirror {
+	background: var(--box-background-color) !important;
+}
+.cm-s-one-dark.CodeMirror {
 	background: var(--form-background-color) !important;
 }
 
@@ -1660,7 +1671,7 @@ div.code_viewer pre code.hljs {
 pre code.hljs {
 	background: transparent !important;
 	font-family: var(--font-family-monospace);
-	font-size: 13px;
+	font-size: 12px;
 	line-height: 16px;
 	tab-size: 4;
 	overflow-x: hidden;
