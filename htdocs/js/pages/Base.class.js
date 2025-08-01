@@ -2563,6 +2563,7 @@ Page.Base = class Base extends Page {
 			$(span).html( 'Minimize<i style="padding-left:3px" class="mdi mdi-arrow-bottom-left-thick"></i>' );
 		}
 		
+		this.editor.refresh();
 		CodeEditor.autoResize();
 	}
 	
