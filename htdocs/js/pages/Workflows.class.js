@@ -181,7 +181,11 @@ Page.Workflows = class Workflows extends Page.Events {
 		this.deletePageSnapshot();
 		this.deletePageDraft();
 		
-		Nav.go('Events?sub=list');
+		// create in-memory copy, but prevent race condition as server blasts update at same time
+		var idx = find_object_idx(app.events, { id: resp.event.id });
+		if (idx == -1) app.events.push(resp.event);
+		
+		Nav.go( 'Events?sub=view&id=' + resp.event.id );
 		app.showMessage('success', config.ui.messages.wf_new_save);
 	}
 	
