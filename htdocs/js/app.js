@@ -244,7 +244,7 @@ app.extend({
 		// update top-right display
 		var html = '';
 		
-		html += '<div class="header_widget icon danger"><i class="mdi mdi-power-standby" onClick="app.doUserLogout()" title="Logout"></i></div>';
+		html += '<div class="header_widget icon danger"><i class="mdi mdi-power-standby" onClick="app.doConfirmLogout()" title="Logout"></i></div>';
 		html += '<div id="d_my_account" class="header_widget user" style="background-image:url(' + this.getUserAvatarURL( this.retina ? 64 : 32, bust ) + ')" onClick="app.doMyAccount()" title="My Account (' + app.username + ')"></div>';
 		html += '<div id="d_my_settings" class="header_widget icon"><i class="mdi mdi-tune-vertical-variant" onClick="app.doMySettings()" title="My Preferences"></i></div>';
 		html += '<div id="d_theme_ctrl" class="header_widget icon" onMouseDown="app.openThemeSelector()" title="Select Theme"></div>';
@@ -552,6 +552,18 @@ app.extend({
 		
 		// websocket connect
 		this.comm.init();
+	},
+	
+	doConfirmLogout() {
+		// ask user if they are sure
+		var self = this;
+		var msg = 'Are you sure you want to log out of Cronyx?';
+		
+		Dialog.confirmDanger( 'Log Out', msg, ['power-standby', 'Logout'], function(result) {
+			if (!result) return;
+			app.clearError();
+			self.doUserLogout();
+		} ); // confirm
 	},
 	
 	doUserLogout: function(bad_cookie) {
