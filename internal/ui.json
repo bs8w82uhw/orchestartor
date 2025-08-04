@@ -619,6 +619,13 @@
 		"back_to_workflow": "&laquo; Back to Workflow"
 	},
 	
+	"snapshot_source_menu": [
+		{ "id": "alert", "title": "Alert", "icon": "bell-outline" },
+		{ "id": "user", "title": "User", "icon": "account" },
+		{ "id": "watch", "title": "Watch", "icon": "bullseye-arrow" },
+		{ "id": "job", "title": "Job", "icon": "timer-outline" }
+	],
+	
 	"control_type_labels": {
 		"text": "Text Field",
 		"textarea": "Text Box",

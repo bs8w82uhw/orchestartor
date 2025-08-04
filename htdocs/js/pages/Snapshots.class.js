@@ -59,7 +59,7 @@ Page.Snapshots = class Snapshots extends Page.ServerUtils {
 							id: 'fe_ss_source',
 							title: 'Select Source',
 							placeholder: 'All Sources',
-							options: [['', 'Any Source'], ['alert', 'Alert'], ['user', 'User'], ['watch', 'Watch'], ['job', 'Job']],
+							options: [['', 'Any Source']].concat( config.ui.snapshot_source_menu ),
 							value: args.source || '',
 							default_icon: 'palette-swatch-outline',
 							'data-shrinkwrap': 1
