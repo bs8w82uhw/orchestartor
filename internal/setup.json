@@ -213,7 +213,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "load_avg",
 			"title": "CPU Load Average",
-			"source": "[load/0]",
+			"source": "load[0]",
 			"data_type": "float",
 			"suffix": "",
 			"groups": [],
@@ -227,7 +227,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "cpu_usage",
 			"title": "CPU Usage %",
-			"source": "[cpu/currentLoad]",
+			"source": "cpu.currentLoad",
 			"data_type": "float",
 			"suffix": "%",
 			"groups": [],
@@ -241,7 +241,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "mem_used",
 			"title": "Memory in Use",
-			"source": "[memory/used]",
+			"source": "memory.used",
 			"data_type": "bytes",
 			"suffix": "",
 			"groups": [],
@@ -255,7 +255,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "mem_free",
 			"title": "Available Memory",
-			"source": "[memory/available]",
+			"source": "memory.available",
 			"data_type": "bytes",
 			"suffix": "",
 			"groups": [],
@@ -269,7 +269,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "net_conns",
 			"title": "Network Connections",
-			"source": "[stats/network/conns]",
+			"source": "stats.network.conns",
 			"data_type": "integer",
 			"suffix": "",
 			"groups": [],
@@ -283,7 +283,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "disk_usage_root",
 			"title": "Disk Usage % (Root)",
-			"source": "[mounts/root/use]",
+			"source": "mounts.root.use",
 			"data_type": "float",
 			"suffix": "%",
 			"groups": [],
@@ -297,7 +297,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "disk_read_sec",
 			"title": "Disk Read (Bytes)",
-			"source": "[stats/fs/rx]",
+			"source": "stats.fs.rx",
 			"delta": true,
 			"delta_min_value": 0,
 			"divide_by_delta": true,
@@ -314,7 +314,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "disk_write_sec",
 			"title": "Disk Write (Bytes)",
-			"source": "[stats/fs/wx]",
+			"source": "stats.fs.wx",
 			"delta": true,
 			"delta_min_value": 0,
 			"divide_by_delta": true,
@@ -331,7 +331,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "disk_iops_sec",
 			"title": "Disk I/O Operations",
-			"source": "[stats/io/tIO]",
+			"source": "stats.io.tIO",
 			"delta": true,
 			"delta_min_value": 0,
 			"divide_by_delta": true,
@@ -348,7 +348,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "io_wait",
 			"title": "CPU I/O Wait %",
-			"source": "[cpu/totals/iowait]",
+			"source": "cpu.totals.iowait",
 			"data_type": "float",
 			"suffix": "%",
 			"groups": [],
@@ -363,7 +363,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "open_files",
 			"title": "Open Files",
-			"source": "[commands/open_files]",
+			"source": "commands.open_files",
 			"data_type": "integer",
 			"data_match": "(\\d+)",
 			"suffix": "",
@@ -379,7 +379,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "os_bytes_in_sec",
 			"title": "Network In (Bytes)",
-			"source": "[stats/network/rx_bytes]",
+			"source": "stats.network.rx_bytes",
 			"delta": true,
 			"delta_min_value": 0,
 			"divide_by_delta": true,
@@ -396,7 +396,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "os_bytes_out_sec",
 			"title": "Network Out (Bytes)",
-			"source": "[stats/network/tx_bytes]",
+			"source": "stats.network.tx_bytes",
 			"delta": true,
 			"delta_min_value": 0,
 			"divide_by_delta": true,
@@ -413,7 +413,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "total_procs",
 			"title": "Total Processes",
-			"source": "[processes/all]",
+			"source": "processes.all",
 			"data_type": "integer",
 			"suffix": "",
 			"groups": [],
@@ -427,7 +427,7 @@
 		[ "listPush", "global/monitors", {
 			"id": "active_jobs",
 			"title": "Active Jobs",
-			"source": "[jobs]",
+			"source": "jobs",
 			"data_type": "integer",
 			"suffix": "",
 			"groups": [],
@@ -443,8 +443,8 @@
 		[ "listPush", "global/alerts", {
 			"id": "load_avg_high",
 			"title": "High CPU Load",
-			"expression": "[monitors/load_avg] >= ([cpu/cores] + 1)",
-			"message": "CPU load average is too high: [float:monitors/load_avg] ([cpu/cores] CPU cores)",
+			"expression": "monitors.load_avg >= (cpu.cores + 1)",
+			"message": "CPU load average is too high: {{float(monitors.load_avg)}} ({{cpu.cores}} CPU cores)",
 			"groups": [],
 			"email": "",
 			"web_hook": "",
@@ -459,8 +459,8 @@
 		[ "listPush", "global/alerts", {
 			"id": "mem_free_low",
 			"title": "Low Memory",
-			"expression": "[memory/available] < ([memory/total] * 0.05)",
-			"message": "Less than 5% of total memory is available ([bytes:memory/available] of [bytes:memory/total])",
+			"expression": "memory.available < (memory.total * 0.05)",
+			"message": "Less than 5% of total memory is available ({{bytes(memory.available)}} of {{bytes(memory.total)}})",
 			"groups": [],
 			"monitor_id": "mem_free",
 			"enabled": true,
@@ -473,8 +473,8 @@
 		[ "listPush", "global/alerts", {
 			"id": "io_wait_high",
 			"title": "High I/O Wait",
-			"expression": "[monitors/io_wait] >= 75",
-			"message": "Disk I/O wait is too high: [pct:monitors/io_wait]",
+			"expression": "monitors.io_wait >= 75",
+			"message": "Disk I/O wait is too high: {{pct(monitors.io_wait)}}",
 			"groups": [],
 			"monitor_id": "io_wait",
 			"enabled": true,
@@ -487,8 +487,8 @@
 		[ "listPush", "global/alerts", {
 			"id": "disk_usage_root_high",
 			"title": "Disk Full",
-			"expression": "[monitors/disk_usage_root] >= 90",
-			"message": "Root filesystem is [pct:monitors/disk_usage_root] full.",
+			"expression": "monitors.disk_usage_root >= 90",
+			"message": "Root filesystem is {{pct(monitors.disk_usage_root)}} full.",
 			"groups": [],
 			"monitor_id": "disk_usage_root",
 			"enabled": true,
@@ -501,8 +501,8 @@
 		[ "listPush", "global/alerts", {
 			"id": "active_jobs_high",
 			"title": "High Active Jobs",
-			"expression": "[monitors/active_jobs] >= 50",
-			"message": "Active job count is too high: [monitors/active_jobs]",
+			"expression": "monitors.active_jobs >= 50",
+			"message": "Active job count is too high: {{commify(monitors.active_jobs)}}",
 			"groups": [],
 			"monitor_id": "active_jobs",
 			"enabled": true,

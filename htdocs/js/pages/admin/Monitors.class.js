@@ -578,6 +578,14 @@ Page.Monitors = class Monitors extends Page.PageUtils {
 			if (feats.includes('delta_div')) monitor.divide_by_delta = true;
 		}
 		
+		if (monitor.data_match) {
+			// test regexp, as it was entered by a user
+			try { new RegExp(monitor.data_match); }
+			catch(err) {
+				return app.badField('fe_em_data_match', "Invalid regular expression: " + err);
+			}
+		}
+		
 		if (!monitor.title.length) {
 			return app.badField('#fe_em_title', "Please enter a title for the monitor.");
 		}
