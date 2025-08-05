@@ -977,6 +977,9 @@ div.td_big {
 .fr_content:has(.text_field_icon) > input {
 	padding-right: 24px;
 }
+.fr_content:has(.text_field_icon) > textarea {
+	padding-right: 24px;
+}
 
 /* JSON Tree Data Explorer */
 
