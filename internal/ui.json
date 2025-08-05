@@ -445,7 +445,7 @@
 		},
 		"d_wfd_if": {
 			"label": "Expression:",
-			"caption": "Enter the expression to evaluate.  If true, control will pass onto the next node."
+			"caption": "Enter the expression to evaluate using `dot.path.notation`.  If true, control will pass onto the next node."
 		},
 		"d_wfd_title": {
 			"label": "Custom Title:",
@@ -471,17 +471,22 @@
 			"title": "Select Previous Job"
 		},
 		"d_ex_tree_viewer": {
-			"label": "Job Data Explorer:",
-			"caption": "Click on the desired key to insert the full path into the expression below."
+			"label": "Data Explorer:",
+			"caption": "Click on the desired key to insert the full path into the field below."
 		},
 		"d_ex_exp": {
-			"label": "Expression:",
-			"caption": "Build your final expression here."
+			"label": "Data Path:",
+			"caption": "Once clicked, your selected data path will appear here."
 		},
 		
 		"d_ex_code_viewer": {
 			"label": "Job Data Viewer:",
 			"caption": "View the output data and/or files produced by the selected job."
+		},
+		
+		"d_ex_server": {
+			"label": "Select Server:",
+			"caption": "Select a server to explore its data."
 		}
 	},
 	
@@ -503,7 +508,8 @@
 		"wfdj_plugin_not_found": "Plugin ID \"[node.data.plugin]\" could not be found.  Did someone delete it?",
 		"fe_wfdj_targets": "You must select at least one target for the plugin job.",
 		"fe_wf_title": "Please enter a title for the workflow.",
-		"wf_test_no_limit": "Limit nodes cannot be tested directly.  Please select the attached event or plugin node instead."
+		"wf_test_no_limit": "Limit nodes cannot be tested directly.  Please select the attached event or plugin node instead.",
+		"sde_no_servers": "No active servers found.  Please add a server to your cluster before exploring data."
 	},
 	
 	"titles": {
@@ -529,7 +535,9 @@
 		"wfdc_edit": "Editing Controller",
 		
 		"wfd_exp_builder": "Expression Builder",
-		"wfd_data_explorer": "Job Data Explorer"
+		"wfd_data_explorer": "Job Data Importer",
+		
+		"server_data_explorer": "Server Data Explorer"
 	},
 	
 	"buttons": {
@@ -565,6 +573,7 @@
 		"copy_id": "Copy ID to Clipboard",
 		"quick_add_cat": "Quick Add Category...",
 		"wfd_exp_builder": "Open Expression Builder...",
+		"server_data_explorer": "Open Server Data Explorer...",
 		
 		"wf_edit_sel_node": "Edit selected node",
 		"wf_test_sel_node": "Test selected node",
@@ -580,7 +589,8 @@
 	
 	"intros": {
 		"wfd_exp_builder": "This allows you to explore output data from recently completed jobs, and pick out a specific JSON key path to use for your controller expression.",
-		"wfd_data_explorer": "Select a previously completed job to import the data and/or files from it.  This is so you can use it as simulated input for your test run."
+		"wfd_data_explorer": "Select a previously completed job to import the data and/or files from it.  This is so you can use it as simulated input for your test run.",
+		"server_data_explorer": "This allows you to explore monitoring data from your servers, and pick out a specific JSON key path to use for your expression."
 	},
 	
 	"nav": {
