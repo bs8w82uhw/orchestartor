@@ -277,6 +277,7 @@ div.inline_page_message {
 }
 
 .dash_unit_box {
+	min-width: 0;
 	padding: 10px 15px 10px 15px;
 	
 	background: var(--box-background-color);
@@ -309,9 +310,12 @@ body.dark div.dash_unit_box {
 	color: var(--label-color);
 	text-align: center;
 	
-	/* white-space: nowrap;
+	white-space: nowrap;
 	overflow: hidden;
-	text-overflow: ellipsis; */
+	text-overflow: ellipsis;
+	
+	width: 100%; 
+	display: block;
 }
 
 .dash_unit_box.warning .dash_unit_value {
