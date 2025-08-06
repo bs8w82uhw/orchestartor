@@ -503,7 +503,7 @@ Page.WebHooks = class WebHooks extends Page.PageUtils {
 				spellcheck: 'false',
 				value: web_hook.body
 			}),
-			caption: 'For endpoints that require it, compose the request body here.  You can use macros to insert dynamic content.' // TODO: link to docs
+			caption: 'For endpoints that require it, compose the request body here.  You can use `{{macros}}` to insert dynamic content from the web hook data.  [Learn More](#Docs/web-hooks/body)'
 		});
 		
 		// timeout
@@ -578,7 +578,7 @@ Page.WebHooks = class WebHooks extends Page.PageUtils {
 				rows: 5,
 				value: web_hook.notes
 			}),
-			caption: 'Optionally enter notes for the web_hook, for your own internal use.'
+			caption: 'Optionally enter notes for the web hook, for your own internal use.'
 		});
 		
 		return html;
