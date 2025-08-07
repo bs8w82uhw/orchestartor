@@ -198,6 +198,7 @@ Page.AlertSetup = class AlertSetup extends Page.PageUtils {
 		// buttons at bottom
 		html += '<div class="box_buttons">';
 			html += '<div class="button phone_collapse" onClick="$P().cancel_alert_edit()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>Cancel</span></div>';
+			html += '<div class="button secondary phone_collapse" onClick="$P().do_test_alert()"><i class="mdi mdi-test-tube">&nbsp;</i><span>Test...</span></div>';
 			html += '<div class="button secondary phone_collapse" onClick="$P().do_export()"><i class="mdi mdi-cloud-download-outline">&nbsp;</i><span>Export...</span></div>';
 			html += '<div class="button primary" onClick="$P().do_new_alert()"><i class="mdi mdi-floppy">&nbsp;</i><span>Create Alert</span></div>';
 		html += '</div>'; // box_buttons
@@ -283,6 +284,7 @@ Page.AlertSetup = class AlertSetup extends Page.PageUtils {
 		html += '<div class="box_buttons">';
 			html += '<div class="button mobile_collapse" onClick="$P().cancel_alert_edit()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>Cancel</span></div>';
 			html += '<div class="button danger mobile_collapse" onClick="$P().show_delete_alert_dialog()"><i class="mdi mdi-trash-can-outline">&nbsp;</i><span>Delete...</span></div>';
+			html += '<div class="button secondary mobile_collapse" onClick="$P().do_test_alert()"><i class="mdi mdi-test-tube">&nbsp;</i><span>Test...</span></div>';
 			html += '<div class="button secondary mobile_collapse" onClick="$P().do_export()"><i class="mdi mdi-cloud-download-outline">&nbsp;</i><span>Export...</span></div>';
 			html += '<div class="button secondary mobile_collapse" onClick="$P().go_edit_history()"><i class="mdi mdi-history">&nbsp;</i><span>History...</span></div>';
 			html += '<div class="button primary phone_collapse" onClick="$P().do_save_alert()"><i class="mdi mdi-floppy">&nbsp;</i><span>Save Changes</span></div>';
@@ -608,6 +610,104 @@ Page.AlertSetup = class AlertSetup extends Page.PageUtils {
 		}
 		
 		return alert;
+	}
+	
+	do_test_alert() {
+		// open dialog for testing alert on select server
+		var self = this;
+		var title = "Test Alert";
+		var html = '';
+		
+		app.clearError();
+		var alert = this.get_alert_form_json();
+		if (!alert) return; // error
+		
+		var servers = this.getCategorizedServers(true);
+		if (!servers.length) return app.doError(config.ui.errors.sde_no_servers);
+		
+		html += `<div class="dialog_intro">Test your alert expression against live server data, to see if it will trigger on the current values.</div>`;
+		html += '<div class="dialog_box_content scroll maximize">';
+		
+		// server picker
+		html += this.getFormRow({
+			id: 'd_ex_server',
+			content: this.getFormMenuSingle({
+				id: 'fe_ex_server',
+				options: servers,
+				value: '',
+				default_icon: 'router-network'
+			})
+		});
+		
+		// result
+		html += this.getFormRow({
+			id: 'd_ead_result',
+			label: 'Test Result:',
+			content: `<div id="d_ead_form_result" class="form_result">...</div>`,
+			caption: 'Your alert trigger result will appear above.'
+		});
+		
+		// message
+		html += this.getFormRow({
+			id: 'd_ead_message',
+			label: 'Alert Message:',
+			content: `<div id="d_ead_form_message" class="form_result">...</div>`,
+			caption: 'Preview the computed alert message text above.'
+		});
+		
+		html += '</div>'; // dialog_box_content
+		
+		var buttons_html = "";
+		buttons_html += `<div id="btn_ead_retry" class="button"><i class="mdi mdi-refresh">&nbsp;</i>${config.ui.buttons.retry}</div>`;
+		buttons_html += `<div class="button primary" onClick="Dialog.hide()"><i class="mdi mdi-close-circle-outline">&nbsp;</i>${config.ui.buttons.close}</div>`;
+		
+		Dialog.showSimpleDialog(title, html, buttons_html);
+		
+		SingleSelect.init('#fe_ex_server');
+		
+		$('#fe_ex_server').on('change', function() {
+			var id = $(this).val();
+			if (!id) return; // sanity
+			
+			$('#d_ead_form_result').removeClass().addClass('form_result').html('...');
+			$('#d_ead_form_message').html('...');
+			app.clearError();
+			
+			// now test alert
+			app.api.post( 'app/test_alert', { ...alert, server: id }, function(resp) {
+				if (resp.result) {
+					var value = '<i class="mdi mdi-bell-ring-outline"></i><b>Alert triggered!</b>';
+					$('#d_ead_form_result').addClass('triggered').html(value);
+					
+					// apply flash effect
+					if (!$('#d_ead_form_result').hasClass('rflash')) {
+						$('#d_ead_form_result').addClass('rflash');
+						setTimeout( function() { $('#d_ead_form_result').removeClass('rflash'); }, 1500 );
+					}
+				}
+				else {
+					$('#d_ead_form_result').addClass('fail').html( `<i class="mdi mdi-bell-off-outline"></i>Alert did not trigger.` );
+					
+					// apply flash effect
+					if (!$('#d_ead_form_result').hasClass('iflash')) {
+						$('#d_ead_form_result').addClass('iflash');
+						setTimeout( function() { $('#d_ead_form_result').removeClass('iflash'); }, 1500 );
+					}
+				}
+				$('#d_ead_form_message').html( encode_entities(resp.message) );
+				
+				
+			} ); // api.get
+		}); // on change
+		
+		$('#btn_ead_retry').on('click', function() {
+			// retry the op
+			$('#d_ead_form_result').html('...');
+			$('#fe_ex_server').trigger('change');
+		});
+		
+		// trigger change to load first server
+		$('#fe_ex_server').trigger('change');
 	}
 	
 	onDataUpdate(key, data) {
