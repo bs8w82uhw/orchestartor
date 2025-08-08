@@ -392,7 +392,7 @@ app.extend({
 				{ id: 'dark', title: 'Dark', icon: 'moon-waning-crescent' }, // weather-night
 				{ id: 'auto', title: 'Auto', icon: 'circle-half-full' }
 			],
-			value: this.getPref('theme'),
+			value: this.getPref('theme') || 'auto',
 			
 			callback: function(value) {
 				app.setTheme(value);
@@ -1011,7 +1011,7 @@ app.extend({
 	
 	getCodemirrorTheme: function() {
 		// get appropriate theme for cm, based on opsrocket theme
-		return this.cmThemeMap[ this.getPref('theme') ];
+		return this.cmThemeMap[ this.getTheme() ];
 	},
 	
 	highlightAuto: function(text, formats) {
