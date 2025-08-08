@@ -63,16 +63,16 @@ if (config.uid && (process.getuid() != 0)) {
 	process.exit(1);
 }
 
-// make sure opsrocket isn't running
+// make sure xyops isn't running
 var is_running = false;
-var pid_file = config.log_dir + '/opsrocket.pid';
+var pid_file = config.log_dir + '/xyops.pid';
 try {
 	var pid = fs.readFileSync(pid_file, { encoding: 'utf8' });
 	is_running = process.kill( pid, 0 );
 }
 catch (err) {;}
 if (is_running && !args.force) {
-	print( "ERROR: Please stop OpsRocket before running this script.\n" );
+	print( "ERROR: Please stop xyOps before running this script.\n" );
 	process.exit(1);
 }
 
@@ -471,7 +471,7 @@ function export_data(file) {
 	var stream = file ? fs.createWriteStream(file) : process.stdout;
 	
 	// file header (for humans)
-	var file_header = "# OpsRocket Data Export v1.0\n" + 
+	var file_header = "# xyOps Data Export v1.0\n" + 
 		"# Hostname: " + hostname + "\n" + 
 		"# Date/Time: " + (new Date()).toString() + "\n" + 
 		"# Format: KEY - JSON\n\n";
@@ -569,7 +569,7 @@ function export_data(file) {
 function import_data(file) {
 	// import storage data from specified file or stdin
 	// one record per line: KEY - JSON
-	print( "\nOpsRocket Data Importer v1.0\n" );
+	print( "\nxyOps Data Importer v1.0\n" );
 	if (file) print( "Importing from file: " + file + "\n" );
 	else print( "Importing from STDIN\n" );
 	print( "\n" );
@@ -615,7 +615,7 @@ function import_data(file) {
 	rl.on('close', function() {
 		// end of input stream
 		var complete = function() {
-			// finally, delete state so opsrocket recreates it
+			// finally, delete state so xyops recreates it
 			storage.delete( 'global/state', function(err) {
 				// ignore error here, as state may not exist yet
 				print( "\nImport complete. " + count + " records imported.\nExiting.\n\n" );

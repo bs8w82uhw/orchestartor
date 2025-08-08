@@ -349,7 +349,7 @@ Page.Roles = class Roles extends Page.PageUtils {
 					value: role.id
 				}),
 				suffix: this.getFormIDCopier(),
-				caption: 'This is a unique ID for the role, used by the OpsRocket API.  It cannot be changed.'
+				caption: 'This is a unique ID for the role, used by the xyOps API.  It cannot be changed.'
 			});
 		}
 		

@@ -1,6 +1,6 @@
 To: [email_to]
 From: [config/email_from]
-Subject: ✅ OpsRocket Job Completed Successfully: [event/title]
+Subject: ✅ xyOps Job Completed Successfully: [event/title]
 
 Date/Time: [display/date_time]
 Event: [event/title]
@@ -31,4 +31,4 @@ Event Notes:
 [job/notes]
 
 Regards,
-The OpsRocket Team
+The xyOps Team

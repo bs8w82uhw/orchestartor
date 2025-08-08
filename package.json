@@ -1,10 +1,10 @@
 {
-	"name": "opsrocket",
+	"name": "xyops",
 	"version": "1.0.0",
 	"private": true,
 	"description": "A complete task scheduler and server monitoring system.",
 	"author": "Joseph Huckaby <jhuckaby@pixlcore.com>",
-	"homepage": "https://github.com/pixlcore/opsrocket",
+	"homepage": "https://github.com/pixlcore/xyops",
 	"license": "Sustainable Use License",
 	"main": "lib/main.js",
 	"scripts": {
@@ -15,10 +15,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/pixlcore/opsrocket"
+		"url": "https://github.com/pixlcore/xyops"
 	},
 	"bugs": {
-		"url": "https://github.com/pixlcore/opsrocket/issues"
+		"url": "https://github.com/pixlcore/xyops/issues"
 	},
 	"keywords": [
 		"cron",

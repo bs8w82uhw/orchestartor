@@ -119,7 +119,7 @@ Page.System = class System extends Page.Base {
 		// upgrade server
 		html += '<div class="maint_unit">';
 			html += '<div class="button danger" onClick="$P().upgrade_master()"><i class="mdi mdi-cloud-upload-outline">&nbsp;</i>Upgrade Server...</div>';
-			html += '<div class="caption">Upgrade the current conductor server to the latest stable OpsRocket release.  <a href="#">Learn More</a></div>';
+			html += '<div class="caption">Upgrade the current conductor server to the latest stable xyOps release.  <a href="#">Learn More</a></div>';
 		html += '</div>';
 		
 		html += '</div>'; // maint_grid
@@ -150,7 +150,7 @@ Page.System = class System extends Page.Base {
 		// orch version
 		// html += '<div class="dash_unit_box">';
 		// 	html += '<div class="dash_unit_value">' + data.version + '</div>';
-		// 	html += '<div class="dash_unit_label">OpsRocket Version</div>';
+		// 	html += '<div class="dash_unit_label">xyOps Version</div>';
 		// html += '</div>';
 		
 		// node version
@@ -347,7 +347,7 @@ Page.System = class System extends Page.Base {
 	prompt_import_data() {
 		// prompt user with instructions and warnings
 		var self = this;
-		var html = "Use this feature to import bulk data into OpsRocket by providing a file from your local machine.  The file should have been generated from a previous export.  <br><br> <b>Note:</b> It is highly recommended that you stop all running jobs before importing data.  Also note that the scheduler will automatically be paused if it is active.";
+		var html = "Use this feature to import bulk data into xyOps by providing a file from your local machine.  The file should have been generated from a previous export.  <br><br> <b>Note:</b> It is highly recommended that you stop all running jobs before importing data.  Also note that the scheduler will automatically be paused if it is active.";
 		
 		Dialog.confirm( 'Import Data', html, ['database-import', 'Choose File...'], function(result) {
 			if (!result) return;
@@ -386,7 +386,7 @@ Page.System = class System extends Page.Base {
 		
 		html += this.getFormRow({
 			label: 'Description:',
-			content: `This allows you to bulk export OpsRocket data to your local machine.  A gzip-compressed text file will be downloaded when the process is complete.  Please select which categories of data you wish you export.`
+			content: `This allows you to bulk export xyOps data to your local machine.  A gzip-compressed text file will be downloaded when the process is complete.  Please select which categories of data you wish you export.`
 		});
 		
 		html += this.getFormRow({
@@ -498,7 +498,7 @@ Page.System = class System extends Page.Base {
 		
 		html += this.getFormRow({
 			label: 'Description:',
-			content: `This allows you to <b>permanently delete</b> OpsRocket data in bulk.  Please select which categories of data you wish you delete.  It is highly recommended that you stop all running jobs before deleting data.  Also note that the scheduler will automatically be paused if it is active.`
+			content: `This allows you to <b>permanently delete</b> xyOps data in bulk.  Please select which categories of data you wish you delete.  It is highly recommended that you stop all running jobs before deleting data.  Also note that the scheduler will automatically be paused if it is active.`
 		});
 		
 		html += this.getFormRow({

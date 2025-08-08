@@ -1,4 +1,4 @@
-// OpsRocket Web App
+// xyOps Web App
 // Copyright (c) 2019 - 2025 PixlCore LLC
 // Released under the PixlCore Sustainable Use License.
 // See the LICENSE.md file in this repository.
@@ -78,7 +78,7 @@ app.extend({
 		
 		if (config.debug) {
 			Debug.enable( this.debug_cats );
-			Debug.trace('system', "OpsRocket Client Starting Up");
+			Debug.trace('system', "xyOps Client Starting Up");
 		}
 		
 		// setup theme (light / dark)
@@ -1009,7 +1009,7 @@ app.extend({
 	},
 	
 	getCodemirrorTheme: function() {
-		// get appropriate theme for cm, based on opsrocket theme
+		// get appropriate theme for cm, based on xyops theme
 		return this.cmThemeMap[ this.getTheme() ];
 	},
 	
@@ -1072,10 +1072,10 @@ app.extend({
 		
 		// optional system-level notification
 		if (this.user.notifications && (Notification.permission === "granted")) {
-			var note = new Notification( "OpsRocket: " + channel.title, {
+			var note = new Notification( "xyOps: " + channel.title, {
 				body: args.message.replace(/<.+?>/g, ''),
 				icon: '/images/logo-256.png',
-				tag: 'opsrocket-channel',
+				tag: 'xyops-channel',
 				renotify: true,
 				requireInteraction: true
 			} );

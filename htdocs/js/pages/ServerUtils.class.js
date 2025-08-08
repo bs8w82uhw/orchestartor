@@ -1185,7 +1185,7 @@ Page.ServerUtils = class ServerUtils extends Page.PageUtils {
 	}
 	
 	showAddServerDialog(default_groups) {
-		// one-liner installation for opsrocket-satellite
+		// one-liner installation for xyops-satellite
 		var self = this;
 		var html = '<div class="dialog_box_content maximize">';
 		

@@ -377,7 +377,7 @@ Page.Buckets = class Buckets extends Page.PageUtils {
 					value: bucket.id
 				}),
 				suffix: this.getFormIDCopier(),
-				caption: 'This is a unique ID for the bucket, used by the OpsRocket API.  It cannot be changed.'
+				caption: 'This is a unique ID for the bucket, used by the xyOps API.  It cannot be changed.'
 			});
 		}
 		

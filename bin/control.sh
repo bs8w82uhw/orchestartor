@@ -2,7 +2,7 @@
 #
 # Control script designed to allow an easy command line interface
 # to controlling any binary.  Written by Marc Slemko, 1997/08/23
-# Modified for OpsRocket, Joe Huckaby, 2020/02/19
+# Modified for xyOps, Joe Huckaby, 2020/02/19
 # 
 # The exit codes returned are:
 #	0 - operation completed successfully
@@ -22,7 +22,7 @@
 PATH=$PATH:/usr/bin:/bin:/usr/local/bin:/usr/sbin:/sbin:/usr/local/sbin
 # 
 # the name of your binary
-NAME="OpsRocket Server"
+NAME="xyOps Server"
 #
 # home directory
 HOMEDIR="$(dirname "$(cd -- "$(dirname "$0")" && (pwd -P 2>/dev/null || pwd))")"
@@ -32,7 +32,7 @@ cd $HOMEDIR
 BINARY="node $HOMEDIR/lib/main.js"
 #
 # the path to your PID file
-PIDFILE=$HOMEDIR/logs/opsrocket.pid
+PIDFILE=$HOMEDIR/logs/xyops.pid
 #
 # --------------------                              --------------------
 # ||||||||||||||||||||   END CONFIGURATION SECTION  ||||||||||||||||||||

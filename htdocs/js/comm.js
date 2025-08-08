@@ -1,4 +1,4 @@
-// OpsRocket Communication Layer
+// xyOps Communication Layer
 // Copyright (c) 2019 - 2025 PixlCore LLC
 // Released under the PixlCore Sustainable Use License.
 // See the LICENSE.md file in this repository.

@@ -109,7 +109,7 @@
 			"params": [
 				{ "type":"select", "id":"method", "title":"Method", "value":"GET, HEAD, POST, PUT, DELETE" }, 
 				{ "type":"text", "id":"url", "title":"URL", "value":"http://" }, 
-				{ "type":"textarea", "id":"headers", "title":"Request Headers", "value":"User-Agent: OpsRocket/HTTP-Plugin" }, 
+				{ "type":"textarea", "id":"headers", "title":"Request Headers", "value":"User-Agent: xyOps/HTTP-Plugin" }, 
 				{ "type":"textarea", "id":"data", "title":"POST Data", "value":"" }, 
 				{ "type":"text", "id":"timeout", "title":"Timeout (Seconds)", "value":"30" }, 
 				{ "type":"text", "id":"success_match", "title":"Success Match", "value":"" }, 
@@ -177,7 +177,7 @@
 			"method": "POST",
 			"headers": [
 				{ "name": "Content-Type", "value": "application/json" },
-				{ "name": "User-Agent", "value": "OpsRocket/WebHook" }
+				{ "name": "User-Agent", "value": "xyOps/WebHook" }
 			],
 			"body": "{\n\t\"text\": \"{{text}}\",\n\t\"content\": \"{{text}},\"\n\t\"message\": \"{{text}}\"\n}",
 			"timeout": 30,
@@ -634,10 +634,10 @@
 			{
 				"action": "printMessage",
 				"lines": [
-					"Welcome to OpsRocket!",
-					"First time installing?  You should configure your settings in '/opt/opsrocket/conf/config.json'.",
-					"Then, to start the service, type: '/opt/opsrocket/bin/control.sh start'.",
-					"For full docs, please visit: http://github.com/pixlcore/opsrocket",
+					"Welcome to xyOps!",
+					"First time installing?  You should configure your settings in '/opt/xyops/conf/config.json'.",
+					"Then, to start the service, type: '/opt/xyops/bin/control.sh start'.",
+					"For full docs, please visit: http://github.com/pixlcore/xyops",
 					"Enjoy!"
 				]
 			}

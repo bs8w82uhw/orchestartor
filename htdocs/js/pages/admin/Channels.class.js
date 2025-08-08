@@ -388,7 +388,7 @@ Page.Channels = class Channels extends Page.PageUtils {
 					value: channel.id
 				}),
 				suffix: this.getFormIDCopier(),
-				caption: 'This is a unique ID for the channel, used by the OpsRocket API.  It cannot be changed.'
+				caption: 'This is a unique ID for the channel, used by the xyOps API.  It cannot be changed.'
 			});
 		}
 		

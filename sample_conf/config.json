@@ -19,7 +19,7 @@
 	"log_archive_path": "logs/archives/[yyyy]/[mm]/[dd]/[filename]-[yyyy]-[mm]-[dd].log.gz",
 	"log_crashes": true,
 	"temp_dir": "temp",
-	"pid_file": "logs/opsrocket.pid",
+	"pid_file": "logs/xyops.pid",
 	"debug_level": 9,
 	"maintenance": "04:00",
 	"ttl": 300,
@@ -69,12 +69,12 @@
 	},
 	
 	"hook_text_templates": {
-		"job_start": "OpsRocket Job started on {{nice_server}}: {{event.title}}: {{links.job_details}}",
-		"job_success": "OpsRocket Job completed successfully on {{nice_server}}: {{event.title}}: {{links.job_details}}",
-		"job_error": "OpsRocket Job failed on {{nice_server}}: {{event.title}}: Error ({{job.code}}): {{job.description}}: {{links.job_details}}",
-		"job_progress": "OpsRocket Job is in progress on {{nice_server}} ({{event.title}}): {{links.job_details}}",
-		"alert_new": "OpsRocket Alert: {{nice_server}}: {{def.title}}: {{alert.message}}: {{alert_url}}",
-		"alert_cleared": "OpsRocket Alert Cleared: {{nice_server}}: {{def.title}}"
+		"job_start": "xyOps Job started on {{nice_server}}: {{event.title}}: {{links.job_details}}",
+		"job_success": "xyOps Job completed successfully on {{nice_server}}: {{event.title}}: {{links.job_details}}",
+		"job_error": "xyOps Job failed on {{nice_server}}: {{event.title}}: Error ({{job.code}}): {{job.description}}: {{links.job_details}}",
+		"job_progress": "xyOps Job is in progress on {{nice_server}} ({{event.title}}): {{links.job_details}}",
+		"alert_new": "xyOps Alert: {{nice_server}}: {{def.title}}: {{alert.message}}: {{alert_url}}",
+		"alert_cleared": "xyOps Alert Cleared: {{nice_server}}: {{def.title}}"
 	},
 	
 	"multi": {
@@ -87,7 +87,7 @@
 	},
 	
 	"satellite": {
-		"base_url": "https://github.com/pixlcore/opsrocket-satellite/releases",
+		"base_url": "https://github.com/pixlcore/xysat/releases",
 		"version": "latest",
 		"cache_ttl": 86400,
 		"config": { 
@@ -156,7 +156,7 @@
 	},
 	
 	"client": {
-		"name": "OpsRocket",
+		"name": "xyOps",
 		"debug": 1,
 		
 		"items_per_page": 50,
@@ -331,7 +331,7 @@
 		"http_max_upload_size": 1073741824,
 		"http_static_ttl": 31536000,
 		"http_static_index": "index.html",
-		"http_server_signature": "OpsRocket v1.0",
+		"http_server_signature": "xyOps v1.0",
 		"http_compress_text": true,
 		"http_enable_brotli": true,
 		"http_timeout": 30,

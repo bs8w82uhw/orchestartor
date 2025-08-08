@@ -1,8 +1,8 @@
 To: [email_to]
 From: [config/email_from]
-Subject: OpsRocket Alert: [nice_server]: [def/title]
+Subject: xyOps Alert: [nice_server]: [def/title]
 
-The following OpsRocket alert has fired: [def/title]
+The following xyOps alert has fired: [def/title]
 
 Message: [alert/message]
 Hostname: [params/hostname]
@@ -33,4 +33,4 @@ Operating System: [nice_os]
 Uptime: [nice_uptime]
 
 Regards,
-The OpsRocket Team
+The xyOps Team

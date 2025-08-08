@@ -416,13 +416,13 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		// download export as file (which can then be re-uploaded to create/replace)
 		var opts = this._temp_export;
 		var json = {
-			description: "OpsRocket Portable Data Object",
+			description: "xyOps Portable Data Object",
 			version: "1.0",
 			type: opts.dataType,
 			data: opts.data
 		};
 		var payload = JSON.stringify(json, null, "\t") + "\n";
-		var filename = 'opsrocket-' + opts.dataType + '-' + opts.data.id + '.json';
+		var filename = 'xyops-' + opts.dataType + '-' + opts.data.id + '.json';
 		var blob = new Blob([payload], { type: "application/json" });
 		var url = URL.createObjectURL(blob);
 		

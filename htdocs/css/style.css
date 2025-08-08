@@ -1,4 +1,4 @@
-/* OpsRocket Custom Styles */
+/* xyOps Custom Styles */
 
 /* Copyright (c) 2019 - 2025 PixlCore LLC
 Released under the PixlCore Sustainable Use License.
@@ -177,7 +177,7 @@ body.sidebar #d_logo_overlay {
 }
 
 div.sidebar > div.title {
-	background-size: 145px auto;
+	background-size: 125px auto;
 }
 
 div.box_title_widget.btw_nav {

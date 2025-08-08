@@ -39,7 +39,7 @@ else {
 	base_api_url = 'http://localhost:' + web.http_port + '/api';
 }
 
-var request = new Request( "OpsRocket DB CLI" );
+var request = new Request( "xyOps DB CLI" );
 request.setTimeout( 30 * 1000 );
 request.setFollow( 5 );
 request.setAutoError( true );

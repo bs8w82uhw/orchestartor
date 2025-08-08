@@ -1,6 +1,6 @@
 To: [/user/email]
 From: [/config/email_from]
-Subject: OpsRocket Sessions Logged Out
+Subject: xyOps Sessions Logged Out
 
 Hey [/user/full_name],
 
@@ -16,4 +16,4 @@ This request was sent from IP address: [/session/ip]
 Using the following user agent: [/useragent]
 
 Regards,
-The OpsRocket Team
+The xyOps Team

@@ -187,7 +187,7 @@ Page.WebHooks = class WebHooks extends Page.PageUtils {
 			"method": "POST",
 			"headers": [
 				{ "name": "Content-Type", "value": "application/json" },
-				{ "name": "User-Agent", "value": "OpsRocket/WebHook" }
+				{ "name": "User-Agent", "value": "xyOps/WebHook" }
 			],
 			"body": JSON.stringify({ content: '[description]', text: '[description]' }, null, "\t"),
 			"timeout": 30,
@@ -418,7 +418,7 @@ Page.WebHooks = class WebHooks extends Page.PageUtils {
 					value: web_hook.id
 				}),
 				suffix: this.getFormIDCopier(),
-				caption: 'This is a unique ID for the web hook, used by the OpsRocket API.  It cannot be changed.'
+				caption: 'This is a unique ID for the web hook, used by the xyOps API.  It cannot be changed.'
 			});
 		}
 		
