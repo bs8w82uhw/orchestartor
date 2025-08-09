@@ -368,7 +368,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		md += `Please select how you would like to export the ${opts.name}'s JSON data.` + "\n";
 		md += "\n```json\n" + JSON.stringify(opts.data, null, "\t") + "\n```\n";
 		
-		html += '<div class="code_viewer">';
+		html += '<div class="code_viewer scroll_shadows">';
 		html += '<div class="markdown-body">';
 		
 		html += marked(md, config.ui.marked_config);

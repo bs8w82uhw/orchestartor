@@ -2337,7 +2337,7 @@ Page.Base = class Base extends Page {
 		var value = this._temp_code = ((typeof(data) == 'string') ? data : JSON.stringify(data, null, "\t"));
 		var html = '';
 		
-		html += '<div class="code_viewer">';
+		html += '<div class="code_viewer scroll_shadows">';
 		html += '<pre><code class="hljs">' + app.highlightAuto(value, formats) + '</code></pre>';
 		html += '</div>';
 		
@@ -2358,7 +2358,7 @@ Page.Base = class Base extends Page {
 		this._temp_code = text;
 		var html = '';
 		
-		html += '<div class="code_viewer">';
+		html += '<div class="code_viewer scroll_shadows">';
 		html += '<div class="markdown-body">';
 		
 		html += marked(text, config.ui.marked_config);
@@ -2647,7 +2647,7 @@ Page.Base = class Base extends Page {
 			}
 			
 			var html = '';
-			html += '<div class="code_viewer">';
+			html += '<div class="code_viewer scroll_shadows">';
 			html += '<div class="markdown-body">';
 			
 			html += marked(md, config.ui.marked_config);
