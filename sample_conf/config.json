@@ -164,7 +164,6 @@
 	
 	"client": {
 		"name": "xyOps",
-		"debug": 1,
 		
 		"items_per_page": 50,
 		"alt_items_per_page": 25,
