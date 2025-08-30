@@ -194,23 +194,24 @@ app.extend({
 			return;
 		}
 		
-		// user landed on a backup server
+		// user landed on a backup server, or other error
 		Dialog.hide();
 		
 		var html = '';
-		html += '<div style="height:75px;"></div>';
 		
-		html += '<div class="box" style="padding:30px">';
-			html += '<div class="box_title error">' + (resp.title || 'An Error Occurred') + '</div>';
-			html += '<div class="box_content" style="font-size:14px;">' + resp.description + '</div>';
+		html += '<div class="dialog inline">';
+			html += '<div class="dialog_title" style="color:var(--red)">' + (resp.title || 'An Error Occurred') + '</div>';
+			html += '<div class="box_content">' + resp.description + '</div>';
 		html += '</div>';
 		
-		html += '<div style="height:75px;"></div>';
 		$('div.main').html(html);
 		
 		app.setWindowTitle( "Error" );
-		app.setHeaderTitle( '<i class="mdi mdi-alert-circle-outline">&nbsp;</i>Error' );
+		// app.setHeaderTitle( '<i class="mdi mdi-alert-circle-outline">&nbsp;</i>Error' );
 		$('div.header_title').addClass('error');
+		$('body').addClass('login');
+		
+		if (resp.version) $('#d_footer_version').html( "Version " + resp.version );
 	},
 	
 	presortTables: function() {
@@ -254,7 +255,7 @@ app.extend({
 		var html = '';
 		
 		html += '<div class="header_widget icon danger"><i class="mdi mdi-power-standby" onClick="app.doConfirmLogout()" title="Logout"></i></div>';
-		html += '<div id="d_my_account" class="header_widget user" style="background-image:url(' + this.getUserAvatarURL( this.retina ? 64 : 32, bust ) + ')" onClick="app.doMyAccount()" title="My Account (' + app.username + ')"></div>';
+		html += '<div id="d_my_account" class="header_widget user" style="background-image:url(' + this.getUserAvatarURL( this.retina ? 64 : 32, bust ) + ')" onClick="app.doMyAccount()" title="My Account (' + encode_attrib_entities(app.user.full_name) + ')"></div>';
 		html += '<div id="d_my_settings" class="header_widget icon"><i class="mdi mdi-tune-vertical-variant" onClick="app.doMySettings()" title="My Preferences"></i></div>';
 		html += '<div id="d_theme_ctrl" class="header_widget icon" onMouseDown="app.openThemeSelector()" title="Select Theme"></div>';
 		html += '<div id="d_header_clock" class="header_widget combo" onMouseDown="app.openScheduleSelector()" title="Toggle Scheduler">...</div>';
@@ -586,11 +587,10 @@ app.extend({
 		}
 		
 		this.api.post( 'user/logout', {}, function(resp) {
-			Dialog.hideProgress();
 			delete self.user;
 			delete self.username;
 			delete self.user_info;
-			delete app.navAfterLogin;
+			delete self.navAfterLogin;
 			
 			self.setPref('username', '');
 			$('#d_header_user_container').html( '' );
@@ -598,6 +598,14 @@ app.extend({
 			
 			// kill websocket
 			self.comm.disconnect();
+			
+			if (resp.redirect) {
+				Debug.trace("Redirecting for external logout: " + resp.redirect);
+				location.href = resp.redirect;
+				return;
+			}
+			
+			Dialog.hideProgress();
 			
 			Debug.trace("User session cookie was deleted, redirecting to login page");
 			Dialog.hideProgress();
