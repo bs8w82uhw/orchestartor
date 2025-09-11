@@ -261,7 +261,7 @@ app.extend({
 		html += '<div id="d_header_clock" class="header_widget combo" onMouseDown="app.openScheduleSelector()" title="Toggle Scheduler">...</div>';
 		
 		html += '<div id="d_job_counter" class="header_widget combo marquee" onClick="app.goJobs()" title="Active Jobs" style="display:none">...</div>';
-		html += '<div id="d_pending_counter" class="header_widget combo" onClick="app.goJobs()" title="Pending Jobs" style="display:none">...</div>';
+		html += '<div id="d_pending_counter" class="header_widget combo" onClick="app.goPending()" title="Pending Jobs" style="display:none">...</div>';
 		html += '<div id="d_alert_counter" class="header_widget combo red" onClick="app.goAlerts()" title="Active Alerts" style="display:none">...</div>';
 		
 		// html += '<div class="header_search_widget"><i class="mdi mdi-magnify">&nbsp;</i><input type="text" size="15" id="fe_header_search" placeholder="Quick Search" onKeyDown="app.qsKeyDown(this,event)"/></div>';
@@ -287,6 +287,15 @@ app.extend({
 	},
 	
 	goJobs: function() {
+		// jump into job if only 1 active, otherwise jump to dash
+		if (num_keys(this.activeJobs) == 1) {
+			var job_id = first_key(this.activeJobs);
+			Nav.go('Job?id=' + job_id);
+		}
+		else Nav.go('Dashboard');
+	},
+	
+	goPending: function() {
 		Nav.go('Dashboard');
 	},
 	
