@@ -29,7 +29,7 @@ HOMEDIR="$(dirname "$(cd -- "$(dirname "$0")" && (pwd -P 2>/dev/null || pwd))")"
 cd $HOMEDIR
 #
 # the path to your binary, including options if necessary
-BINARY="node $HOMEDIR/lib/main.js"
+BINARY="node --max-old-space-size=${NODE_MAX_MEMORY:-4096} $HOMEDIR/lib/main.js"
 #
 # the path to your PID file
 PIDFILE=$HOMEDIR/logs/xyops.pid
@@ -116,7 +116,7 @@ do
 			exit 1;
 		fi
 		shift
-		node --trace-warnings $HOMEDIR/lib/main.js --debug --debug_level 9 --repl --color --echo "$@"
+		node --max-old-space-size=${NODE_MAX_MEMORY:-4096} --trace-warnings $HOMEDIR/lib/main.js --debug --debug_level 9 --repl --color --echo "$@"
 		exit
 	;;
 	admin)
