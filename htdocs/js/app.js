@@ -114,6 +114,7 @@ app.extend({
 			{ ID: 'WebHooks' },
 			{ ID: 'Buckets' },
 			{ ID: 'Secrets' },
+			{ ID: 'Tickets' },
 			{ ID: 'Plugins' },
 			{ ID: 'Tags' },
 			{ ID: 'Roles' },
@@ -185,6 +186,20 @@ app.extend({
 		
 		this.cacheBust = time_now();
 		this.page_manager = new PageManager( always_array(config.Page) );
+		
+		// special hook for redirecting #NUM --> ticket view
+		var hashchange = function(event) {
+			var parts = window.location.href.split(/\#/);
+			var anchor = parts[1];
+			if (anchor && anchor.match(/^\d+$/)) {
+				// shortcut: #1234 --> #Tickets?sub=view&num=1234
+				history.replaceState( null, '', '#Tickets?sub=view&num=' + anchor );
+			}
+		};
+		window.addEventListener("hashchange", hashchange);
+		
+		// catch initial #NUMBER and replaceState so Nav doesn't choke
+		hashchange();
 		
 		if (!Nav.inited) Nav.init();
 	},
@@ -467,26 +482,51 @@ app.extend({
 		else $('body').removeClass('admin');
 		
 		// user searches
-		var $section = $('#d_section_my_searches').empty();
-		if (this.user.searches && this.user.searches.length) {
-			this.user.searches.sort( function(a, b) {
+		var $job_section = $('#d_section_my_job_searches').empty();
+		var job_searches = (this.user.searches || []).filter( function(search) { return !!search.uri.match(/^Search/); } );
+		
+		if (job_searches.length) {
+			job_searches.sort( function(a, b) {
 				return a.name.localeCompare( b.name );
 			} );
-			this.user.searches.forEach( function(search) {
+			job_searches.forEach( function(search) {
 				var icon = search.icon || '';
 				if (!icon) icon = 'magnify';
 				
 				var $search = $('<a></a>')
 					.prop('id', 'tab_Search_' + search.name.replace(/\W+/g, ''))
-					.attr('href', '#Search?preset=' + search.name)
+					.attr('href', '#' + search.uri)
 					.addClass('section_item')
 					.html( '<i class="mdi mdi-' + icon + '">&nbsp;</i>' + search.name );
-				$section.append( $search );
+				$job_section.append( $search );
 			} );
 		}
-		else {
-			$section.append( '<div class="section_item disabled">(None found)</div>' );
+		// else {
+		// 	$job_section.append( '<div class="section_item disabled">(None found)</div>' );
+		// }
+		
+		var $ticket_section = $('#d_section_my_ticket_searches').empty();
+		var ticket_searches = (this.user.searches || []).filter( function(search) { return !!search.uri.match(/^Tickets/); } );
+		
+		if (ticket_searches.length) {
+			ticket_searches.sort( function(a, b) {
+				return a.name.localeCompare( b.name );
+			} );
+			ticket_searches.forEach( function(search) {
+				var icon = search.icon || '';
+				if (!icon) icon = 'text-box-search-outline';
+				
+				var $search = $('<a></a>')
+					.prop('id', 'tab_Tickets_' + search.name.replace(/\W+/g, ''))
+					.attr('href', '#' + search.uri)
+					.addClass('section_item')
+					.html( '<i class="mdi mdi-' + icon + '">&nbsp;</i>' + search.name );
+				$ticket_section.append( $search );
+			} );
 		}
+		// else {
+		// 	$ticket_section.append( '<div class="section_item disabled">(None found)</div>' );
+		// }
 		
 		// calling this again to recalculate sidebar expandable group heights, for animation toggle thing
 		setTimeout( function() { app.page_manager.initSidebar(); }, 1 );
