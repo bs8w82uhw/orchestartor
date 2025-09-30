@@ -44,7 +44,6 @@
 .cm-s-one-dark span.cm-type { color: #d19a66; }
 
 .cm-s-one-dark span.cm-def,
-.cm-s-one-dark span.cm-variable-3,
 .cm-s-one-dark span.cm-error { color: #e06c75; }
 
 .cm-s-one-dark span.cm-string,
@@ -68,5 +67,8 @@
 .cm-s-one-dark span.cm-link:visited { color: #61aeee; }
 
 .cm-s-one-dark span.cm-variable-2 {
+  color: #d19a66;
+}
+.cm-s-one-dark span.cm-variable-3 {
   color: #6abe81;
 }
