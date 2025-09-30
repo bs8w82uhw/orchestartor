@@ -128,7 +128,7 @@ div.box_title.comment {
 	color: var(--theme-color);
 }
 div.box_title.comment i.mdi:before {
-	transform: scale(1.25);
+	transform: scale(1.2);
 }
 
 /* div.box_admin_container {
