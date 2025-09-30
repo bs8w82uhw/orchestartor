@@ -61,6 +61,10 @@ app.extend({
 			link(href, title, text) {
 				const titleAttr = title ? ` title="${title}"` : '';
 				return `<a href="${href}" target="_blank"${titleAttr}>${text}<i style="padding-left:3px" class="mdi mdi-open-in-new"></i></a>`;
+			},
+			checkbox(checked) {
+				const icon = checked ? 'mdi-checkbox-marked-outline' : 'mdi-checkbox-blank-outline';
+				return `<i class="mdi ${icon}" aria-hidden="true"></i>`;
 			}
 		} });
 		
