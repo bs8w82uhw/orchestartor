@@ -2338,8 +2338,8 @@ Page.Base = class Base extends Page {
 			switch (param.type) {
 				case 'text':
 					if (elem_value.toString().length) {
-						html += '<i class="link mdi mdi-' + elem_icon + '" onClick="$P().copyPluginParamValue(' + idx + ')" title="Copy to Clipboard">&nbsp;</i>';
-						html += elem_value.toString().length ? strip_html(elem_value) : none;
+						html += '<i class="link mdi mdi-' + elem_icon + '" onClick="$P().copyPluginParamValue(this)" title="Copy to Clipboard">&nbsp;</i>';
+						html += '<span class="data_value">' + encode_entities(elem_value) + '</span>';
 					}
 					else html += none;
 				break;
@@ -2347,8 +2347,9 @@ Page.Base = class Base extends Page {
 				case 'textarea':
 				case 'code':
 					if (elem_value.toString().length) {
-						html += '<i class="link mdi mdi-' + elem_icon + '" onClick="$P().copyPluginParamValue(' + idx + ')" title="Copy to Clipboard">&nbsp;</i>';
-						html += '<span class="link" onClick="$P().viewPluginParamValue(' + idx + ')">Click to View...</span>';
+						html += '<i class="link mdi mdi-' + elem_icon + '" onClick="$P().copyPluginParamValue(this)" title="Copy to Clipboard">&nbsp;</i>';
+						html += '<span class="link" onClick="$P().viewPluginParamValue(this)">Click to View...</span>';
+						html += '<span class="data_value" style="display:none" data-title="' + encode_attrib_entities(param.title) + '">' + encode_entities(elem_value) + '</span>';
 					}
 					else html += none;
 				break;
@@ -2362,7 +2363,7 @@ Page.Base = class Base extends Page {
 				
 				case 'select':
 					html += '<i class="link mdi mdi-' + elem_icon + '" onClick="$P().copyPluginParamValue(' + idx + ')" title="Copy to Clipboard">&nbsp;</i>';
-					html += strip_html( elem_value.toString().replace(/\,.*$/, '') );
+					html += '<span class="data_value">' + encode_entities( elem_value.toString().replace(/\,.*$/, '') ) + '</span>';
 				break;
 			} // switch type
 			
@@ -2375,26 +2376,29 @@ Page.Base = class Base extends Page {
 		return html;
 	}
 	
-	copyPluginParamValue(idx) {
+	copyPluginParamValue(elem) {
 		// copy specific plugin param value to the clipboard
-		var item = this.job || this.event;
-		var plugin = find_object( app.plugins, { id: item.plugin } );
-		var param = plugin.params[idx];
-		var elem_value = (param.id in item.params) ? item.params[param.id] : param.value;
+		var $elem = $(elem);
+		var $info_value = $elem.closest('div.info_value');
+		var $data_value = $info_value.find('span.data_value');
 		
-		copyToClipboard(elem_value);
+		copyToClipboard( $data_value.text() );
 		
 		app.showMessage('info', "Parameter value copied to your clipboard.");
 	}
 	
-	viewPluginParamValue(idx) {
+	viewPluginParamValue(elem) {
 		// popup dialog to show multi-line text box param value
-		var item = this.job || this.event;
-		var plugin = find_object( app.plugins, { id: item.plugin } );
-		var param = plugin.params[idx];
-		var elem_value = (param.id in item.params) ? item.params[param.id] : param.value;
+		var $elem = $(elem);
+		var $info_value = $elem.closest('div.info_value');
+		var $data_value = $info_value.find('span.data_value');
+		var text = $data_value.text();
+		var formats = null;
 		
-		this.viewCodeAuto( param.title, elem_value );
+		// if text is single line, prevent auto-detect on format
+		if (!text.trim().match(/\n/)) formats = ['text'];
+		
+		this.viewCodeAuto( $data_value.data('title'), text, formats );
 	}
 	
 	viewCodeAuto(title, data, formats) {
