@@ -565,6 +565,76 @@
 		},
 		
 		"Tickets": {
+			"d_nt_subject": {
+				"label": "Subject:",
+				"caption": "Enter a subject line for the ticket (i.e. title, summary, etc.)."
+			},
+			"d_nt_body": {
+				"label": "Body:",
+				"caption": "Enter the ticket body text using [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/) syntax."
+			},
+			"d_nt_type": {
+				"label": "Type:",
+				"caption": "Select a type for the new ticket."
+			},
+			"fe_nt_type": {
+				"title": "Select type for ticket",
+				"placeholder": "Select type for ticket..."
+			},
+			"d_nt_status": {
+				"label": "Status:",
+				"caption": "Select a status for the new ticket."
+			},
+			"fe_nt_status": {
+				"title": "Select status for ticket",
+				"placeholder": "Select status for ticket..."
+			},
+			"d_nt_category": {
+				"label": "Category:",
+				"caption": "Optionally assign the ticket to a category."
+			},
+			"fe_nt_category": {
+				"title": "Select category for ticket"
+			},
+			"d_nt_assignee": {
+				"label": "Assigned To:",
+				"caption": "Select the user responsible for executing the ticket."
+			},
+			"fe_nt_assignee": {
+				"title": "Select assignee for ticket",
+				"placeholder": "Select assignee for ticket..."
+			},
+			"d_nt_cc": {
+				"label": "Cc:",
+				"caption": "Optionally select users to receive updates for the ticket."
+			},
+			"fe_nt_cc": {
+				"title": "Select users to carbon copy",
+				"placeholder": "Select users to carbon copy..."
+			},
+			"d_nt_notify": {
+				"label": "Notify:",
+				"caption": "Optionally add custom e-mail addresses to receive updates for the ticket."
+			},
+			"fe_nt_notify": {
+				"title": "Add new recipient",
+				"placeholder": "Click to add recipient...",
+				"description": "Enter any email address to receive ticket updates.",
+				"confirm": "Add Recipient"
+			},
+			"d_nt_due": {
+				"label": "Due Date:",
+				"caption": "Optionally select the ticket due date (reminders are sent out after this)."
+			},
+			"d_nt_tags": {
+				"label": "Tags:",
+				"caption": "Optionally select tags to apply to the ticket."
+			},
+			"fe_nt_tags": {
+				"title": "Select tags to apply",
+				"placeholder": "Select tags to apply..."
+			},
+			
 			"d_td_event": {
 				"label": "Event:",
 				"caption": "Select the event for the ticket."
@@ -590,6 +660,37 @@
 			"d_td_user_params": {
 				"label": "User Parameters:",
 				"caption": "Enter values for all the event-defined parameters here."
+			}
+		},
+		
+		"Job": {
+			"d_nt_subject": {
+				"label": "Subject:",
+				"caption": "Enter a subject line for the ticket (i.e. title, summary, etc.)."
+			},
+			"d_nt_type": {
+				"label": "Type:",
+				"caption": "Select a type for the new ticket."
+			},
+			"fe_nt_type": {
+				"title": "Select type for ticket",
+				"placeholder": "Select type for ticket..."
+			},
+			"d_nt_assignee": {
+				"label": "Assigned To:",
+				"caption": "Select the user responsible for executing the ticket."
+			},
+			"fe_nt_assignee": {
+				"title": "Select assignee for ticket",
+				"placeholder": "Select assignee for ticket..."
+			},
+			"d_nt_tags": {
+				"label": "Tags:",
+				"caption": "Optionally select tags to apply to the ticket."
+			},
+			"fe_nt_tags": {
+				"title": "Select tags to apply",
+				"placeholder": "Select tags to apply..."
 			}
 		}
 		
@@ -702,7 +803,9 @@
 	"intros": {
 		"wfd_exp_builder": "This allows you to explore output data from recently completed jobs, and pick out a specific JSON key path to use for your controller expression.",
 		"wfd_data_explorer": "Select a previously completed job to import the data and/or files from it.  This is so you can use it as simulated input for your test run.",
-		"server_data_explorer": "This allows you to explore monitoring data from your servers, and pick out a specific JSON key path to use for your expression."
+		"server_data_explorer": "This allows you to explore monitoring data from your servers, and pick out a specific JSON key path to use for your expression.",
+		"job_create_ticket": "Use this form to create a new ticket, which will reference the current job.",
+		"job_add_to_ticket": "Attach the current job to an existing ticket."
 	},
 	
 	"nav": {
