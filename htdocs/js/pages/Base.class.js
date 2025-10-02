@@ -504,12 +504,12 @@ Page.Base = class Base extends Page {
 		
 		var html = '<span class="nowrap">';
 		var icon = '<i class="mdi mdi-' + (item.offline ? 'close-network-outline' : (item.icon || 'router-network')) + '"></i>';
+		var text = item.title || app.formatHostname(item.hostname);
 		if (link) {
-			html += '<a href="#Servers?id=' + item.id + '">';
-			html += icon + '<span>' + this.getNiceServerText(item) + '</span></a>';
+			html += '<a href="#Servers?id=' + item.id + '">' + icon + '<span data-private>' + text + '</span></a>';
 		}
 		else {
-			html += icon + this.getNiceServerText(item);
+			html += icon + '<span data-private>' + text + '</span>';
 		}
 		
 		html += '</span>';
@@ -517,9 +517,10 @@ Page.Base = class Base extends Page {
 	}
 	
 	getNiceServerText(item) {
-		// get server label or hostname
+		// get server label or hostname in plain text (no HTML markup)
 		if (!item) return '(None)';
-		return '<span data-private>' + (item.title || app.formatHostname(item.hostname)) + '</span>';
+		if (app.privacyMode()) return '(Redacted)';
+		return item.title || app.formatHostname(item.hostname);
 	}
 	
 	getNiceTarget(target, link) {
@@ -1169,7 +1170,7 @@ Page.Base = class Base extends Page {
 			html += icon + '<span>' + (user.full_name || username) + '</span></a>';
 		}
 		else {
-			if (username == 'api') username = 'API';
+			if (username == 'system') username = '(System)';
 			html += icon + (user.full_name || username);
 		}
 		html += '</span>';
