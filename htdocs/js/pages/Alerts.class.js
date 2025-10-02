@@ -405,6 +405,16 @@ Page.Alerts = class Alerts extends Page.Base {
 			html += '</div>'; // box_content
 		html += '</div>'; // box
 		
+		// tickets
+		html += '<div class="box" id="d_va_tickets" style="display:none">';
+			html += '<div class="box_title">';
+				html += 'Alert Tickets';
+			html += '</div>';
+			html += '<div class="box_content table">';
+				html += '<div class="loading_container"><div class="loading"></div></div>';
+			html += '</div>'; // box_content
+		html += '</div>'; // box
+		
 		// jobs
 		html += '<div class="box" id="d_va_jobs">';
 			html += '<div class="box_title">';
@@ -428,6 +438,7 @@ Page.Alerts = class Alerts extends Page.Base {
 		this.div.html(html);
 		
 		this.getAlertSnapshots();
+		this.getAlertTickets();
 		this.getAlertJobs();
 		this.getAlertHistory();
 	}
@@ -492,6 +503,97 @@ Page.Alerts = class Alerts extends Page.Base {
 		
 		$('#d_va_snapshots > div.box_content').html( html );
 		$('#d_va_snapshots').show();
+	}
+	
+	getAlertTickets() {
+		// load ticket info for display
+		var self = this;
+		var alert = this.alert;
+		
+		if (!alert.tickets || !alert.tickets.length) {
+			this.div.find('#d_va_tickets').hide();
+			return;
+		}
+		
+		app.api.post( 'app/get_tickets', { ids: alert.tickets }, function(resp) {
+			self.tickets = resp.tickets || [];
+			self.renderAlertTickets();
+		});
+	}
+	
+	renderAlertTickets() {
+		// render tickets in table
+		var self = this;
+		var tickets = this.tickets;
+		var html = '';
+		
+		if (!tickets.length) {
+			this.div.find('#d_va_tickets').hide();
+			return;
+		}
+		
+		var grid_args = {
+			rows: tickets,
+			cols: ['#', 'Subject', 'Type', 'Status', 'Assignee', 'Tags', 'Created', 'Actions'],
+			data_type: 'ticket',
+			empty_msg: 'No tickets found.'
+		};
+		
+		html += this.getBasicGrid( grid_args, function(ticket, idx) {
+			var actions = [
+				'<span class="link danger" onClick="$P().doRemoveTicket(' + idx + ')"><b>Remove</b></span>'
+			];
+			
+			// handle deleted tickets (should be rare, as they're cleaned up in background)
+			if (ticket.err) return [
+				'<div class="monospace">#</div>',
+				'(Ticket was deleted)',
+				'n/a', // type
+				'n/a', // status
+				'n/a', // assignee
+				'n/a', // tags
+				'n/a', // created
+				'<span class="nowrap">' + actions.join(' | ') + '</span>'
+			];
+			
+			return [
+				'<div class="monospace">#' + ticket.num + '</div>',
+				self.getNiceTicket(ticket, true),
+				self.getNiceTicketType(ticket.type),
+				self.getNiceTicketStatus(ticket.status),
+				ticket.assignee ? self.getNiceUser(ticket.assignee, app.isAdmin()) : '(None)',
+				self.getNiceTagList( ticket.tags, false ),
+				self.getRelativeDateTime( ticket.created, true ),
+				'<span class="nowrap">' + actions.join(' | ') + '</span>'
+			];
+		});
+		
+		this.div.find('#d_va_tickets > .box_content').html(html);
+		this.div.find('#d_va_tickets').show();
+	}
+	
+	doRemoveTicket(idx) {
+		// remove ticket from job
+		var self = this;
+		var alert = this.alert;
+		var ticket = this.tickets[idx];
+		
+		Dialog.confirmDanger( 'Remove Ticket', "Are you sure you want to remove the ticket &ldquo;<b>" + ticket.subject + "</b>&rdquo; from the current alert invocation?  This will not delete the ticket itself.", ['trash-can', 'Remove'], function(result) {
+			if (!result) return;
+			app.clearError();
+			Dialog.showProgress( 1.0, "Removing Ticket..." );
+			
+			// remove our ticket id from the alert ticket list
+			var new_tickets = alert.tickets.filter( function(ticket_id) { return ticket_id != ticket.id } );
+			
+			app.api.post( 'app/update_alert', { id: alert.id, tickets: new_tickets }, function(resp) {
+				Dialog.hideProgress();
+				app.cacheBust = hires_time_now();
+				alert.tickets = new_tickets;
+				app.showMessage('success', "Ticket successfully removed.");
+				self.getAlertTickets();
+			} ); // api.post
+		} ); // confirm
 	}
 	
 	getAlertJobs() {
@@ -632,6 +734,7 @@ Page.Alerts = class Alerts extends Page.Base {
 		delete this.def;
 		delete this.snapshots;
 		delete this.jobs;
+		delete this.tickets;
 		
 		return true;
 	}
