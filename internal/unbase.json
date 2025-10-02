@@ -337,7 +337,8 @@
 					"min_word_length": 1,
 					"max_word_length": 32,
 					"max_words": 500,
-					"use_stemmer": true
+					"use_stemmer": true,
+					"filter": "markdown"
 				},
 				{
 					"id": "changes",
@@ -345,7 +346,8 @@
 					"min_word_length": 1,
 					"max_word_length": 32,
 					"max_words": 500,
-					"use_stemmer": true
+					"use_stemmer": true,
+					"filter": "markdown"
 				}
 			],
 			"sorters": [
