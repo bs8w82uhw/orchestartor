@@ -285,6 +285,35 @@
 	},
 	
 	"dom": {
+		"d_nt_subject": {
+			"label": "Subject:",
+			"caption": "Enter a subject line for the ticket (i.e. title, summary, etc.)."
+		},
+		"d_nt_type": {
+			"label": "Type:",
+			"caption": "Select a type for the new ticket."
+		},
+		"fe_nt_type": {
+			"title": "Select type for ticket",
+			"placeholder": "Select type for ticket..."
+		},
+		"d_nt_assignee": {
+			"label": "Assigned To:",
+			"caption": "Select the user responsible for executing the ticket."
+		},
+		"fe_nt_assignee": {
+			"title": "Select assignee for ticket",
+			"placeholder": "Select assignee for ticket..."
+		},
+		"d_nt_tags": {
+			"label": "Tags:",
+			"caption": "Optionally select tags to apply to the ticket."
+		},
+		"fe_nt_tags": {
+			"title": "Select tags to apply",
+			"placeholder": "Select tags to apply..."
+		},
+		
 		"d_wf_id": {
 			"label": "Workflow ID:",
 			"caption": "This is a unique ID for the workflow, used by the API.  It cannot be changed."
@@ -660,37 +689,6 @@
 			"d_td_user_params": {
 				"label": "User Parameters:",
 				"caption": "Enter values for all the event-defined parameters here."
-			}
-		},
-		
-		"Job": {
-			"d_nt_subject": {
-				"label": "Subject:",
-				"caption": "Enter a subject line for the ticket (i.e. title, summary, etc.)."
-			},
-			"d_nt_type": {
-				"label": "Type:",
-				"caption": "Select a type for the new ticket."
-			},
-			"fe_nt_type": {
-				"title": "Select type for ticket",
-				"placeholder": "Select type for ticket..."
-			},
-			"d_nt_assignee": {
-				"label": "Assigned To:",
-				"caption": "Select the user responsible for executing the ticket."
-			},
-			"fe_nt_assignee": {
-				"title": "Select assignee for ticket",
-				"placeholder": "Select assignee for ticket..."
-			},
-			"d_nt_tags": {
-				"label": "Tags:",
-				"caption": "Optionally select tags to apply to the ticket."
-			},
-			"fe_nt_tags": {
-				"title": "Select tags to apply",
-				"placeholder": "Select tags to apply..."
 			}
 		}
 		
