@@ -1,5 +1,5 @@
 # Upgrade to the latest xyOps Satellite for Windows x64.
-# Copyright (c) 2025 PixlCore LLC.  Sustainable Use License.
+# Copyright (c) 2025 PixlCore LLC.  MIT License.
 
 # Pre-populated variables (these values will be replaced server-side)
 $server_id  = "[server_id]"

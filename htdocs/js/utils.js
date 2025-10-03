@@ -1,6 +1,6 @@
 // xyOps Web App - Utils
 // Copyright (c) 2019 - 2025 PixlCore LLC
-// Released under the PixlCore Sustainable Use License.
+// Released under the MIT License.
 // See the LICENSE.md file in this repository.
 
 function get_pretty_int_list(arr, ranges) {
@@ -232,7 +232,7 @@ function detect_num_interval(arr, max) {
 };
 
 // Crontab Parsing Tools
-// by Joseph Huckaby, (c) 2015, Sustainable Use License
+// by Joseph Huckaby, (c) 2015, MIT License
 
 var cron_aliases = {
 	jan: 1,

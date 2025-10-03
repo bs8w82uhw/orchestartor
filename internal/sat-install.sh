@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Install the latest xyOps Satellite to /opt/xyops/satellite/
-# Copyright (c) 2025 PixlCore LLC.  Sustainable Use License.
+# Copyright (c) 2025 PixlCore LLC.  MIT License.
 
 set -eu
 

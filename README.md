@@ -16,7 +16,7 @@ xyOps is a flexible job scheduler and server monitoring system, featuring workfl
 
 # License
 
-xyOps is dual-licensed under a [Sustainable Use License](https://xyops.io/license), and a [Commercial License](https://xyops.io/enterprise) for enterprise.
+xyOps is MIT licensed.
 
 
 
@@ -86,10 +86,8 @@ xyOps is a flexible job scheduler and server monitoring system, featuring workfl
 - Graph data can be kept indefinitely or auto-expired
 - Light and dark themes for the UI
 
-- Dual-licensed under a Sustainable Use License, and a Commercial License for enterprise.
-
 - Free tier you can host yourself.
-	- Source Available, Sustainable Use License
+	- MIT License
 - Professional tier with full cloud hosting and support (24h).
 	- $100 / month, or $1,000 / year.
 - Enterprise tier with on-prem hosting, SSO, a dedicated account manager, and priority support (1h).

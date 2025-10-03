@@ -1,6 +1,6 @@
 // xyOps Auto Installer
 // Copyright (c) 2019 - 2025 PixlCore LLC
-// Released under the PixlCore Sustainable Use License.
+// Released under the MIT License.
 // https://github.com/pixlcore/xyops/blob/main/LICENSE.md
 
 // To install, issue this command as root:

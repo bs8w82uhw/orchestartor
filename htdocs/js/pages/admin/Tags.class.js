@@ -1,7 +1,7 @@
 // Admin Page -- Tag Config
 
 // Copyright (c) 2019 - 2025 PixlCore LLC
-// Released under the PixlCore Sustainable Use License.
+// Released under the MIT License.
 // See the LICENSE.md file in this repository.
 
 Page.Tags = class Tags extends Page.PageUtils {

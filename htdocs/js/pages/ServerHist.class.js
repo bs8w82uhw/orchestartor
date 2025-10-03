@@ -1,7 +1,7 @@
 // Server History
 
 // Copyright (c) 2019 - 2025 PixlCore LLC
-// Released under the PixlCore Sustainable Use License.
+// Released under the MIT License.
 // See the LICENSE.md file in this repository.
 
 Page.ServerHist = class ServerHist extends Page.ServerUtils {
