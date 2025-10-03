@@ -23,7 +23,7 @@ The following {{config.client.name}} alert has fired: **{{def.title}}**
 ### Server Information:
 
 - **CPU Load Average:** {{nice_load_avg}}
-- **CPU Usage:** {{nice_cpu}}
+- **CPU Type:** {{nice_cpu}}
 - **CPU Cores:** {{params.data.cpu.cores}}
 - **Virtualization:** {{nice_virt}}
 - **Total Memory:** {{nice_mem_total}}
