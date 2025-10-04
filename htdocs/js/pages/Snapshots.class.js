@@ -795,9 +795,6 @@ Page.Snapshots = class Snapshots extends Page.ServerUtils {
 		if (group.hostname_match == '(?!)') nice_match = '(None)';
 		else nice_match = '<span class="regexp">/' + group.hostname_match + '/</span>';
 		
-		var nice_email = 'n/a';
-		if (group.alert_email) nice_email = '<i class="mdi mdi-email-outline">&nbsp;</i>' + group.alert_email;
-		
 		html += '<div class="box">';
 			html += '<div class="box_title">';
 				html += 'Group Snapshot Summary';
@@ -844,13 +841,13 @@ Page.Snapshots = class Snapshots extends Page.ServerUtils {
 					html += '</div>';
 					
 					html += '<div>';
-						html += '<div class="info_label">Alert Email</div>';
-						html += '<div class="info_value">' + nice_email + '</div>';
+						html += '<div class="info_label">Alert Actions</div>';
+						html += '<div class="info_value">' + commify(group.alert_actions.length) + '</div>';
 					html += '</div>';
 					
 					html += '<div>';
-						html += '<div class="info_label">Alert Web Hook</div>';
-						html += '<div class="info_value">' + (group.alert_web_hook ? this.getNiceWebHook(group.alert_web_hook, true) : 'n/a') + '</div>';
+						html += '<div class="info_label">Author</div>';
+						html += '<div class="info_value">' + this.getNiceUser(group.username) + '</div>';
 					html += '</div>';
 					
 					// row 3

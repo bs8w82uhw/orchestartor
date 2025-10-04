@@ -222,8 +222,9 @@ Page.Groups = class Groups extends Page.ServerUtils {
 			id: "",
 			title: "",
 			hostname_match: "",
-			mute_alerts: false
+			alert_actions: []
 		};
+		this.actions = this.group.alert_actions; // for action editor
 		
 		html += this.get_group_edit_html();
 		
@@ -289,6 +290,7 @@ Page.Groups = class Groups extends Page.ServerUtils {
 		}
 		
 		this.group = resp.group;
+		this.actions = this.group.alert_actions; // for action editor
 		if (!this.active) return; // sanity
 		
 		app.setWindowTitle( "Editing Group \"" + (this.group.title) + "\"" );
@@ -461,44 +463,12 @@ Page.Groups = class Groups extends Page.ServerUtils {
 			caption: 'Optionally enter a regular expression match to auto-include hostnames in the group.<br/>To match <b>all servers</b>, set this to <code>.+</code>'
 		});
 		
-		// alert emails
+		// actions
+		// (requires this.actions to be populated)
 		html += this.getFormRow({
-			label: 'Alert Email:',
-			content: this.getFormText({
-				id: 'fe_eg_alert_email',
-				// type: 'email',
-				spellcheck: 'false',
-				placeholder: 'email@sample.com',
-				value: group.alert_email || '',
-				onChange: '$P().updateAddRemoveMe(this)',
-				'data-private': ''
-			}),
-			suffix: '<div class="form_suffix_icon mdi" title="" onClick="$P().addRemoveMe(this)"></div>',
-			caption: 'Optionally set the default e-mail recipients to be notified for alerts in this group. Note that individual alerts can override this setting.'
-		});
-		
-		// alert web hook
-		html += this.getFormRow({
-			label: 'Alert Web Hook:',
-			content: this.getFormMenuSingle({
-				id: 'fe_eg_web_hook',
-				title: 'Select Web Hook',
-				options: [ ['', "(None)"] ].concat( app.web_hooks ),
-				value: group.alert_web_hook,
-				default_icon: 'webhook'
-			}),
-			caption: 'Optionally set the default Web Hook for alerts in this group. Note that individual alerts can override this setting.'
-		});
-		
-		// mute_alerts
-		html += this.getFormRow({
-			label: 'Mute:',
-			content: this.getFormCheckbox({
-				id: 'fe_eg_mute',
-				label: 'Mute Alerts',
-				checked: group.mute_alerts
-			}),
-			caption: 'Check this box to silence all monitoring alerts for servers in the group.'
+			label: 'Alert Actions:',
+			content: '<div id="d_eg_jobact_table">' + this.getJobActionTable() + '</div>',
+			caption: 'Optionally select default actions to perform when **any** alert fires and/or clears in this group.'
 		});
 		
 		// notes
@@ -522,9 +492,6 @@ Page.Groups = class Groups extends Page.ServerUtils {
 		group.title = $('#fe_eg_title').val().trim();
 		group.icon = $('#fe_eg_icon').val();
 		group.hostname_match = $('#fe_eg_match').val();
-		group.alert_email = $('#fe_eg_alert_email').val();
-		group.alert_web_hook = $('#fe_eg_web_hook').val();
-		group.mute_alerts = !!$('#fe_eg_mute').is(':checked');
 		group.notes = $('#fe_eg_notes').val();
 		
 		if (!group.title.length) {
@@ -542,6 +509,42 @@ Page.Groups = class Groups extends Page.ServerUtils {
 		}
 		
 		return group;
+	}
+	
+	editJobAction(idx) {
+		// show dialog to select alert actions for group (overrides base one in PageUtils)
+		// action: { condition, type, email?, url? }
+		var self = this;
+		var action = (idx > -1) ? this.actions[idx] : { condition: 'alert_new', type: 'email', email: '', enabled: true };
+		var title = (idx > -1) ? "Editing Alert Action" : "New Alert Action";
+		var btn = (idx > -1) ? ['check-circle', "Accept"] : ['plus-circle', "Add Action"];
+		
+		this.showEditJobActionDialog({
+			action: action,
+			title: title,
+			btn: btn,
+			show_condition: true,
+			conditions: config.ui.alert_action_condition_menu,
+			
+			action_type_filter: function(item) { 
+				// filter out unsupported actions for alerts
+				return !item.id.match(/^(disable|delete|store|fetch)$/); 
+			},
+			
+			callback: function(action) {
+				// see if we need to add or replace
+				if (idx == -1) {
+					self.actions.push(action);
+				}
+				else self.actions[idx] = action;
+				
+				// keep list sorted by condition reverse (so alert_new comes first)
+				sort_by(self.actions, 'condition', { dir: -1 });
+				
+				// self.dirty = true;
+				self.renderJobActionEditor();
+			}
+		});
 	}
 	
 	// 
@@ -583,9 +586,6 @@ Page.Groups = class Groups extends Page.ServerUtils {
 		var nice_match = '';
 		if (group.hostname_match == '(?!)') nice_match = '(None)';
 		else nice_match = '<span class="regexp">/' + group.hostname_match + '/</span>';
-		
-		var nice_email = 'n/a';
-		if (group.alert_email) nice_email = '<i class="mdi mdi-email-outline">&nbsp;</i>' + group.alert_email;
 		
 		var html = '';
 		
@@ -650,13 +650,13 @@ Page.Groups = class Groups extends Page.ServerUtils {
 					html += '</div>';
 					
 					html += '<div>';
-						html += '<div class="info_label">Alert Email</div>';
-						html += '<div class="info_value">' + nice_email + '</div>';
+						html += '<div class="info_label">Alert Actions</div>';
+						html += '<div class="info_value">' + commify(group.alert_actions.length) + '</div>';
 					html += '</div>';
 					
 					html += '<div>';
-						html += '<div class="info_label">Alert Web Hook</div>';
-						html += '<div class="info_value">' + (group.alert_web_hook ? this.getNiceWebHook(group.alert_web_hook, true) : 'n/a') + '</div>';
+						html += '<div class="info_label">Author</div>';
+						html += '<div class="info_value">' + this.getNiceUser(group.username) + '</div>';
 					html += '</div>';
 					
 					// row 3
@@ -1705,6 +1705,7 @@ Page.Groups = class Groups extends Page.ServerUtils {
 		delete this.quickReady;
 		delete this.quickmonEnabled;
 		delete this.tables;
+		delete this.actions;
 		
 		// destroy charts if applicable (view page)
 		if (this.charts) {
