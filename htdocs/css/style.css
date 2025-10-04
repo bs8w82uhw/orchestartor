@@ -732,7 +732,7 @@ body.dark .fr_caption code {
 }
 
 .dialog_content > .code_viewer > .markdown-body ul > li > strong:first-child {
-	padding-right: 6px;
+	padding-right: 3px;
 }
 
 .markdown-body .blocknote {
