@@ -535,8 +535,8 @@ Page.ActivityLog = class ActivityLog extends Page.PageUtils {
 		// summary
 		md += "### Summary\n\n";
 		// md += '- **Category:** <i class="mdi mdi-' + item._type.icon + '">&nbsp;</i>' + item._type.label + "\n";
-		md += '- **Description:** <i class="mdi mdi-' + item._type.icon + '">&nbsp;</i>' + item._desc.replace(/\s+/g, ' ') + "\n";
-		md += '- **Date/Time:** ' + this.getRelativeDateTime(item.epoch) + "\n";
+		md += '- **Description:** <i class="mdi mdi-' + item._type.icon + '"></i>' + item._desc.replace(/\s+/g, ' ') + "\n";
+		md += '- **Date/Time:** ' + this.getRelativeDateTime(item.epoch).replace(/\&nbsp;<\/i>/g, '</i>') + "\n";
 		
 		// user info
 		md += "\n### Client Info\n\n";
@@ -585,15 +585,15 @@ Page.ActivityLog = class ActivityLog extends Page.PageUtils {
 		
 		var md = '';
 		md += "### Summary\n\n";
-		md += "- **Job ID:** " + job.id + "\n";
+		md += "- **Job ID:** `" + job.id + "`\n";
 		md += "- **Job Title:** " + job.title + "\n";
 		md += "- **Job Type:** " + this.getNiceInternalJobType(job.type) + "\n";
 		md += "- **Requested By:** " + this.getNiceUser(job.username) + "\n";
 		
 		md += "\n### Timing\n\n";
-		md += "- **Started:** " + this.getRelativeDateTime(job.started, true) + "\n";
-		md += "- **Completed:** " + this.getRelativeDateTime(job.completed, true) + "\n";
-		md += "- **Elapsed:** " + this.getNiceJobElapsedTime(job, false, true) + "\n";
+		md += "- **Started:** " + this.getRelativeDateTime(job.started, true).replace(/\&nbsp;<\/i>/g, '</i>') + "\n";
+		md += "- **Completed:** " + this.getRelativeDateTime(job.completed, true).replace(/\&nbsp;<\/i>/g, '</i>') + "\n";
+		md += "- **Elapsed:** " + this.getNiceJobElapsedTime(job, false, true).replace(/\&nbsp;<\/i>/g, '</i>') + "\n";
 		
 		if (job.details) {
 			md += "\n";
