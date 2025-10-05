@@ -17,11 +17,13 @@ The following {{config.client.name}} alert has fired: **{{def.title}}**
 - [Alert Detail View]({{links.alert_url}})
 - [Live Server View]({{links.server_url}})
 
+### Active Jobs:
+{{nice_active_jobs}}
+
 ### Alert Notes:
 {{nice_notes}}
 
 ### Server Information:
-
 - **CPU Load Average:** {{nice_load_avg}}
 - **CPU Type:** {{nice_cpu}}
 - **CPU Cores:** {{params.data.cpu.cores}}
