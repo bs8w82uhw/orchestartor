@@ -1321,6 +1321,14 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				disp.icon = 'export';
 			break;
 			
+			case 'ticket':
+				disp.type = 'Create Ticket';
+				var ticket_type = find_object( config.ui.ticket_types, { id: action.ticket_type } );
+				disp.text = ticket_type.title;
+				disp.desc = this.getNiceTicketType(action.ticket_type);
+				disp.icon = 'text-box-plus-outline';
+			break;
+			
 			case 'disable':
 				disp.type = "Disable Event";
 				disp.text = disp.desc = "(Current Event)";
@@ -1477,6 +1485,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			caption: 'Select the desired action type.'
 		});
 		
+		// email
 		html += this.getFormRow({
 			id: 'd_eja_users',
 			label: 'Email Users:',
@@ -1495,7 +1504,6 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			}),
 			caption: 'Select which users should be emailed for the action.'
 		});
-		
 		html += this.getFormRow({
 			id: 'd_eja_email',
 			label: 'Extra Recipients:',
@@ -1513,6 +1521,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			caption: 'Optionally enter one or more additional email addresses for the action.'
 		});
 		
+		// web hook
 		html += this.getFormRow({
 			id: 'd_eja_web_hook',
 			label: 'Web Hook:',
@@ -1525,7 +1534,6 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			}),
 			caption: 'Select a Web Hook to fire for the action.'
 		});
-		
 		html += this.getFormRow({
 			id: 'd_eja_web_hook_text',
 			label: 'Custom Text Content:',
@@ -1540,6 +1548,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			caption: 'Optionally customize the text content of the web hook.  Leave blank to use a default system message for the action.'
 		});
 		
+		// run event
 		html += this.getFormRow({
 			id: 'd_eja_run_job',
 			label: 'Event:',
@@ -1611,6 +1620,42 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			caption: 'If you have chosen to sync files, optionally enter a glob pattern here to include only certain files.'
 		});
 		
+		// ticket type
+		html += this.getFormRow({
+			id: 'd_nt_type',
+			label: 'Ticket Type:',
+			content: this.getFormMenuSingle({
+				id: 'fe_nt_type',
+				options: config.ui.ticket_types,
+				value: 'issue',
+				// 'data-shrinkwrap': 1
+			})
+		});
+		
+		// ticket assignee
+		html += this.getFormRow({
+			id: 'd_nt_assignee',
+			content: this.getFormMenuSingle({
+				id: 'fe_nt_assignee',
+				options: [['', '(None)']].concat( app.users.map( function(user) { return { id: user.username, title: user.full_name, icon: user.icon || 'account' }; } ) ),
+				value: app.username,
+				auto_add: true,
+				// 'data-shrinkwrap': 1
+			})
+		});
+		
+		// ticket tags
+		html += this.getFormRow({
+			id: 'd_nt_tags',
+			label: 'Ticket Tags:',
+			content: this.getFormMenuMulti({
+				id: 'fe_nt_tags',
+				options: app.tags,
+				values: [],
+				// 'data-shrinkwrap': 1
+			})
+		});
+		
 		// plugin
 		html += this.getFormRow({
 			id: 'd_eja_plugin',
@@ -1678,6 +1723,12 @@ Page.PageUtils = class PageUtils extends Page.Base {
 					action.bucket_glob = $('#fe_eja_bucket_glob').val();
 				break;
 				
+				case 'ticket':
+					action.ticket_type = $('#fe_nt_type').val();
+					action.ticket_assignee = $('#fe_nt_assignee').val();
+					action.ticket_tags = $('#fe_nt_tags').val();
+				break;
+				
 				case 'plugin':
 					action.plugin_id = $('#fe_eja_plugin').val();
 					if (!action.plugin_id) return app.badField('#fe_eja_plugin', "Please select a Plugin for the action.");
@@ -1691,7 +1742,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		} ); // Dialog.confirm
 		
 		var change_action_type = function(new_type) {
-			$('#d_eja_email, #d_eja_users, #d_eja_web_hook, #d_eja_web_hook_text, #d_eja_run_job, #d_eja_channel, #d_eja_bucket, #d_eja_bucket_sync, #d_eja_bucket_glob, #d_eja_plugin, #d_eja_plugin_params').hide();
+			$('#d_eja_email, #d_eja_users, #d_eja_web_hook, #d_eja_web_hook_text, #d_eja_run_job, #d_eja_channel, #d_eja_bucket, #d_eja_bucket_sync, #d_eja_bucket_glob, #d_nt_type, #d_nt_assignee, #d_nt_tags, #d_eja_plugin, #d_eja_plugin_params').hide();
 			
 			switch (new_type) {
 				case 'email':
@@ -1719,6 +1770,10 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				case 'store':
 				case 'fetch':
 					$('#d_eja_bucket, #d_eja_bucket_sync, #d_eja_bucket_glob').show();
+				break;
+				
+				case 'ticket':
+					$('#d_nt_type, #d_nt_assignee, #d_nt_tags').show();
 				break;
 				
 				case 'disable':
@@ -1750,8 +1805,8 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			Dialog.autoResize();
 		}); // type change
 		
-		MultiSelect.init( $('#fe_eja_users') );
-		SingleSelect.init( $('#fe_eja_condition, #fe_eja_type, #fe_eja_event, #fe_eja_channel, #fe_eja_web_hook, #fe_eja_plugin, #fe_eja_bucket, #fe_eja_bucket_sync') );
+		MultiSelect.init( $('#fe_eja_users, #fe_nt_tags') );
+		SingleSelect.init( $('#fe_eja_condition, #fe_eja_type, #fe_eja_event, #fe_eja_channel, #fe_eja_web_hook, #fe_eja_plugin, #fe_eja_bucket, #fe_eja_bucket_sync, #fe_nt_type, #fe_nt_assignee') );
 		
 		Dialog.autoResize();
 	}
