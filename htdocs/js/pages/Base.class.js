@@ -2437,7 +2437,7 @@ Page.Base = class Base extends Page {
 		html += '</div>';
 		
 		var buttons_html = "";
-		buttons_html += '<div class="button" onClick="$P().copyCodeToClipboard()"><i class="mdi mdi-clipboard-text-outline">&nbsp;</i>Copy to Clipboard</div>';
+		buttons_html += '<div class="button" title="Copy to Clipboard" onClick="$P().copyCodeToClipboard()"><i class="mdi mdi-clipboard-text-outline">&nbsp;</i>Copy</div>';
 		buttons_html += '<div class="button primary" onClick="CodeEditor.hide()"><i class="mdi mdi-close-circle-outline">&nbsp;</i>Close</div>';
 		
 		CodeEditor.showSimpleDialog(title, html, buttons_html);
@@ -2463,7 +2463,7 @@ Page.Base = class Base extends Page {
 		
 		var buttons_html = "";
 		if (btn) buttons_html += btn;
-		else buttons_html += '<div class="button" onClick="$P().copyCodeToClipboard()"><i class="mdi mdi-clipboard-text-outline">&nbsp;</i>Copy to Clipboard</div>';
+		else buttons_html += '<div class="button" title="Copy to Clipboard" onClick="$P().copyCodeToClipboard()"><i class="mdi mdi-clipboard-text-outline">&nbsp;</i>Copy</div>';
 		buttons_html += '<div class="button primary" onClick="Dialog.confirm_click(true)"><i class="mdi mdi-close-circle-outline">&nbsp;</i>Close</div>';
 		
 		Dialog.showSimpleDialog(title, html, buttons_html);
@@ -2647,7 +2647,8 @@ Page.Base = class Base extends Page {
 		
 		var buttons_html = "";
 		buttons_html += '<div class="button phone_collapse" onClick="CodeEditor.hide()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>Cancel</span></div>';
-		buttons_html += '<div class="button phone_collapse" onClick="$P().copyCodeToClipboard()"><i class="mdi mdi-clipboard-text-outline">&nbsp;</i><span>Copy to Clipboard</span></div>';
+		buttons_html += '<div class="button phone_collapse" title="Copy to Clipboard" onClick="$P().copyCodeToClipboard()"><i class="mdi mdi-clipboard-text-outline">&nbsp;</i><span>Copy</span></div>';
+		buttons_html += '<div class="button phone_collapse" title="Upload File..." onClick="$P().uploadCodeFile()"><i class="mdi mdi-cloud-upload-outline">&nbsp;</i><span>Upload...</span></div>';
 		buttons_html += '<div id="btn_ceditor_confirm" class="button primary"><i class="mdi mdi-check-circle">&nbsp;</i><span>Accept</span></div>';
 		
 		title += ' <div class="dialog_title_widget mobile_hide"><span class="link" onClick="$P().toggleDialogCodeEditorSize(this)">Maximize<i style="padding-left:3px" class="mdi mdi-arrow-top-right-thick"></i></span></div>';
@@ -2666,6 +2667,19 @@ Page.Base = class Base extends Page {
 			}
 			else delete self.editor;
 		};
+		
+		CodeEditor.onDragDrop = function(files) {
+			// user dropped file on code editor dialog
+			var file = files[0]; // only one file
+			var reader = new FileReader();
+			
+			reader.onload = function(e) {
+				self.editor.setValue( e.target.result );
+				self.editor.focus();
+			};
+			
+			reader.readAsText(file);
+		}; // onDragDrop
 		
 		// now setup the editor itself
 		var elem = document.getElementById("fe_dialog_editor");
@@ -2714,6 +2728,21 @@ Page.Base = class Base extends Page {
 		
 		this.editor.refresh();
 		CodeEditor.autoResize();
+	}
+	
+	uploadCodeFile() {
+		// user clicked "Upload" inside code editor dialog
+		var self = this;
+		var $file = $('#fe_code_import');
+		if ($file.length) $file.remove();
+		$file = $('<input type="file" id="fe_code_import" accept=".txt,.html,.css,.js,.json,.ts,.jsx,.tsx,.py,.sh,.c,.cpp,.h,.hpp,.md,.yaml,.yml,.xml,.csv,.ini,.log,.conf,.php,.rb,.pl" style="display:none">').appendTo('body');
+		
+		$file.on('change', function() {
+			if (this.files && this.files.length && CodeEditor.onDragDrop) CodeEditor.onDragDrop( this.files );
+			$file.remove();
+		});
+		
+		$file[0].click();
 	}
 	
 	doPrepImportFile(file) {

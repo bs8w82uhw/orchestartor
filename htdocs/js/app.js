@@ -571,7 +571,12 @@ app.extend({
 				e.preventDefault();
 				e.stopPropagation();
 				
-				if (app.page_manager && app.page_manager.current_page_id) {
+				// allow CodeEditor to intercept drops first
+				if (CodeEditor.active && CodeEditor.onDragDrop) {
+					CodeEditor.onDragDrop( files );
+				}
+				else if (app.page_manager && app.page_manager.current_page_id) {
+					// followed by the current page itself
 					var page = app.page_manager.find(app.page_manager.current_page_id);
 					if (page && page.onDragDrop) page.onDragDrop( files );
 					else if (page && page.doPrepImportFile) page.doPrepImportFile( files[0] );
