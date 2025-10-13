@@ -3,7 +3,7 @@
 <!-- Title: Job Failed -->
 <!-- Button: View Details | {{links.job_details}} -->
 
-The following {{config.client.name}} job has failed with code: *{{job.code}}**
+The following {{config.client.name}} job has failed with code: **{{job.code}}**
 
 - **Job ID:** `{{job.id}}`
 - **Error Code:** `{{job.code}}`

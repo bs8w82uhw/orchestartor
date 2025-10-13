@@ -1632,13 +1632,13 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			})
 		});
 		
-		// ticket assignee
+		// ticket assignees
 		html += this.getFormRow({
-			id: 'd_nt_assignee',
-			content: this.getFormMenuSingle({
-				id: 'fe_nt_assignee',
-				options: [['', '(None)']].concat( app.users.map( function(user) { return { id: user.username, title: user.full_name, icon: user.icon || 'account' }; } ) ),
-				value: app.username,
+			id: 'd_nt_assignees',
+			content: this.getFormMenuMulti({
+				id: 'fe_nt_assignees',
+				options: app.users.map( function(user) { return { id: user.username, title: user.full_name, icon: user.icon || 'account' }; } ),
+				values: [ app.username ],
 				auto_add: true,
 				// 'data-shrinkwrap': 1
 			})
@@ -1725,7 +1725,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				
 				case 'ticket':
 					action.ticket_type = $('#fe_nt_type').val();
-					action.ticket_assignee = $('#fe_nt_assignee').val();
+					action.ticket_assignees = $('#fe_nt_assignees').val();
 					action.ticket_tags = $('#fe_nt_tags').val();
 				break;
 				
@@ -1742,7 +1742,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		} ); // Dialog.confirm
 		
 		var change_action_type = function(new_type) {
-			$('#d_eja_email, #d_eja_users, #d_eja_web_hook, #d_eja_web_hook_text, #d_eja_run_job, #d_eja_channel, #d_eja_bucket, #d_eja_bucket_sync, #d_eja_bucket_glob, #d_nt_type, #d_nt_assignee, #d_nt_tags, #d_eja_plugin, #d_eja_plugin_params').hide();
+			$('#d_eja_email, #d_eja_users, #d_eja_web_hook, #d_eja_web_hook_text, #d_eja_run_job, #d_eja_channel, #d_eja_bucket, #d_eja_bucket_sync, #d_eja_bucket_glob, #d_nt_type, #d_nt_assignees, #d_nt_tags, #d_eja_plugin, #d_eja_plugin_params').hide();
 			
 			switch (new_type) {
 				case 'email':
@@ -1773,7 +1773,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				break;
 				
 				case 'ticket':
-					$('#d_nt_type, #d_nt_assignee, #d_nt_tags').show();
+					$('#d_nt_type, #d_nt_assignees, #d_nt_tags').show();
 				break;
 				
 				case 'disable':
@@ -1805,8 +1805,8 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			Dialog.autoResize();
 		}); // type change
 		
-		MultiSelect.init( $('#fe_eja_users, #fe_nt_tags') );
-		SingleSelect.init( $('#fe_eja_condition, #fe_eja_type, #fe_eja_event, #fe_eja_channel, #fe_eja_web_hook, #fe_eja_plugin, #fe_eja_bucket, #fe_eja_bucket_sync, #fe_nt_type, #fe_nt_assignee') );
+		MultiSelect.init( $('#fe_eja_users, #fe_nt_assignees, #fe_nt_tags') );
+		SingleSelect.init( $('#fe_eja_condition, #fe_eja_type, #fe_eja_event, #fe_eja_channel, #fe_eja_web_hook, #fe_eja_plugin, #fe_eja_bucket, #fe_eja_bucket_sync, #fe_nt_type') );
 		
 		Dialog.autoResize();
 	}

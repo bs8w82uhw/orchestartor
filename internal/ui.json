@@ -297,13 +297,13 @@
 			"title": "Select type for ticket",
 			"placeholder": "Select type for ticket..."
 		},
-		"d_nt_assignee": {
-			"label": "Assigned To:",
-			"caption": "Select the user responsible for executing the ticket."
+		"d_nt_assignees": {
+			"label": "Assignees:",
+			"caption": "Select the user(s) responsible for executing the ticket."
 		},
-		"fe_nt_assignee": {
-			"title": "Select assignee for ticket",
-			"placeholder": "Select assignee for ticket..."
+		"fe_nt_assignees": {
+			"title": "Select assignees for ticket",
+			"placeholder": "Select assignees..."
 		},
 		"d_nt_tags": {
 			"label": "Tags:",
@@ -632,13 +632,13 @@
 			"fe_nt_server": {
 				"title": "Select server for ticket"
 			},
-			"d_nt_assignee": {
-				"label": "Assigned To:",
-				"caption": "Select the user responsible for executing the ticket."
+			"d_nt_assignees": {
+				"label": "Assignees:",
+				"caption": "Select the user(s) responsible for executing the ticket."
 			},
-			"fe_nt_assignee": {
-				"title": "Select assignee for ticket",
-				"placeholder": "Select assignee for ticket..."
+			"fe_nt_assignees": {
+				"title": "Select assignees for ticket",
+				"placeholder": "Select assignees..."
 			},
 			"d_nt_cc": {
 				"label": "Cc:",
@@ -1073,7 +1073,7 @@
 		"type": "changed type to: [disp]",
 		"category": "changed category to: [disp]",
 		"server": "changed server to: [disp]",
-		"assignee": "changed assignee to: [disp]",
+		"assignees": "changed assignees to: [disp]",
 		"due": "changed due date to: [disp]",
 		"cc": "changed Cc list to: [disp]",
 		"notify": "changed notify list to: [disp]",

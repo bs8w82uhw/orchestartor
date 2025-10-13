@@ -287,10 +287,9 @@
 					"filter": "alphanum"
 				},
 				{
-					"id": "assignee",
-					"source": "/assignee",
-					"filter": "alphanum",
-					"master_list": true
+					"id": "assignees",
+					"source": "/assignees",
+					"filter": "alphanum_array"
 				},
 				{
 					"id": "cc",

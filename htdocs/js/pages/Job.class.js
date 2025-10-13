@@ -588,11 +588,11 @@ Page.Job = class Job extends Page.PageUtils {
 		
 		// assigned to
 		html += this.getFormRow({
-			id: 'd_nt_assignee',
-			content: this.getFormMenuSingle({
-				id: 'fe_nt_assignee',
-				options: [['', '(None)']].concat( app.users.map( function(user) { return { id: user.username, title: user.full_name, icon: user.icon || 'account' }; } ) ),
-				value: app.username,
+			id: 'd_nt_assignees',
+			content: this.getFormMenuMulti({
+				id: 'fe_nt_assignees',
+				options: app.users.map( function(user) { return { id: user.username, title: user.full_name, icon: user.icon || 'account' }; } ),
+				values: [ app.username ],
 				auto_add: true,
 				// 'data-shrinkwrap': 1
 			})
@@ -621,7 +621,7 @@ Page.Job = class Job extends Page.PageUtils {
 				type: $('#fe_nt_type').val(),
 				status: 'open',
 				category: job.category || '',
-				assignee: $('#fe_nt_assignee').val(),
+				assignees: $('#fe_nt_assignees').val(),
 				cc: [],
 				notify: [],
 				events: [],
@@ -651,8 +651,8 @@ Page.Job = class Job extends Page.PageUtils {
 			} ); // api.post (ct)
 		}); // Dialog.confirm
 		
-		MultiSelect.init( $('#fe_nt_tags') );
-		SingleSelect.init( $('#fe_nt_type, #fe_nt_assignee') );
+		MultiSelect.init( $('#fe_nt_assignees, #fe_nt_tags') );
+		SingleSelect.init( $('#fe_nt_type') );
 		Dialog.autoResize();
 		
 		$('#fe_nt_subject').focus().get(0).setSelectionRange( new_subject.length, new_subject.length );
@@ -2437,7 +2437,7 @@ Page.Job = class Job extends Page.PageUtils {
 		
 		var grid_args = {
 			rows: tickets,
-			cols: ['#', 'Subject', 'Type', 'Status', 'Assignee', 'Tags', 'Created', 'Actions'],
+			cols: ['#', 'Subject', 'Type', 'Status', 'Assignees', 'Tags', 'Created', 'Actions'],
 			data_type: 'ticket',
 			empty_msg: 'No tickets found.'
 		};
@@ -2453,7 +2453,7 @@ Page.Job = class Job extends Page.PageUtils {
 				'(Ticket was deleted)',
 				'n/a', // type
 				'n/a', // status
-				'n/a', // assignee
+				'n/a', // assignees
 				'n/a', // tags
 				'n/a', // created
 				'<span class="nowrap">' + actions.join(' | ') + '</span>'
@@ -2464,7 +2464,7 @@ Page.Job = class Job extends Page.PageUtils {
 				self.getNiceTicket(ticket, true),
 				self.getNiceTicketType(ticket.type),
 				self.getNiceTicketStatus(ticket.status),
-				ticket.assignee ? self.getNiceUser(ticket.assignee, app.isAdmin()) : '(None)',
+				self.getNiceUserList( ticket.assignees, app.isAdmin() ),
 				self.getNiceTagList( ticket.tags, false ),
 				self.getRelativeDateTime( ticket.created, true ),
 				'<span class="nowrap">' + actions.join(' | ') + '</span>'

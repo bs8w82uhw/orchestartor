@@ -87,10 +87,10 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 					});
 				html += '</div>';
 				
-				// assignee
+				// assigned (single for search)
 				html += '<div class="form_cell">';
 					html += this.getFormRow({
-						label: '<i class="icon mdi mdi-account-supervisor">&nbsp;</i>Assignee:',
+						label: '<i class="icon mdi mdi-account-supervisor">&nbsp;</i>Assigned To:',
 						content: this.getFormMenuSingle({
 							id: 'fe_s_assignee',
 							title: 'Select Assignee',
@@ -351,7 +351,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 		var query = args.query ? args.query.toString().toLowerCase().trim() : ''; //  : 'status:open|closed'; // omit drafts
 		if (args.tags) query += ' tags:' + args.tags.split(/\,\s*/).join('&');
 		if (args.type) query += ' type:' + args.type;
-		if (args.assignee) query += ' assignee:' + args.assignee;
+		if (args.assignee) query += ' assignees:' + args.assignee;
 		if (args.username) query += ' username:' + args.username;
 		if (args.status) query += ' status:' + args.status;
 		if (args.category) query += ' category:' + args.category;
@@ -410,7 +410,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 		
 		var grid_args = {
 			resp: resp,
-			cols: ['#', 'Subject', 'Type', 'Status', 'Assignee', 'Tags', 'Created', 'Actions'],
+			cols: ['#', 'Subject', 'Type', 'Status', 'Assignees', 'Tags', 'Created', 'Actions'],
 			data_type: 'ticket',
 			offset: this.args.offset || 0,
 			limit: this.args.limit,
@@ -437,7 +437,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 				self.getNiceTicket(ticket, true),
 				self.getNiceTicketType(ticket.type),
 				self.getNiceTicketStatus(ticket.status),
-				ticket.assignee ? self.getNiceUser(ticket.assignee, app.isAdmin()) : '(None)',
+				self.getNiceUserList( ticket.assignees, app.isAdmin() ),
 				self.getNiceTagList( ticket.tags, false ),
 				self.getRelativeDateTime( ticket.created, true ),
 				'<span class="nowrap">' + actions.join(' | ') + '</span>'
@@ -626,7 +626,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 		this.ticket = {
 			status: "open",
 			username: app.username,
-			assignee: '',
+			assignees: [],
 			// due: normalize_time( time_now() + (86400 * config.default_ticket_due_days), { hour:0, min:0, sec:0 } ),
 			due: 0,
 			id: "",
@@ -788,13 +788,13 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 			})
 		});
 		
-		// assigned to
+		// assignees
 		html += this.getFormRow({
-			id: 'd_nt_assignee',
-			content: this.getFormMenuSingle({
-				id: 'fe_nt_assignee',
-				options: [['', '(None)']].concat( app.users.map( function(user) { return { id: user.username, title: user.full_name, icon: user.icon || 'account' }; } ) ),
-				value: ticket.assignee,
+			id: 'd_nt_assignees',
+			content: this.getFormMenuMulti({
+				id: 'fe_nt_assignees',
+				options: app.users.map( function(user) { return { id: user.username, title: user.full_name, icon: user.icon || 'account' }; } ),
+				values: ticket.assignees,
 				auto_add: true,
 				// 'data-shrinkwrap': 1
 			})
@@ -859,8 +859,8 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 		// setup popups, uploads and codemirror
 		var self = this;
 		
-		SingleSelect.init( this.div.find('#fe_nt_assignee, #fe_nt_category, #fe_nt_server, #fe_nt_status, #fe_nt_type') );
-		MultiSelect.init( this.div.find('#fe_nt_tags, #fe_nt_cc') );
+		SingleSelect.init( this.div.find('#fe_nt_category, #fe_nt_server, #fe_nt_status, #fe_nt_type') );
+		MultiSelect.init( this.div.find('#fe_nt_assignees, #fe_nt_tags, #fe_nt_cc') );
 		TextSelect.init( this.div.find('#fe_nt_notify') );
 		
 		// setup codemirror
@@ -891,7 +891,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 		ticket.subject = this.div.find('#fe_nt_subject').val().trim();
 		ticket.body = this.editor.getValue();
 		ticket.status = this.div.find('#fe_nt_status').val();
-		ticket.assignee = this.div.find('#fe_nt_assignee').val();
+		ticket.assignees = this.div.find('#fe_nt_assignees').val();
 		ticket.cc = this.div.find('#fe_nt_cc').val();
 		ticket.notify = this.div.find('#fe_nt_notify').val();
 		ticket.category = this.div.find('#fe_nt_category').val();
@@ -1017,20 +1017,20 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 		});
 		html += '</div>';
 		
-		// assigned to
+		// assignees
 		html += '<div class="form_cell">';
 		html += this.getFormRow({
-			label: 'Assigned To:',
-			content: this.getFormMenuSingle({
-				id: 'fe_et_assignee',
-				title: 'Select assignee for ticket',
-				placeholder: 'Select assignee for ticket...',
-				options: [['', '(None)']].concat( app.users.map( function(user) { return { id: user.username, title: user.full_name, icon: user.icon || 'account' }; } ) ),
-				value: ticket.assignee,
+			label: 'Assignees:',
+			content: this.getFormMenuMulti({
+				id: 'fe_et_assignees',
+				title: 'Select assignees for ticket',
+				placeholder: 'Select assignees...',
+				options: app.users.map( function(user) { return { id: user.username, title: user.full_name, icon: user.icon || 'account' }; } ),
+				values: ticket.assignees,
 				auto_add: true,
 				'data-shrinkwrap': 1
 			}),
-			caption: 'Select the user responsible for the ticket.'
+			caption: 'Select the user(s) responsible for the ticket.'
 		});
 		html += '</div>';
 		
@@ -1230,12 +1230,12 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 		this.render_ticket_changes();
 		this.setupUploader();
 		
-		SingleSelect.init( this.div.find('#fe_et_assignee, #fe_et_type, #fe_et_status, #fe_et_category, #fe_et_server') );
-		MultiSelect.init( this.div.find('#fe_et_tags, #fe_et_cc') );
+		SingleSelect.init( this.div.find('#fe_et_type, #fe_et_status, #fe_et_category, #fe_et_server') );
+		MultiSelect.init( this.div.find('#fe_et_assignees, #fe_et_tags, #fe_et_cc') );
 		TextSelect.init( this.div.find('#fe_et_notify') );
 		
 		// handle attribute block changes
-		this.div.find('#fe_et_assignee, #fe_et_type, #fe_et_status, #fe_et_category, #fe_et_server, #fe_et_tags, #fe_et_cc, #fe_et_notify, #fe_et_due').on('change', function() {
+		this.div.find('#fe_et_assignees, #fe_et_type, #fe_et_status, #fe_et_category, #fe_et_server, #fe_et_tags, #fe_et_cc, #fe_et_notify, #fe_et_due').on('change', function() {
 			var $this = $(this);
 			var field_id = $this.prop('id').replace(/^fe_et_/, '');
 			var data = { id: self.ticket.id };
@@ -1823,12 +1823,12 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 	
 	do_assign_to_me() {
 		// assign ticket to current user
-		if (this.ticket.assignee == app.username) {
+		if (this.ticket.assignees.includes(app.username)) {
 			app.showMessage('warning', "The ticket is already assigned to you.");
 			return;
 		}
 		
-		this.div.find('#fe_et_assignee').val(app.username).trigger('change');
+		this.div.find('#fe_et_assignees').val( this.ticket.assignees.concat(app.username) ).trigger('change');
 	}
 	
 	do_close_ticket() {
@@ -1843,7 +1843,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 	
 	update_buttons() {
 		// update button state based on the situation
-		$('#btn_et_assign').toggleClass('disabled', this.ticket.assignee == app.username);
+		$('#btn_et_assign').toggleClass('disabled', this.ticket.assignees.includes(app.username));
 		$('#btn_et_close').toggleClass('disabled', this.ticket.status == 'closed');
 	}
 	
@@ -1852,7 +1852,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 		// could be editing main body, editing comment, or adding new comment
 		if (!this.editor) return;
 		this.killEditor();
-		app.hideMessage();
+		// app.hideMessage();
 		
 		switch (this.current_editor_type) {
 			case 'main':
@@ -2106,8 +2106,8 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 						md += substitute( text, { disp: self.getNiceServer(change.value) } );
 					break;
 					
-					case 'assignee':
-						md += substitute( text, { disp: self.getNiceUser(change.value) } );
+					case 'assignees':
+						md += substitute( text, { disp: self.getNiceUserList(change.value) } );
 					break;
 					
 					case 'due':
@@ -2115,7 +2115,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 					break;
 					
 					case 'cc':
-						md += substitute( text, { disp: change.value.length ? self.getNiceUserList(change.value) : '(None)' } );
+						md += substitute( text, { disp: self.getNiceUserList(change.value) } );
 					break;
 					
 					case 'notify':
@@ -2664,7 +2664,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 		this.highlightCodeBlocks('#d_ticket_main_body');
 		
 		// update all attribute controls
-		this.div.find('#fe_et_assignee').val( ticket.assignee ).trigger('redraw');
+		this.div.find('#fe_et_assignees').val( ticket.assignees ).trigger('redraw');
 		this.div.find('#fe_et_type').val( ticket.type ).trigger('redraw');
 		this.div.find('#fe_et_status').val( ticket.status ).trigger('redraw');
 		this.div.find('#fe_et_category').val( ticket.category ).trigger('redraw');
