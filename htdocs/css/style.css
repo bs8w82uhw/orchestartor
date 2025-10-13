@@ -1267,7 +1267,9 @@ body.dark .box_buttons.floater {
 }
 
 .plugin_param_editor_cont .info_label {
+	text-transform: none;
 	font-size: 13px;
+	/* font-weight: bold; */
 	margin-bottom: 4px;
 }
 .plugin_param_editor_cont .info_label i.mdi:before {
