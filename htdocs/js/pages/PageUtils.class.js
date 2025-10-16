@@ -1819,7 +1819,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 	
 	// Plugin Params
 	
-	getPluginParamEditor(plugin_id, params) {
+	getPluginParamEditor(plugin_id, params, explore = false) {
 		// get HTML for plugin param editor
 		// { "id":"script", "type":"textarea", "title":"Script Source", "value": "#!/bin/sh\n\n# Enter your shell script code here" },
 		var self = this;
@@ -1829,6 +1829,13 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		var plugin = find_object( app.plugins, { id: plugin_id } );
 		if (!plugin) return "(Could not locate Plugin definition: " + plugin_id + ")";
 		if (!plugin.params.length) return '(The selected Plugin has no configurable parameters defined.)';
+		
+		var explore_start = '';
+		var explore_end = '';
+		if (explore) {
+			explore_start = `<div class="form_row_compact"><div>`;
+			explore_end = `</div><div class="form_suffix_icon mdi mdi-database-search-outline" title="Open Job Data Explorer..." onClick="$P().openJobDataExplorer(this)"></div></div>`;
+		}
 		
 		plugin.params.forEach( function(param) {
 			var elem_id = 'fe_pp_' + plugin_id + '_' + param.id;
@@ -1842,29 +1849,34 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			
 			switch (param.type) {
 				case 'text':
-					html += self.getFormText({ id: elem_id, type: param.variant || 'text', value: elem_value, disabled: elem_dis, autocomplete: 'off' });
-				break;
-				
-				case 'code':
-					// limit code editor to event plugins, as it uses a dialog
-					// JH 2025-06-22 We now support code editing from dialogs, so let's try this always enabled
-					if (1 || (plugin.type == 'event')) {
-						html += self.getFormTextarea({ id: elem_id, value: elem_value, rows: 1, disabled: elem_dis, style: 'display:none' });
-						if (elem_dis) {
-							html += '<div class="button small secondary" onClick="$P().viewPluginParamCode(\'' + plugin_id + '\',\'' + param.id + '\')"><i class="mdi mdi-code-json">&nbsp;</i>View Code...</div>';
-						}
-						else {
-							html += '<div class="button small secondary" onClick="$P().editPluginParamCode(\'' + plugin_id + '\',\'' + param.id + '\')"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>Edit Code...</div>';
-						}
-					}
-					else {
-						// for non-event plugin types just show a monospace textarea
-						html += self.getFormTextarea({ id: elem_id, value: elem_value, rows: 5, class: 'monospace', disabled: elem_dis });
-					}
+					html += explore_start + self.getFormText({ 
+						id: elem_id, 
+						type: param.variant || 'text', 
+						value: elem_value, 
+						class: 'monospace', 
+						disabled: elem_dis, 
+						autocomplete: 'off' 
+					}) + explore_end;
 				break;
 				
 				case 'textarea':
-					html += self.getFormTextarea({ id: elem_id, value: elem_value, rows: 5, disabled: elem_dis });
+					html += explore_start + self.getFormTextarea({ 
+						id: elem_id, 
+						value: elem_value, 
+						rows: 5, 
+						class: 'monospace', 
+						disabled: elem_dis 
+					}) + explore_end;
+				break;
+				
+				case 'code':
+					html += self.getFormTextarea({ id: elem_id, value: elem_value, rows: 1, disabled: elem_dis, style: 'display:none' });
+					if (elem_dis) {
+						html += '<div class="button small secondary" onClick="$P().viewPluginParamCode(\'' + plugin_id + '\',\'' + param.id + '\')"><i class="mdi mdi-code-json">&nbsp;</i>View Code...</div>';
+					}
+					else {
+						html += '<div class="button small secondary" onClick="$P().editPluginParamCode(\'' + plugin_id + '\',\'' + param.id + '\')"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>Edit Code...</div>';
+					}
 				break;
 				
 				case 'checkbox':
@@ -1895,12 +1907,12 @@ Page.PageUtils = class PageUtils extends Page.Base {
 						elem_value = tool.id;
 					}
 					
-					html += self.getFormMenu({ id: elem_id, value: elem_value, options: tools, disabled: elem_dis, onChange: `$P().changePluginParamTool('${plugin_id}','${param.id}')` });
+					html += self.getFormMenu({ id: elem_id, value: elem_value, options: tools, disabled: elem_dis, onChange: `$P().changePluginParamTool('${plugin_id}','${param.id}',${explore})` });
 					
 					html += `<fieldset id="fs_toolset_${plugin_id}_${param.id}" class="info_fieldset">`;
 					html += `<legend>${strip_html(tool.title)}</legend>`;
 					html += `<div class="tool_desc">${strip_html(tool.description)}</div>`;
-					if (tool.fields && tool.fields.length) html += self.getParamEditor(tool.fields, params);
+					if (tool.fields && tool.fields.length) html += self.getParamEditor(tool.fields, params, explore);
 					html += `</fieldset>`;
 				break;
 			} // switch type
@@ -1913,7 +1925,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		return html;
 	}
 	
-	changePluginParamTool(plugin_id, param_id) {
+	changePluginParamTool(plugin_id, param_id, explore = false) {
 		// change tool in toolset, redraw fields
 		var elem_id = 'fe_pp_' + plugin_id + '_' + param_id;
 		var elem_value = $('#' + elem_id).val();
@@ -1935,7 +1947,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		
 		html += `<legend>${strip_html(tool.title)}</legend>`;
 		html += `<div class="tool_desc">${strip_html(tool.description)}</div>`;
-		if (tool.fields && tool.fields.length) html += this.getParamEditor(tool.fields, {});
+		if (tool.fields && tool.fields.length) html += this.getParamEditor(tool.fields, {}, explore);
 		
 		$fieldset.html(html);
 	}
@@ -2330,6 +2342,126 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		
 		// trigger change to load first server
 		$('#fe_ex_server').trigger('change');
+	}
+	
+	openJobDataExplorer(elem) {
+		// open job data explorer dialog
+		var self = this;
+		var title = "Job Data Explorer";
+		var $input = $(elem).closest('.form_row_compact').find('input, textarea');
+		var html = '';
+		
+		html += `<div class="dialog_intro">Select a previously completed job to select a data path, which will be inserted into the parameter value as a placeholder macro.</div>`;
+		html += '<div class="dialog_box_content scroll maximize">';
+		
+		// job picker
+		html += this.getFormRow({
+			id: 'd_ex_job',
+			content: this.getFormMenuSingle({
+				id: 'fe_ex_job',
+				options: [ { id: '', title: config.ui.menu_bits.generic_loading } ],
+				value: ''
+			})
+		});
+		
+		// json tree viewer
+		html += this.getFormRow({
+			id: 'd_ex_tree_viewer',
+			content: '<div id="d_ex_tree"><div class="ex_tree_inner"><div class="loading_container"><div class="loading"></div></div></div></div>'
+		});
+		
+		// expression
+		html += this.getFormRow({
+			id: 'd_ex_exp',
+			content: this.getFormText({
+				id: 'fe_ex_exp',
+				type: 'text',
+				spellcheck: 'false',
+				autocomplete: 'off',
+				maxlength: 8192,
+				class: 'monospace',
+				value: ''
+			})
+		});
+		
+		html += '</div>'; // dialog_box_content
+		
+		var buttons_html = "";
+		buttons_html += `<div class="button" onClick="CodeEditor.hide()"><i class="mdi mdi-close-circle-outline">&nbsp;</i>${config.ui.buttons.cancel}</div>`;
+		buttons_html += `<div id="btn_ex_apply" class="button primary"><i class="mdi mdi-check-circle">&nbsp;</i>Insert Macro</div>`;
+		
+		CodeEditor.showSimpleDialog(title, html, buttons_html);
+		
+		SingleSelect.init('#fe_ex_job');
+		
+		$('#fe_ex_job').on('change', function() {
+			var id = $(this).val();
+			if (!id) return; // sanity
+			
+			// now load job details
+			app.api.get( 'app/get_job', { id, remove: ['timelines', 'activity'] }, function(resp) {
+				// see if job actually produced data and/or files
+				var job = resp.job;
+				
+				if ((job.data && first_key(job.data)) || (job.files && job.files.length)) {
+					var temp_data = { data: job.data || {}, files: job.files || [] };
+					
+					// render json tree
+					$('#d_ex_tree > .ex_tree_inner').html( self.getDataTree(temp_data) );
+					
+					// add click handler to all keys
+					$('#d_ex_tree .tree_key').on('click', function() {
+						var path = $(this).data('path');
+						$('#fe_ex_exp').val( path );
+						
+						// apply flash effect
+						if (!$('#fe_ex_exp').hasClass('iflash')) {
+							$('#fe_ex_exp').addClass('iflash').focus();
+							setTimeout( function() { $('#fe_ex_exp').removeClass('iflash'); }, 1500 );
+						}
+					});
+				}
+				else {
+					$('#d_ex_tree > .ex_tree_inner').html(`<div class="ex_tree_none">${config.ui.errors.ex_tree_no_data}</div>`);
+				}
+			} ); // api.get
+		}); // on change
+		
+		$('#btn_ex_apply').on('click', function() {
+			// apply changes and exit dialog
+			if ($('#fe_ex_exp').val().length) {
+				var value = $input.val();
+				if (value.length) value += ' ';
+				
+				value += '{{' + $('#fe_ex_exp').val() + '}}';
+				
+				$input.val( value.trim() );
+				
+				// apply flash effect
+				$input.addClass('iflash').focus();
+				setTimeout( function() { $input.removeClass('iflash'); }, 1500 );
+			}
+			CodeEditor.hide();
+		});
+		
+		// job search
+		var squery = (this.workflow ? 'source:workflow' : '') + ' tags:_success _last';
+		
+		app.api.get( 'app/search_jobs', { query: squery, limit: config.alt_items_per_page }, function(resp) {
+			var items = (resp.rows || []).map( function(job) {
+				var args = self.getJobDisplayArgs(job);
+				return { id: job.id, title: args.title, icon: args.icon };
+			} );
+			
+			if (!items.length) {
+				$('#fe_ex_job').html( render_menu_options( [{ id: '', title: config.ui.errors.fe_ex_job }], '' ) ).trigger('change');
+				$('#d_ex_tree > .ex_tree_inner').html(`<div class="ex_tree_none">${config.ui.errors.ex_tree_none}</div>`);
+				return;
+			}
+			
+			// change menu items and fire onChange event for redraw
+			$('#fe_ex_job').html( render_menu_options( items, items[0].id ) ).trigger('change');
+		} ); // api.get
 	}
 	
 	// Workflow Utilities:
@@ -3799,13 +3931,20 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		});
 	}
 	
-	getParamEditor(fields, params) {
+	getParamEditor(fields, params, explore) {
 		// get HTML for generic param editor
 		// { "id":"script", "type":"textarea", "title":"Script Source", "value": "#!/bin/sh\n\n# Enter your shell script code here" },
 		var self = this;
 		var html = '';
 		
 		if (!fields || !fields.length) return '(No configurable parameters defined.)';
+		
+		var explore_start = '';
+		var explore_end = '';
+		if (explore) {
+			explore_start = `<div class="form_row_compact"><div>`;
+			explore_end = `</div><div class="form_suffix_icon mdi mdi-database-search-outline" title="Open Job Data Explorer..." onClick="$P().openJobDataExplorer(this)"></div></div>`;
+		}
 		
 		fields.forEach( function(param) {
 			var elem_id = 'fe_uf_' + param.id;
@@ -3819,7 +3958,24 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			
 			switch (param.type) {
 				case 'text':
-					html += self.getFormText({ id: elem_id, type: param.variant || 'text', value: elem_value, disabled: elem_dis, autocomplete: 'off' });
+					html += explore_start + self.getFormText({ 
+						id: elem_id, 
+						type: param.variant || 'text', 
+						value: elem_value, 
+						class: 'monospace', 
+						disabled: elem_dis, 
+						autocomplete: 'off' 
+					}) + explore_end;
+				break;
+				
+				case 'textarea':
+					html += explore_start + self.getFormTextarea({ 
+						id: elem_id, 
+						value: elem_value, 
+						rows: 5, 
+						class: 'monospace', 
+						disabled: elem_dis 
+					}) + explore_end;
 				break;
 				
 				case 'code':
@@ -3831,10 +3987,6 @@ Page.PageUtils = class PageUtils extends Page.Base {
 					else {
 						html += '<div class="button small secondary" onClick="$P().editParamCode(\'' + param.id + '\')"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>Edit Code...</div>';
 					}
-				break;
-				
-				case 'textarea':
-					html += self.getFormTextarea({ id: elem_id, value: elem_value, rows: 5, disabled: elem_dis });
 				break;
 				
 				case 'checkbox':

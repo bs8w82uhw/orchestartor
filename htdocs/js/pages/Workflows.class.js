@@ -1396,7 +1396,7 @@ Page.Workflows = class Workflows extends Page.Events {
 			// refresh param editor
 			var event_id = $('#fe_wfde_event').val();
 			var event = find_object( app.events, { id: event_id } );
-			$('#d_wfde_param_editor').html( self.getParamEditor( event.fields, params ) );
+			$('#d_wfde_param_editor').html( self.getParamEditor( event.fields, params, true ) );
 			Dialog.autoResize();
 		}
 		
@@ -1580,7 +1580,7 @@ Page.Workflows = class Workflows extends Page.Events {
 			// refresh plugin param editor
 			var plugin_id = $('#fe_wfdj_plugin').val();
 			var plugin = find_object( app.plugins, { id: plugin_id } );
-			$('#d_wfdj_param_editor').html( self.getPluginParamEditor( plugin_id, node.data.params ) );
+			$('#d_wfdj_param_editor').html( self.getPluginParamEditor( plugin_id, node.data.params, true ) );
 			Dialog.autoResize();
 		}
 		

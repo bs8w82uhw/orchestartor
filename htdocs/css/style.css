@@ -1326,6 +1326,16 @@ body.dark .dialog .plugin_param_editor_cont {
 	resize: none;
 }
 
+.form_row_compact {
+	display: grid;
+	grid-template-columns: auto 20px;
+	gap: 3px;
+	align-items: center;
+}
+.form_row_compact .form_suffix_icon {
+	left: 4px;
+}
+
 /* Job Details Page */
 
 .summary_grid {
