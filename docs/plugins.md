@@ -12,6 +12,8 @@ This document describes the xyOps Plugin System.  You can extend xyOps with the 
 
 ## Event Plugins
 
+xy, type, ...job
+
 
 
 ## Monitor Plugins
@@ -30,7 +32,7 @@ As with most other Plugin types, you can define custom parameters for Action Plu
 
 ### Input
 
-xyops, params, ...hook_args -- [Job Hook Data](data-structures.md#job-hook-data)
+xy, params, ...hook_args -- [Job Hook Data](data-structures.md#job-hook-data)
 
 
 
@@ -58,7 +60,8 @@ When your trigger plugin is invoked, it will be passed an array of all the event
 
 ```json
 {
-	"xy": true,
+	"xy": 1,
+	"type": "trigger",
 	"items": [
 		{
 			"timezone": "America/Los_Angeles", 
@@ -129,11 +132,11 @@ data.items.forEach( function(item) {
 
 ### Output
 
-Once your plugin decides which events should launch jobs (if any), you need to communicate that information back to xyOps.  This is done by sending a JSON record out through your process STDOUT.  Similar to the document you received via STDIN, it needs to have a top-level `xy` property set to `true`, and an `items` array:
+Once your plugin decides which events should launch jobs (if any), you need to communicate that information back to xyOps.  This is done by sending a JSON record out through your process STDOUT.  Similar to the document you received via STDIN, it needs to have a top-level `xy` property set to `1`, and an `items` array:
 
 ```json
 {
-	"xy": true,
+	"xy": 1,
 	"items": [ false, false, true ]
 }
 ```
@@ -144,7 +147,7 @@ Now, instead of a simple Boolean, the items can also be objects containing a `la
 
 ```json
 {
-	"xy": true,
+	"xy": 1,
 	"items": [ 
 		{
 			"launch": false
@@ -184,7 +187,7 @@ When your trigger plugin decides to launch a job, you can optionally include arb
 
 ```json
 {
-	"xy": true,
+	"xy": 1,
 	"items": [ 
 		{
 			"launch": false
@@ -211,7 +214,7 @@ You can also send along files to your launched jobs.  These will be attached to 
 
 ```json
 {
-	"xy": true,
+	"xy": 1,
 	"items": [ 
 		{
 			"launch": false
@@ -239,7 +242,7 @@ If you would like to delay a job launch, send back a `delay` property alongside 
 
 ```json
 {
-	"xy": true,
+	"xy": 1,
 	"items": [ 
 		{
 			"launch": false
