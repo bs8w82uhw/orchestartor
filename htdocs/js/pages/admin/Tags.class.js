@@ -48,9 +48,9 @@ Page.Tags = class Tags extends Page.PageUtils {
 		if (!resp.rows) resp.rows = [];
 		if (!this.active) return; // sanity
 		
-		// sort by custom sort order
+		// sort by title ascending
 		this.tags = resp.rows.sort( function(a, b) {
-			return a.id.localeCompare( b.id );
+			return a.title.toLowerCase().localeCompare( b.title.toLowerCase() );
 		} );
 		
 		// NOTE: Don't change these columns without also changing the responsive css column collapse rules in style.css
