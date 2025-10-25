@@ -1128,13 +1128,14 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			label: 'File Types:',
 			content: this.getFormText({
 				id: 'fe_erl_file_types',
+				class: 'monospace',
 				placeholder: '*',
 				spellcheck: 'false',
 				autocomplete: 'off',
 				maxlength: 256,
 				value: limit.accept || ''
 			}),
-			caption: 'Optionally limit the accepted file types to the specified list.  You can specify file extensions or content types here, separated by commas.  See <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/accept#unique_file_type_specifiers" target="_blank">file type specifiers</a> for details.'
+			caption: 'Optionally limit the accepted file types to a list of file extensions, separated by commas.  The extensions should all begin with a period, and they are case insensitive.'
 		});
 		
 		html += '</div>';
@@ -1182,7 +1183,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				case 'file':
 					limit.amount = parseInt( $('#fe_erl_raw_amount').val() );
 					limit.size = parseInt( $('#fe_erl_file_size').val() );
-					limit.accept = $('#fe_erl_file_types').val().replace(/[^\w\s\-\.\,\/\*]+/g, '');
+					limit.accept = $('#fe_erl_file_types').val().replace(/[^\w\s\-\.\,]+/g, '').trim().toLowerCase();
 				break;
 			} // switch limit.type
 			
