@@ -46,7 +46,7 @@
 		"default": [
 			{
 				"enabled": true,
-				"hidden": true,
+				"hidden": false,
 				"condition": "error",
 				"type": "snapshot"
 			}
