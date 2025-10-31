@@ -1057,8 +1057,8 @@
 		{ "id": "time", "title": "Max Run Time", "icon": "timer-remove-outline" },
 		{ "id": "job", "title": "Max Concurrent Jobs", "icon": "traffic-light-outline" },
 		{ "id": "log", "title": "Max Output Size", "icon": "file-remove-outline" },
-		{ "id": "mem", "title": "Memory Limit", "icon": "memory" },
-		{ "id": "cpu", "title": "CPU % Limit", "icon": "chip" },
+		{ "id": "mem", "title": "Max Memory Limit", "icon": "memory" },
+		{ "id": "cpu", "title": "Max CPU % Limit", "icon": "chip" },
 		{ "id": "retry", "title": "Max Retry Limit", "icon": "redo-variant" },
 		{ "id": "queue", "title": "Max Queue Limit", "icon": "tray-full" },
 		{ "id": "file", "title": "Max File Limit", "icon": "file-multiple-outline" }
