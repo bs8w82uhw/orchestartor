@@ -1033,6 +1033,14 @@ This is the UID (user account) to run the plugin under.  The UID may be either n
 
 This is the GID (group account) to run the plugin under.  The GID may be either numerical or a string ('wheel', 'admin', etc.).
 
+## Plugin.kill
+
+This string specifies how xySat should terminate processes when a job is aborted.  This is only used for Event Plugins.  The accepted values are as follows:
+
+- `none` means that **no** processes are killed on abort.  This is only used for very special cases.
+- `parent` means that only the **parent** process is killed on abort.  This is the default behavior for new Plugins.
+- `all` means that **all** processes are killed on abort.  Meaning, xySat will traverse the process tree from the parent process down, and kill everything.
+
 ## Plugin.notes
 
 Optional notes or comments about the plugin's purpose or configuration.
