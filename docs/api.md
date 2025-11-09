@@ -730,13 +730,196 @@ Notes:
 
 ### get_channels
 
+```
+GET /api/app/get_channels/v1
+```
+
+Fetch all notification channel definitions. No input parameters are required. No specific privilege is required beyond a valid user session or API Key.
+
+In addition to the [Standard Response Format](#standard-response-format), this will include a `rows` array containing all channels, and a `list` object containing list metadata (e.g. `length` for total rows without pagination).
+
+Example response:
+
+```json
+{
+    "code": 0,
+    "rows": [
+        {
+            "id": "sev1",
+            "title": "Severity 1",
+            "enabled": true,
+            "username": "admin",
+            "modified": 1754603045,
+            "created": 1754365754,
+            "notes": "For major events that require everyone's attention right away.",
+            "users": ["admin"],
+            "email": "",
+            "web_hook": "",
+            "run_event": "",
+            "sound": "attention-3.mp3",
+            "icon": "",
+            "revision": 3,
+            "max_per_day": 0
+        }
+        
+    ],
+    "list": { "length": 1 }
+}
+```
+
+See [Channel](data-structures.md#channel) for details on channel properties.
+
 ### get_channel
+
+```
+GET /api/app/get_channel/v1
+```
+
+Fetch a single channel definition by ID. No specific privilege is required beyond a valid user session or API Key. Both HTTP GET with query string parameters and HTTP POST with JSON are accepted.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The alphanumeric ID of the channel to fetch. |
+
+Example request:
+
+```json
+{
+    "id": "sev1"
+}
+```
+
+Example response:
+
+```json
+{
+    "code": 0,
+    "channel": {
+        "id": "sev1",
+        "title": "Severity 1",
+        "enabled": true,
+        "username": "admin",
+        "modified": 1754603045,
+        "created": 1754365754,
+        "notes": "For major events that require everyone's attention right away.",
+        "users": ["admin"],
+        "email": "",
+        "web_hook": "",
+        "run_event": "",
+        "sound": "attention-3.mp3",
+        "icon": "",
+        "revision": 3,
+        "max_per_day": 0
+    }
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this will include a `channel` object containing the requested channel.
+
+See [Channel](data-structures.md#channel) for details on channel properties.
 
 ### create_channel
 
+```
+POST /api/app/create_channel/v1
+```
+
+Create a new notification channel. Requires the [create_channels](privileges.md#create_channels) privilege, plus a valid user session or API Key. Send as HTTP POST with JSON. See [Channel](data-structures.md#channel) for property details. The `id` may be omitted and will be auto-generated; `username`, `created`, `modified`, and `revision` are set by the server.
+
+Example request:
+
+```json
+{
+    "title": "Severity 1",
+    "enabled": true,
+    "notes": "For major events that require everyone's attention right away.",
+    "users": ["admin"],
+    "email": "",
+    "web_hook": "",
+    "run_event": "",
+    "sound": "attention-3.mp3",
+    "icon": "",
+    "max_per_day": 0
+}
+```
+
+Example response:
+
+```json
+{
+    "code": 0,
+    "channel": { /* full channel object including auto-generated fields */ }
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this will include a `channel` object containing the newly created channel.
+
 ### update_channel
 
+```
+POST /api/app/update_channel/v1
+```
+
+Update an existing channel by ID. Requires the [edit_channels](privileges.md#edit_channels) privilege, plus a valid user session or API Key. Send as HTTP POST with JSON. The request is shallow-merged into the existing channel, so you can provide a sparse set of properties to update. The server updates `modified` and increments `revision` automatically.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The channel ID to update. |
+| other fields | Various | Any updatable [Channel](data-structures.md#channel) fields (e.g. `title`, `enabled`, `users`, `email`, `web_hook`, `run_event`, `sound`, `icon`, `max_per_day`, `notes`). |
+
+Example request:
+
+```json
+{
+    "id": "sev1",
+    "title": "Severity 1 Alerts",
+    "max_per_day": 5
+}
+```
+
+Example response:
+
+```json
+{
+    "code": 0
+}
+```
+
 ### delete_channel
+
+```
+POST /api/app/delete_channel/v1
+```
+
+Delete an existing channel by ID. Requires the [delete_channels](privileges.md#delete_channels) privilege, plus a valid user session or API Key.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The channel ID to delete. |
+
+Example request:
+
+```json
+{
+    "id": "sev1"
+}
+```
+
+Example response:
+
+```json
+{
+    "code": 0
+}
+```
+
+Deletions are permanent and cannot be undone.
 
 
 
