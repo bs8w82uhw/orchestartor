@@ -1988,6 +1988,42 @@ Example response:
 
 Use with care. This can alter persisted job history.
 
+### resume_job
+
+```
+POST /api/app/resume_job/v1
+```
+
+Resume a suspended active job. Requires the [run_jobs](privileges.md#run_jobs) privilege and a valid session or API Key, plus category/target access to the job’s event. The job must be active and currently suspended.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The [Job.id](data-structures.md#job-id). |
+| `params` | Object | Optional. User parameters to merge into the job’s `params` when resuming. |
+
+Behavior:
+
+- Fails if the job is not active or not suspended.
+- Records suspension metadata (duration, resumed at/by, IPs, user agent) in the job’s suspend action details for audit.
+- If provided, merges `params` into current job parameters upon resume.  This is used to collect user parameters in the UI at resume time.
+
+Example request:
+
+```json
+{
+    "id": "jabc123def",
+    "params": { "example": 12345 }
+}
+```
+
+Example response:
+
+```json
+{ "code": 0 }
+```
+
 ### job_toggle_notify_me
 
 ```
