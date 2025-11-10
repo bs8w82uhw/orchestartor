@@ -4301,15 +4301,273 @@ Web Hook APIs manage outbound HTTP callbacks used by alerts, job actions and wor
 
 ### get_web_hooks
 
+```
+GET /api/app/get_web_hooks/v1
+```
+
+Fetch all web hook definitions. No input parameters are required. No specific privilege is required beyond a valid user session or API Key.
+
+In addition to the [Standard Response Format](#standard-response-format), this will include a `rows` array containing all web hooks, and a `list` object containing list metadata (e.g. `length` for total rows without pagination).
+
+Example response:
+
+```json
+{
+  "code": 0,
+  "rows": [
+    {
+      "id": "example_hook",
+      "title": "Example Hook",
+      "enabled": true,
+      "url": "https://httpbin.org/post",
+      "method": "POST",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "User-Agent", "value": "xyOps/WebHook" }
+      ],
+      "body": "{\n\t\"text\": \"{{text}}\"\n}",
+      "timeout": 30,
+      "retries": 0,
+      "follow": false,
+      "ssl_cert_bypass": false,
+      "max_per_day": 0,
+      "icon": "",
+      "notes": "",
+      "username": "admin",
+      "modified": 1754449105,
+      "created": 1754365754,
+      "revision": 2
+    }
+  ],
+  "list": { "length": 1 }
+}
+```
+
+See [WebHook](data-structures.md#webhook) for details on web hook properties.
+
 ### get_web_hook
+
+```
+GET /api/app/get_web_hook/v1
+```
+
+Fetch a single web hook definition by ID. No specific privilege is required beyond a valid user session or API Key. Both HTTP GET with query string parameters and HTTP POST with JSON are accepted.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The alphanumeric ID of the web hook to fetch. |
+
+Example request:
+
+```json
+{ "id": "example_hook" }
+```
+
+Example response:
+
+```json
+{
+  "code": 0,
+  "web_hook": {
+    "id": "example_hook",
+    "title": "Example Hook",
+    "enabled": true,
+    "url": "https://httpbin.org/post",
+    "method": "POST",
+    "headers": [
+      { "name": "Content-Type", "value": "application/json" },
+      { "name": "User-Agent", "value": "xyOps/WebHook" }
+    ],
+    "body": "{\n\t\"text\": \"{{text}}\"\n}",
+    "timeout": 30,
+    "retries": 0,
+    "follow": false,
+    "ssl_cert_bypass": false,
+    "max_per_day": 0,
+    "icon": "",
+    "notes": "",
+    "username": "admin",
+    "modified": 1754449105,
+    "created": 1754365754,
+    "revision": 2
+  }
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes a `web_hook` object containing the requested web hook.
+
+See [WebHook](data-structures.md#webhook) for property details and templating behavior.
 
 ### create_web_hook
 
+```
+POST /api/app/create_web_hook/v1
+```
+
+Create a new web hook. Requires the [create_web_hooks](privileges.md#create_web_hooks) privilege, plus a valid user session or API Key. Send as HTTP POST with JSON. See [WebHook](data-structures.md#webhook) for property details. The `id` may be omitted and will be auto-generated; `username`, `created`, `modified`, and `revision` are set by the server.
+
+Notes:
+
+- The server validates `id` (alphanumeric/underscore), `method` (letters only), and `url` (must be `http` or `https`).
+- If `body` is provided, any `{{ ... }}` templates are precompiled and a syntax error returns an error response.
+- Web hooks can expand secrets at runtime when allowed via [Secret.web_hooks](data-structures.md#secret-web_hooks).
+
+Example request:
+
+```json
+{
+  "title": "Example Hook",
+  "enabled": true,
+  "url": "https://httpbin.org/post",
+  "method": "POST",
+  "headers": [
+    { "name": "Content-Type", "value": "application/json" },
+    { "name": "User-Agent", "value": "xyOps/WebHook" }
+  ],
+  "body": "{\n  \"text\": \"{{text}}\",\n  \"content\": \"{{text}}\"\n}",
+  "timeout": 30,
+  "retries": 0,
+  "follow": false,
+  "ssl_cert_bypass": false,
+  "max_per_day": 0,
+  "notes": "An example web hook for demonstration purposes.",
+  "icon": ""
+}
+```
+
+Example response:
+
+```json
+{
+  "code": 0,
+  "web_hook": { /* full web hook object including auto-generated fields */ }
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes a `web_hook` object containing the newly created web hook.
+
 ### update_web_hook
+
+```
+POST /api/app/update_web_hook/v1
+```
+
+Update an existing web hook by ID. Requires the [edit_web_hooks](privileges.md#edit_web_hooks) privilege, plus a valid user session or API Key. Send as HTTP POST with JSON. The request is shallow-merged into the existing web hook, so you can provide a sparse set of properties to update. The server updates `modified` and increments `revision` automatically.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The web hook ID to update. |
+| (Other) | Various | Any updatable [WebHook](data-structures.md#webhook) fields (e.g. `title`, `enabled`, `url`, `method`, `headers`, `body`, `timeout`, `retries`, `follow`, `ssl_cert_bypass`, `max_per_day`, `notes`, `icon`). |
+
+Notes:
+
+- If `body` is provided, templates are precompiled; syntax errors result in an error response.
+
+Example request:
+
+```json
+{
+  "id": "example_hook",
+  "title": "Example Hook (updated)",
+  "timeout": 60,
+  "follow": true
+}
+```
+
+Example response:
+
+```json
+{ "code": 0 }
+```
 
 ### delete_web_hook
 
+```
+POST /api/app/delete_web_hook/v1
+```
+
+Delete a web hook by ID. Requires the [delete_web_hooks](privileges.md#delete_web_hooks) privilege, plus a valid user session or API Key. Send as HTTP POST with JSON.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The web hook ID to delete. |
+
+Example request:
+
+```json
+{ "id": "example_hook" }
+```
+
+Example response:
+
+```json
+{ "code": 0 }
+```
+
+Deletions are permanent and cannot be undone.
+
 ### test_web_hook
+
+```
+POST /api/app/test_web_hook/v1
+```
+
+Test a web hook configuration by performing a live HTTP request and returning a detailed, markdown-formatted report. Requires the [edit_web_hooks](privileges.md#edit_web_hooks) privilege, plus a valid user session or API Key. Send as HTTP POST with JSON.
+
+Behavior:
+
+- If the provided `id` matches an existing web hook, the server merges it with the request body, allowing you to override fields for testing without saving them.
+- Templates in `url`, `headers[].value`, and `body` are expanded using the same data as runtime actions. When testing an existing, saved hook, secrets are included if granted via [Secret.web_hooks](data-structures.md#secret-web_hooks).
+- Timeouts, retries, redirect behavior (`follow`), and TLS validation (`ssl_cert_bypass`) are honored during the test.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** Web hook ID to test (existing hook is optional, but an ID is required). |
+| `title` | String | **(Required)** A title for the test. Required even when testing an existing hook. |
+| `method` | String | **(Required)** HTTP method to use (e.g., `GET`, `POST`). |
+| `url` | String | **(Required)** Fully-qualified `http` or `https` URL to call. |
+| (Other) | Various | Any [WebHook](data-structures.md#webhook) fields to apply for this test only (e.g., `headers`, `body`, `timeout`, `retries`, `follow`, `ssl_cert_bypass`). |
+
+Example request (override headers and timeout for an existing hook):
+
+```json
+{
+  "id": "example_hook",
+  "title": "Example Hook",
+  "method": "POST",
+  "url": "https://httpbin.org/post",
+  "headers": [ { "name": "Content-Type", "value": "application/json" } ],
+  "body": "{\n  \"text\": \"Hello from test\"\n}",
+  "timeout": 10
+}
+```
+
+Example response:
+
+```json
+{
+  "code": 0,
+  "result": {
+    "code": 0,
+    "description": "Success (HTTP 200 OK)",
+    "details": "- **Method:** POST\n- **URL:** https://httpbin.org/post\n\n**Response:** HTTP 200 OK\n\n..."
+  }
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes a `result` object with:
+
+- `code`: `0` on success, or a string error code (e.g., `"webhook"`).
+- `description`: Short summary text (e.g., HTTP status).
+- `details`: A markdown-formatted report including request/response headers and body, and performance metrics when available.
 
 
 
