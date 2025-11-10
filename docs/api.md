@@ -3862,21 +3862,324 @@ Ticket APIs manage lightweight issue tracking and comments within xyOps. Use the
 
 ### get_ticket
 
+```
+GET /api/app/get_ticket/v1
+```
+
+Fetch a single ticket by ID or ticket number. No specific privilege is required beyond a valid user session or API Key. Both HTTP GET with query parameters and HTTP POST with JSON are accepted.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | The ticket ID to fetch. Required if `num` is not provided. |
+| `num` | Number | The ticket number to fetch. Required if `id` is not provided. |
+
+Example request (by ID):
+
+```json
+{ "id": "tmgpmoorz6p" }
+```
+
+Example request (by number):
+
+```json
+{ "num": 24 }
+```
+
+Example response:
+
+```json
+{
+  "code": 0,
+  "ticket": {
+    "id": "tmgpmoorz6p",
+    "num": 24,
+    "subject": "Job #jmgn8f6ib7p failed with code: 1 (BlueSky Test)",
+    "status": "open"
+  }
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes a `ticket` object. See [Ticket](data-structures.md#ticket) for details.
+
 ### get_tickets
+
+```
+GET /api/app/get_tickets/v1
+```
+
+Fetch multiple tickets by ID in a single request. No specific privilege is required beyond a valid user session or API Key. Both HTTP GET with query parameters and HTTP POST with JSON are accepted.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `ids` | Array | **(Required)** Array of ticket IDs to fetch. The response preserves this order. |
+| `verbose` | Boolean | Optional. If `true`, include heavy fields (`body`, full `changes`). If omitted or `false`, these are pruned. |
+
+Example request:
+
+```json
+{ "ids": ["tmgpmoorz6p", "txyz123abcd"], "verbose": false }
+```
+
+Example response (non-verbose):
+
+```json
+{
+  "code": 0,
+  "tickets": [
+    { "id": "tmgpmoorz6p", "num": 24, "subject": "...", "status": "open" },
+    { "err": "Not Found" }
+  ]
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes a `tickets` array in the same order as `ids`. When `verbose` is not set, large fields are pruned. If a ticket cannot be loaded, its array entry will contain an `err` property instead of a ticket object. See [Ticket](data-structures.md#ticket) for field definitions.
 
 ### search_tickets
 
+```
+GET /api/app/search_tickets/v1
+```
+
+Search tickets using the Unbase query syntax. Requires a valid user session or API Key. Results are automatically filtered by the caller’s access rights.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `query` | String | **(Required)** [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). |
+| `offset` | Number | Optional. Zero-based row offset for pagination. Defaults to `0`. |
+| `limit` | Number | Optional. Number of rows to return. Defaults to `1`. |
+| `sort_by` | String | Optional. Field to sort by. Defaults to `_id`. |
+| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
+| `compact` | Boolean | Optional. If `true` (or `1`), omit `body` and replace `changes` with its count for lighter payloads. |
+
+Example response (compact):
+
+```json
+{
+  "code": 0,
+  "rows": [
+    { "id": "tmgpmoorz6p", "num": 24, "subject": "...", "status": "open", "changes": 3 }
+  ],
+  "list": { "length": 57 }
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes a `rows` array of [Ticket](data-structures.md#ticket) records and a `list` object with list metadata (e.g., `length` for total rows without pagination). When `compact` is set, `body` is omitted and `changes` is the count of changes.
+
 ### create_ticket
+
+```
+POST /api/app/create_ticket/v1
+```
+
+Create a new ticket. Requires the [create_tickets](privileges.md#create_tickets) privilege and a valid user session or API Key. Send as HTTP POST. You may send either JSON, or `multipart/form-data` if uploading files:
+
+- JSON body: Post the ticket fields as JSON.
+- Multipart form-data: Send `Content-Type: multipart/form-data` and include a `json` field containing the full JSON payload (as a string), plus one or more file fields. Uploaded files are attached to the ticket.
+
+Parameters (JSON):
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | Optional. If omitted, a unique ID is generated. Must be alphanumeric if provided. |
+| `subject` | String | **(Required)** Short summary for the ticket. HTML is stripped. |
+| (Other) | Various | Any [Ticket](data-structures.md#ticket) fields, e.g. `type`, `status`, `category`, `server`, `assignees` (array), `cc` (array), `notify` (array of email), `due` (Unix seconds), `tags` (array), `body` (Markdown). |
+| `template` | String | Optional. Auto-generate the `body` from a template. Allowed values: `job` or `alert` (see below). |
+| `job` | String | Required when `template` is `job`. The [Job.id](data-structures.md#job-id) to use for the template content. |
+| `alert` | String | Required when `template` is `alert`. The [AlertInvocation.id](data-structures.md#alertinvocation-id) to use for the template content. |
+
+When using `multipart/form-data`, attach one or more file fields (any field names). Files are saved and added to [Ticket.files](data-structures.md#ticket-files) with metadata. Files auto-expire per [file_expiration](configuration.md#file_expiration) configuration setting.
+
+Defaults: If not provided, the server sets `status` to `open`, `body` to an empty string, `due` to `0`, and initializes `changes` with an initial “created” entry.
+
+Example request (JSON):
+
+```json
+{
+  "subject": "Nightly backup failed on server sorbstack01",
+  "type": "issue",
+  "status": "open",
+  "assignees": ["admin"],
+  "tags": ["important"],
+  "body": "Observed failure in nightly backup job. See logs." 
+}
+```
+
+Example response:
+
+```json
+{
+  "code": 0,
+  "ticket": { "id": "tmgpmoorz6p", "num": 24, "subject": "Nightly backup failed on server sorbstack01", "status": "open" }
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes a `ticket` object containing the newly created [Ticket](data-structures.md#ticket) (including generated fields like `id`, `num`, `created`, `modified` and `changes`).
 
 ### update_ticket
 
+```
+POST /api/app/update_ticket/v1
+```
+
+Update an existing ticket by ID. Requires the [edit_tickets](privileges.md#edit_tickets) privilege and a valid user session or API Key. Send as HTTP POST with JSON. The request is shallow-merged into the existing ticket, so you can provide only the changed fields.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The ticket ID to update. |
+| (Other) | Various | Any updatable [Ticket](data-structures.md#ticket) fields, e.g. `subject`, `body`, `status`, `type`, `category`, `assignees`, `cc`, `notify`, `due`, `tags`, `server`. |
+
+Notes:
+
+- HTML in `subject` is stripped; `body` is sanitized as Markdown.
+- Changes are detected and appended to [Ticket.changes](data-structures.md#ticket-changes) (draft tickets do not record changes).
+
+Example request:
+
+```json
+{ "id": "tmgpmoorz6p", "status": "closed", "assignees": ["admin"] }
+```
+
+Example response:
+
+```json
+{ "code": 0, "ticket": { "id": "tmgpmoorz6p", "status": "closed" } }
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes an updated `ticket` object. See [Ticket](data-structures.md#ticket).
+
 ### add_ticket_change
+
+```
+POST /api/app/add_ticket_change/v1
+```
+
+Add a [change](data-structures.md#ticket-changes) to a ticket (usually a comment). Requires the [edit_tickets](privileges.md#edit_tickets) privilege and a valid user session or API Key. Send as HTTP POST with JSON.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The ticket ID to update. |
+| `change` | Object | **(Required)** The change object. For comments, set `type` to `comment` and provide `body` (Markdown). See [Ticket.changes](data-structures.md#ticket-changes) for details. |
+
+Example request (add comment):
+
+```json
+{
+  "id": "tmgpmoorz6p",
+  "change": { "type": "comment", "body": "Investigating the backup logs now." }
+}
+```
+
+Example response:
+
+```json
+{ "code": 0, "ticket": { "id": "tmgpmoorz6p", "changes": [ /* ... */ ] } }
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes the updated [Ticket](data-structures.md#ticket) object. Comment bodies are sanitized as Markdown. See [Ticket.changes](data-structures.md#ticket-changes).
 
 ### update_ticket_change
 
+```
+POST /api/app/update_ticket_change/v1
+```
+
+Edit or delete an existing ticket [change](data-structures.md#ticket-changes) (e.g., a comment). Requires the [edit_tickets](privileges.md#edit_tickets) privilege and a valid user session or API Key. A user may edit/delete their own comments; editing/deleting others’ comments requires administrator privileges.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The ticket ID. |
+| `change_id` | String | **(Required)** The change ID to edit or delete. |
+| `change` | Object | Optional. New change fields to merge (e.g., `body` for comment edits). See [Ticket.changes](data-structures.md#ticket-changes) for details. |
+| `delete` | Boolean | Optional. If `true`, delete the specified change. |
+
+Example request (edit comment):
+
+```json
+{ "id": "tmgpmoorz6p", "change_id": "cabc123", "change": { "body": "Updated findings after deeper analysis." } }
+```
+
+Example request (delete comment):
+
+```json
+{ "id": "tmgpmoorz6p", "change_id": "cabc123", "delete": true }
+```
+
+Example response:
+
+```json
+{ "code": 0, "ticket": { "id": "tmgpmoorz6p", "changes": [ /* ... */ ] } }
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes the updated [Ticket](data-structures.md#ticket) object. Comment bodies are sanitized and edits record an `edited` timestamp. See [Ticket.changes](data-structures.md#ticket-changes).
+
 ### delete_ticket_file
 
+```
+POST /api/app/delete_ticket_file/v1
+```
+
+Delete a file attached to a ticket. Requires the [edit_tickets](privileges.md#edit_tickets) privilege and a valid user session or API Key. Send as HTTP POST with JSON.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The ticket ID. |
+| `path` | String | **(Required)** The storage path of the file to delete. |
+
+Example request:
+
+```json
+{ "id": "tmgpmoorz6p", "path": "files/tmgpmoorz6p/admin/abc123/log.txt" }
+```
+
+Example response:
+
+```json
+{ "code": 0, "files": [ /* remaining File objects */ ] }
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes a `files` array with the ticket’s remaining [File](data-structures.md#file) objects.
+
 ### delete_ticket
+
+```
+POST /api/app/delete_ticket/v1
+```
+
+Delete an existing ticket by ID. Requires the [delete_tickets](privileges.md#delete_tickets) privilege and a valid user session or API Key. Send as HTTP POST with JSON.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | **(Required)** The ticket ID to delete. |
+
+Example request:
+
+```json
+{ "id": "tmgpmoorz6p" }
+```
+
+Example response:
+
+```json
+{ "code": 0 }
+```
+
+Deletion removes the ticket permanently. References to the ticket in jobs and alerts are cleaned up by background maintenance tasks.
 
 
 
