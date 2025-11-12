@@ -2715,7 +2715,7 @@ These objects are nested under other data structures, usually items of an array.
 
 ## Action
 
-Actions can be assigned to job related events such as start, completion, errors, and other conditions.  Here is an example:
+Actions can be assigned to job and alert related events such as job start, job completion, job errors, new alert, and other conditions.  Here is an example:
 
 ```json
 {
@@ -2740,17 +2740,20 @@ Additional properties may be present based on the type.
 
 ### Action Conditions
 
-Each action has a `condition` property which specifies when it will fire.  The value may be one of:
+Each action has a `condition` property which specifies when it should fire.  The value may be one of:
 
 | Condition ID | Description |
 |------------|-------------|
-| `start` | Fires on job start. |
-| `complete` | Fires on job completion, regardless of the outcome. |
-| `success` | Fires on job success, i.e. when the `code` property is `0` or `false`. |
-| `error` | Fires on job errors, i.e. when the `code` property is any true value or string. |
-| `warning` | Fires on job warnings, i.e. when the `code` property is set to `"warning"`. |
-| `critical` | Fires on critical errors, i.e. when the `code` property is set to `"critical"`. |
-| `abort` | Fires when the job is aborted, either by user or special event (e.g. lost server). |
+| `job_start` | Fires on job start. |
+| `job_complete` | Fires on job completion, regardless of the outcome. |
+| `job_success` | Fires on job success, i.e. when the `code` property is `0` or `false`. |
+| `job_error` | Fires on job errors, i.e. when the `code` property is any true value or string. |
+| `job_warning` | Fires on job warnings, i.e. when the `code` property is set to `"warning"`. |
+| `job_critical` | Fires on critical errors, i.e. when the `code` property is set to `"critical"`. |
+| `job_abort` | Fires when the job is aborted, either by user or special event (e.g. lost server). |
+| `tag:TAGID` | Fires on job completion only when a specific tag is present on the job. |
+| `alert_new` | Fires when a new alert is triggered on a server. |
+| `alert_cleared` | Fires when an active alert has cleared. |
 
 ### Action Types
 
@@ -2763,7 +2766,13 @@ Each action has a `type` property which dictates what will happen when the condi
 | `run_event` | Run a custom job for the action.  The Event ID should be specified in a property named `event_id`. |
 | `channel` | Activate a notification channel for the action.  The Channel ID should be specified in a property named `channel_id`. |
 | `disable` | Disable the event for the action (no extra properties defined). |
+| `delete` | Delete the event for the action (no extra properties defined). |
 | `snapshot` | Take a server snapshot for the action (no extra properties defined). |
+| `suspend` | Suspend (pause) a workflow until a user resumes in the UI.  No extra properties defined. |
+| `store` | Store data in a storage bucket. Requires `bucket_id` (the [Bucket.id](#bucket-id)), `bucket_sync` (species if files and/or data should be stored), and `bucket_glob` (glob pattern to match on files). |
+| `fetch` | Fetch data from a storage bucket. Requires `bucket_id` (the [Bucket.id](#bucket-id)), `bucket_sync` (species if files and/or data should be fetched), and `bucket_glob` (glob pattern to match on files). |
+| `ticket` | Create a ticket.  Requires `ticket_type` (see [Ticket.type](#ticket-type)), `ticket_assignees` (an array of [User.username](#user-username)s), and `ticket_tags` (an array of [Tag.id](#tag-id)s). |
+| `plugin` | Invoke a custom Plugin for the action.  Requires `plugin_id` (the [Plugin.id](#plugin-id)) and `params` (custom parameters defined by the Plugin). |
 
 ## Limit
 
