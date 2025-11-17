@@ -65,6 +65,20 @@ app.extend({
 			checkbox(checked) {
 				const icon = checked ? 'mdi-checkbox-marked-outline' : 'mdi-checkbox-blank-outline';
 				return `<i class="mdi ${icon}" aria-hidden="true"></i>`;
+			},
+			blockquote: function(html) {
+				html = html.trim().replace(/^<p>([\s\S]+)<\/p>$/, '$1');
+				
+				if (html.match(/^\[\!(\w+)\]\s*/)) {
+					var type = RegExp.$1.toLowerCase();
+					var title = Tools.ucfirst(type);
+					var icons = { note: 'information-outline', tip: 'lightbulb-on-outline', important: 'alert-decagram', warning: 'alert-circle', caution: 'fire-alert' };
+					var icon = icons[type];
+					
+					html = html.replace(/^\[\!(\w+)\]\s*/, '');
+					return `<div class="blocknote ${type}"><div class="bn_title"><i class="mdi mdi-${icon}">&nbsp;</i>${title}</div><div class="bn_content">${html}</div></div>`;
+				}
+				else return `<blockquote>${html}</blockquote>`;
 			}
 		} });
 		
