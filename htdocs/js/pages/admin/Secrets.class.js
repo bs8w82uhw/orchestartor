@@ -446,7 +446,7 @@ Page.Secrets = class Secrets extends Page.PageUtils {
 				id: 'fe_se_plugins',
 				title: 'Allow access to plugins',
 				placeholder: '(None)',
-				options: app.plugins.filter( function(plugin) { return plugin.type != 'monitor'; } ),
+				options: app.plugins,
 				values: secret.plugins || [],
 				default_icon: 'power-plug-outline',
 				'data-hold': 1,
