@@ -38,7 +38,7 @@ Most automation platforms focus on workflow orchestration -- they run tasks, but
 Just want to test out xyOps locally really quick?  One-liner Docker command:
 
 ```sh
-docker run --init -v xy-data:/opt/xyops/data -p 5522:5522 -p 5523:5523 --name "xyops01" --hostname "xyops01" -e XYOPS_secret_key="MY_SECRET_KEY" -e TZ="America/Los_Angeles" ghcr.io/pixlcore/xyops:latest
+docker run --init -v xy-data:/opt/xyops/data -p 5522:5522 -p 5523:5523 --name "xyops01" --hostname "xyops01" ghcr.io/pixlcore/xyops:latest
 ```
 
 Then open http://localhost:5522 in your browser, and use username `admin` and password `admin`.
