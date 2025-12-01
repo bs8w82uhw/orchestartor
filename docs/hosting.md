@@ -376,6 +376,8 @@ The types of proxies supported are:
 | `socks4` | `socks4://some-socks-proxy.com:9050` |
 | `pac-*` | `pac+http://www.example.com/proxy.pac` |
 
+Make sure to set the environment variables across your server fleet, so things like the [HTTP Request Plugin](plugins.md#http-request-plugin) will also adhere.
+
 # Air-Gapped Mode
 
 xyOps supports air-gapped installs, which prevent it from making unauthorized outbound connections beyond a specified IP range.  You can configure which IP ranges it is allowed to connect to, via whitelist and/or blacklist.  The usual setup is to allow local LAN requests so servers can communicate with each other in your infra.
