@@ -93,6 +93,8 @@
 			"username": "admin",
 			"type": "event",
 			"kill": "parent",
+			"icon": "test-tube",
+			"notes": "The Test Plugin exists mainly to test xyOps, but it can also be useful for testing pieces of workflows.  It outputs sample data and optionally a sample file, which are passed to downstream events, if connected.  It can also simulate various job outcomes (success, fail, etc.).",
 			"modified": 1434125333,
 			"created": 1434125333,
 			"params": [
@@ -111,6 +113,8 @@
 			"username": "admin",
 			"type": "event",
 			"kill": "all",
+			"icon": "console",
+			"notes": "The Shell Plugin allows you to execute arbitrary shell scripts (or any language that supports a Shebang).  Simply select the Shell Plugin when creating an event or workflow, and enter your script.  This is an easy way to get up and running quickly, because you don't have to worry about reading or writing JSON.",
 			"modified": 1434125333,
 			"created": 1434125333,
 			"params": [
@@ -127,6 +131,8 @@
 			"username": "admin",
 			"type": "event",
 			"kill": "parent",
+			"icon": "wan",
+			"notes": "The HTTP Request Plugin allows you to send simple GET, HEAD or POST requests to any URL, and log the response.  You can specify custom HTTP request headers, and also supply regular expressions to match a successful response based on the content.",
 			"modified": 1434125333,
 			"created": 1434125333,
 			"params": [
@@ -141,6 +147,143 @@
 				{ "type":"checkbox", "id":"download", "title":"Download File", "value":false }, 
 				{ "type":"checkbox", "id":"ssl_cert_bypass", "title":"SSL Cert Bypass", "value":false }
 			]
+		} ],
+		[ "listPush", "global/plugins", {
+			"id": "dockerplug",
+			"title": "Docker Run",
+			"enabled": true,
+			"type": "event",
+			"command": "[docker-plugin]",
+			"params": [
+				{
+					"id": "image_name",
+					"title": "Image Name",
+					"type": "text",
+					"caption": "Enter the name of the Docker image to use, which can be local or remote.",
+					"locked": false,
+					"value": "ghcr.io/pixlcore/xyops-shell-image",
+					"variant": "text",
+					"required": true
+				},
+				{
+					"id": "image_ver",
+					"title": "Image Version",
+					"type": "text",
+					"caption": "Enter the desired version of the image to use, or use \"latest\" for the latest version.",
+					"locked": false,
+					"value": "latest",
+					"variant": "text",
+					"required": true
+				},
+				{
+					"id": "cont_name",
+					"title": "Container Name",
+					"type": "text",
+					"caption": "Enter the desired name of the Docker container, which can contain placeholder macros from the job data.",
+					"locked": false,
+					"value": "xyops-job-{{id}}",
+					"variant": "text",
+					"required": true
+				},
+				{
+					"id": "cont_cpus",
+					"title": "Max CPUs",
+					"type": "text",
+					"caption": "Set the maximum number of CPU cores the container is allowed to use, or 0 for unlimited.",
+					"locked": false,
+					"value": "1",
+					"variant": "number",
+					"required": false
+				},
+				{
+					"id": "cont_mem",
+					"title": "Max Memory",
+					"type": "text",
+					"caption": "Enter the maximum amount of memory to allow the container to use, or leave blank for unlimited.",
+					"locked": false,
+					"value": "1 GB",
+					"variant": "text",
+					"required": false
+				},
+				{
+					"id": "cont_net",
+					"title": "Join Network",
+					"type": "text",
+					"caption": "Optionally specify a Docker network name for the container to join.",
+					"locked": false,
+					"value": "",
+					"variant": "text",
+					"required": false
+				},
+				{
+					"id": "cont_extras",
+					"title": "Command Extras",
+					"type": "text",
+					"caption": "Optionally add any extra command-line arguments to pass to `docker run` (for e.g. volume mounts).",
+					"locked": false,
+					"value": "",
+					"variant": "text",
+					"required": false
+				},
+				{
+					"id": "cont_cmd",
+					"title": "Launch Command",
+					"type": "text",
+					"caption": "Enter the initial command to run as the container starts.  It is recommended to use [xyrun](https://github.com/pixlcore/xyrun) for this, so resources are monitored, and files are managed properly.\n",
+					"locked": false,
+					"value": "xyrun",
+					"variant": "text",
+					"required": false
+				},
+				{
+					"id": "run_mode",
+					"title": "Run Mode",
+					"type": "select",
+					"caption": "Choose whether you want the entire job JSON data to be sent to STDIN, or only the script source (advanced).",
+					"locked": false,
+					"value": "Send Job JSON, Send Script Source"
+				},
+				{
+					"id": "script",
+					"title": "Script Source",
+					"type": "code",
+					"caption": "Enter the code to run inside the container.  You can use any language that supports a shebang line.",
+					"locked": true,
+					"value": "#!/bin/sh\n\n# Enter your shell script code here",
+					"required": true
+				},
+				{
+					"id": "cont_init",
+					"title": "Init process manager",
+					"type": "checkbox",
+					"caption": "Run an \"init\" inside the container that forwards signals and reaps processes.",
+					"locked": false,
+					"value": true
+				},
+				{
+					"id": "cont_rm",
+					"title": "Ephemeral Container",
+					"type": "checkbox",
+					"caption": "Automatically delete the container after the job completes (recommended).",
+					"locked": false,
+					"value": true
+				},
+				{
+					"id": "verbose",
+					"title": "Verbose Logging",
+					"type": "checkbox",
+					"caption": "Enable verbose debug logging (raw docker command, etc.).",
+					"locked": false,
+					"value": false
+				}
+			],
+			"kill": "parent",
+			"runner": true,
+			"notes": "Use this Plugin to run custom scripts inside a Docker container.",
+			"icon": "docker",
+			"username": "admin",
+			"modified": 1434125333,
+			"created": 1434125333
 		} ],
 		[ "listPush", "global/plugins", {
 			"id": "open_files",
