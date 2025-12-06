@@ -1,68 +1,84 @@
-# The xyOps Longevity Pledge
+# xyOps Longevity Pledge
 
-### TL;DR
-**Always open-licensed, always OSI-approved. No rug pulls.**
+This document describes the long-term commitments that PixlCore LLC and I, Joseph Huckaby, make regarding the stewardship, licensing, and future of the xyOps project. It supplements, but does not replace, the legal terms defined in the LICENSE file. Your actual enforceable rights come from that license; this pledge explains the principles we commit to follow as maintainers.
 
-### 1. Permanent Open-Source Commitment
-- xyOps is, and will always remain, 100% licensed under an **OSI-approved open-source license**.
-- I, **Joseph Huckaby**, founder of **PixlCore LLC**, personally guarantee that the xyOps source code will **never** be re-licensed under a closed or proprietary license, restricted in access, or split into paid editions.
-- All public releases, past and future, are and will remain permanently open-licensed.
-- No new "editions," "enterprise versions," or "commercial forks" will ever exist.
-- The license will never be modified, split, or appended with additional restrictive terms.
-- No new code or contributions will ever be accepted under a non-open license.
-- No special "EE" or dual-licensed directories or files will ever exist in the xyOps codebase.
+## 1. Licensing & Openness
 
-### 2. Ownership and Successor Obligations
-- If PixlCore LLC is ever acquired or changes ownership, this pledge **must** transfer with it as a binding condition of sale.
-- Any successor or parent company will be legally and publicly bound to honor this pledge and maintain xyOps under an OSI-approved open-source license.
+xyOps is and will remain released under an OSI-approved open-source license.  We commit that:
 
-### 3. Dependencies and Integrity
-- All software dependencies in xyOps will always use compatible licenses (OSI-approved).
-- If any dependency changes its license to an incompatible one, we will:
-	1. Version-lock the last open-licensed release (already done by default), and  
-	2. Replace it with an alternative or re-implement it in-house as soon as possible.
+- xyOps will not be superseded by a proprietary fork that has a different or more advanced feature set.
+- The open-source version of xyOps will continue to receive ongoing development, security fixes, and enhancements.
+- No relicensing will occur that removes rights already granted under previous releases.
 
-### 4. Commercial Offerings
-- **xyOps Cloud** and **xyOps Enterprise** are service / support offerings only -- *not* new products or codebases.
-- The xyOps software running in the cloud is the exact same open-licensed code available publicly.
-- The only additions are support integrations (e.g. live chat, ticket creation), which are also open-licensed.
-- There will never be paid-only features, hidden enterprise flags, or closed extensions.
+Once released, versions under an open-source license cannot be revoked. Users will always be able to fork, modify, and redistribute xyOps under the terms of that license.
 
-### 5. Community Rights
-- The xyOps source code is and always will be freely copyable and modifiable under the terms of its open-source license.
-- No contributor agreement, license assignment, or other legal instrument will ever be introduced that transfers ownership of community contributions or restricts their rights.
-- All contributions, past and future, remain licensed under the same open-source terms, and all contributors retain full ownership of their work while granting permission for inclusion under those terms.
-- All repository history and release tags will remain publicly available in their original open-licensed form.  Past commits will never be rewritten, deleted, or hidden.
+## 2. No Feature-Restricted Editions
 
-### 6. Project Stewardship
-xyOps is designed not only to be open source forever, but to *endure*.  PixlCore LLC and its founder, Joseph Huckaby, are establishing safeguards to ensure that xyOps continues to exist, evolve, and remain accessible for decades to come -- regardless of individual or corporate circumstances.
+We will not create a "premium," "enterprise-only," or otherwise feature-restricted edition of xyOps that reduces the capability of the open-source version.
 
-#### 6a. Continuity
-- All xyOps source code, documentation, and release artifacts will remain publicly accessible, and will never be taken down, hidden, or paywalled.
-- The build and release process is fully automated and documented to allow anyone to reproduce official releases from source.
+Commercial offerings, such as hosted services, support plans, integrations, or optional convenience tooling, may exist, but they will not contain *core xyOps features* that are unavailable to the community edition. The open source xyOps project will remain fully functional and complete.
 
-#### 6b. Succession Plan
-- In the event that PixlCore LLC or I am no longer able to maintain xyOps, a designated successor organization (to be announced) will inherit stewardship and the full terms of this Longevity Pledge.
-- All existing maintainers and community contributors will retain their rights under the open-source license, and governance continuity will be prioritized above any business considerations.
+## 3. No Hidden or Undocumented Functionality
 
-#### 6c. Community Governance
-- Work is underway to formalize a **community-based governance model** that emphasizes transparency, technical merit, and inclusivity.
-- The goal is to transition xyOps into a self-sustaining ecosystem -- one that can outlive any single company or individual while staying true to its founding principles of openness and fairness.
+xyOps will not include hidden enterprise flags, private APIs, or closed-source modules. All functionality shipping with xyOps will be part of the public codebase. Any paid services will exist *outside* the core xyOps repository.
 
-#### 6d. Sustainability
-- Commercial offerings (such as xyOps Cloud) are operated independently of the open-source project and will never influence licensing or feature access.
-- Funding and sponsorship opportunities will be used solely to support ongoing development, maintenance, and community growth.
-- PixlCore's future products and services will always complement, not compete with, xyOps.  We will never develop or promote a closed-source or proprietary alternative to the xyOps platform.
+## 4. Continuity Through Ownership Changes
 
-### 7. Closing Words
-This pledge is not a marketing statement. It is a permanent promise of trust between PixlCore and the developer community.
+If PixlCore LLC is ever acquired, merged, or transitions ownership, our intent is that:
 
-### Meta
-- This file (`LONGEVITY.md`) will always remain at the root level of the xyOps repository, alongside `LICENSE.md`.
-- All releases of xyOps, including this longevity pledge, will be submitted to the [Software Heritage Foundation](https://www.softwareheritage.org).
+- xyOps will remain open source under an OSI-approved license.
+- The acquiring party will be publicly informed that continued open-source stewardship is an expected condition of the project.
+- Any planned changes to xyOps governance, licensing, or openness will be communicated transparently to the community prior to taking effect.
 
-### Signed
-- **Joseph Huckaby**
-- Founder & CEO, PixlCore LLC  
-- October 24, 2025
-- GPG Fingerprint: `FE0BACD6E1A4FD690CB4E5035642E9E0B1A5B9FC`
+This pledge itself is not a contract, but we commit to treating it as an ethical and operational guideline in any future business transactions.
+
+## 5. Dependency Licensing
+
+We will make every reasonable effort to ensure that all software dependencies used by xyOps have licenses compatible with xyOps's open-source license.
+
+If any dependency changes its license in a way that is incompatible or concerning, we will:
+
+- version-lock the last compatible release, and  
+- begin evaluating or developing a replacement.
+
+## 6. Stewardship, Transparency & Bus-Factor Reduction
+
+To ensure xyOps remains sustainable and viable long-term:
+
+- The project is fully open-source, with complete commit history and issue tracking publicly available.
+- Releases are tagged and permanent, allowing anyone to fork or maintain independent versions.
+- The project will be periodically submitted to independent archival services (e.g., Software Heritage Foundation) to ensure permanent public availability.
+- We intend, over time, to move toward a governance model that includes additional maintainers beyond the original author, to distribute responsibility and reduce single-maintainer risk.
+
+The goal is that xyOps remains usable, buildable, and maintainable even if PixlCore or I were no longer able to develop it.
+
+## 7. Commitment to Transparency
+
+If our intentions, direction, commercial strategy, or governance approach ever change in ways that materially affect the community, we will communicate those changes openly. Surprises, sudden pivots, and unilateral rug-pulls are incompatible with the purpose of this pledge.
+
+You are encouraged to fork the project if you ever feel that xyOps has drifted away from its stated principles. This is a fundamental right preserved by the open-source license itself.
+
+## 8. Archival & Preservation
+
+To support long-term continuity:
+
+- xyOps source code and documentation will be mirrored to independent archival services such as Software Heritage.  
+- Official releases will remain available indefinitely.
+
+These archives ensure xyOps survives beyond any single company, repository, or platform.
+
+## 9. Identity & Accountability
+
+This pledge is issued by:
+
+- **Joseph Huckaby**  
+- Founder, PixlCore LLC  
+- GPG Key Fingerprint: `3F74 C09B 4E73 D69A 93C3  723A 9DC6 51BD 8A8E 13F9`
+
+By attaching my real identity to this project, I acknowledge the reputational stakes involved. The integrity of xyOps, and the trust of its users, is central to its success.
+
+## 10. Important Note
+
+This pledge is not a legal contract, and does not confer additional legal rights beyond those granted by the LICENSE. Instead, it documents the principles and commitments that guide the long-term stewardship of xyOps. You should rely on the open-source license for enforceable guarantees, and view this pledge as a transparent statement of intent and philosophy.
+
+If you have questions, concerns, or suggestions for improving this pledge, please open a GitHub Issue so the discussion can happen publicly and benefit the entire community.
