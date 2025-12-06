@@ -2901,17 +2901,20 @@ Page.Base = class Base extends Page {
 			try { json = JSON.parse(e.target.result); } 
 			catch (err) { return app.doError("Failed to parse JSON in uploaded file: " + err); }
 			
-			if (!json.version || (json.version !== '1.0') || !json.type || !json.data || (typeof(json.data) != 'object')) {
+			if (!json.version || (json.version !== '1.0') || !json.type || (json.type !== 'xypdf') || !json.items || !json.items[0]) {
 				return app.doError("Unknown Format: Uploaded file is not an xyOps Portable Data Object.");
 			}
 			
-			var opts = config.ui.data_types[ json.type ];
-			if (!opts) return app.doError("Unknown Data Type: " + json.type);
+			// FUTURE: Support importing multiple items -- for now, just grab the first one
+			var item = json.items[0];
+			
+			var opts = config.ui.data_types[ item.type ];
+			if (!opts) return app.doError("Unknown Data Type: " + item.type);
 			
 			var all_objs = app[ opts.list ];
 			
 			// cleanup
-			var obj = json.data;
+			var obj = item.data;
 			delete obj.created;
 			delete obj.modified;
 			delete obj.revision;
@@ -2923,12 +2926,15 @@ Page.Base = class Base extends Page {
 			
 			var md = '';
 			md += `You are about to import ${prefix} ${opts.name} from an uploaded file.  Please confirm the data is what you expect:` + "\n";
-			md += "\n```json\n" + JSON.stringify(obj, null, "\t") + "\n```\n";
 			
 			if (find_object(all_objs, { id: obj.id })) {
 				do_replace = true;
-				md += "\n" + `**WARNING:** That ${opts.name} already exists.  If you proceed, it will be replaced with the uploaded version.` + "\n";
+				// md += "\n" + `**WARNING:** That ${opts.name} already exists.  If you proceed, it will be replaced with the uploaded version.` + "\n";
+				md += "\n" + `> [!WARNING]\n> This ${opts.name} already exists.  If you proceed, it will be replaced with the uploaded version.` + "\n";
+				title = '<span style="color:var(--red)">' + title + '</span>';
 			}
+			
+			md += "\n```json\n" + JSON.stringify(obj, null, "\t") + "\n```\n";
 			
 			var html = '';
 			html += '<div class="code_viewer scroll_shadows">';
@@ -2941,7 +2947,7 @@ Page.Base = class Base extends Page {
 			
 			var buttons_html = "";
 			buttons_html += '<div class="button mobile_collapse" onClick="Dialog.hide()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>Cancel</span></div>';
-			buttons_html += '<div class="button primary" onClick="Dialog.confirm_click(true)"><i class="mdi mdi-cloud-upload-outline">&nbsp;</i>Confirm Import</div>';
+			buttons_html += '<div class="button ' + (do_replace ? 'delete' : 'primary') + '" onClick="Dialog.confirm_click(true)"><i class="mdi mdi-cloud-upload-outline">&nbsp;</i>Confirm Import</div>';
 			
 			Dialog.showSimpleDialog(title, html, buttons_html);
 			

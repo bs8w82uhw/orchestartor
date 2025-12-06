@@ -443,10 +443,13 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		// download export as file (which can then be re-uploaded to create/replace)
 		var opts = this._temp_export;
 		var json = {
+			type: 'xypdf',
 			description: "xyOps Portable Data Object",
 			version: "1.0",
-			type: opts.dataType,
-			data: opts.data
+			items: [{ // FUTURE: Support multiple
+				type: opts.dataType,
+				data: opts.data
+			}]
 		};
 		var payload = JSON.stringify(json, null, "\t") + "\n";
 		var filename = 'xyops-' + opts.dataType + '-' + opts.data.id + '.json';
