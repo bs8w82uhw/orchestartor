@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Start xyOps inside a container
+# Append common PATHs
+# Delete old PID file, and use exec to replace current process
+# Support NODE_MAX_MEMORY
+
+# add some common path locations
+PATH=$PATH:/usr/bin:/bin:/usr/local/bin:/usr/sbin:/sbin:/usr/local/sbin
+
+# home directory
+HOMEDIR="$(dirname "$(cd -- "$(dirname "$0")" && (pwd -P 2>/dev/null || pwd))")"
+cd $HOMEDIR
+
+# the path to xyops entrypoint, including options
+BINARY="node --max-old-space-size=${NODE_MAX_MEMORY:-4096} $HOMEDIR/lib/main.js --foreground"
+
+# the path to the PID file
+PIDFILE=$HOMEDIR/logs/xyops.pid
+
+# delete old pid file
+rm -f $PIDFILE
+
+# start xyops, replace current process
+exec $BINARY
