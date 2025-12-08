@@ -43,7 +43,7 @@ Minimal example (JSON):
   - Event/workflow limits first (highest precedence)
   - Category limits next
   - Universal limits last
-- xyOps consults the first matching limit by `type` for start‑time checks like Max Concurrent Jobs (`job`) and Max Queue (`queue`). 
+- xyOps consults the first matching limit by `type` for start-time checks like Max Concurrent Jobs (`job`) and Max Queue (`queue`). 
 - For running resource checks (`time`, `log`, `mem`, `cpu`), multiple limits can exist, and they all apply, and can perform separate actions.
 
 ## Limit Object
@@ -73,7 +73,7 @@ Parameters:
 | `duration` | Number | Yes | Maximum runtime in seconds. |
 | `tags` | Array<String> | Optional | Apply these [Tag.id](data.md#tag-id) values when exceeded. |
 | `users` | Array<String> | Optional | Email these [User.username](data.md#user-username) users. |
-| `email` | String | Optional | Additional comma‑separated email addresses. |
+| `email` | String | Optional | Additional comma-separated email addresses. |
 | `web_hook` | String | Optional | Fire this [WebHook.id](data.md#webhook-id) when exceeded. |
 | `text` | String | Optional | Custom text appended to the web hook message. |
 | `snapshot` | Boolean | Optional | Take a server snapshot when exceeded. |
@@ -109,7 +109,7 @@ Parameters:
 
 Notes:
 
-- Scope for workflows matches the workflow's event; for ad‑hoc workflow node jobs, the queue scope includes the node ID.
+- Scope for workflows matches the workflow's event; for ad-hoc workflow node jobs, the queue scope includes the node ID.
 - Works in tandem with `queue`: without a queue, jobs are aborted when the limit is reached.
 
 Example:
@@ -134,7 +134,7 @@ Parameters:
 | `amount` | Number | Yes | Maximum bytes of output/log content. |
 | `tags` | Array<String> | Optional | Apply these tags when exceeded. |
 | `users` | Array<String> | Optional | Email these users. |
-| `email` | String | Optional | Additional comma‑separated email addresses. |
+| `email` | String | Optional | Additional comma-separated email addresses. |
 | `web_hook` | String | Optional | Fire this web hook. |
 | `text` | String | Optional | Custom text appended to the web hook message. |
 | `snapshot` | Boolean | Optional | Take a server snapshot when exceeded. |
@@ -165,7 +165,7 @@ Parameters:
 | `duration` | Number | Yes | Sustain time in seconds over the limit before triggering. |
 | `tags` | Array<String> | Optional | Apply these tags when exceeded. |
 | `users` | Array<String> | Optional | Email these users. |
-| `email` | String | Optional | Additional comma‑separated email addresses. |
+| `email` | String | Optional | Additional comma-separated email addresses. |
 | `web_hook` | String | Optional | Fire this web hook. |
 | `text` | String | Optional | Custom text appended to the web hook message. |
 | `snapshot` | Boolean | Optional | Take a server snapshot when exceeded. |
@@ -198,7 +198,7 @@ Parameters:
 | `duration` | Number | Yes | Sustain time in seconds over the limit before triggering. |
 | `tags` | Array<String> | Optional | Apply these tags when exceeded. |
 | `users` | Array<String> | Optional | Email these users. |
-| `email` | String | Optional | Additional comma‑separated email addresses. |
+| `email` | String | Optional | Additional comma-separated email addresses. |
 | `web_hook` | String | Optional | Fire this web hook. |
 | `text` | String | Optional | Custom text appended to the web hook message. |
 | `snapshot` | Boolean | Optional | Take a server snapshot when exceeded. |
@@ -273,7 +273,7 @@ Parameters:
 | `type` | String | Yes | Set to `file` for max file limit. |
 | `amount` | Number | Yes | Maximum number of input files allowed. `0` means **no** files permitted. |
 | `size` | Number | Optional | Maximum total combined size (bytes) for all files. |
-| `accept` | String | Optional | Comma‑separated list of file extensions to allow (include the leading dot, case‑insensitive), e.g. `.json,.csv`. |
+| `accept` | String | Optional | Comma-separated list of file extensions to allow (include the leading dot, case-insensitive), e.g. `.json,.csv`. |
 
 Example:
 
@@ -305,10 +305,10 @@ Example:
 
 ## Notes and Behavior
 
-- Start‑time enforcement: `job`, `queue`, and `file` limits are evaluated before launch. `job`/`queue` determine whether a job runs now, queues, or aborts. `file` prunes input.
+- Start-time enforcement: `job`, `queue`, and `file` limits are evaluated before launch. `job`/`queue` determine whether a job runs now, queues, or aborts. `file` prunes input.
 - Runtime enforcement: `time`, `log`, `mem`, `cpu` are checked while the job runs. `mem` and `cpu` require sustained overages for their `duration` before triggering.
 - Triggered actions: For `time`, `log`, `mem`, `cpu`, when exceeded xyOps can apply tags, send emails, fire a web hook (with optional extra text), take a snapshot, and abort the job. All actions are recorded in the job's Activity log with details.
-- Multiple similar limits: If multiple sources define the same type, the event/workflow definition takes precedence for start‑time checks.
-- Queues and scope: Queues are per event. For ad‑hoc workflow node runs, the queue scope includes the node identifier to avoid cross‑contending unrelated nodes. Queues are used both when `job` concurrency is saturated and when no matching servers are currently available.
+- Multiple similar limits: If multiple sources define the same type, the event/workflow definition takes precedence for start-time checks.
+- Queues and scope: Queues are per event. For ad-hoc workflow node runs, the queue scope includes the node identifier to avoid cross-contending unrelated nodes. Queues are used both when `job` concurrency is saturated and when no matching servers are currently available.
 
 See also: [Limit](data.md#limit) and [Limit Types](data.md#limit-type) for the canonical data structure definitions.

@@ -104,7 +104,7 @@ Responses follow the standard format and include full [Tag](data.md#tag) objects
 
 ## Tips and Recommended Tags
 
-Here are some practical, general‑purpose tags you might create:
+Here are some practical, general-purpose tags you might create:
 
 - **Environments**: `Production`, `Staging`, `Dev`, `QA`
 - **Priority/Severity**: `Sev1`, `Sev2`, `Sev3`; `Priority:High`, `Priority:Low`

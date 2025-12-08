@@ -13,7 +13,7 @@ xyOps uses a custom expression syntax built upon the open-source [JavaScript Exp
 
 ## Overview
 
-The xyOps Expression Format is a JavaScript‑style syntax with dot paths, array indexing, arithmetic and boolean operators.  Using it you can traverse deep object trees (e.g. [ServerMonitorData](data.md#servermonitordata)), pull out individual values, and perform operations on one or more values.
+The xyOps Expression Format is a JavaScript-style syntax with dot paths, array indexing, arithmetic and boolean operators.  Using it you can traverse deep object trees (e.g. [ServerMonitorData](data.md#servermonitordata)), pull out individual values, and perform operations on one or more values.
 
 Since it is built upon JEXL you can easily traverse arrays of objects, and select items from an array based on sub-object keys.  See examples below for details.
 

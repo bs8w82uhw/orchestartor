@@ -10,12 +10,12 @@ We stand on the shoulders of giants.  xyOps was built using these awesome open s
 | [@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm) | Full xterm-compatible terminal in the browser. | MIT |
 | [@xterm/addon-fit](https://www.npmjs.com/package/@xterm/addon-fit) | Addon for xterm.js to resize the terminal to fit its container. | MIT |
 | [ansi_up](https://www.npmjs.com/package/ansi_up) | Convert ANSI sequences in text to colorful HTML. | MIT |
-| [async](https://www.npmjs.com/package/async) | Higher‑order functions and common patterns for asynchronous code. | MIT |
+| [async](https://www.npmjs.com/package/async) | Higher-order functions and common patterns for asynchronous code. | MIT |
 | [bcrypt-node](https://www.npmjs.com/package/bcrypt-node) | Native JavaScript implementation of BCrypt for Node.js. | BSD-3-Clause |
 | [canvas-confetti](https://www.npmjs.com/package/canvas-confetti) | Performant confetti animation in the browser. | ISC |
-| [codemirror](https://www.npmjs.com/package/codemirror) | Full‑featured in‑browser code editor. | MIT |
+| [codemirror](https://www.npmjs.com/package/codemirror) | Full-featured in-browser code editor. | MIT |
 | [diff](https://www.npmjs.com/package/diff) | JavaScript text diff implementation. | BSD-3-Clause |
-| [jexl](https://www.npmjs.com/package/jexl) | Context‑based expression language parser and evaluator. | MIT |
+| [jexl](https://www.npmjs.com/package/jexl) | Context-based expression language parser and evaluator. | MIT |
 | [jimp](https://www.npmjs.com/package/jimp) | Image processing library written entirely in JavaScript. | MIT |
 | [jquery](https://www.npmjs.com/package/jquery) | JavaScript library for DOM operations. | MIT |
 | [juice](https://www.npmjs.com/package/juice) | Inline CSS into HTML source. | MIT |
@@ -24,7 +24,7 @@ We stand on the shoulders of giants.  xyOps was built using these awesome open s
 | [node-pty](https://www.npmjs.com/package/node-pty) | Fork pseudoterminals in Node.js | MIT |
 | [sanitize-html](https://www.npmjs.com/package/sanitize-html) | Sanitize user-submitted HTML while preserving allowed elements and attributes. | MIT |
 | [shell-quote](https://www.npmjs.com/package/shell-quote) | Parse and quote shell commands. | MIT |
-| [sqlite3](https://www.npmjs.com/package/sqlite3) | Asynchronous, non‑blocking SQLite3 bindings. | BSD-3-Clause |
+| [sqlite3](https://www.npmjs.com/package/sqlite3) | Asynchronous, non-blocking SQLite3 bindings. | BSD-3-Clause |
 | [systeminformation](https://www.npmjs.com/package/systeminformation) | System and OS information library for Node.js | MIT |
 | [uglify-js](https://www.npmjs.com/package/uglify-js) | JavaScript parser, mangler/compressor and beautifier toolkit. | BSD-2-Clause |
 | [useragent-ng](https://www.npmjs.com/package/useragent-ng) | Fast and efficient user agent string parser. | MIT |

@@ -51,18 +51,18 @@ Running an event produces a job. Here is the lifecycle from trigger to execution
 	- Active limits (time, log size, CPU, memory, etc.) are continuously evaluated. 
 	- When exceeded, configured actions fire (email, web hooks, tags, snapshots, abort, etc.).
 7. **Completion**
-	- On finish, final actions run (success/fail/progress/abort, plus any tag‑based actions), and the job record is stored in history for searching and analytics.
+	- On finish, final actions run (success/fail/progress/abort, plus any tag-based actions), and the job record is stored in history for searching and analytics.
 
 ## Triggers
 
 Triggers define when jobs are allowed to launch, and optional modifiers. Common patterns:
 
-- `manual`: Allows on‑demand runs via UI/API. If omitted or disabled, manual runs are rejected.
-- `schedule`: Cron‑style arrays of years/months/days/weekdays/hours/minutes with optional timezone.
+- `manual`: Allows on-demand runs via UI/API. If omitted or disabled, manual runs are rejected.
+- `schedule`: Cron-style arrays of years/months/days/weekdays/hours/minutes with optional timezone.
 - `interval`: Run every N minutes; mutually exclusive with precision/delay.
 - `single`: One-time run at a specific date/time.
 - `plugin`: Scheduler Plugin decides when to run; useful for external signals.
-- Modifiers: `catchup`, `range`, `blackout`, `delay`, `precision` provide windowing, lockouts, and sub‑minute behavior.
+- Modifiers: `catchup`, `range`, `blackout`, `delay`, `precision` provide windowing, lockouts, and sub-minute behavior.
 
 See the full trigger list and composition rules: [Triggers](triggers.md).
 
@@ -70,10 +70,10 @@ See the full trigger list and composition rules: [Triggers](triggers.md).
 
 The `targets` list may contain server IDs and/or group IDs. At launch time xyOps:
 
-- Expands groups into member servers and de‑duplicates the list.
+- Expands groups into member servers and de-duplicates the list.
 - Filters to currently enabled, online servers.
 - Optionally removes servers that are under active blocking alerts (e.g. maintenance or capacity limits).
-- If the resulting set is empty, and a `queue` limit is present, the job may enter a per‑event queue up to the configured size; otherwise it aborts with a retry‑ok flag.
+- If the resulting set is empty, and a `queue` limit is present, the job may enter a per-event queue up to the configured size; otherwise it aborts with a retry-ok flag.
 
 Selection among remaining candidates is controlled by `algo`:
 
@@ -88,10 +88,10 @@ The chosen server ID is stored on the job as `server` and the server's group mem
 
 ## Plugins
 
-Every non‑workflow event references an Event Plugin via `plugin`, which defines how to execute the job: command/script, user/group IDs, kill signals, and parameter definitions. The scheduler copies missing default parameter values from the plugin spec at launch time, and enforces locked/required parameters for non‑admin users.
+Every non-workflow event references an Event Plugin via `plugin`, which defines how to execute the job: command/script, user/group IDs, kill signals, and parameter definitions. The scheduler copies missing default parameter values from the plugin spec at launch time, and enforces locked/required parameters for non-admin users.
 
 - **Parameters**: `params` are passed to the plugin. Locked/required attributes can be set by admins or categories. Optional `fields` collected at manual run time are merged into `params`.
-- **Environment**: Jobs inherit configured `job_env` plus any event‑specific `env` overrides.  Additionally, all Plugin params are passed as environment variables as well.
+- **Environment**: Jobs inherit configured `job_env` plus any event-specific `env` overrides.  Additionally, all Plugin params are passed as environment variables as well.
 - **Input**: Jobs may include structured `input.data` and uploaded `input.files` when launched from the UI/API. Actions like "Bucket Fetch" can also populate inputs before your code runs.
 
 See [Event Plugins](plugins.md#event-plugins) for plugin parameters, and lifecycle details.
@@ -109,7 +109,7 @@ Limits can apply tags, send email/web hooks, generate snapshots, and abort jobs.
 
 ## Actions
 
-Actions run at specific job lifecycle stages and conditions: `start`, `progress`, `success`, `warning`, `critical`, `abort`, `complete`, and tag‑based triggers (`tag:xyz`). Actions can:
+Actions run at specific job lifecycle stages and conditions: `start`, `progress`, `success`, `warning`, `critical`, `abort`, `complete`, and tag-based triggers (`tag:xyz`). Actions can:
 
 - Send email to users and/or custom addresses.
 - Fire web hooks with rich job payloads.
@@ -122,11 +122,11 @@ Event actions combine with category defaults and universal actions. See [Actions
 
 ## Manual Runs and Prompts
 
-To allow on‑demand runs from the UI or API, include an enabled `manual` trigger on the event. When launching manually:
+To allow on-demand runs from the UI or API, include an enabled `manual` trigger on the event. When launching manually:
 
 - Any `fields` defined on the event are presented as a UI form, and their values are merged into `params`.
 - The UI/API may attach uploaded files; these become `input.files`. Arbitrary JSON may be provided as `input.data` when testing.
-- Non‑admin users must satisfy any locked/required parameters defined by the plugin or event fields; the system enforces these and applies defaults.
+- Non-admin users must satisfy any locked/required parameters defined by the plugin or event fields; the system enforces these and applies defaults.
 
 To run an event programmatically, see [API](api.md) for the run endpoint and parameter overrides.
 
@@ -137,7 +137,7 @@ To run an event programmatically, see [API](api.md) for the run endpoint and par
 
 ## Workflows
 
-Workflow events are special "multi-event" graphs with connected nodes. Triggers on a workflow event define entry points into the graph. When launched, the workflow orchestrates sub‑jobs and actions per node and connection. See [Workflows](workflows.md) for full details.
+Workflow events are special "multi-event" graphs with connected nodes. Triggers on a workflow event define entry points into the graph. When launched, the workflow orchestrates sub-jobs and actions per node and connection. See [Workflows](workflows.md) for full details.
 
 ## Related Reading
 

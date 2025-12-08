@@ -74,11 +74,11 @@ Replace `v1.0.0` with the desired xyOps version from the [official release list]
 
 See our [Command Line Guide](cli.md) for controlling the xyOps service via command-line.
 
-## Adding Masters Manually
+## Adding Conductors Manually
 
-When you manually install xyOps, it creates a cluster of one, and promotes itself to master.  To add additional servers, follow these instructions.
+When you manually install xyOps, it creates a cluster of one, and promotes itself to primary.  To add additional servers, follow these instructions.
 
-First, for multi-master setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).  See [Storage Engines](https://github.com/jhuckaby/pixl-server-storage#engines) for details.
+First, for multi-conductor setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).  See [Storage Engines](https://github.com/jhuckaby/pixl-server-storage#engines) for details.
 
 Once you have storage setup and working, stop the xyOps service, and edit the `/opt/xyops/conf/masters.json` file:
 
@@ -100,11 +100,11 @@ Then, install the software onto the new server, and copy over the following file
 /opt/xyops/conf/masters.json
 ```
 
-Then finally, start the service on both servers.  They should self-negotiate and one will be promoted to master after 10 seconds (whichever hostname sorts first alphabetically).
+Then finally, start the service on both servers.  They should self-negotiate and one will be promoted to primary after 10 seconds (whichever hostname sorts first alphabetically).
 
-Note that master server hostnames **cannot change**.  If they do, you will need to update the `/opt/xyops/conf/masters.json` file on all servers and restart everything.
+Note that conductor server hostnames **cannot change**.  If they do, you will need to update the `/opt/xyops/conf/masters.json` file on all servers and restart everything.
 
-For fully transparent auto-failover using a single user-facing hostname, see [Multi-Master with Nginx](#multi-master-with-nginx) below.
+For fully transparent auto-failover using a single user-facing hostname, see [Multi-Conductor with Nginx](#multi-conductor-with-nginx) below.
 
 ## Uninstall
 
@@ -165,28 +165,28 @@ The xyOps built-in web server ([pixl-server-web](https://github.com/jhuckaby/pix
 
 Alternatively, you can setup a proxy to sit in front of xyOps and handle TLS for you (see next section).
 
-# Multi-Master with Nginx
+# Multi-Conductor with Nginx
 
-For a load balanced multi-master setup with Nginx w/TLS, please read this section.  This is a complex setup, and requires advanced knowledge of all the components used.  Let me recommend our [Enterprise Plan](https://xyops.io/enterprise) here, as we can set all this up for you.  Now, the way this configuration works is as follows:
+For a load balanced multi-conductor setup with Nginx w/TLS, please read this section.  This is a complex setup, and requires advanced knowledge of all the components used.  Let me recommend our [Enterprise Plan](https://xyops.io/enterprise) here, as we can set all this up for you.  Now, the way this configuration works is as follows:
 
 - [Nginx](https://nginx.org/) sits in front, and handles TLS termination, as well as routing requests to various backends.
-- Nginx handles xyOps multi-master using an embedded [Health Check Daemon](https://github.com/pixlcore/xyops-healthcheck) which runs in the same container.
-	- The health check keeps track of which server is master, and dynamically reconfigures and hot-reloads Nginx as needed.
+- Nginx handles xyOps multi-conductor using an embedded [Health Check Daemon](https://github.com/pixlcore/xyops-healthcheck) which runs in the same container.
+	- The health check keeps track of which server is conductor, and dynamically reconfigures and hot-reloads Nginx as needed.
 	- We maintain our own custom Nginx docker image for this (shown below), or you can [build your own from source](https://github.com/pixlcore/xyops-nginx/blob/main/Dockerfile).
 
 A few prerequisites for this setup:
 
-- For multi-master setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).  See [Storage Engines](https://github.com/jhuckaby/pixl-server-storage#engines) for details.
+- For multi-conductor setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).  See [Storage Engines](https://github.com/jhuckaby/pixl-server-storage#engines) for details.
 - You will need a custom domain configured and TLS certs created and ready to attach.
 - You have your xyOps configuration file customized and ready to go ([config.json](https://github.com/pixlcore/xyops/blob/main/sample_conf/config.json)) (see below).
 
 For the examples below, we'll be using the following domain placeholders:
 
 - `xyops.yourcompany.com` - User-facing domain which should route to Nginx / SSO.
-- `xyops01.yourcompany.com` - Internal domain for master server #1.
-- `xyops02.yourcompany.com` - Internal domain for master server #2.
+- `xyops01.yourcompany.com` - Internal domain for conductor server #1.
+- `xyops02.yourcompany.com` - Internal domain for conductor server #2.
 
-The reason why the master servers each need their own unique (internal) domain name is because of how the multi-master system works.  Each master server needs to be individually addressable, and reachable by all of your worker servers in your org.  Worker servers don't know or care about Nginx -- they contact masters directly, and have their own auto-failover system.  Also, worker servers use a persistent WebSocket connection, and can send a large amount of traffic, depending on how many worker servers you have and how many jobs you run.  For these reasons, it's better to have worker servers connect the masters directly, especially at production scale.
+The reason why the conductor servers each need their own unique (internal) domain name is because of how the multi-conductor system works.  Each conductor server needs to be individually addressable, and reachable by all of your worker servers in your org.  Worker servers don't know or care about Nginx -- they contact conductors directly, and have their own auto-failover system.  Also, worker servers use a persistent WebSocket connection, and can send a large amount of traffic, depending on how many worker servers you have and how many jobs you run.  For these reasons, it's better to have worker servers connect the conductors directly, especially at production scale.
 
 That being said, you *can* configure your worker servers to connect through the Nginx front door if you want.  This can be useful if you have worker servers in another network or out in the wild, but it is not recommended for most setups.  To do this, please see [Overriding The Connect URL](hosting.md#overriding-the-connect-url) in our self-hosting guide.
 
@@ -221,12 +221,12 @@ services:
 	  - "443:443"
 ```
 
-Let's talk about the Nginx setup.  We are pulling in our own Docker image here ([xyops-nginx](https://github.com/pixlcore/xyops-nginx)).  This is a wrapper around the official Nginx docker image, but it includes our [xyOps Health Check](https://github.com/pixlcore/xyops-healthcheck) daemon.  The health check monitors which master server is currently primary, and dynamically reconfigures Nginx on-the-fly as needed (so Nginx always routes to the current primary server only).  The image also comes with a fully preconfigured Nginx.  To use this image you will need to provide:
+Let's talk about the Nginx setup.  We are pulling in our own Docker image here ([xyops-nginx](https://github.com/pixlcore/xyops-nginx)).  This is a wrapper around the official Nginx docker image, but it includes our [xyOps Health Check](https://github.com/pixlcore/xyops-healthcheck) daemon.  The health check monitors which conductor server is currently primary, and dynamically reconfigures Nginx on-the-fly as needed (so Nginx always routes to the current primary server only).  The image also comes with a fully preconfigured Nginx.  To use this image you will need to provide:
 
 - Your TLS certificate files, named `tls.crt` and `tls.key`, which are bound to `/etc/tls.crt` and `/etc/tls.key`, respectively.
-- The list of xyOps master server domain names, as a CSV list in the `XYOPS_masters` environment variable (used by health check).
+- The list of xyOps conductor server domain names, as a CSV list in the `XYOPS_masters` environment variable (used by health check).
 
-Once you have Nginx running, we can fire up the xyOps backend.  This is documented separately as you'll usually want to run these on separate servers.  Here is the multi-master configuration as a single Docker run command:
+Once you have Nginx running, we can fire up the xyOps backend.  This is documented separately as you'll usually want to run these on separate servers.  Here is the multi-conductor configuration as a single Docker run command:
 
 ```sh
 docker run \
@@ -249,7 +249,7 @@ And here it is as a docker compose file.
 services:
   xyops1:
 	image: ghcr.io/pixlcore/xyops:latest
-	hostname: xyops01.yourcompany.com # change this per master server
+	hostname: xyops01.yourcompany.com # change this per conductor server
 	init: true
 	environment:
 	  XYOPS_masters: xyops01.yourcompany.com,xyops02.yourcompany.com
@@ -263,13 +263,13 @@ services:
 	  - "5523:5523"
 ```
 
-For additional master servers you can simply duplicate the command and change the hostname.
+For additional conductor servers you can simply duplicate the command and change the hostname.
 
 A few things to note here:
 
 - We're using our official xyOps Docker image, but you can always [build your own from source](https://github.com/pixlcore/xyops/blob/main/Dockerfile).
-- All master server hostnames need to be listed in the `XYOPS_masters` environment variable, comma-separated.
-- All master servers need to be able to route to each other via their hostnames, so they can self-negotiate and hold elections.
+- All conductor server hostnames need to be listed in the `XYOPS_masters` environment variable, comma-separated.
+- All conductor servers need to be able to route to each other via their hostnames, so they can self-negotiate and hold elections.
 - The timezone (`TZ`) should be set to your company's main timezone, so things like midnight log rotation and daily stat resets work as expected.
 - The `/var/run/docker.sock` bind allows xyOps to launch its own containers (i.e. for the [Plugin Marketplace](marketplace.md)).
 - You will need to supply the configuration file: `config.json`.  See below.
@@ -284,7 +284,7 @@ For instructions on how to install xySat, see [Adding Servers](servers.md#adding
 
 ## Configuration
 
-xySat is configured automatically via the xyOps master server.  The [satellite.config](config.md#satellite-config) object is automatically sent to each server after it connects and authenticates, so you can keep a master version of the xySat configuration which is auto-synced to all servers.  Here is the default config:
+xySat is configured automatically via the xyOps conductor server.  The [satellite.config](config.md#satellite-config) object is automatically sent to each server after it connects and authenticates, so you can keep a conductor version of the xySat configuration which is auto-synced to all servers.  Here is the default config:
 
 ```json
 { 
@@ -309,7 +309,7 @@ Here are descriptions of the configuration properties:
 
 | Property Name | Type | Description |
 |---------------|------|-------------|
-| `port` | Number | Specifies which port the xyOps master server will be listening on (default is `5522` for ws:// and `5523` for wss://). |
+| `port` | Number | Specifies which port the xyOps conductor server will be listening on (default is `5522` for ws:// and `5523` for wss://). |
 | `secure` | Boolean | Set to `true` to use secure WebSocket (wss://) and HTTPS connections. |
 | `socket_opts` | Object | Options to pass to the WebSocket connection (see [WebSocket](https://github.com/websockets/ws/blob/master/doc/ws.md#class-websocket)). |
 | `pid_file` | String | Location of the PID file to ensure two satellites don't run simultaneously. |
@@ -326,9 +326,9 @@ Here are descriptions of the configuration properties:
 
 ### Overriding The Connect URL
 
-When xySat is first installed, it is provided an array of hosts to connect to, which becomes a `hosts` array in the xySat config file on each server.  When xySat starts up, it connects to a *random host* from this array, and figures out which master is primary, and reconnects to that host.  If the master cluster changes, a new `hosts` array is automatically distributed to all servers by the current master.
+When xySat is first installed, it is provided an array of hosts to connect to, which becomes a `hosts` array in the xySat config file on each server.  When xySat starts up, it connects to a *random host* from this array, and figures out which conductor is primary, and reconnects to that host.  If the conductor cluster changes, a new `hosts` array is automatically distributed to all servers by the current conductor.
 
-In certain situations you may need to have xySat connect to a specific master host, instead of the default master list.  For e.g. you may have servers "out in the wild" and they need to connect through a proxy, or some other kind of complex network topology.  Either way, you can override the usual array of hosts that xySat connects to, and specify a static value instead.
+In certain situations you may need to have xySat connect to a specific conductor host, instead of the default conductor list.  For e.g. you may have servers "out in the wild" and they need to connect through a proxy, or some other kind of complex network topology.  Either way, you can override the usual array of hosts that xySat connects to, and specify a static value instead.
 
 To do this, add a `host` property into the xySat config as a top-level JSON property, on each server that requires it.  The xySat config file is be located at:
 
@@ -336,7 +336,7 @@ To do this, add a `host` property into the xySat config as a top-level JSON prop
 /opt/xyops/satellite/config.json
 ```
 
-Note that you should **not** add a `host` property into the [satellite.config](config.md#satellite-config) object on the master server, unless you want **all** of your servers to connect to the static host.
+Note that you should **not** add a `host` property into the [satellite.config](config.md#satellite-config) object on the conductor server, unless you want **all** of your servers to connect to the static host.
 
 When both `hosts` and `host` exist in the config file, `host` takes precedence.
 
@@ -407,7 +407,7 @@ xyOps supports fully air-gapped server installs and upgrades.  Here is how it wo
 1. As part of your [enterprise plan](https://xyops.io/enterprise), request a signed xySat software package from us.
 2. In your xyOps instance, create a [Storage Bucket](buckets.md) and note the Bucket ID.
 3. Upload the files you received into the bucket.  The filenames will be in this format: `satellite-OS-ARCH.tar.gz`.
-4. Edit your master config file, and set the `satellite.bucket` property to the Bucket ID.
+4. Edit your conductor config file, and set the `satellite.bucket` property to the Bucket ID.
 5. Install or upgrade your servers as per usual.
 6. xyOps will use the xySat install packages from the bucket, and not request anything over the internet.
 
@@ -418,23 +418,23 @@ For Docker containers, make sure that your local Docker has our images stored lo
 
 # Secret Key Rotation
 
-xyOps uses a single secret key on every master server. This key encrypts stored secrets, signs temporary UI tokens, and issues authentication tokens for worker servers (xySat). Rotating this key is fully automated and performed from the UI.
+xyOps uses a single secret key on every conductor server. This key encrypts stored secrets, signs temporary UI tokens, and issues authentication tokens for worker servers (xySat). Rotating this key is fully automated and performed from the UI.
 
 ## Overview
 
-- **Secure generation**: A new cryptographically secure key is generated by the primary master and is never transmitted in plaintext.
+- **Secure generation**: A new cryptographically secure key is generated by the primary conductor and is never transmitted in plaintext.
 - **Orchestrated rotation**: The scheduler is paused, queued jobs are flushed, and active jobs are aborted before rotation proceeds.
 - **Seamless re-encryption**: All stored secrets are re-encrypted with the new key.
 - **Re-authentication**: All connected xySat servers are re-authenticated and issued new auth tokens automatically.
-- **Peer distribution**: The new key is distributed to all master peers (backup masters) encrypted using the prior key.
+- **Peer distribution**: The new key is distributed to all conductor peers (backup conductors) encrypted using the prior key.
 - **Persistent config**: The new key is written to `/opt/xyops/conf/overrides.json`. The base `config.json` is not modified by design (often mounted read-only in Docker).
 - **Not impacted**: Existing user sessions and API keys remain valid and are not affected by key rotation.
 
-## Pre‑Checks
+## Pre-Checks
 
-Before starting a rotation, ensure that all masters and all worker servers are online and healthy:
+Before starting a rotation, ensure that all conductors and all worker servers are online and healthy:
 
-- Verify that every master is reachable and participating in the cluster.
+- Verify that every conductor is reachable and participating in the cluster.
 - Verify that all worker servers show as online in the Servers list.
 
 If a node is offline during rotation, it will not receive updates automatically. See [Offline Recovery](#offline-recovery) below.
@@ -445,26 +445,26 @@ If a node is offline during rotation, it will not receive updates automatically.
 2. The system pauses the scheduler, flushes queued jobs, and aborts active jobs.
 3. A new key is generated and used to re-encrypt all secrets.
 4. Connected worker servers are issued new auth tokens.
-5. The new key is securely distributed to all master peers.
-6. The key is persisted to `/opt/xyops/conf/overrides.json` on each master.
+5. The new key is securely distributed to all conductor peers.
+6. The key is persisted to `/opt/xyops/conf/overrides.json` on each conductor.
 7. The schedule remains paused until you resume it (click the "Paused" icon in the header).
 
 No manual edits or restarts are required when all nodes are online.
 
 ## Offline Recovery
 
-If a server or master was offline during the rotation window, you will need to perform the appropriate recovery action.
+If a server or conductor was offline during the rotation window, you will need to perform the appropriate recovery action.
 
-### Re‑authenticate an Offline Worker Server
+### Re-authenticate an Offline Worker Server
 
 If a worker server missed the rotation, you can recover it by deriving a new auth token manually.
 
 What you need:
 
-- The current secret key from the primary master. This is only available on-disk via SSH to the master: `/opt/xyops/conf/overrides.json` (`secret_key`). It is not retrievable via API.
+- The current secret key from the primary conductor. This is only available on-disk via SSH to the conductor: `/opt/xyops/conf/overrides.json` (`secret_key`). It is not retrievable via API.
 - The offline server's alphanumeric ID (e.g. `smf4j79snhe`). You can find this in the UI on the server history page, or on the server itself in `/opt/xyops/satellite/config.json`.
 
-Compute the SHA‑256 of the concatenation: `SERVER_ID + SECRET_KEY`, and use the hex digest as the new auth token. Example:
+Compute the SHA-256 of the concatenation: `SERVER_ID + SECRET_KEY`, and use the hex digest as the new auth token. Example:
 
 ```sh
 # OpenSSL
@@ -477,21 +477,21 @@ Then edit the satellite config on the worker:
 /opt/xyops/satellite/config.json
 ```
 
-Set the `auth_token` property to the computed SHA‑256 hex string. Save the file -- the satellite will auto‑reload and attempt to reconnect within ~30 seconds. Check the satellite logs for troubleshooting.
+Set the `auth_token` property to the computed SHA-256 hex string. Save the file -- the satellite will auto-reload and attempt to reconnect within ~30 seconds. Check the satellite logs for troubleshooting.
 
-### Update an Offline Master
+### Update an Offline Conductor
 
-If a master was offline during rotation, SSH to it and update the key by hand:
+If a conductor was offline during rotation, SSH to it and update the key by hand:
 
-1) Open `/opt/xyops/conf/overrides.json` on the offline master.
-2) Set the `secret_key` property to the new key from the primary master. If the file lacks `secret_key` (e.g. first rotation), add it.
-3) Save the file and restart the master service if needed.
+1) Open `/opt/xyops/conf/overrides.json` on the offline conductor.
+2) Set the `secret_key` property to the new key from the primary conductor. If the file lacks `secret_key` (e.g. first rotation), add it.
+3) Save the file and restart the conductor service if needed.
 
-After the update, the master will rejoin the cluster with the correct key.
+After the update, the conductor will rejoin the cluster with the correct key.
 
 ## Best Practices
 
 - Schedule rotations during a maintenance window to tolerate job aborts.
 - Confirm node health beforehand to avoid manual recovery steps.
-- Store the current key securely and restrict SSH access to masters.
+- Store the current key securely and restrict SSH access to conductors.
 - Rotate periodically as part of your security program (see [Security Checklist](scaling.md#security-checklist)).

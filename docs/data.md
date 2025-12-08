@@ -622,7 +622,7 @@ Which CWD (Current Working Directory) run the job process under.  This cannot be
 
 ## Job.env
 
-Custom job environment variables to inject into the executable when spawning it.  If unset, this is copied from the `job_env` master configuration property.
+Custom job environment variables to inject into the executable when spawning it.  If unset, this is copied from the `job_env` global configuration property.
 
 ## Job.state
 
@@ -1243,7 +1243,7 @@ An internal revision number for the secret, incremented with each change.
 
 # Server
 
-A server is a physical or virtual machine that connects to the master xyOps server, provides metrics for monitoring, and can execute jobs.  The server object represents a server instance within the xyOps ecosystem.  Here is an example server in JSON format:
+A server is a physical or virtual machine that connects to the conductor xyOps server, provides metrics for monitoring, and can execute jobs.  The server object represents a server instance within the xyOps ecosystem.  Here is an example server in JSON format:
 
 ```json
 {
@@ -1344,7 +1344,7 @@ The hostname of the server, used for displaying in the UI, and possibly for auto
 
 ## Server.ip
 
-The IP address of the server (if the server has multiple network interfaces, this is the IP that was used to connect to the master server).
+The IP address of the server (if the server has multiple network interfaces, this is the IP that was used to connect to the conductor server).
 
 ## Server.title
 
@@ -1962,10 +1962,10 @@ A string identifying the action which took place.  Here is the list of possible 
 | `server_delete` | `Server deleted: [hostname]` |
 | `server_update` | `Server information was updated: [hostname]` |
 | `server_watch` | `A watch for [duration] was set on the server: [hostname]` |
-| `master_primary` | `Master server is now primary: [host]` |
-| `peer_add` | `Master server added to the network: [host]` |
-| `peer_disconnect` | `Master serfer disconnected from the network: [host]` |
-| `peer_command` | `Control command [commands] sent to master server: [host]` |
+| `master_primary` | `Conductor server is now primary: [host]` |
+| `peer_add` | `Conductor server added to the network: [host]` |
+| `peer_disconnect` | `Conductor serfer disconnected from the network: [host]` |
+| `peer_command` | `Control command [commands] sent to conductor server: [host]` |
 | `state_update` | `Internal state updated: [description]` |
 | `internal_job` | `Internal job completed: [job.title]` |
 
@@ -2631,9 +2631,9 @@ An array of [Job.id](#job-id)s representing active jobs in the group at the time
 
 An array of [QuickmonData](#quickmondata) samples for the group, with indices matching up with [GroupSnapshot.servers](#groupsnapshot-servers).
 
-# Master
+# Conductor
 
-xyOps keep track of all online master (backup) servers in the cluster, using the following in-memory data structure (displayed as JSON):
+xyOps keep track of all online conductor (backup) servers in the cluster, using the following in-memory data structure (displayed as JSON):
 
 ```json
 {
@@ -2650,37 +2650,37 @@ xyOps keep track of all online master (backup) servers in the cluster, using the
 }
 ```
 
-## Master.id
+## Conductor.id
 
-This is the master server's internal ID, which is usually it's hostname.
+This is the conductor server's internal ID, which is usually it's hostname.
 
-## Master.online
+## Conductor.online
 
 A boolean indicating whether the server is online (connected) or not.
 
-## Master.master
+## Conductor.master
 
-A boolean indicating whether the server is the current master primary or not.
+A boolean indicating whether the conductor is the current conductor primary or not.
 
-## Master.date
+## Conductor.date
 
 A timestamp in Unix seconds representing when the server came online.
 
-## Master.version
+## Conductor.version
 
 Currently unused, will always be set to "1.0".  For future use.
 
-## Master.ping
+## Conductor.ping
 
-The last ping time (in milliseconds) between the current master and the server (Websocket RTT).
+The last ping time (in milliseconds) between the current conductor and the server (Websocket RTT).
 
-## Master.stats
+## Conductor.stats
 
 This object will contain basic stats about the server, including `mem` (current memory usage of the xyOps process), and `load` (minute load average).
 
 # State
 
-xyOps keeps state data in a `global/state` storage record.  This is so it can survive restarts, and survive master failover to a backup server.  It is used to store things like the scheduler master switch, event state (time cursors), and server/group watches (snapshots).
+xyOps keeps state data in a `global/state` storage record.  This is so it can survive restarts, and survive conductor failover to a backup server.  It is used to store things like the scheduler switch, event state (time cursors), and server/group watches (snapshots).
 
 ## State.scheduler
 
@@ -2935,7 +2935,7 @@ Here is a list of all the `schedule` type trigger object properties and their de
 | `weekdays` | 0 - 6 | One or more weekdays, where Sunday is 0, and Saturday is 6. |
 | `hours` | 0 - 23 | One or more hours in 24-hour time, from 0 to 23. |
 | `minutes` | 0 - 59 | One or more minutes, from 0 to 59. |
-| `timezone` | n/a | Optional timezone to evaluate the schedule entry in.  Defaults to the master server timezone. |
+| `timezone` | n/a | Optional timezone to evaluate the schedule entry in.  Defaults to the conductor server timezone. |
 
 ## Workflow
 
@@ -3289,7 +3289,7 @@ When job actions are executed, including firing web hooks and sending emails, th
 | `category` | Object | The [Category](#category) object for the job's category. |
 | `plugin` | Object | The [Plugin](#plugin) object for the job's event plugin (n/a for workflows). |
 | `server` | Object | The [Server](#server) object for the server that ran the job (if applicable). |
-| `nice_server` | String | A nice string representation of the current server (title, hostname or master ID). |
+| `nice_server` | String | A nice string representation of the current server (title, hostname or conductor host ID). |
 | `nice_hostname` | String | A nice string representation of the current server hostname, if applicable. |
 | `links` | Object | An object containing URLs for use in the email body text or web hook text. |
 | `links.job_details` | String | A fully-qualified URL to the job details page (requires login). |

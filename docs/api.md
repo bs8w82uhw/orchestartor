@@ -60,7 +60,7 @@ Example error response:
 
 ## Alerts
 
-Alert APIs manage alert definitions. Use these endpoints to list, fetch, create, update, and delete alerts that evaluate monitor data and trigger actions (email, web hooks, snapshots, and more). Alerts run on the master and evaluate incoming monitor samples from servers; results appear in monitoring views and the activity log. Editing alerts typically requires appropriate privileges; read operations only require a valid session or API Key.
+Alert APIs manage alert definitions. Use these endpoints to list, fetch, create, update, and delete alerts that evaluate monitor data and trigger actions (email, web hooks, snapshots, and more). Alerts run on the conductor and evaluate incoming monitor samples from servers; results appear in monitoring views and the activity log. Editing alerts typically requires appropriate privileges; read operations only require a valid session or API Key.
 
 See [Alerts](alerts.md) for details on the xyOps alert system.
 
@@ -3421,7 +3421,7 @@ Server APIs can list active servers, fetch a server, update server metadata, del
 GET /api/app/get_active_servers/v1
 ```
 
-Fetch all active servers (connected to the current master server). No input parameters are required. No specific privilege is required beyond a valid user session or API Key.
+Fetch all active servers (connected to the current conductor server). No input parameters are required. No specific privilege is required beyond a valid user session or API Key.
 
 In addition to the [Standard Response Format](#standard-response-format), this will include a `rows` array of active servers, and a `list` object with list metadata (e.g. `length` for total rows). Example response:
 
@@ -4628,14 +4628,14 @@ Administrative APIs provide system-wide maintenance and export/import utilities 
 GET /api/app/get_servers/v1
 ```
 
-Fetch a live snapshot of all connected worker servers and master/peer servers. Admin only.
+Fetch a live snapshot of all connected worker servers and conductor/peer servers. Admin only.
 
 No input parameters.
 
 In addition to the [Standard Response Format](#standard-response-format), this returns:
 
 - `servers`: Object keyed by server ID containing [Server](data.md#server) objects for all currently connected workers.
-- `masters`: Object keyed by master/peer host ID with [Master](data.md#master) objects for master status, version and basic stats.
+- `masters`: Object keyed by host ID with [Conductor](data.md#conductor) objects for status, version and basic stats.
 
 Example response:
 
@@ -4646,7 +4646,7 @@ Example response:
     "sorbstack01": { "id": "sorbstack01", "hostname": "centos-9-arm", "groups": ["main"], "enabled": true, "modified": 1754872218, "info": { /* see Server */ } }
   },
   "masters": {
-    "master-a": { "id": "master-a", "online": true, "master": true, "date": 1754800000, "version": "0.0.0", "ping": 0, "stats": { /* mem, load */ } }
+    "conductor-a": { "id": "conductor-a", "online": true, "master": true, "date": 1754800000, "version": "0.0.0", "ping": 0, "stats": { /* mem, load */ } }
   }
 }
 ```
@@ -4657,11 +4657,11 @@ Example response:
 GET /api/app/get_master_state/v1
 ```
 
-Fetch the in-memory master [State](data.md#state) object. This includes runtime flags (e.g., scheduler enabled), watches, and other internal state used by the master. Admin session or API Key is required.
+Fetch the in-memory conductor [State](data.md#state) object. This includes runtime flags (e.g., scheduler enabled), watches, and other internal state used by the conductor. Admin session or API Key is required.
 
 No input parameters.
 
-In addition to the [Standard Response Format](#standard-response-format), this returns a `state` object containing current master state. The contents are primarily internal and subject to change between releases.
+In addition to the [Standard Response Format](#standard-response-format), this returns a `state` object containing current conductor state. The contents are primarily internal and subject to change between releases.
 
 Example response:
 
@@ -4683,13 +4683,13 @@ See [State](data.md#state) for more details.
 POST /api/app/update_master_state/v1
 ```
 
-Update one or more master state values using "dot" property paths in the [State](data.md#state) object. Admin only. Useful for toggling system features without a restart (e.g., pausing the scheduler).
+Update one or more conductor state values using "dot" property paths in the [State](data.md#state) object. Admin only. Useful for toggling system features without a restart (e.g., pausing the scheduler).
 
 Parameters:
 
 | Property Name | Type | Description |
 |---------------|------|-------------|
-| (Other) | Various | One or more dot-path properties to update in the master state (e.g., `"scheduler.enabled": false`). |
+| (Other) | Various | One or more dot-path properties to update in the conductor state (e.g., `"scheduler.enabled": false`). |
 
 Example request:
 

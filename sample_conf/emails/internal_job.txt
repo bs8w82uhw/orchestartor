@@ -6,7 +6,7 @@
 - **Job Title:** {{job.title}}
 - **Job Type:** {{job.type}}
 - **Requested By:** `{{job.username}}`
-- **Primary Master:** `{{hostID}}`
+- **Primary Conductor:** `{{hostID}}`
 - **Started:** {{display.started}}
 - **Completed:** {{display.completed}}
 - **Elapsed:** {{display.elapsed}}

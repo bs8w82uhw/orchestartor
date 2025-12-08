@@ -1,6 +1,6 @@
 # Buckets
 
-Storage Buckets provide durable, shareable storage for jobs and workflows. A bucket can hold structured JSON data and any number of files. Jobs can fetch from and store to buckets at well‑defined points in their lifecycle so outputs from one job are available as inputs to another, even when the jobs are not directly connected in a chain.
+Storage Buckets provide durable, shareable storage for jobs and workflows. A bucket can hold structured JSON data and any number of files. Jobs can fetch from and store to buckets at well-defined points in their lifecycle so outputs from one job are available as inputs to another, even when the jobs are not directly connected in a chain.
 
 ## Overview
 
@@ -14,7 +14,7 @@ See the [Bucket](data.md#bucket) data structure and the [Bucket APIs](api.md#buc
 
 ## When To Use
 
-- Cross‑job handoff: Pass artifacts from build to deploy, or output from data prep to analysis.
+- Cross-job handoff: Pass artifacts from build to deploy, or output from data prep to analysis.
 - Workflows: Share state and files between workflow nodes, even ones that don't have a direct connection.
 - Checkpointing: Persist intermediate results for retries or manual inspection.
 - Shared state: Maintain small JSON documents that multiple jobs can read/update over time.
@@ -24,12 +24,12 @@ See the [Bucket](data.md#bucket) data structure and the [Bucket APIs](api.md#buc
 Users with the appropriate privileges can create, edit and delete buckets from the Buckets section of the UI.
 
 - Create: Provide a title, optional icon/notes; the ID is generated.
-- Edit data: Buckets have a JSON "Data" pane you can edit directly. This is arbitrary user‑defined data.
-- Upload files: Drag‑and‑drop or select multiple files. Existing files with the same normalized name are replaced.
+- Edit data: Buckets have a JSON "Data" pane you can edit directly. This is arbitrary user-defined data.
+- Upload files: Drag-and-drop or select multiple files. Existing files with the same normalized name are replaced.
 - Delete files: Remove individual files from the list; deletions are permanent.
 - Download files: Click a file to download via a direct URL. Links use the `files/bucket/...` path.
 
-Filenames are normalized on upload (lowercased; non‑alphanumerics except dashes and periods become underscores). Uploads respect configured limits (max size/count/types) via `client.bucket_upload_settings` and server‑side enforcement. See [Configuration](config.md) for details.
+Filenames are normalized on upload (lowercased; non-alphanumerics except dashes and periods become underscores). Uploads respect configured limits (max size/count/types) via `client.bucket_upload_settings` and server-side enforcement. See [Configuration](config.md) for details.
 
 ### Required Privileges
 
@@ -47,7 +47,7 @@ Buckets integrate with jobs through two action types: Fetch Bucket and Store Buc
 
 Use Fetch Bucket with the `start` condition to pull bucket content into the job's input context before launch:
 
-- **Data**: Shallow‑merged into the job's `input.data`. Avoid key collisions or namespace your keys deliberately.
+- **Data**: Shallow-merged into the job's `input.data`. Avoid key collisions or namespace your keys deliberately.
 - **Files**: Selected files are added to the job's input file list and staged into the job's temp directory on the remote server before the Plugin starts.
 
 Example (JSON):
@@ -98,7 +98,7 @@ Buckets are commonly used in workflows to pass artifacts and state between nodes
 - Upstream nodes store outputs to a shared bucket on `success`.
 - Downstream nodes fetch from the same bucket at `start` to receive the data/files as if they were provided by a predecessor.
 
-This pattern is useful for fan‑out/fan‑in designs, optional branches, and long‑lived shared state between periodic jobs.
+This pattern is useful for fan-out/fan-in designs, optional branches, and long-lived shared state between periodic jobs.
 
 ## Downloading Files By URL
 
@@ -110,7 +110,7 @@ GET https://your.xyops.example.com/files/bucket/bme4wi6pg35/bdY8zZ9nKynfFUb4xH6f
 
 ## Tips
 
-- **Namespacing**: Use distinct keys in bucket JSON to avoid shallow‑merge collisions with job input.
+- **Namespacing**: Use distinct keys in bucket JSON to avoid shallow-merge collisions with job input.
 - **Size discipline**: Prefer buckets for modest artifacts; large datasets may be better handled via external storage and referenced by URL.
 - **Cleanup**: Consider lifecycle practices (e.g., replace/rotate files) to keep buckets tidy and within limits.
 

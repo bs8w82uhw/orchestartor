@@ -1,6 +1,6 @@
 # Monitors
 
-Monitors track a single numeric server metric over time. Each monitor points to one value in the live server data, casts it to a specific data type (integer, float, bytes, seconds, or milliseconds), and xyOps stores the samples in a time‑series database. Monitors power the per‑server and per‑group graphs, and they can be used to trigger alerts.
+Monitors track a single numeric server metric over time. Each monitor points to one value in the live server data, casts it to a specific data type (integer, float, bytes, seconds, or milliseconds), and xyOps stores the samples in a time-series database. Monitors power the per-server and per-group graphs, and they can be used to trigger alerts.
 
 - A monitor evaluates its expression once per minute on each matching server.
 - Results are stored and graphed at multiple resolutions (hourly, daily, monthly, yearly).
@@ -16,12 +16,12 @@ See also:
 
 ## How It Works
 
-Every minute each satellite sends a fresh [ServerMonitorData](data.md#servermonitordata) snapshot to the master. For every monitor whose group scope matches the server:
+Every minute each satellite sends a fresh [ServerMonitorData](data.md#servermonitordata) snapshot to the primary conductor. For every monitor whose group scope matches the server:
 
 1. xyOps evaluates the monitor's source expression against the current server monitor data sample.
-2. The value is type‑cast using the monitor's data type and optional match regex.
+2. The value is type-cast using the monitor's data type and optional match regex.
 3. If the monitor is configured as a delta monitor, its rate is computed from the previous absolute value (and optionally divided by elapsed seconds).
-4. The value is inserted into the server's time‑series for all resolutions.
+4. The value is inserted into the server's time-series for all resolutions.
 
 Notes:
 
@@ -41,8 +41,8 @@ Go to Admin → Monitors.
 - **Data Expression**: An expression that extracts or computes a single numeric value from ServerMonitorData. See [Expressions](#expressions).
 - **Data Match**: Optional regular expression to extract a number from a string value. See [Data Match](#data-match).
 - **Data Type**: Controls parsing and display (integer, float, bytes, seconds, milliseconds).
-- **Delta Features**: For counter‑style sources, compute a delta and optionally divide by elapsed time to get a rate per second; also supports a zero‑minimum clamp.
-- **Min Vert Range**: Set a minimum Y‑axis range (e.g., 100 for percentages).
+- **Delta Features**: For counter-style sources, compute a delta and optionally divide by elapsed time to get a rate per second; also supports a zero-minimum clamp.
+- **Min Vert Range**: Set a minimum Y-axis range (e.g., 100 for percentages).
 - **Data Suffix**: Optional unit shown in labels (e.g. %, /sec, ms).
 
 Tips:
@@ -55,19 +55,19 @@ Tips:
 ## Monitoring Data Flow
 
 - **Sampling cadence**: Once per minute per server.
-- **Storage**: Samples are down‑sampled into four systems: hourly, daily, monthly, yearly.
-- **Deltas**: For counter‑style metrics (e.g., OS network bytes, disk bytes read/written), enable "Calc as Delta" and "Divide by Time" to graph rates per second.
+- **Storage**: Samples are down-sampled into four systems: hourly, daily, monthly, yearly.
+- **Deltas**: For counter-style metrics (e.g., OS network bytes, disk bytes read/written), enable "Calc as Delta" and "Divide by Time" to graph rates per second.
 - **Alert context**: After monitors are computed, xyOps evaluates alert triggers against the same data.
 
 
 ## Expressions
 
-Monitor expressions are evaluated in [xyOps Expression Syntax](xyexp.md), using the current [ServerMonitorData](data.md#servermonitordata) object as context.  This uses JavaScript‑style syntax with dot paths, array indexing, arithmetic and boolean operators.
+Monitor expressions are evaluated in [xyOps Expression Syntax](xyexp.md), using the current [ServerMonitorData](data.md#servermonitordata) object as context.  This uses JavaScript-style syntax with dot paths, array indexing, arithmetic and boolean operators.
 
 Examples:
 
 - Basic metric: `cpu.currentLoad` (CPU usage as a float percentage)
-- Array index: `load[0]` (1‑minute load average)
+- Array index: `load[0]` (1-minute load average)
 - Object path: `stats.network.conns` (current active connections)
 - Math/composition: `100 - memory.available / memory.total * 100` (memory used %)
 - Guarded math: `stats && stats.network ? stats.network.rx_bytes : 0` (coalesce missing to 0)
@@ -94,7 +94,7 @@ Example (default "Open Files" monitor):
 Some data sources are absolute counters that only ever increase, such as OS network byte totals or disk I/O byte counters. For these:
 
 - **Calc as Delta**: Stores the change since the previous minute instead of the absolute counter.
-- **Divide by Time**: Divides the delta by elapsed seconds between samples to produce a per‑second rate.
+- **Divide by Time**: Divides the delta by elapsed seconds between samples to produce a per-second rate.
 - **Zero Minimum**: Clamp negative spikes to a specific minimum (commonly `0`) to avoid dips after reboots or counter resets.
 
 Alerts can also reference delta values via the `deltas` object. See [Alert Expressions](alerts.md#alert-expressions).
@@ -104,7 +104,7 @@ Alerts can also reference delta values via the `deltas` object. See [Alert Expre
 
 xyOps ships with a set of standard monitors. Here is what each tracks:
 
-- **Load Average**: `load[0]` -- 1‑minute load average (float).
+- **Load Average**: `load[0]` -- 1-minute load average (float).
 - **CPU Usage**: `cpu.currentLoad` -- CPU usage percentage (float), suffix `%`, min range `100`.
 - **Memory in Use**: `memory.used` -- Total memory in use (bytes).
 - **Memory Available**: `memory.available` -- Available memory (bytes).
@@ -125,15 +125,15 @@ Use these as templates for your own monitors, or create more from scratch. You c
 
 ## QuickMon
 
-QuickMon (Quick Monitors) are lightweight, predefined real‑time monitors sampled every second on each server. They are meant for "right now" visibility and short‑term trend lines on server and group pages.
+QuickMon (Quick Monitors) are lightweight, predefined real-time monitors sampled every second on each server. They are meant for "right now" visibility and short-term trend lines on server and group pages.
 
 - **Presets**: CPU load/usage, memory used/available, disk read/write bytes/sec, network in/out bytes/sec.
 - **Retention**: The last 60 seconds per server is stored in memory.
-- **Display**: Real‑time graphs and gauges on Server and Group pages. New samples stream live via websockets.
-- **Snapshots**: The most recent 60‑second series is embedded into all server and group snapshots.
-- **Config**: Definitions live in `config.json` under [quick_monitors](config.md#quick_monitors). Each preset includes `id`, `source` path (from the per‑second agent data), `type` (integer/float/bytes), and optional delta/time options mirroring monitor behavior.
+- **Display**: Real-time graphs and gauges on Server and Group pages. New samples stream live via websockets.
+- **Snapshots**: The most recent 60-second series is embedded into all server and group snapshots.
+- **Config**: Definitions live in `config.json` under [quick_monitors](config.md#quick_monitors). Each preset includes `id`, `source` path (from the per-second agent data), `type` (integer/float/bytes), and optional delta/time options mirroring monitor behavior.
 
-QuickMon complements minute‑level monitors: use QuickMon for immediate visibility, and standard monitors for historical analysis and alerting.
+QuickMon complements minute-level monitors: use QuickMon for immediate visibility, and standard monitors for historical analysis and alerting.
 
 
 ## Examples and Recipes

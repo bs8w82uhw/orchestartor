@@ -226,7 +226,7 @@ app.comm = {
 	
 	forceVersionRefresh: function(data) {
 		// server software was upgraded, need client refresh
-		var msg = `The primary master server was upgraded to xyOps v${data.version}.  We now need to refresh your client to complete the upgrade.  Sorry for the inconvenience!`;
+		var msg = `The primary conductor server was upgraded to xyOps v${data.version}.  We now need to refresh your client to complete the upgrade.  Sorry for the inconvenience!`;
 		
 		Dialog.confirm( 'Refresh Needed', msg, ['refresh', 'Refresh'], function(result) {
 			if (!result) return;

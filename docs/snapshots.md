@@ -1,13 +1,13 @@
 # Snapshots
 
-Snapshots capture a point-in-time view of everything happening on one server (or across a server group). They're designed for fast forensics, side‑by‑side comparisons (before/after a deploy, during an incident), and long‑term audit trails.
+Snapshots capture a point-in-time view of everything happening on one server (or across a server group). They're designed for fast forensics, side-by-side comparisons (before/after a deploy, during an incident), and long-term audit trails.
 
 This page explains what snapshots are, what they contain, how to create them (manually or automatically), how watches work, and a few tips for using them effectively.
 
 ## Overview
 
 - A snapshot records the current state of a server (processes, connections, mounts, devices, metrics, jobs, alerts, and more).
-- Group snapshots record a whole group at once (all current members, plus recently offline servers), enabling fleet‑level forensics.
+- Group snapshots record a whole group at once (all current members, plus recently offline servers), enabling fleet-level forensics.
 - Snapshots can be created manually in the UI, by API, or automatically via Actions (on jobs/alerts) and Watches (every minute for a duration).
 - Snapshots are visible on the Snapshots page and are linked from servers, groups, jobs and alerts.
 - Snapshots are retained up to a global cap (default 100,000) and are pruned nightly. See [Servers → Snapshots and Watches](servers.md#snapshots-and-watches).
@@ -22,14 +22,14 @@ All server snapshots include a record with the following:
   - Active network connections (including listeners).
   - Network interfaces and stats; disk mounts and filesystem stats.
   - Monitors (computed values) and deltas; raw plugin command output.
-- Quick metrics: The last 60 seconds of per‑second "quick" samples (`quickmon`) for CPU/mem/disk/net ([QuickmonData](data.md#quickmondata)).
-- Context: IDs of active jobs and active alerts at capture time. For workflow sub‑jobs, parents may be included for context.
+- Quick metrics: The last 60 seconds of per-second "quick" samples (`quickmon`) for CPU/mem/disk/net ([QuickmonData](data.md#quickmondata)).
+- Context: IDs of active jobs and active alerts at capture time. For workflow sub-jobs, parents may be included for context.
 
 Group snapshots add fleet context:
 
 - All current members (online) plus recently offline servers (within the last hour), labeled with online/offline state.
-- Per‑server [ServerMonitorData](data.md#servermonitordata) objects aligned 1:1 with `servers`.
-- Per‑server 60‑second quick samples aligned 1:1 with `servers`.
+- Per-server [ServerMonitorData](data.md#servermonitordata) objects aligned 1:1 with `servers`.
+- Per-server 60-second quick samples aligned 1:1 with `servers`.
 - Active alerts and jobs relevant to any member server at capture time.
 
 See the full object shapes in [Data → Snapshot](data.md#snapshot) and [Data → GroupSnapshot](data.md#groupsnapshot).
@@ -53,7 +53,7 @@ Permissions: Creating snapshots (UI or API) requires the [create_snapshots](priv
 
 ## Watches
 
-Watches instruct xyOps to take snapshots every minute for a specified duration. Use these to capture short‑lived issues or observe changes during a rollout.
+Watches instruct xyOps to take snapshots every minute for a specified duration. Use these to capture short-lived issues or observe changes during a rollout.
 
 - **Server Watch**
   - Set from a server page (UI) or API: [watch_server](api.md#watch_server).
@@ -76,10 +76,10 @@ Notes:
 
 ## Troubleshooting and Tips
 
-- Prefer watches for transient issues: If a problem is bursty or short‑lived, start a short watch (e.g., 5-10 minutes) rather than taking a single manual snapshot.
+- Prefer watches for transient issues: If a problem is bursty or short-lived, start a short watch (e.g., 5-10 minutes) rather than taking a single manual snapshot.
 - Align timing with events: For pre/post comparisons, take one before and one after your change; record links in the related ticket or job notes.
 - Troublesome job?  Assign snapshot actions on both job start *and* job complete, to compare the server differences.
-- Understand minute vs. second data: The core state is minute‑granularity [ServerMonitorData]; the `quickmon` buffer adds the previous 60 seconds of per‑second context.
+- Understand minute vs. second data: The core state is minute-granularity [ServerMonitorData]; the `quickmon` buffer adds the previous 60 seconds of per-second context.
 - Group snapshots timing: Group watch runs on :30; servers submit minute samples on staggered offsets. Group snapshots use the latest saved minute for each server.
 - Recently offline hosts: Group snapshots include recently offline hosts (last hour) and mark them offline so you still see their last known state.
 - Permissions: If you don't see snapshot controls or API calls fail, ensure your user or API Key has [create_snapshots](privileges.md#create_snapshots).

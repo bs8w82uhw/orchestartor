@@ -80,7 +80,7 @@ What this means in practice is that your multiplex events should "just work" lik
 
 xyOps does not have the concept of [detached jobs](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#detached-mode) like Cronicle does.  The reason is, xyOps installs a small satellite binary on your worker servers, which runs 24x7 and does not ever need to be restarted.  And if you do need to upgrade the satellite software, the process is orchestrated in such a way where it rolls out gradually, and never interrupts running jobs (each worker server waits for all jobs to complete before self-upgrading).
 
-Also, stopping the master xyOps service does not abort any running jobs.  They all continue headless, and if they complete while the xyOps master server is still down, they simply wait for a master server to come up before reporting completion.
+Also, stopping the primary xyOps service does not abort any running jobs.  They all continue headless, and if they complete while the xyOps conductor server is still down, they simply wait for a conductor server to come up before reporting completion.
 
 ## User Privileges
 

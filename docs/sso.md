@@ -286,7 +286,7 @@ OAUTH2_PROXY_WHITELIST_DOMAINS: ".yourcompany.com,.github.com"
 
 # OAuth2-Proxy with TLS
 
-Now you should be ready to integrate xyOps with OAuth2-Proxy.  You have several options for doing this.  If you have a single xyOps master server, then the best way is to run OAuth2-Proxy standalone.  That has the fewest moving parts, and OAuth2-Proxy can also terminate TLS for you.  This section covers that configuration.
+Now you should be ready to integrate xyOps with OAuth2-Proxy.  You have several options for doing this.  If you have a single xyOps conductor server, then the best way is to run OAuth2-Proxy standalone.  That has the fewest moving parts, and OAuth2-Proxy can also terminate TLS for you.  This section covers that configuration.
 
 Going from our docker compose shown above, we're going to swap xyOps in for the echo server, change the backend port number to `5522` (the xyOps default), tweak a few more settings for TLS, and add your certificate files.  Here is the updated docker compose file:
 
@@ -340,25 +340,25 @@ For the xyOps container, it needs two configuration files.  Grab our sample [con
 
 At the very least, make sure you set the [base_app_url](config.md#base_app_url) property to the domain that routes to the proxy (which sits in front), with a `https://` prefix.  You should also set the `XYOPS_hostname` to the same hostname (without the protocol prefix).  This is what xyOps uses to advertise itself to the server cluster, and generate URLs for new servers to connect.
 
-In this case, since we are only running a single master server, we can route *everything* through the proxy, making things simpler.  You don't even need to expose any ports on the xyOps container.  Users hit the root `/` URI path and are authenticated via SSO, and API calls and server connections both hit the `/api` prefix, which is routed directly through to xyOps, and that uses its own authentication layer (API keys, tokens, etc.).
+In this case, since we are only running a single conductor server, we can route *everything* through the proxy, making things simpler.  You don't even need to expose any ports on the xyOps container.  Users hit the root `/` URI path and are authenticated via SSO, and API calls and server connections both hit the `/api` prefix, which is routed directly through to xyOps, and that uses its own authentication layer (API keys, tokens, etc.).
 
 **Advanced**: For installations with a large amount of worker servers, it is better to expose the xyOps container under its own internal domain, and have worker servers connect directly to that, instead of going through OAuth2-Proxy.  Change the `XYOPS_hostname` environment variable to point to the dedicated xyOps domain to change how it advertises itself to the cluster.
 
-## Multi-Master with OAuth2-Proxy and TLS with Nginx
+## Multi-Conductor with OAuth2-Proxy and TLS with Nginx
 
-For a load balanced multi-master setup with Nginx w/TLS and OAuth-Proxy for SSO, please read this section.  This is definitely the most complex setup, and requires advanced knowledge of all the components used.  Let me just plug our [Enterprise Plan](https://xyops.io/enterprise) one last time, as we can set all this up for you.  Now, the way this configuration works is as follows:
+For a load balanced multi-conductor setup with Nginx w/TLS and OAuth-Proxy for SSO, please read this section.  This is definitely the most complex setup, and requires advanced knowledge of all the components used.  Let me just plug our [Enterprise Plan](https://xyops.io/enterprise) one last time, as we can set all this up for you.  Now, the way this configuration works is as follows:
 
 - [Nginx](https://nginx.org/) sits in front, and handles TLS termination, as well as routing requests to various backends.
 - [OAuth2-Proxy](https://github.com/oauth2-proxy/oauth2-proxy) handles SSO, and is integrated via Nginx using the [auth_request](https://nginx.org/en/docs/http/ngx_http_auth_request_module.html) directive.
 	- Meaning, OAuth2-Proxy sits "on the side" of the request flow, and is consulted for auth, then the request is routed from Nginx to xyOps.
 	- When Nginx routes the authenticated request to xyOps, it forwards along the "trusted headers" for automatic user creation / user login.
-- Nginx handles xyOps multi-master using an embedded [Health Check Daemon](https://github.com/pixlcore/xyops-healthcheck) which runs in the same container.
-	- The health check keeps track of which server is master, and dynamically reconfigures and hot-reloads Nginx as needed.
+- Nginx handles xyOps multi-conductor using an embedded [Health Check Daemon](https://github.com/pixlcore/xyops-healthcheck) which runs in the same container.
+	- The health check keeps track of which server is conductor, and dynamically reconfigures and hot-reloads Nginx as needed.
 	- We maintain our own custom Nginx docker image for this (shown below), or you can [build your own from source](https://github.com/pixlcore/xyops-nginx-sso/blob/main/Dockerfile).
 
 A few prerequisites for this setup:
 
-- For multi-master setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).
+- For multi-conductor setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).
 - You will need a custom domain configured and TLS certs created and ready to attach.
 - You have your xyOps configuration files customized and ready to go ([config.json](https://github.com/pixlcore/xyops/blob/main/sample_conf/config.json) and [sso.json](https://github.com/pixlcore/xyops/blob/main/sample_conf/sso.json)) (see below).
 - And of course you should have a pretested SSO configuration for OAuth2-Proxy, so you are confident that piece works before integrating it here.
@@ -366,14 +366,14 @@ A few prerequisites for this setup:
 For the examples below, we'll be using the following domain placeholders:
 
 - `xyops.yourcompany.com` - User-facing domain which should route to Nginx / SSO.
-- `xyops01.yourcompany.com` - Internal domain for master server #1.
-- `xyops02.yourcompany.com` - Internal domain for master server #2.
+- `xyops01.yourcompany.com` - Internal domain for conductor server #1.
+- `xyops02.yourcompany.com` - Internal domain for conductor server #2.
 
-The reason why the master servers each need their own unique (internal) domain name is because of how the multi-master system works.  Each master server needs to be individually addressable, and reachable by all of your worker servers in your org.  Worker servers don't know or care about Nginx -- they contact masters directly, and have their own auto-failover system.  Also, worker servers use a persistent WebSocket connection, and can send a large amount of traffic, depending on how many worker servers you have and how many jobs you run.  For these reasons, it's better to have worker servers connect the masters directly, especially at production scale.
+The reason why the conductor servers each need their own unique (internal) domain name is because of how the multi-conductor system works.  Each conductor server needs to be individually addressable, and reachable by all of your worker servers in your org.  Worker servers don't know or care about Nginx -- they contact conductors directly, and have their own auto-failover system.  Also, worker servers use a persistent WebSocket connection, and can send a large amount of traffic, depending on how many worker servers you have and how many jobs you run.  For these reasons, it's better to have worker servers connect the conductors directly, especially at production scale.
 
 That being said, you *can* configure your worker servers to connect through the Nginx front door if you want.  This can be useful if you have worker servers in another network or out in the wild, but it is not recommended for most setups.  To do this, please see [Overriding The Connect URL](hosting.md#overriding-the-connect-url) in our self-hosting guide.
 
-Here is a docker compose file for running Nginx and OAuth2-Proxy in the proper configuration for multi-master with TLS and SSO.  xyOps is not included yet, as that will be running separately.
+Here is a docker compose file for running Nginx and OAuth2-Proxy in the proper configuration for multi-conductor with TLS and SSO.  xyOps is not included yet, as that will be running separately.
 
 ```yaml
 services:
@@ -414,10 +414,10 @@ services:
 	  OAUTH2_PROXY_WHITELIST_DOMAINS: ".yourcompany.com" # add your domains
 ```
 
-Let's talk about the Nginx setup first.  We are pulling in our own Docker image here ([xyops-nginx-sso](https://github.com/pixlcore/xyops-nginx-sso)).  This is a wrapper around the official Nginx docker image, but it includes our [xyOps Health Check](https://github.com/pixlcore/xyops-healthcheck) daemon.  The health check monitors which master server is currently primary, and dynamically reconfigures Nginx on-the-fly as needed (so Nginx always routes to the current primary server only).  The image also comes with a fully preconfigured Nginx, which will call to OAuth2-Proxy via the [auth_request](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html) mechanism.  To use this image you will need to provide:
+Let's talk about the Nginx setup first.  We are pulling in our own Docker image here ([xyops-nginx-sso](https://github.com/pixlcore/xyops-nginx-sso)).  This is a wrapper around the official Nginx docker image, but it includes our [xyOps Health Check](https://github.com/pixlcore/xyops-healthcheck) daemon.  The health check monitors which conductor server is currently primary, and dynamically reconfigures Nginx on-the-fly as needed (so Nginx always routes to the current primary server only).  The image also comes with a fully preconfigured Nginx, which will call to OAuth2-Proxy via the [auth_request](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html) mechanism.  To use this image you will need to provide:
 
 - Your TLS certificate files, named `tls.crt` and `tls.key`, which are bound to `/etc/tls.crt` and `/etc/tls.key`, respectively.
-- The list of xyOps master server domain names, as a CSV list in the `XYOPS_masters` environment variable (used by health check).
+- The list of xyOps conductor server domain names, as a CSV list in the `XYOPS_masters` environment variable (used by health check).
 
 Next is the OAuth2-Proxy setup (we use the official Docker image here).  Configuration is largely discussed above, but there are a few key things to point out this time:
 
@@ -426,13 +426,13 @@ Next is the OAuth2-Proxy setup (we use the official Docker image here).  Configu
 - `OAUTH2_PROXY_SET_XAUTHREQUEST` is set to `true`.  This returns the set of trusted headers in auth_request mode.
 - `OAUTH2_PROXY_SKIP_AUTH_ROUTES` has been removed, as OAuth2-Proxy doesn't actually do any routing in this configuration.
 
-Once you have those two components running, we can fire up the xyOps backend.  This is listed separately as you'll usually want to run these on dedicated servers.  Here is the multi-master configuration as a single Docker compose file.  For additional master servers you can simply duplicate this and change the hostname:
+Once you have those two components running, we can fire up the xyOps backend.  This is listed separately as you'll usually want to run these on dedicated servers.  Here is the multi-conductor configuration as a single Docker compose file.  For additional conductor servers you can simply duplicate this and change the hostname:
 
 ```yaml
 services:
   xyops1:
     image: ghcr.io/pixlcore/xyops:latest
-    hostname: xyops01.yourcompany.com # change this per master server
+    hostname: xyops01.yourcompany.com # change this per conductor server
     init: true
     environment:
       XYOPS_masters: xyops01.yourcompany.com,xyops02.yourcompany.com
@@ -448,8 +448,8 @@ services:
 A few things to note here:
 
 - We're using our official xyOps Docker image, but you can always [build your own from source](https://github.com/pixlcore/xyops/blob/main/Dockerfile).
-- All master server hostnames need to be listed in the `XYOPS_masters` environment variable, comma-separated.
-- All master servers need to be able to route to each other via their hostnames, so they can self-negotiate and hold elections.
+- All conductor server hostnames need to be listed in the `XYOPS_masters` environment variable, comma-separated.
+- All conductor servers need to be able to route to each other via their hostnames, so they can self-negotiate and hold elections.
 - The timezone (`TZ`) should be set to your company's main timezone, so things like midnight log rotation and daily stat resets work as expected.
 - You will need to supply two configuration files, `config.json` and `sso.json`.  See below.
 
@@ -466,7 +466,7 @@ Grab our sample [config.json](https://github.com/pixlcore/xyops/blob/main/sample
 
 Notice the request header names are different; they all have a `x-auth-request-` prefix.  This is how Nginx forwards along trusted headers with it uses OAuth2-Proxy as a side effect via the [auth_request](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html) mechanism.  So you will have to use this style of header in your `header_map` to properly map the user fields.
 
-**Advanced:** xyOps actually performs its own TLS termination in its embedded web server, and hosts HTTPS on port 5523.  This is used by worker servers who connect to the master directly.  By default xyOps is configured with a self-signed certificate, which our satellite software ([xySat](https://github.com/pixlcore/xysat)) is designed to support.  You can change all this, however, and include signed certificates for use on your master servers, and also configure the worker servers to reject self-signed certs.  For more information, see [Self-Hosting Guide - TLS](hosting.md#tls).
+**Advanced:** xyOps actually performs its own TLS termination in its embedded web server, and hosts HTTPS on port 5523.  This is used by worker servers who connect to the conductor directly.  By default xyOps is configured with a self-signed certificate, which our satellite software ([xySat](https://github.com/pixlcore/xysat)) is designed to support.  You can change all this, however, and include signed certificates for use on your conductor servers, and also configure the worker servers to reject self-signed certs.  For more information, see [Self-Hosting Guide - TLS](hosting.md#tls).
 
 ## Troubleshooting
 
@@ -612,7 +612,7 @@ In a production environment, it is crucial to ensure the security and reliabilit
 5. **Secure-Only Cookies**: Remember to set `OAUTH2_PROXY_COOKIE_SECURE` to `true` for live production.
 6. **Restrict Email Domains**: Set `OAUTH2_PROXY_EMAIL_DOMAINS` to restrict your login email domain list.
 7. **xyOps Base App URL**: Remember to set the [base_app_url](config.md#base_app_url) configuration property for your live production setup.
-8. **Use Multiple Availability Zones**: For running multiple xyOps master servers, ideally put them in separate AZs.
+8. **Use Multiple Availability Zones**: For running multiple xyOps conductor servers, ideally put them in separate AZs.
 
 ## IP Whitelist
 

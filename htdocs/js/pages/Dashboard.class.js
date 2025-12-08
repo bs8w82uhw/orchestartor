@@ -134,7 +134,7 @@ Page.Dashboard = class Dashboard extends Page.PageUtils {
 		// masters
 		html += '<div class="dash_unit_box">';
 			html += '<div class="dash_unit_value">' + num_keys(app.masters) + '</div>';
-			html += '<div class="dash_unit_label">Masters</div>';
+			html += '<div class="dash_unit_label">Conductors</div>';
 		html += '</div>';
 		
 		// servers

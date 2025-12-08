@@ -1,22 +1,22 @@
 # Servers
 
-Servers are the worker nodes in a xyOps cluster. Each server runs our lightweight satellite agent (xySat), maintains a persistent WebSocket connection to the master, collects monitoring metrics, and executes jobs on demand. A server may be a physical host, virtual machine, or container, and can run Linux, macOS, or Windows.
+Servers are the worker nodes in a xyOps cluster. Each server runs our lightweight satellite agent (xySat), maintains a persistent WebSocket connection to the conductor, collects monitoring metrics, and executes jobs on demand. A server may be a physical host, virtual machine, or container, and can run Linux, macOS, or Windows.
 
 This document explains how servers fit into xyOps, how to add and organize them, how events target servers, what you can see on each server's UI page, and how the system scales to large fleets.
 
 ## Overview
 
 - Servers run xySat and act as job runners and metrics collectors.
-- Masters run the full xyOps stack and coordinate scheduling, routing, storage, and UI.
-- You can add any number of servers and masters to a cluster; agents maintain live connections and auto-failover across masters.
+- Conductors run the full xyOps stack and coordinate scheduling, routing, storage, and UI.
+- You can add any number of servers and conductors to a cluster; agents maintain live connections and auto-failover across conductors.
 - Servers collect "quick" metrics every second (CPU/Mem/Disk/Net) and minute-level metrics via user-defined monitor plugins. Some metrics are not available on Windows.
 
-## Servers vs. Masters
+## Servers vs. Conductors
 
-- **Server**: A worker node running xySat. It reports host details and metrics, and executes jobs sent by a master. Servers may be grouped and targeted by events.
-- **Master**: A full xyOps instance (primary or hot standby) that manages the schedule, routes jobs to servers, stores data, and serves the UI/API. A cluster can have multiple masters for redundancy; one is primary at any time.
+- **Server**: A worker node running xySat. It reports host details and metrics, and executes jobs sent by a conductor. Servers may be grouped and targeted by events.
+- **Conductor**: A full xyOps instance (primary or hot standby) that manages the schedule, routes jobs to servers, stores data, and serves the UI/API. A cluster can have multiple conductors for redundancy; one is primary at any time.
 
-xySat keeps an up-to-date list of all masters. If a server loses its master connection, it automatically fails over to a backup and then reconnects to the new primary after election.
+xySat keeps an up-to-date list of all conductors. If a server loses its primary connection, it automatically fails over to a backup and then reconnects to the new primary after election.
 
 ## Adding Servers
 
@@ -61,14 +61,14 @@ Notes:
 - Make sure your servers have `curl` preinstalled.  Alternatively, you can rewrite the command to use `wget`.
 - In automated mode your server's hostname will dictate which server groups it gets added to.
 
-## Groups and Auto‑Assignment
+## Groups and Auto-Assignment
 
 Servers can belong to one or more groups. Groups are used for organizing the fleet, scoping monitors/alerts, and targeting events.
 
-- **Auto‑assignment**: Groups can declare a hostname regular expression. When a server comes online (or when its hostname changes), matching groups are applied automatically.
+- **Auto-assignment**: Groups can declare a hostname regular expression. When a server comes online (or when its hostname changes), matching groups are applied automatically.
 - **Multiple groups**: Servers can match and join multiple groups.
-- **Manual assignment**: If you manually assign groups to a server, automatic hostname-based matching is disabled for that server. You can re-enable auto‑assignment by clearing the manual groups.
-- **Re‑evaluation**: Group matches are re-evaluated if a server's hostname changes.
+- **Manual assignment**: If you manually assign groups to a server, automatic hostname-based matching is disabled for that server. You can re-enable auto-assignment by clearing the manual groups.
+- **Re-evaluation**: Group matches are re-evaluated if a server's hostname changes.
 
 See [Server Groups](groups.md) for more details on server groups.
 
@@ -128,12 +128,12 @@ See [Snapshots](snapshots.md) for more details.
 - Per minute (monitors): User-defined monitor plugins run each minute on servers to produce numeric values (or deltas). These feed charts, alerts, and dashboards. See [Monitors](monitors.md).
 - OS differences: Some metrics are not available on Windows.
 
-To avoid thundering herd effects on masters, each server deterministically staggers its minute collection offset using a hash of its Server ID plus a dynamically computed offset. This spreads submissions evenly across N seconds, which is based on the total number of servers in the cluster.  The quick second metrics also do this, but stagger in milliseconds.
+To avoid thundering herd effects on conductors, each server deterministically staggers its minute collection offset using a hash of its Server ID plus a dynamically computed offset. This spreads submissions evenly across N seconds, which is based on the total number of servers in the cluster.  The quick second metrics also do this, but stagger in milliseconds.
 
 ## Lifecycle and Health
 
 - **Online/offline**: A server is online while its xySat WebSocket is connected. If the socket drops, the server is immediately marked offline. The UI updates in real time.
-- **Running jobs**: Jobs are not aborted immediately when a server goes offline. Instead, masters wait for `dead_job_timeout` before declaring the job dead and aborting it (default: 120 seconds). See [Configuration](config.md#dead_job_timeout).
+- **Running jobs**: Jobs are not aborted immediately when a server goes offline. Instead, conductors wait for `dead_job_timeout` before declaring the job dead and aborting it (default: 120 seconds). See [Configuration](config.md#dead_job_timeout).
 - **Enable/disable**: Disabling a server removes it from job selection but it can remain online and continue reporting metrics.
 
 ## Scalability
@@ -141,8 +141,8 @@ To avoid thundering herd effects on masters, each server deterministically stagg
 xyOps is designed for large fleets and has been tested up to hundreds of servers per cluster. For larger clusters:
 
 - Deterministic staggering ensures not all servers submit minute and second samples at once; load is spread evenly over a dynamic time window.
-- Masters should run on strong hardware (CPU/RAM/SSD) for best performance when ingesting and aggregating data, running elections, and serving the UI/API.
-- You can operate multiple masters (primary + hot standby peers). Agents auto-failover between them; the cluster performs election to select a new primary as needed.
+- Conductors should run on strong hardware (CPU/RAM/SSD) for best performance when ingesting and aggregating data, running elections, and serving the UI/API.
+- You can operate multiple conductors (primary + hot standby peers). Agents auto-failover between them; the cluster performs election to select a new primary as needed.
 
 Also see the [Scaling](scaling.md) guide.
 
@@ -150,7 +150,7 @@ Also see the [Scaling](scaling.md) guide.
 
 To retire a server, open its detail page and click the trash can icon:
 
-- **Online**: The master sends an uninstall command to the agent, which shuts down and removes xySat. You can also optionally delete historical data (server record, metrics, snapshots).
+- **Online**: The conductor sends an uninstall command to the agent, which shuts down and removes xySat. You can also optionally delete historical data (server record, metrics, snapshots).
 - **Offline**: You can still delete the server but must opt to delete history, as uninstall requires an active connection.
 
 Deletions are permanent and cannot be undone.

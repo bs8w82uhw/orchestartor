@@ -164,7 +164,6 @@ var server = new PixlServer({
 server.on('init', function() {
 	// setup fancy echo / repl system, if enabled
 	Echo.setup(server);
-	// server.emit('master');
 });
 
 server.startup( function() {

@@ -2,8 +2,8 @@
 
 Web hooks in xyOps are outbound HTTP requests that fire in response to job and alert activity. They integrate xyOps with external systems such as Slack, Discord, Pushover, incident and chat systems, or any custom HTTP endpoint you control.
 
-- **Fully customizable request**: URL, method, headers, and body are user‑defined and support templating (macros).
-- **Action‑driven**: Jobs and alerts trigger hooks based on conditions (start, outcomes, tags, suspensions, limits, alert fired/cleared, etc.).
+- **Fully customizable request**: URL, method, headers, and body are user-defined and support templating (macros).
+- **Action-driven**: Jobs and alerts trigger hooks based on conditions (start, outcomes, tags, suspensions, limits, alert fired/cleared, etc.).
 - **Observable**: Each execution records success/failure, timing, request/response, and a performance breakdown.
 
 
@@ -28,20 +28,20 @@ Notes:
 
 A web hook definition is reusable and referenced by actions. Core properties (see full schema in [WebHook](docs/data.md#webhook)):
 
-- `id`: Unique alphanumeric ID (auto‑generated).
+- `id`: Unique alphanumeric ID (auto-generated).
 - `title`: Display title.
 - `enabled`: Enable/disable without deleting.
 - `icon`: Optional [Material Design Icons](https://pictogrammers.com/library/mdi/) id for display.
-- `url`: Fully‑qualified `http://` or `https://` endpoint. Templating supported; placeholders are URL‑encoded automatically.
+- `url`: Fully-qualified `http://` or `https://` endpoint. Templating supported; placeholders are URL-encoded automatically.
 - `method`: HTTP verb (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`).
 - `headers`: Array of `{ name, value }`. Values support templating.
-- `body`: Optional request body as a string. Templating supported. Sent for non‑GET/HEAD when non‑empty.
+- `body`: Optional request body as a string. Templating supported. Sent for non-GET/HEAD when non-empty.
 - `timeout`: Seconds to wait for first byte and idle socket (TTFB + idle).
 - `retries`: Number of automatic retries on transport errors.
-- `follow`: Auto‑follow redirects (numeric cap internally; off when false).
+- `follow`: Auto-follow redirects (numeric cap internally; off when false).
 - `ssl_cert_bypass`: If true, disables TLS verification (`rejectUnauthorized: false`).
-- `max_per_day`: Daily cap on executions for anti‑flooding (0 = unlimited).
-- `notes`: Free‑form notes.
+- `max_per_day`: Daily cap on executions for anti-flooding (0 = unlimited).
+- `notes`: Free-form notes.
 
 Create, update, list, delete and test are available via the UI and the [Web Hooks API](docs/api.md#web-hooks).
 
@@ -65,13 +65,13 @@ Content-Type: application/json
 
 Key behavior:
 
-- URL placeholders are URL‑encoded automatically.
+- URL placeholders are URL-encoded automatically.
 - Secrets are available as `{{ secrets.VAR_NAME }}` when the secret is assigned to the hook (see "Secrets" below).
 - Helpers include `float()`, `integer()`, `bytes()`, `number()`, `pct()`, `encode()`, `stringify()`, `count()`, `min()`, `max()`, `round()`, `ceil()`, `floor()`, `clamp()`. See [xyOps Expression Format](xyexp.md) for the full helper list.
 - Job context: [JobHookData](data.md#jobhookdata) including `text`, `event`, `job`, `server`, `display` (CPU/mem summaries), `links`, etc.
 - Alert context: [AlertHookData](data.md#alerthookdata) including `text`, `def`, `alert`, `server`, `links`, and other niceties.
 
-Tip: Prefer JSON for bodies where possible; for form‑encoded APIs, set `Content-Type: application/x-www-form-urlencoded` and compose the body accordingly.
+Tip: Prefer JSON for bodies where possible; for form-encoded APIs, set `Content-Type: application/x-www-form-urlencoded` and compose the body accordingly.
 
 
 ## Secrets
@@ -87,7 +87,7 @@ See [Secrets](secrets.md) for model, assignment and auditing details.
 
 ## Default Text Templates
 
-When a hook is used by an action, xyOps generates a context‑aware `{{text}}` value from configurable templates ([hook_text_templates](config.md#hook_text_templates)). You can append your own text in the action's "Custom Text" field.
+When a hook is used by an action, xyOps generates a context-aware `{{text}}` value from configurable templates ([hook_text_templates](config.md#hook_text_templates)). You can append your own text in the action's "Custom Text" field.
 
 Default templates include:
 
@@ -113,10 +113,10 @@ Every web hook execution records rich diagnostics and surfaces them in the UI (j
 
 - **Status**: Success with HTTP status line or an error code.
 - **Timing**: Total elapsed and a performance breakdown of network lifecycle phases (dns, connect, send, wait, receive, compress, decompress).
-- **Request**: Final method, URL (with templates expanded and URL‑encoded), headers, and body.
+- **Request**: Final method, URL (with templates expanded and URL-encoded), headers, and body.
 - **Response**: Raw headers and body returned by the endpoint.
 
-These details are also returned by the test API for ad‑hoc verification.
+These details are also returned by the test API for ad-hoc verification.
 
 
 ## Tips and Examples
@@ -191,7 +191,7 @@ token={{ encode(secrets.PUSHOVER_TOKEN) }}&user={{ encode(secrets.PUSHOVER_USER)
 - Hook not firing: Confirm the action condition matches and the hook is enabled. For jobs, ensure the run wasn't retried; completion actions skip retried runs.
 - Daily cap: If `max_per_day` is set and reached, xyOps skips execution and records a failure (visible on job details page).
 - Templating errors: Invalid `{{ ... }}` expressions in the body are rejected on save/update. For URL/headers/body, use the Test feature to validate expansions.
-- TLS issues: For development endpoints with self‑signed certificates, enable "SSL Cert Bypass". Prefer valid certificates in production.
+- TLS issues: For development endpoints with self-signed certificates, enable "SSL Cert Bypass". Prefer valid certificates in production.
 - Secrets not expanding: Ensure the secret is assigned to the hook and variable names match. Avoid using secrets in the URL when possible.
 
 

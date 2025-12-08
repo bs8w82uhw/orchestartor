@@ -19,8 +19,8 @@ Page.Masters = class Masters extends Page.Base {
 		this.args = args;
 		
 		app.showSidebar(true);
-		app.setHeaderTitle( '<i class="mdi mdi-database">&nbsp;</i>Master Servers' );
-		app.setWindowTitle( "Master Servers" );
+		app.setHeaderTitle( '<i class="mdi mdi-database">&nbsp;</i>Conductor Servers' );
+		app.setWindowTitle( "Conductor Servers" );
 		
 		this.render_masters();
 		
@@ -49,16 +49,16 @@ Page.Masters = class Masters extends Page.Base {
 		
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'All Masters';
+			html += 'All Conductors';
 		html += '</div>';
 		html += '<div class="box_content table">';
 		
-		html += this.getBasicGrid( rows, cols, 'master', function(item, idx) {
+		html += this.getBasicGrid( rows, cols, 'conductor', function(item, idx) {
 			var actions = [
-				'<button class="link" onClick="$P().upgrade_master(' + idx + ')"><b>Upgrade</b></button>',
-				'<button class="link" onClick="$P().restart_master(' + idx + ')"><b>Restart</b></button>',
+				// '<button class="link" onClick="$P().upgrade_master(' + idx + ')"><b>Upgrade</b></button>',
+				// '<button class="link" onClick="$P().restart_master(' + idx + ')"><b>Restart</b></button>',
 				'<button class="link" onClick="$P().shutdown_master(' + idx + ')"><b>Shutdown</b></button>',
-				'<button class="link" onClick="$P().remove_master(' + idx + ')"><b>Remove</b></button>'
+				// '<button class="link" onClick="$P().remove_master(' + idx + ')"><b>Remove</b></button>'
 			];
 			var status = item.online ? (item.master ? '<span class="color_label green"><i class="mdi mdi-check-circle">&nbsp;</i>Primary</span>' : '<span class="color_label blue">Online</span>') : '<span class="color_label gray"><i class="mdi mdi-alert-circle">&nbsp;</i>Offline</span>';
 			
@@ -77,8 +77,7 @@ Page.Masters = class Masters extends Page.Base {
 				'<div style="">' + (item.stats.load ? short_float(item.stats.load) : '-') + '</div>',
 				'<div style="">' + item.ping + ' ms</div>',
 				'<div style="">' + (item.date ? get_text_from_seconds( app.epoch - item.date, false, true ) : '-') + '</div>',
-				// item.online ? actions.join(' | ') : '-'
-				'-'
+				item.online ? actions.join(' | ') : '-'
 			];
 			if (!item.online) row.className = 'disabled';
 			return row;
@@ -103,7 +102,7 @@ Page.Masters = class Masters extends Page.Base {
 			commands: cmds
 		};
 		
-		Dialog.confirmDanger( '<span style="">' + ucfirst(cmds[0]) + ' Master Server</span>', "Are you sure you want to " + cmds[0] + " the master server &ldquo;" + item.id + "&rdquo;?", ['alert-decagram', 'Confirm'], function(result) {
+		Dialog.confirmDanger( '<span style="">' + ucfirst(cmds[0]) + ' Conductor Server</span>', "Are you sure you want to " + cmds[0] + " the conductor server &ldquo;" + item.id + "&rdquo;?", ['alert-decagram', 'Confirm'], function(result) {
 			if (result) {
 				Dialog.hide();
 				app.api.post( 'app/master_command', params, function(resp) {

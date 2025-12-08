@@ -16,7 +16,7 @@ This string is the sender email address for all outbound messages (default: `adm
 
 ## secret_key
 
-This string is a shared secret used to sign tokens (e.g., download links), authenticate multi-master messages, and encrypt/decrypt stored secrets -- set this to a long random value in production.
+This string is a shared secret used to sign tokens (e.g., download links), authenticate multi-conductor messages, and encrypt/decrypt stored secrets -- set this to a long random value in production.
 
 ## mail_settings
 
@@ -266,7 +266,7 @@ This object defines system-wide web hook triggers that can fire on any logged ac
 
 ## hook_text_templates
 
-This object provides message templates for jobs and alerts; Mustache-style placeholders populate human‑readable text for emails and web hooks (default includes templates like `{{links.job_details}}`).  Example set:
+This object provides message templates for jobs and alerts; Mustache-style placeholders populate human-readable text for emails and web hooks (default includes templates like `{{links.job_details}}`).  Example set:
 
 ```json
 {
@@ -291,7 +291,7 @@ This section configures the multi-server subsystem.
 
 ### multi.list_url
 
-This URL string points to the release metadata used by multi-master upgrade flows (default: `https://api.github.com/repos/pixlcore/xyops/releases`).
+This URL string points to the release metadata used by multi-conductor upgrade flows (default: `https://api.github.com/repos/pixlcore/xyops/releases`).
 
 ### multi.protocol
 
@@ -303,11 +303,11 @@ This number (seconds) sets the connection timeout for initial peer socket connec
 
 ### multi.master_timeout_sec
 
-This number (seconds) is used for the election timer and general control timeouts for master operations (default: `10`).
+This number (seconds) is used for the election timer and general control timeouts for conductor operations (default: `10`).
 
 ### multi.socket_opts
 
-This object holds options merged into the WebSocket client, e.g., TLS options for self‑signed certs. Default:
+This object holds options merged into the WebSocket client, e.g., TLS options for self-signed certs. Default:
 
 ```json
 { "rejectUnauthorized": false }
@@ -342,7 +342,7 @@ This object contains web server and runtime settings for xySat; these options ar
 
 ## quick_monitors
 
-This array defines built‑in metrics to collect (defaults include CPU, memory, disk, and network presets).  These are displayed on server detail pages for real-time monitoring.
+This array defines built-in metrics to collect (defaults include CPU, memory, disk, and network presets).  These are displayed on server detail pages for real-time monitoring.
 
 ## default_user_privileges
 
@@ -398,7 +398,7 @@ See [Air-Gapped Mode](hosting.md#air-gapped-mode) for more details.
 
 ### airgap.enabled
 
-This boolean enables outbound network egress controls for server‑initiated HTTP(S) requests (default: `false`).
+This boolean enables outbound network egress controls for server-initiated HTTP(S) requests (default: `false`).
 
 ### airgap.outbound_whitelist
 
@@ -435,7 +435,7 @@ This number controls how many additional events are loaded per increment in the 
 
 ### client.max_table_rows
 
-This number caps the number of rendered table rows client‑side to keep the UI responsive (default: `500`).
+This number caps the number of rendered table rows client-side to keep the UI responsive (default: `500`).
 
 ### client.max_menu_items
 
@@ -728,7 +728,7 @@ Sets cookie path, secure policy, httpOnly, and sameSite. Controls session cookie
 
 ## SSO
 
-This section configures Single Sign‑On using trusted headers. See the [SSO guide](sso.md) for setup details and examples.
+This section configures Single Sign-On using trusted headers. See the [SSO guide](sso.md) for setup details and examples.
 
 ### enabled
 
@@ -736,7 +736,7 @@ This boolean enables SSO and disables local username/password login (default: `f
 
 ### whitelist
 
-This array of IPs/CIDRs limits which client addresses may send trusted headers (default allows localhost, private and link‑local ranges).
+This array of IPs/CIDRs limits which client addresses may send trusted headers (default allows localhost, private and link-local ranges).
 
 ### header_map
 
@@ -744,19 +744,19 @@ This object maps incoming trusted headers to xyOps user fields (`username`, `ful
 
 ### cleanup_username
 
-This boolean cleans up the username when derived from an email (strip illegal chars, lowercase, use local‑part) (default: `true`).
+This boolean cleans up the username when derived from an email (strip illegal chars, lowercase, use local-part) (default: `true`).
 
 ### cleanup_full_name
 
-This boolean derives a display name from an email (use local‑part, replace dots with spaces, title‑case) (default: `true`).
+This boolean derives a display name from an email (use local-part, replace dots with spaces, title-case) (default: `true`).
 
 ### group_role_map
 
-This object maps IdP group names to xyOps role IDs to auto‑assign roles on login (default: `{}`).
+This object maps IdP group names to xyOps role IDs to auto-assign roles on login (default: `{}`).
 
 ### group_privilege_map
 
-This object maps IdP group names to privilege keys to auto‑assign privileges on login (default: `{}`).
+This object maps IdP group names to privilege keys to auto-assign privileges on login (default: `{}`).
 
 ### replace_roles
 

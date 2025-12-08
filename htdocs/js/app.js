@@ -226,7 +226,7 @@ app.extend({
 	handleConfigError: function(resp) {
 		// handle config error (i.e. "master")
 		if (!resp.host) {
-			Dialog.showProgress( 1.0, "Waiting for Master Server..." );
+			Dialog.showProgress( 1.0, "Waiting for Conductor Server..." );
 			setTimeout( function() { load_script('/api/app/config'); }, 5000 );
 			return;
 		}

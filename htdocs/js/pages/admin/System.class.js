@@ -107,13 +107,13 @@ Page.System = class System extends Page.Base {
 		// shutdown server
 		// html += '<div class="maint_unit">';
 		// 	html += '<div class="button danger" onClick="$P().shutdown_master()"><i class="mdi mdi-power">&nbsp;</i>Shutdown Server...</div>';
-		// 	html += '<div class="caption">Shutdown the current master server (secondary will take over if applicable).</div>';
+		// 	html += '<div class="caption">Shutdown the current conductor server (secondary will take over if applicable).</div>';
 		// html += '</div>';
 		
 		// restart server
 		// html += '<div class="maint_unit">';
 		// 	html += '<div class="button danger" onClick="$P().restart_master()"><i class="mdi mdi-restart">&nbsp;</i>Restart Server...</div>';
-		// 	html += '<div class="caption">Restart the current master server (secondary will take over).</div>';
+		// 	html += '<div class="caption">Restart the current conductor server (secondary will take over).</div>';
 		// html += '</div>';
 		
 		// upgrade satellite
@@ -124,14 +124,14 @@ Page.System = class System extends Page.Base {
 		
 		// upgrade masters
 		html += '<div class="maint_unit">';
-			html += '<div class="button danger" onClick="$P().do_upgrade_masters()"><i class="mdi mdi-database-arrow-up-outline">&nbsp;</i>Upgrade Masters...</div>';
-			html += '<div class="caption">Upgrade or downgrade xyOps on your master servers to any selected version.</div>';
+			html += '<div class="button danger" onClick="$P().do_upgrade_masters()"><i class="mdi mdi-database-arrow-up-outline">&nbsp;</i>Upgrade Conductors...</div>';
+			html += '<div class="caption">Upgrade or downgrade xyOps on your conductor servers to any selected version.</div>';
 		html += '</div>';
 		
 		// rotate secret key
 		html += '<div class="maint_unit">';
 			html += '<div class="button danger" onClick="$P().do_rotate_secret_key()"><i class="mdi mdi-key-wireless">&nbsp;</i>Rotate Secret Key...</div>';
-			html += '<div class="caption">Generate a new secret key and safely re-encrypt all secrets, servers and masters.  <a href="#Docs/hosting/secret-key-rotation">Learn More</a></div>';
+			html += '<div class="caption">Generate a new secret key and safely re-encrypt all secrets, servers and conductors.  <a href="#Docs/hosting/secret-key-rotation">Learn More</a></div>';
 		html += '</div>';
 		
 		html += '</div>'; // maint_grid
@@ -740,7 +740,7 @@ Page.System = class System extends Page.Base {
 		var self = this;
 		var html = '';
 		
-		html += `<div class="dialog_intro">This allows you to upgrade the xyOps software on your master servers.  Note that if you include the current primary master in the upgrade list, it will be upgraded last (and the client will be disconnected during the upgrade process).</div>`;
+		html += `<div class="dialog_intro">This allows you to upgrade the xyOps software on your conductor servers.  Note that if you include the current primary conductor in the upgrade list, it will be upgraded last (and the client will be disconnected during the upgrade process).</div>`;
 		html += '<div class="dialog_box_content maximize" style="max-height:75vh; overflow-x:hidden; overflow-y:auto;">';
 		
 		// targets
@@ -780,12 +780,12 @@ Page.System = class System extends Page.Base {
 		});
 		
 		html += '</div>';
-		Dialog.confirmDanger( "Upgrade Master Servers", html, ['database-arrow-up-outline', "Upgrade Now"], function(result) {
+		Dialog.confirmDanger( "Upgrade Conductor Servers", html, ['database-arrow-up-outline', "Upgrade Now"], function(result) {
 			if (!result) return;
 			app.clearError();
 			
 			var targets = $('#fe_sys_multi_targets').val();
-			if (!targets.length) return app.badField('#fe_sys_multi_targets', "Please select one or more masters to upgrade.");
+			if (!targets.length) return app.badField('#fe_sys_multi_targets', "Please select one or more conductors to upgrade.");
 			
 			var release = $('#fe_sys_multi_release').val();
 			var stagger = parseInt( $('#fe_sys_multi_stagger').val() ) || 0;
@@ -822,7 +822,7 @@ Page.System = class System extends Page.Base {
 		var self = this;
 		var html = '';
 		
-		html += `<div class="dialog_intro">Use this to rotate the master secret key.  xyOps will automatically generate a new, cryptographically secure one for you, install it, and re-encrypt all secrets, re-authenticate all servers, and update all master peers securely.  <b>Please make sure that all your servers are online before proceeding.</b>  Also, the scheduler will be paused, and all active jobs aborted.</div>`;
+		html += `<div class="dialog_intro">Use this to rotate the conductor secret key.  xyOps will automatically generate a new, cryptographically secure one for you, install it, and re-encrypt all secrets, re-authenticate all servers, and update all conductor peers securely.  <b>Please make sure that all your servers are online before proceeding.</b>  Also, the scheduler will be paused, and all active jobs aborted.</div>`;
 		html += '<div class="dialog_box_content maximize" style="max-height:75vh; overflow-x:hidden; overflow-y:auto;">';
 		
 		html += this.getFormRow({
@@ -866,7 +866,7 @@ Page.System = class System extends Page.Base {
 			commands: cmds
 		};
 		
-		Dialog.confirmDanger( '<span style="">' + ucfirst(cmds[0]) + ' Master</span>', "Are you sure you want to " + cmds[0] + " the master server &ldquo;" + item.id + "&rdquo;?", ['alert-decagram', 'Confirm'], function(result) {
+		Dialog.confirmDanger( '<span style="">' + ucfirst(cmds[0]) + ' Conductor</span>', "Are you sure you want to " + cmds[0] + " the conductor server &ldquo;" + item.id + "&rdquo;?", ['alert-decagram', 'Confirm'], function(result) {
 			if (result) {
 				Dialog.hide();
 				app.api.post( 'app/master_command', params, function(resp) {

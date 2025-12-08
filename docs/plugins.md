@@ -133,7 +133,7 @@ Note that all Plugin parameters are also passed to your Plugin process as enviro
 
 #### Output
 
-Your Plugin is expected to write JSON to STDOUT in order to report status back to the xyOps master server.  At the very least, you need to notify xyOps that the job was completed, and the result of the job (i.e. success or fail).  This is done by printing a JSON object with a `xy` property set to `1` (indicating the [xyOps Wire Protocol](xywp.md) version), and a `code` property set to `0` indicating success.  You need to make sure the JSON is compacted onto a single line, and ends with a single EOL character (`\n` on Unix).  Example:
+Your Plugin is expected to write JSON to STDOUT in order to report status back to the xyOps primary conductor.  At the very least, you need to notify xyOps that the job was completed, and the result of the job (i.e. success or fail).  This is done by printing a JSON object with a `xy` property set to `1` (indicating the [xyOps Wire Protocol](xywp.md) version), and a `code` property set to `0` indicating success.  You need to make sure the JSON is compacted onto a single line, and ends with a single EOL character (`\n` on Unix).  Example:
 
 ```json
 { "xy": 1, "code": 0 }
@@ -395,7 +395,7 @@ The `push` object is used here to instruct xyOps to "push" (append) actions onto
 
 Action Plugins are designed for custom actions that take place in response to jobs starting, completing, or completing with specific result codes (e.g. success, error, warning, critical, etc.).  They can also run in response to alerts firing or clearing.  You can already assign a number of [built-in actions](actions.md) including sending an email, firing a web hook, launching an event, taking a server snapshot, and more.  But with Plugins you can write your own actions that do anything you want.  They can even be configured to accept a custom set of parameters that are configured by the user in the UI.
 
-Action Plugins run *on the master server*, as they are part of the core engine.  However, you can still write them in any language, as they are spawned as a child subprocess, and communication API is JSON over STDIO.  To create an Action Plugin, navigate to the **Plugins** page, and click the **New Plugin** button.  For the Plugin type, select "Action Plugin".
+Action Plugins run *on the primary conductor server*, as they are part of the core engine.  However, you can still write them in any language, as they are spawned as a child subprocess, and communication API is JSON over STDIO.  To create an Action Plugin, navigate to the **Plugins** page, and click the **New Plugin** button.  For the Plugin type, select "Action Plugin".
 
 #### Parameters
 
@@ -551,7 +551,7 @@ If your Plugin does not output JSON, no problem.  When no JSON is detected in th
 
 Trigger Plugins are extensions of the scheduler system, in that they can decide "when" and "if" to launch jobs.  Specifically, if an event uses a trigger plugin, it is consulted *once per minute on the minute* (the same as the scheduler itself), and the Plugin decides whether to launch each assigned job or not.  Foe example, this can be used for custom timing algorithms like sunrise / sunset, or even watching a directory or S3 prefix for new files to appear.
 
-Trigger Plugins run *on the master server*, as they execute before a job is launched and before a server is chosen for it.  However, like the other Plugin types, they are spawned as sub-processes and can be written in virtually any language.  There is no SDK to use -- xyOps communicates with Plugins via simple JSON over STDIO.
+Trigger Plugins run *on the primary conductor server*, as they execute before a job is launched and before a server is chosen for it.  However, like the other Plugin types, they are spawned as sub-processes and can be written in virtually any language.  There is no SDK to use -- xyOps communicates with Plugins via simple JSON over STDIO.
 
 To create a Trigger Plugin, navigate to the **Plugins** page, and click the **New Plugin** button.  For the Plugin type, select "Trigger Plugin".
 
@@ -767,7 +767,7 @@ Note that this mechanism works similarly to the built-in [Delay](triggers.md#del
 
 ### Monitor Plugins
 
-Monitor Plugins can extend the xyOps monitoring system by gathering **any** custom metrics that you want.  These Plugins run directly on the servers they are targeted to (i.e. xySat runs them as child processes), and then their custom metrics are included along with the server last-minute monitoring data sent back to the xyOps master server.
+Monitor Plugins can extend the xyOps monitoring system by gathering **any** custom metrics that you want.  These Plugins run directly on the servers they are targeted to (i.e. xySat runs them as child processes), and then their custom metrics are included along with the server last-minute monitoring data sent back to the xyOps conductor server.
 
 Instead of running in response to an event or action, Monitor Plugins run every single minute, 24x7.  They are essentially "data collectors", and are expected to produce monitoring data for the instant in which they are run, or in many cases they return accumulated data for the last 60 seconds.
 

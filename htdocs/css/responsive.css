@@ -262,8 +262,8 @@
 	.data_grid.job_search_grid > ul > div:nth-child(6) { visibility: hidden; }
 	
 	/* 'Host ID', 'Status', 'Version', 'Load Avg', 'Ping', 'Uptime', 'Actions' */
-	.data_grid.master_grid { grid-template-columns: auto auto auto 0px auto auto auto !important; }
-	.data_grid.master_grid > ul > div:nth-child(4) { visibility: hidden; }
+	.data_grid.conductor_grid { grid-template-columns: auto auto auto 0px auto auto auto !important; }
+	.data_grid.conductor_grid > ul > div:nth-child(4) { visibility: hidden; }
 	
 	/* "Snapshot ID", "Source", "Server", "Uptime", "Load Avg", "Mem Avail", "Date/Time" */
 	.data_grid.snapshot_grid { grid-template-columns: auto auto auto 0px auto auto auto !important; }
@@ -659,10 +659,10 @@
 	.data_grid.job_search_grid > ul > div:nth-child(8) { visibility: hidden; }
 	
 	/* 'Host ID', 'Status', 'Version', 'Load Avg', 'Ping', 'Uptime', 'Actions' */
-	.data_grid.master_grid { grid-template-columns: auto auto auto 0px 0px 0px auto !important; }
-	.data_grid.master_grid > ul > div:nth-child(4) { visibility: hidden; }
-	.data_grid.master_grid > ul > div:nth-child(5) { visibility: hidden; }
-	.data_grid.master_grid > ul > div:nth-child(6) { visibility: hidden; }
+	.data_grid.conductor_grid { grid-template-columns: auto auto auto 0px 0px 0px auto !important; }
+	.data_grid.conductor_grid > ul > div:nth-child(4) { visibility: hidden; }
+	.data_grid.conductor_grid > ul > div:nth-child(5) { visibility: hidden; }
+	.data_grid.conductor_grid > ul > div:nth-child(6) { visibility: hidden; }
 	
 	/* "Snapshot ID", "Source", "Server", "Uptime", "Load Avg", "Mem Avail", "Date/Time" */
 	.data_grid.snapshot_grid { grid-template-columns: auto auto auto 0px 0px 0px auto !important; }
@@ -1197,11 +1197,11 @@
 	.data_grid.job_search_grid > ul > div:nth-child(9) { visibility: hidden; }
 	
 	/* 'Host ID', 'Status', 'Version', 'Load Avg', 'Ping', 'Uptime', 'Actions' */
-	.data_grid.master_grid { grid-template-columns: auto auto 0px 0px 0px 0px auto !important; }
-	.data_grid.master_grid > ul > div:nth-child(3) { visibility: hidden; }
-	.data_grid.master_grid > ul > div:nth-child(4) { visibility: hidden; }
-	.data_grid.master_grid > ul > div:nth-child(5) { visibility: hidden; }
-	.data_grid.master_grid > ul > div:nth-child(6) { visibility: hidden; }
+	.data_grid.conductor_grid { grid-template-columns: auto auto 0px 0px 0px 0px auto !important; }
+	.data_grid.conductor_grid > ul > div:nth-child(3) { visibility: hidden; }
+	.data_grid.conductor_grid > ul > div:nth-child(4) { visibility: hidden; }
+	.data_grid.conductor_grid > ul > div:nth-child(5) { visibility: hidden; }
+	.data_grid.conductor_grid > ul > div:nth-child(6) { visibility: hidden; }
 	
 	/* "Snapshot ID", "Source", "Server", "Uptime", "Load Avg", "Mem Avail", "Date/Time" */
 	.data_grid.snapshot_grid { grid-template-columns: auto 0px auto 0px 0px 0px auto !important; }
@@ -1646,12 +1646,12 @@
 	.data_grid.job_search_grid > ul > div:nth-child(9) { visibility: hidden; }
 	
 	/* 'Host ID', 'Status', 'Version', 'Load Avg', 'Ping', 'Uptime', 'Actions' */
-	.data_grid.master_grid { grid-template-columns: auto auto 0px 0px 0px 0px 0px !important; }
-	.data_grid.master_grid > ul > div:nth-child(3) { visibility: hidden; }
-	.data_grid.master_grid > ul > div:nth-child(4) { visibility: hidden; }
-	.data_grid.master_grid > ul > div:nth-child(5) { visibility: hidden; }
-	.data_grid.master_grid > ul > div:nth-child(6) { visibility: hidden; }
-	.data_grid.master_grid > ul > div:nth-child(7) { visibility: hidden; }
+	.data_grid.conductor_grid { grid-template-columns: auto auto 0px 0px 0px 0px 0px !important; }
+	.data_grid.conductor_grid > ul > div:nth-child(3) { visibility: hidden; }
+	.data_grid.conductor_grid > ul > div:nth-child(4) { visibility: hidden; }
+	.data_grid.conductor_grid > ul > div:nth-child(5) { visibility: hidden; }
+	.data_grid.conductor_grid > ul > div:nth-child(6) { visibility: hidden; }
+	.data_grid.conductor_grid > ul > div:nth-child(7) { visibility: hidden; }
 	
 	/* "Snapshot ID", "Source", "Server", "Uptime", "Load Avg", "Mem Avail", "Date/Time" */
 	.data_grid.snapshot_grid { grid-template-columns: auto 0px auto 0px 0px 0px 0px !important; }

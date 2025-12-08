@@ -1,6 +1,6 @@
 # Triggers
 
-Triggers in xyOps define when and how an event (or workflow) is allowed to run jobs. You compose one or more triggers on an event to describe automatic schedules, one‑time launches, manual control, blackout windows, and optional behaviors like catch‑up, delays, and sub‑minute precision. The scheduler evaluates triggers once per minute (with optional second‑level precision), launches matching jobs, and enforces any options.
+Triggers in xyOps define when and how an event (or workflow) is allowed to run jobs. You compose one or more triggers on an event to describe automatic schedules, one-time launches, manual control, blackout windows, and optional behaviors like catch-up, delays, and sub-minute precision. The scheduler evaluates triggers once per minute (with optional second-level precision), launches matching jobs, and enforces any options.
 
 This document explains how triggers work, how they combine, and details each trigger type with parameters and examples.
 
@@ -8,8 +8,8 @@ This document explains how triggers work, how they combine, and details each tri
 
 - Each trigger is a small definition object with two core fields: `enabled` and `type`. Extra fields depend on the type.
 - An event may have multiple triggers. Some types produce launches (schedule, interval, single, plugin). Others augment or constrain scheduling (manual, catchup, range, blackout, delay, precision).
-- The scheduler runs on the master once per minute. For schedule/interval/plugin triggers, it computes matching minutes (and optional seconds) and launches jobs accordingly.
-- Timezones are supported for schedule/plugin triggers via a `timezone` field. Range/blackout/interval times are "absolute" and thus timezone‑agnostic.
+- The scheduler runs on the conductor once per minute. For schedule/interval/plugin triggers, it computes matching minutes (and optional seconds) and launches jobs accordingly.
+- Timezones are supported for schedule/plugin triggers via a `timezone` field. Range/blackout/interval times are "absolute" and thus timezone-agnostic.
 
 Example minimal trigger (JSON format):
 
@@ -86,9 +86,9 @@ Parameters:
 |------|------|----------|-------------|
 | `years` | Array<Number> | Optional | One or more years in YYYY format. |
 | `months` | Array<Number> | Optional | Months 1-12 (Jan=1 ... Dec=12). |
-| `days` | Array<Number> | Optional | Month days 1-31, or reverse month days −1 to −7 (−1 = last day, −2 = second‑to‑last, etc.). |
+| `days` | Array<Number> | Optional | Month days 1-31, or reverse month days −1 to −7 (−1 = last day, −2 = second-to-last, etc.). |
 | `weekdays` | Array<Number> | Optional | Weekdays 0-6 (Sun=0 ... Sat=6). |
-| `hours` | Array<Number> | Optional | Hours 0-23 (24‑hour clock). |
+| `hours` | Array<Number> | Optional | Hours 0-23 (24-hour clock). |
 | `minutes` | Array<Number> | Optional | Minutes 0-59. |
 | `timezone` | String | Optional | IANA timezone for evaluating the schedule (defaults to server timezone). |
 
@@ -124,7 +124,7 @@ Example: Last day of every month at 23:55:
 
 ### Interval
 
-Run the event on a fixed interval starting from a specific epoch. Timezone‑agnostic and can launch multiple jobs within the current minute at second offsets.
+Run the event on a fixed interval starting from a specific epoch. Timezone-agnostic and can launch multiple jobs within the current minute at second offsets.
 
 Parameters:
 
@@ -169,7 +169,7 @@ Example:
 }
 ```
 
-### Catch‑Up
+### Catch-Up
 
 Catch-up mode is an optional feature designed to ensure that an event always runs on schedule, even when certain situations arise that may temporarily prevent its execution. This can include scenarios such as:
 
@@ -195,8 +195,8 @@ Notes:
 
 - Applies to schedule/interval triggers on the same event.
 - On each scheduler tick, the event's cursor advances one minute at a time, evaluating schedules for each minute until present time.
-- Long outages can produce a backlog of late jobs; ensure your event and infrastructure can handle catch‑up bursts.
-- Time Machine: In the UI you can set a custom cursor timestamp to re‑run a historical window (set cursor in the past) or skip a backlog (set cursor near "now").
+- Long outages can produce a backlog of late jobs; ensure your event and infrastructure can handle catch-up bursts.
+- Time Machine: In the UI you can set a custom cursor timestamp to re-run a historical window (set cursor in the past) or skip a backlog (set cursor near "now").
 
 Example:
 
@@ -263,7 +263,7 @@ Example:
 
 ### Delay
 
-Add a starting delay to all scheduler‑launched jobs for the event. Does not affect manual/API runs. Mutually exclusive with `interval` and `precision`.
+Add a starting delay to all scheduler-launched jobs for the event. Does not affect manual/API runs. Mutually exclusive with `interval` and `precision`.
 
 Parameters:
 
@@ -283,7 +283,7 @@ Example (delay all launches by 2 minutes):
 
 ### Precision
 
-Launch within the scheduled minute at specific second offsets. Augments other automatic triggers to achieve sub‑minute starts. Mutually exclusive with `interval` and `delay`.
+Launch within the scheduled minute at specific second offsets. Augments other automatic triggers to achieve sub-minute starts. Mutually exclusive with `interval` and `delay`.
 
 Parameters:
 
@@ -308,19 +308,19 @@ Example (launch at :05, :20, :35, :50 within each matched minute):
 
 ### Plugin
 
-Use a custom [Trigger Plugin](plugins.md#trigger-plugins) to decide whether to launch on each minute for this event. The plugin runs with configured parameters and returns a launch/no‑launch decision per minute.
+Use a custom [Trigger Plugin](plugins.md#trigger-plugins) to decide whether to launch on each minute for this event. The plugin runs with configured parameters and returns a launch/no-launch decision per minute.
 
 Parameters:
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `plugin_id` | String | Yes | ID of a configured Plugin of type `scheduler`. |
-| `params` | Object | Optional | Plugin‑defined configuration key/values. |
+| `params` | Object | Optional | Plugin-defined configuration key/values. |
 | `timezone` | String | Optional | Timezone context provided to the plugin (defaults to server timezone). |
 
 Notes:
 
-- At a high level, xyOps invokes the plugin once per minute with context, and launches jobs if the plugin indicates so. Plugins can also request a per‑launch delay and may provide input data/files for the job.  See [Plugins](plugins.md) for details.
+- At a high level, xyOps invokes the plugin once per minute with context, and launches jobs if the plugin indicates so. Plugins can also request a per-launch delay and may provide input data/files for the job.  See [Plugins](plugins.md) for details.
 
 Example:
 
@@ -344,7 +344,7 @@ Workflows use the same event trigger system. When a scheduled workflow launches,
 
 When you save or run an event, xyOps validates triggers:
 
-- Types and required parameters must be present and well‑formed.
+- Types and required parameters must be present and well-formed.
 - Ranges: `start` ≤ `end` where applicable. Blackout requires both.
 - Schedule lists must contain numbers in valid ranges; `days` may include −1...−7 to represent reverse month days.
 - Enabled uniqueness and mutual exclusion rules are enforced (see Composition Rules).

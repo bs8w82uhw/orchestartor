@@ -1,8 +1,8 @@
 # Channels
 
-Notification Channels in xyOps let you bundle multiple notification targets and follow‑up actions under a single reusable name. Instead of attaching individual emails, web hooks, or run‑event actions everywhere, you reference a channel from your event/workflow or alert action and xyOps executes the channel's configured actions together.
+Notification Channels in xyOps let you bundle multiple notification targets and follow-up actions under a single reusable name. Instead of attaching individual emails, web hooks, or run-event actions everywhere, you reference a channel from your event/workflow or alert action and xyOps executes the channel's configured actions together.
 
-Typical use case: Create a channel named "Severity 1" that emails your on‑call team, sends a Slack/web hook, runs a remediation event, and plays an audible alert in the UI for connected users.
+Typical use case: Create a channel named "Severity 1" that emails your on-call team, sends a Slack/web hook, runs a remediation event, and plays an audible alert in the UI for connected users.
 
 This document explains how channels work, where they are used, what they can do, and provides an example configuration.
 
@@ -10,9 +10,9 @@ This document explains how channels work, where they are used, what they can do,
 
 - Channels are reusable notification/action bundles that you define once and reference from actions.
 - Attach a channel via an action of type "Notify Channel" on events/workflows or alerts. See [Actions](actions.md).
-- When a channel runs, xyOps can: email users and explicit addresses, fire a web hook, launch an event, and display in‑app notifications with an optional sound for selected users.
-- Channels can be enabled/disabled, have an optional icon, and support a per‑day rate limit to prevent notification floods.
-- Channel execution is recorded in job Activity logs (for jobs) or stored on the alert record (for alerts), including sub‑action details.
+- When a channel runs, xyOps can: email users and explicit addresses, fire a web hook, launch an event, and display in-app notifications with an optional sound for selected users.
+- Channels can be enabled/disabled, have an optional icon, and support a per-day rate limit to prevent notification floods.
+- Channel execution is recorded in job Activity logs (for jobs) or stored on the alert record (for alerts), including sub-action details.
 
 ## Where Channels Are Used
 
@@ -38,8 +38,8 @@ When a channel is invoked, xyOps executes these configured actions in parallel:
 
 - Email: Email all channel users plus any extra addresses provided.
 - Web Hook: Fire a configured outbound web hook with a rich, templated payload.
-- Run Event: Launch a specific event as a follow‑up/remediation.
-- In‑App Notify: Send a UI notification to all channel users; can optionally play a sound.
+- Run Event: Launch a specific event as a follow-up/remediation.
+- In-App Notify: Send a UI notification to all channel users; can optionally play a sound.
 
 Notes:
 
@@ -50,23 +50,23 @@ Notes:
 
 ## Rate Limiting
 
-Channels support an optional per‑day cap. When the limit is reached, the channel action is skipped for the rest of the day and a message is recorded. Counts reset daily at midnight (local server timezone).
+Channels support an optional per-day cap. When the limit is reached, the channel action is skipped for the rest of the day and a message is recorded. Counts reset daily at midnight (local server timezone).
 
 ## Channel Object
 
-Channels are first‑class objects with these key properties. See the canonical definition in [Channel](data.md#channel).
+Channels are first-class objects with these key properties. See the canonical definition in [Channel](data.md#channel).
 
-- `id`: Unique alphanumeric identifier. If omitted on creation, xyOps auto‑generates one.
+- `id`: Unique alphanumeric identifier. If omitted on creation, xyOps auto-generates one.
 - `title`: Display title shown in the UI and notifications.
 - `enabled`: Enable/disable the channel.
 - `icon`: Optional Material Design icon name for UI display.
-- `users`: Array of usernames to notify. Used for both email lookup and in‑app notifications.
-- `email`: Optional comma‑separated email address list (external recipients).
+- `users`: Array of usernames to notify. Used for both email lookup and in-app notifications.
+- `email`: Optional comma-separated email address list (external recipients).
 - `web_hook`: Optional [WebHook.id](data.md#webhook-id) to fire.
 - `run_event`: Optional [Event.id](data.md#event-id) to launch.
 - `sound`: Optional `.mp3` filename to play for channel users in the UI notification.
 - `max_per_day`: Optional cap on channel invocations per day (0 = unlimited).
-- `notes`: Optional free‑form notes.
+- `notes`: Optional free-form notes.
 
 ## Example Channel
 
@@ -120,9 +120,9 @@ See [Actions → Channel](actions.md#channel) for action semantics and deduplica
 
 - Parallel execution: Email, web hook, run event, and UI notifications execute concurrently.
 - Deduplication: xyOps dedupes actions by type and target at the job/alert level. Multiple references to the same channel within a single trigger run only once; their contained actions execute once as part of the channel.
-- In‑app notifications: All `users` receive a popup notification with an optional sound. Job actions link to the job; alert actions link to the alert.
-- Templates: Email/web hook messages use standard job/alert templates. Channel configuration does not add custom text; customize per‑action text by using direct email/web hook actions if needed.
-- Auditing: For jobs, sub‑action results are aggregated into the job's Activity log under the channel action. For alerts, results are stored with the alert's action history.
+- In-app notifications: All `users` receive a popup notification with an optional sound. Job actions link to the job; alert actions link to the alert.
+- Templates: Email/web hook messages use standard job/alert templates. Channel configuration does not add custom text; customize per-action text by using direct email/web hook actions if needed.
+- Auditing: For jobs, sub-action results are aggregated into the job's Activity log under the channel action. For alerts, results are stored with the alert's action history.
 
 ## Managing Channels
 
@@ -137,7 +137,7 @@ For automation and tools, these endpoints manage channels:
 
 - `app/get_channels/v1`: List all channels.
 - `app/get_channel/v1`: Fetch a single channel by `id`.
-- `app/create_channel/v1`: Create a channel. If `id` is omitted, one is auto‑generated.
+- `app/create_channel/v1`: Create a channel. If `id` is omitted, one is auto-generated.
 - `app/update_channel/v1`: Update a channel.
 - `app/delete_channel/v1`: Delete a channel.
 
@@ -147,7 +147,7 @@ See [Channels API](api.md#channels) for more API details.
 
 - Keep channels focused: Create separate channels for different severities or teams (e.g., `ops_oncall`, `security_incidents`, `customer_success`).
 - Prefer channels for consistency: Reference the same channel across multiple events and alerts to keep your notification patterns uniform.
-- Use run‑event carefully: Ensure the remediation event is idempotent and safe to trigger on repeated conditions.
+- Use run-event carefully: Ensure the remediation event is idempotent and safe to trigger on repeated conditions.
 - Rate limits are per channel: If you need separate caps for different targets, split into multiple channels.
 
 ## See Also

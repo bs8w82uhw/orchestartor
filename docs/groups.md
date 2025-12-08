@@ -88,7 +88,7 @@ Selection algorithms:
 Details:
 
 - The eligible set is de-duplicated and built from all targets (groups and servers), then filtered by online/enabled status and alert exclusion.
-- For `round_robin`, xyOps maintains per-event rotation state so distribution is fair across restarts or master failover.
+- For `round_robin`, xyOps maintains per-event rotation state so distribution is fair across restarts or conductor failover.
 
 See [Events → Server Selection](events.md#server-selection) and [Data → Event.algo](data.md#event-algo) for additional context.
 

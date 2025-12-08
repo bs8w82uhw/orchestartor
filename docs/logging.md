@@ -124,10 +124,10 @@ Monitor evaluation, expressions, alert triggering/clearing, and data submission.
 ```
 
 ### Multi.log
-Multi-server cluster status and master election.
+Multi-server cluster status and conductor election.
 
 ```
-[1763879905.018][2025-11-22 22:38:25][joemax.lan][10341][Multi][debug][1][We are becoming master][{"id":"joemax.lan"}]
+[1763879905.018][2025-11-22 22:38:25][joemax.lan][10341][Multi][debug][1][We are becoming primary][{"id":"joemax.lan"}]
 ```
 
 ### Scheduler.log
