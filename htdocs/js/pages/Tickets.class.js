@@ -2524,13 +2524,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 			
 			html += '<div class="editor_toolbar_divider"></div>';
 			
-			// html += '<div class="editor_toolbar_button" id="btn_scroll_lock" title="Scroll Lock" onClick="$P().toggleScrollLock()"><i class="mdi mdi-arrow-vertical-lock"></i></div>';
-			
-			// html += '<div class="editor_toolbar_divider"></div>';
-			
 			html += '<button class="editor_toolbar_button" id="btn_show_preview" title="Show Preview" onClick="$P().editShowPreview()"><i class="mdi mdi-file-find-outline"></i></button>';
-			
-			// html += '<div class="editor_toolbar_help"><a href="#Document?id=markdown" target="_blank">What\'s this?</a></div>';
 			
 			html += '<div class="clear"></div>';
 		html += '</div>';
