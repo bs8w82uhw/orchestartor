@@ -3000,6 +3000,30 @@ Page.Base = class Base extends Page {
 		// });
 	}
 	
+	fixDocumentLinks(elem) {
+		// fix all local links to point back to #Docs
+		if (!elem) elem = this.div;
+		else if (typeof(elem) == 'string') elem = $(elem);
+		var doc = this.args.doc;
+		
+		elem.find('div.markdown-body').find('a[href]').each( function() {
+			var $this = $(this);
+			var href = $this.attr('href');
+			if (href.match(/^(\w+)\.md$/)) {
+				// link to doc
+				$this.attr('href', href.replace(/^(\w+)\.md$/, '#Docs/$1'));
+			}
+			else if (href.match(/^(\w+)\.md\#(\S+)$/)) {
+				// link to section in doc
+				$this.attr('href', href.replace(/^(\w+)\.md\#(\S+)$/, '#Docs/$1/$2'));
+			}
+			else if (href.match(/^\#(\S+)$/) && doc) {
+				// link to section
+				$this.attr('href', href.replace(/^\#(\S+)$/, '#Docs/' + doc + '/$1') );
+			}
+		} );
+	}
+	
 	// 
 	// Toggle Boxes
 	// 

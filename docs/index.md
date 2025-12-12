@@ -6,6 +6,7 @@ Welcome to the xyOps documentation. xyOps is a job scheduler, workflow engine, a
 
 ## Getting Started
 
+- **[Welcome to xyOps](welcome.md)**: Introduces xyOps and provides some tips for beginners.  Shown on first login.
 - **[Self-Hosting](hosting.md)**: Install xyOps with Docker, add workers, configure TLS, storage, and production settings.
 - **[Configuration](config.md)**: All server configuration options, override layers, and where settings live on disk.
 - **[Scaling](scaling.md)**: Best practices for running at scale, hardware sizing, caching, and multi-conductor.

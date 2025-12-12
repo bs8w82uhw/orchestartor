@@ -54,6 +54,12 @@ Page.Docs = class Docs extends Page.PageUtils {
 		if (args.doc == 'index') {
 			app.setWindowTitle('Documentation');
 			app.setHeaderTitle( '<i class="mdi mdi-file-document-multiple-outline">&nbsp;</i>' + config.name + ' Documentation' );
+			app.highlightTab( 'Docs' );
+		}
+		else if (args.doc == 'support') {
+			app.setWindowTitle('Support');
+			app.setHeaderTitle( '<i class="mdi mdi-lifebuoy">&nbsp;</i>' + config.name + ' Support' );
+			app.highlightTab( 'Support' );
 		}
 		else {
 			app.setWindowTitle( title + ' | Documentation' );
@@ -61,6 +67,7 @@ Page.Docs = class Docs extends Page.PageUtils {
 				{ icon: 'file-document-multiple-outline', loc: '#Docs', title: 'Docs' },
 				{ icon: 'file-document-outline', title: title }
 			]);
+			app.highlightTab( 'Docs' );
 		}
 		
 		// table of contents
@@ -73,7 +80,7 @@ Page.Docs = class Docs extends Page.PageUtils {
 			html += title;
 			html += '<div class="box_title_widget" style="overflow:visible"><i class="mdi mdi-magnify" onClick="$(\'#fe_doc_search\').focus()">&nbsp;</i><input type="text" id="fe_doc_search" placeholder="Search docs..."/></div>';
 			html += '<div class="clear"></div>';
-			if (args.doc != 'index') {
+			if (!['index', 'support'].includes(args.doc)) {
 				html += '<div class="box_subtitle"><a href="#Docs">&laquo; Back to Document Index</a></div>';
 			}
 		html += '</div>';
@@ -81,7 +88,7 @@ Page.Docs = class Docs extends Page.PageUtils {
 		html += '<div class="box_content">';
 		html += '<div class="markdown-body doc-body" style="margin-top:0px; margin-bottom:15px;">';
 		
-		html += marked.parse(text, Object.assign({}, config.ui.marked_config, { headerIds: false }));
+		html += marked.parse(text, config.ui.marked_config);
 		
 		html += '<p class="article_fin"><i class="mdi mdi-console-line"></i></p>';
 		
@@ -95,7 +102,7 @@ Page.Docs = class Docs extends Page.PageUtils {
 		
 		this.expandInlineImages();
 		this.highlightCodeBlocks();
-		this.fixLinks();
+		this.fixDocumentLinks();
 		this.setupHeaderLinks();
 		
 		setTimeout( function() {
@@ -150,7 +157,7 @@ Page.Docs = class Docs extends Page.PageUtils {
 	
 	getTableOfContents(text) {
 		// scan doc for headings
-		if (this.args.doc == 'index') return '';
+		if (['index', 'support'].includes(this.args.doc)) return '';
 		var chapters = [];
 		var min_indent = 99;
 		var in_code_block = false;
@@ -182,28 +189,6 @@ Page.Docs = class Docs extends Page.PageUtils {
 		return toc;
 	}
 	
-	fixLinks() {
-		// fix all local links to point back to #Docs
-		var doc = this.args.doc;
-		
-		this.div.find('div.markdown-body').find('a[href]').each( function() {
-			var $this = $(this);
-			var href = $this.attr('href');
-			if (href.match(/^(\w+)\.md$/)) {
-				// link to doc
-				$this.attr('href', href.replace(/^(\w+)\.md$/, '#Docs/$1'));
-			}
-			else if (href.match(/^(\w+)\.md\#(\S+)$/)) {
-				// link to section in doc
-				$this.attr('href', href.replace(/^(\w+)\.md\#(\S+)$/, '#Docs/$1/$2'));
-			}
-			else if (href.match(/^\#(\S+)$/)) {
-				// link to section
-				$this.attr('href', href.replace(/^\#(\S+)$/, '#Docs/' + doc + '/$1') );
-			}
-		} );
-	}
-	
 	setupHeaderLinks(elem) {
 		// add links to article section headers
 		var self = this;
@@ -224,6 +209,7 @@ Page.Docs = class Docs extends Page.PageUtils {
 	
 	onStatusUpdate() {
 		// HACK: using this to track window.scrollY
+		// FUTURE: find a better way to do this
 		this.lastScrollY = window.scrollY;
 	}
 	

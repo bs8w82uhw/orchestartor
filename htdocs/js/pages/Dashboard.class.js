@@ -22,7 +22,18 @@ Page.Dashboard = class Dashboard extends Page.PageUtils {
 		app.setHeaderTitle( '<i class="mdi mdi-monitor-dashboard">&nbsp;</i>Dashboard' );
 		app.showSidebar(true);
 		
+		var show_welcome = !app.events.length;
 		var html = '';
+		
+		// welcome message (if no events)
+		if (show_welcome) {
+			html += '<div class="box" id="d_dash_welcome">';
+				html += '<div class="box_content">';
+					html += '<div class="loading_container"><div class="loading"></div></div>';
+				html += '</div>'; // box_content
+			html += '</div>'; // box
+		}
+		
 		html += '<div class="dash_grid">';
 		html += '</div>';
 		
@@ -122,7 +133,30 @@ Page.Dashboard = class Dashboard extends Page.PageUtils {
 		this.setupJobHistoryDayGraph();
 		this.setupAlertHistoryDayGraph();
 		
+		if (show_welcome) this.getWelcomeDoc();
+		
 		return true;
+	}
+	
+	getWelcomeDoc() {
+		// fetch welcome doc from server and render it
+		var self = this;
+		
+		app.api.get( 'app/get_doc', { doc: 'welcome' }, function(resp) {
+			var text = resp.text; // .replace(/^\#\s+([^\n]+)\n/, '').trim();
+			var $cont = $('#d_dash_welcome > div.box_content');
+			
+			$cont.html( 
+				'<div class="markdown-body doc-body">' + 
+					marked.parse(text, config.ui.marked_config) + 
+					'<p class="article_fin"><i class="mdi mdi-console-line"></i></p>' + 
+				'</div>'
+			);
+			
+			self.expandInlineImages( $cont );
+			self.highlightCodeBlocks( $cont );
+			self.fixDocumentLinks( $cont );
+		} );
 	}
 	
 	updateDashGrid() {

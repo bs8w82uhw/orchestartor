@@ -26,9 +26,9 @@ Minimal example (JSON):
 
 ```json
 {
-  "enabled": true,
-  "type": "time",
-  "duration": 3600
+	"enabled": true,
+	"type": "time",
+	"duration": 3600
 }
 ```
 
@@ -42,9 +42,9 @@ Minimal example (JSON):
 
 - All three sources can contribute limits: event/workflow, category, and universal.
 - Precedence is by source order when launching jobs:
-  - Event/workflow limits first (highest precedence)
-  - Category limits next
-  - Universal limits last
+	- Event/workflow limits first (highest precedence)
+	- Category limits next
+	- Universal limits last
 - xyOps consults the first matching limit by `type` for start-time checks like Max Concurrent Jobs (`job`) and Max Queue (`queue`). 
 - For running resource checks (`time`, `log`, `mem`, `cpu`), multiple limits can exist, and they all apply, and can perform separate actions.
 
@@ -85,16 +85,16 @@ Example:
 
 ```json
 {
-  "enabled": true,
-  "type": "time",
-  "duration": 3600,
-  "tags": ["limited"],
-  "users": ["oncall"],
-  "email": "ops@example.com",
-  "web_hook": "slack_ops",
-  "text": "Runaway protection triggered",
-  "snapshot": true,
-  "abort": true
+	"enabled": true,
+	"type": "time",
+	"duration": 3600,
+	"tags": ["limited"],
+	"users": ["oncall"],
+	"email": "ops@example.com",
+	"web_hook": "slack_ops",
+	"text": "Runaway protection triggered",
+	"snapshot": true,
+	"abort": true
 }
 ```
 
@@ -118,9 +118,9 @@ Example:
 
 ```json
 {
-  "enabled": true,
-  "type": "job",
-  "amount": 2
+	"enabled": true,
+	"type": "job",
+	"amount": 2
 }
 ```
 
@@ -146,11 +146,11 @@ Example:
 
 ```json
 {
-  "enabled": true,
-  "type": "log",
-  "amount": 10485760,
-  "users": ["sre"],
-  "abort": true
+	"enabled": true,
+	"type": "log",
+	"amount": 10485760,
+	"users": ["sre"],
+	"abort": true
 }
 ```
 
@@ -177,13 +177,13 @@ Example:
 
 ```json
 {
-  "enabled": true,
-  "type": "mem",
-  "amount": 1073741824,
-  "duration": 30,
-  "tags": ["memory-hot"],
-  "snapshot": true,
-  "abort": true
+	"enabled": true,
+	"type": "mem",
+	"amount": 1073741824,
+	"duration": 30,
+	"tags": ["memoryhot"],
+	"snapshot": true,
+	"abort": true
 }
 ```
 
@@ -210,13 +210,13 @@ Example:
 
 ```json
 {
-  "enabled": true,
-  "type": "cpu",
-  "amount": 250,
-  "duration": 20,
-  "users": ["oncall"],
-  "web_hook": "slack_ops",
-  "abort": true
+	"enabled": true,
+	"type": "cpu",
+	"amount": 250,
+	"duration": 20,
+	"users": ["oncall"],
+	"web_hook": "slack_ops",
+	"abort": true
 }
 ```
 
@@ -236,10 +236,10 @@ Example:
 
 ```json
 {
-  "enabled": true,
-  "type": "retry",
-  "amount": 3,
-  "duration": 60
+	"enabled": true,
+	"type": "retry",
+	"amount": 3,
+	"duration": 60
 }
 ```
 
@@ -258,9 +258,9 @@ Example:
 
 ```json
 {
-  "enabled": true,
-  "type": "queue",
-  "amount": 25
+	"enabled": true,
+	"type": "queue",
+	"amount": 25
 }
 ```
 
@@ -281,11 +281,11 @@ Example:
 
 ```json
 {
-  "enabled": true,
-  "type": "file",
-  "amount": 100,
-  "size": 52428800,
-  "accept": ".json,.csv,.tsv"
+	"enabled": true,
+	"type": "file",
+	"amount": 100,
+	"size": 52428800,
+	"accept": ".json,.csv,.tsv"
 }
 ```
 
@@ -297,11 +297,11 @@ Example:
 
 ```json
 "job_universal_limits": {
-  "default": [
-    { "enabled": true, "type": "retry", "amount": 2, "duration": 30 },
-    { "enabled": true, "type": "queue", "amount": 100 }
-  ],
-  "workflow": []
+	"default": [
+		{ "enabled": true, "type": "retry", "amount": 2, "duration": 30 },
+		{ "enabled": true, "type": "queue", "amount": 100 }
+	],
+	"workflow": []
 }
 ```
 
