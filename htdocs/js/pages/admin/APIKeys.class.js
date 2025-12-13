@@ -97,6 +97,7 @@ Page.APIKeys = class APIKeys extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 	}
 	
 	do_new_from_list() {

@@ -4,7 +4,7 @@
 // Released under the BSD 3-Clause License.
 // See the LICENSE.md file in this repository.
 
-Page.System = class System extends Page.Base {
+Page.System = class System extends Page.PageUtils {
 	
 	onInit() {
 		// called once at page load
@@ -141,6 +141,7 @@ Page.System = class System extends Page.Base {
 		this.renderSystemComponents();
 		this.renderInternalJobs();
 		this.renderWebSockets();
+		// this.addPageDescription();
 	}
 	
 	renderStat(key, value) {

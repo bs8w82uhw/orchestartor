@@ -4,7 +4,7 @@
 // Released under the BSD 3-Clause License.
 // See the LICENSE.md file in this repository.
 
-Page.Conductors = class Conductors extends Page.Base {
+Page.Conductors = class Conductors extends Page.PageUtils {
 	
 	onInit() {
 		// called once at page load
@@ -92,6 +92,7 @@ Page.Conductors = class Conductors extends Page.Base {
 		html += '</div>'; // box
 		
 		this.div.html( html );
+		this.addPageDescription();
 	}
 	
 	do_master_cmd(idx, cmds) {

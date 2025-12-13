@@ -249,6 +249,7 @@ Page.Tickets = class Tickets extends Page.PageUtils {
 		html += '<div id="d_search_results"><div class="loading_container"><div class="loading"></div></div></div>';
 		
 		this.div.html( html ).buttonize();
+		this.addPageDescription();
 		
 		// var sargs = this.getSearchArgs();
 		// if (!sargs) this.div.find('#btn_s_save').addClass('disabled');

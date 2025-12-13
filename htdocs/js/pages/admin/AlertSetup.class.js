@@ -103,6 +103,7 @@ Page.AlertSetup = class AlertSetup extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 	}
 	
 	toggle_alert_enabled(elem, idx) {

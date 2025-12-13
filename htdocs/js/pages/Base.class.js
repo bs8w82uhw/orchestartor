@@ -3024,11 +3024,11 @@ Page.Base = class Base extends Page {
 				$this.attr('href', href.replace(/^(\w+)\.md$/, '#Docs/$1'));
 			}
 			else if (href.match(/^(\w+)\.md\#(\S+)$/)) {
-				// link to section in doc
+				// link to section in specific doc
 				$this.attr('href', href.replace(/^(\w+)\.md\#(\S+)$/, '#Docs/$1/$2'));
 			}
 			else if (href.match(/^\#(\S+)$/) && doc) {
-				// link to section
+				// link to section in current doc
 				$this.attr('href', href.replace(/^\#(\S+)$/, '#Docs/' + doc + '/$1') );
 			}
 		} );

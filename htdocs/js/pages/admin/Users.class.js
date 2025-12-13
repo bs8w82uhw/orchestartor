@@ -101,6 +101,7 @@ Page.Users = class Users extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 		
 		setTimeout( function() {
 			$('#fe_ul_search').keypress( function(event) {

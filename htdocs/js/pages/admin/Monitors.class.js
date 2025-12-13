@@ -103,6 +103,7 @@ Page.Monitors = class Monitors extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 		
 		this.setupDraggableGrid({
 			table_sel: this.div.find('div.data_grid'), 

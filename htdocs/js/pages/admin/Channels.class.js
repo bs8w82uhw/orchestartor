@@ -102,6 +102,7 @@ Page.Channels = class Channels extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 	}
 	
 	toggle_channel_enabled(elem, idx) {

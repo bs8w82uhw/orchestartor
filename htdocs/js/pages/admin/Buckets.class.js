@@ -102,6 +102,7 @@ Page.Buckets = class Buckets extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 	}
 	
 	toggle_bucket_enabled(elem, idx) {

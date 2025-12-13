@@ -103,6 +103,7 @@ Page.WebHooks = class WebHooks extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 	}
 	
 	toggle_web_hook_enabled(elem, idx) {

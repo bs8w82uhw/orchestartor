@@ -108,6 +108,7 @@ Page.Plugins = class Plugins extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 	}
 	
 	toggle_plugin_enabled(elem, idx) {

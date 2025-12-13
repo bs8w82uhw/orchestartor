@@ -205,6 +205,8 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		
 		this.div.html( html ).buttonize();
 		this.applyTableFilters();
+		this.addPageDescription();
+		
 		SingleSelect.init( this.div.find('#fe_es_filter') );
 		
 		if (this.args.add && app.hasPrivilege('add_servers')) {

@@ -105,6 +105,7 @@ Page.Roles = class Roles extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 	}
 	
 	toggle_role_enabled(elem, idx) {

@@ -4745,4 +4745,52 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		ZeroUpload.chooseFiles({}, {});
 	}
 	
+	addPageDescription(page_id) {
+		// if enabled, show a description of the current page
+		var self = this;
+		if (!page_id) page_id = this.ID;
+		if (!app.user.page_info) return;
+		
+		app.api.get( 'app/get_doc', { doc: 'pages' }, function(resp) {
+			var text = resp.text;
+			if (!text.match( new RegExp("\\n##\\s+(" + page_id + ")\\s+([\\S\\s]+?)(\\n#|$)") )) return;
+			var desc = RegExp.$2;
+			
+			var $box = $(`
+				<div class="box" id="d_page_desc">
+					<div class="box_title">
+						<span style="color:var(--label-color)"><i class="mdi mdi-help-circle-outline">&nbsp;</i>What's Here?</span>
+						<div class="button right mobile_collapse" onClick="$P().removePageDescriptions()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>Hide</span></div>
+					</div>
+					<div class="box_content table">
+						<div class="markdown-body desc-body">${marked.parse(desc, config.ui.marked_config)}</div>
+					</div>
+				</div>
+			`);
+			
+			self.div.append($box);
+			
+			$box.buttonize();
+			self.expandInlineImages( $box );
+			self.highlightCodeBlocks( $box );
+			self.fixDocumentLinks( $box );
+			
+			$box.find('div.markdown-body').find('a[href]').each( function() {
+				var $this = $(this);
+				if ($this.attr('href').match(/^\#Docs/)) {
+					$this.prepend(`<i style="padding-right:2px" class="mdi mdi-file-document-outline"></i>`);
+				}
+			});
+		} );
+	}
+	
+	removePageDescriptions() {
+		// hide current page description and disable setting in user prefs
+		this.div.find('#d_page_desc').remove();
+		
+		app.api.post( 'app/user_settings', { page_info: false }, function(resp) {
+			app.user = resp.user;
+		});
+	}
+	
 };

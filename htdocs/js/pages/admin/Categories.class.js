@@ -114,6 +114,7 @@ Page.Categories = class Categories extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 		
 		if (!app.isCategoryLimited()) this.setupDraggableGrid({
 			table_sel: this.div.find('div.data_grid'), 

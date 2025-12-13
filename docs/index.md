@@ -68,9 +68,9 @@ Welcome to the xyOps documentation. xyOps is a job scheduler, workflow engine, a
 ## Meta
 
 - **[GitHub Project](https://github.com/pixlcore/xyops/blob/main/README.md)**: Opens source GitHub project overview.
-- **[Longevity](https://github.com/pixlcore/xyops/blob/main/LONGEVITY.md)**: Project longevity and forever license pledge.
-- **[Governance](governance.md)**: Project governance, contribution expectations, and decision-making.
 - **[Code of Conduct](https://github.com/pixlcore/xyops/blob/main/CODE_OF_CONDUCT.md)**: Contributor Covenant Code of Conduct.
 - **[License](https://github.com/pixlcore/xyops/blob/main/LICENSE.md)**: Open source BSD 3-Clause license (OSI-approved).
 - **[Trademarks](https://github.com/pixlcore/xyops/blob/main/TRADEMARKS.md)**: xyOps, xySat and PixlCore are trademarks.
+- **[Longevity](https://github.com/pixlcore/xyops/blob/main/LONGEVITY.md)**: Project longevity and forever license pledge.
+- **[Governance](governance.md)**: Project governance, contribution expectations, and decision-making.
 - **[Colophon](colophon.md)**: We stand on the shoulders of giants.

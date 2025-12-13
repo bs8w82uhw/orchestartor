@@ -123,6 +123,7 @@ Page.Groups = class Groups extends Page.ServerUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 		
 		if (!app.isGroupLimited()) this.setupDraggableGrid({
 			table_sel: this.div.find('div.data_grid'), 

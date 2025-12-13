@@ -92,6 +92,7 @@ Page.Tags = class Tags extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 	}
 	
 	edit_tag(idx) {

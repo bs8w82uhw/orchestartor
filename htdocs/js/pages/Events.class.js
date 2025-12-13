@@ -225,6 +225,7 @@ Page.Events = class Events extends Page.PageUtils {
 		html += '<div id="d_search_results"></div>';
 		
 		this.div.html( html ).buttonize();
+		this.addPageDescription( (args.plugin == '_workflow') ? 'Workflows' : 'Events' );
 		
 		// MultiSelect.init( this.div.find('#fe_el_tags') );
 		SingleSelect.init( this.div.find('#fe_el_status, #fe_el_category, #fe_el_target, #fe_el_plugin, #fe_el_tag, #fe_el_trigger, #fe_el_username, #fe_el_action') );
@@ -284,7 +285,7 @@ Page.Events = class Events extends Page.PageUtils {
 		
 		html += '<div class="box" id="d_el_results">';
 		html += '<div class="box_title">';
-			html += 'Event List';
+			html += (args.plugin == '_workflow') ? 'Workflow List' : 'Event List';
 		html += '</div>';
 		html += '<div class="box_content table">';
 		

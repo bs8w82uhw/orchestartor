@@ -104,6 +104,7 @@ Page.Secrets = class Secrets extends Page.PageUtils {
 		
 		this.div.html( html ).buttonize();
 		this.setupBoxButtonFloater();
+		this.addPageDescription();
 	}
 	
 	toggle_secret_enabled(elem, idx) {
