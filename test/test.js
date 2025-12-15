@@ -73,7 +73,7 @@ module.exports = {
 				satellite.tick();
 			});
 			
-			self.xy.once('addedServer', function() {
+			self.xy.once('serverAdded', function() {
 				self.logDebug(3, "Event: addedServer");
 				callback();
 			});
