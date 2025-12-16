@@ -38,15 +38,15 @@ module.exports = {
 		try { Tools.rimraf.sync('test/temp'); } catch(e) {;}
 		
 		// load suites
-			this.tests = this.tests.concat( 
-				require('./suites/test-user-initial.js').tests,
-				require('./suites/test-alerts-api.js').tests,
-				require('./suites/test-buckets-api.js').tests,
-				require('./suites/test-categories-api.js').tests,
-				require('./suites/test-channels-api.js').tests,
-				require('./suites/test-events-api.js').tests,
-				require('./suites/test-files-api.js').tests
-			);
+		this.tests = this.tests.concat( 
+			require('./suites/test-user-initial.js').tests,
+			require('./suites/test-alerts-api.js').tests,
+			require('./suites/test-buckets-api.js').tests,
+			require('./suites/test-categories-api.js').tests,
+			require('./suites/test-channels-api.js').tests,
+			require('./suites/test-events-api.js').tests,
+			require('./suites/test-files-api.js').tests
+		);
 		
 		// start pixl-server
 		server.startup( function() {
@@ -57,10 +57,6 @@ module.exports = {
 			
 			// prepare to make api calls
 			self.api_url = server.config.get('base_app_url') + server.API.config.get('base_uri');
-			
-			// cancel auto ticks, so we can send our own later
-			clearTimeout( server.tickTimer );
-			delete server.tickTimer;
 			
 			// write log in sync mode, for troubleshooting
 			server.logger.set('sync', true);
