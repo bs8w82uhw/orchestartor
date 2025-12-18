@@ -3062,6 +3062,39 @@ Example response:
 
 In addition to the [Standard Response Format](#standard-response-format), this will include a `rows` array containing [Snapshot](data.md#snapshot) records, and a `list` object containing list metadata. When `verbose` is not set, large fields are pruned from the snapshot records.
 
+### search_tickets
+
+```
+GET /api/app/search_tickets/v1
+```
+
+Search tickets using the Unbase query syntax. Requires a valid user session or API Key. Results are automatically filtered by the caller's access rights.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `query` | String | **(Required)** [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). |
+| `offset` | Number | Optional. Zero-based row offset for pagination. Defaults to `0`. |
+| `limit` | Number | Optional. Number of rows to return. Defaults to `1`. |
+| `sort_by` | String | Optional. Field to sort by. Defaults to `_id`. |
+| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
+| `compact` | Boolean | Optional. If `true` (or `1`), omit `body` and replace `changes` with its count for lighter payloads. |
+
+Example response (compact):
+
+```json
+{
+  "code": 0,
+  "rows": [
+    { "id": "tmgpmoorz6p", "num": 24, "subject": "...", "status": "open", "changes": 3 }
+  ],
+  "list": { "length": 57 }
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes a `rows` array of [Ticket](data.md#ticket) records and a `list` object with list metadata (e.g., `length` for total rows without pagination). When `compact` is set, `body` is omitted and `changes` is the count of changes.
+
 ### search_activity
 
 ```
@@ -3963,38 +3996,6 @@ Example response (non-verbose):
 
 In addition to the [Standard Response Format](#standard-response-format), this includes a `tickets` array in the same order as `ids`. When `verbose` is not set, large fields are pruned. If a ticket cannot be loaded, its array entry will contain an `err` property instead of a ticket object. See [Ticket](data.md#ticket) for field definitions.
 
-### search_tickets
-
-```
-GET /api/app/search_tickets/v1
-```
-
-Search tickets using the Unbase query syntax. Requires a valid user session or API Key. Results are automatically filtered by the caller's access rights.
-
-Parameters:
-
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `query` | String | **(Required)** [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). |
-| `offset` | Number | Optional. Zero-based row offset for pagination. Defaults to `0`. |
-| `limit` | Number | Optional. Number of rows to return. Defaults to `1`. |
-| `sort_by` | String | Optional. Field to sort by. Defaults to `_id`. |
-| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
-| `compact` | Boolean | Optional. If `true` (or `1`), omit `body` and replace `changes` with its count for lighter payloads. |
-
-Example response (compact):
-
-```json
-{
-  "code": 0,
-  "rows": [
-    { "id": "tmgpmoorz6p", "num": 24, "subject": "...", "status": "open", "changes": 3 }
-  ],
-  "list": { "length": 57 }
-}
-```
-
-In addition to the [Standard Response Format](#standard-response-format), this includes a `rows` array of [Ticket](data.md#ticket) records and a `list` object with list metadata (e.g., `length` for total rows without pagination). When `compact` is set, `body` is omitted and `changes` is the count of changes.
 
 ### create_ticket
 
