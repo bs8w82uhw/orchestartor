@@ -60,6 +60,7 @@ module.exports = {
 			require('./suites/test-workflows.js').tests,
 			require('./suites/test-alerts.js').tests,
 			require('./suites/test-search.js').tests,
+			require('./suites/test-scheduler.js').tests,
 			require('./suites/test-users.js').tests,
 			require('./suites/test-admin.js').tests // do this one last!
 		);
