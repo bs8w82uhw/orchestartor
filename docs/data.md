@@ -2031,6 +2031,10 @@ An alert invocation is a specific instance of an alert being triggered. It conta
 
 The unique identifier for the alert invocation.
 
+### AlertInvocation.active
+
+A boolean indicating whether the alert invocation is active (`true`) or cleared (`false`).
+
 ### AlertInvocation.alert
 
 The [Alert.id](#alert-id) of the alert that triggered the invocation.
@@ -2070,6 +2074,10 @@ An internal boolean indicating whether the alert has been notified.
 ### AlertInvocation.server
 
 The [Server.id](#server-id) that the alert is associated with.
+
+### AlertInvocation.tickets
+
+An array of [Ticket.id](#ticket-id)s that reference the alert invocation.
 
 ## ServerMonitorData
 
