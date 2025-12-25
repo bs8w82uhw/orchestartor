@@ -1400,7 +1400,10 @@ Page.Base = class Base extends Page {
 		var icon = 'progress-question';
 		
 		switch (job.state) {
-			case 'queued': icon = 'tray-full'; break;
+			case 'queued': 
+				icon = 'tray-full'; 
+				if (job.position) nice_state += ` (#${job.position})`;
+			break;
 			
 			case 'start_delay': 
 				icon = 'clock-fast';
@@ -1546,6 +1549,9 @@ Page.Base = class Base extends Page {
 		}
 		else if (job.source.match(/workflow/i)) {
 			return '<i class="mdi mdi-clipboard-flow-outline">&nbsp;</i>Workflow';
+		}
+		else if (job.source.match(/magic/i)) {
+			return '<i class="mdi mdi-link-variant">&nbsp;</i>Magic Link';
 		}
 		else return '(Unknown)';
 	}
@@ -2946,6 +2952,7 @@ Page.Base = class Base extends Page {
 		
 		CodeEditor.onHide = function() {
 			// clean shutdown of codemirror
+			app.clearError();
 			self.editor.setOption('mode', 'text');
 			
 			if (old_editor) {
@@ -3249,6 +3256,45 @@ Page.Base = class Base extends Page {
 				$this.attr('href', href.replace(/^\#(\S+)$/, '#Docs/' + doc + '/$1') );
 			}
 		} );
+	}
+	
+	confettiParty() {
+		// yay!
+		var count = 200;
+		var defaults = {
+			origin: { y: 0.7 }
+		};
+		
+		function fire(particleRatio, opts) {
+			app.confetti({
+				...defaults,
+				...opts,
+				particleCount: Math.floor(count * particleRatio)
+			});
+		};
+		
+		fire(0.25, {
+			spread: 26,
+			startVelocity: 55,
+		});
+		fire(0.2, {
+			spread: 60,
+		});
+		fire(0.35, {
+			spread: 100,
+			decay: 0.91,
+			scalar: 0.8
+		});
+		fire(0.1, {
+			spread: 120,
+			startVelocity: 25,
+			decay: 0.92,
+			scalar: 1.2
+		});
+		fire(0.1, {
+			spread: 120,
+			startVelocity: 45,
+		});
 	}
 	
 	// 
