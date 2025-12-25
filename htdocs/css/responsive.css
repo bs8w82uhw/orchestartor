@@ -503,6 +503,20 @@
 		margin-right: 30px;
 	}
 	
+	body.magic {
+		margin-top: 5vh;
+	}
+	body.magic #d_footer {
+		position: relative;
+		width: auto;
+		top: 0;
+		margin-top: 0px;
+		margin-bottom: 20px;
+	}
+	body.magic div.dialog_content {
+		margin: 20px 10px 10px 10px;
+	}
+	
 	/* 'Enabled', 'Event Title', 'Category', 'Plugin', 'Target', 'Trigger', 'Status', 'Actions' */
 	.data_grid.event_grid { grid-template-columns: 40px auto auto 0px 0px 0px auto auto !important; }
 	.data_grid.event_grid > ul > div:nth-child(4) { visibility: hidden; }
@@ -977,6 +991,9 @@
 	.summary_grid {
 		grid-template-columns: 1fr 1fr;
 	}
+	.summary_grid.triple {
+		grid-template-columns: 1fr 1fr;
+	}
 	
 	.maint_grid {
 		grid-template-columns: repeat(1, 1fr);
@@ -1013,6 +1030,20 @@
 	.doc-body {
 		margin-left: 20px;
 		margin-right: 20px;
+	}
+	
+	body.magic {
+		margin-top: 5vh;
+	}
+	body.magic #d_footer {
+		position: relative;
+		width: auto;
+		top: 0;
+		margin-top: 0px;
+		margin-bottom: 20px;
+	}
+	body.magic div.dialog_content {
+		margin: 20px 0px 0px 0px;
 	}
 	
 	/* 'Enabled', 'Event Title', 'Category', 'Plugin', 'Target', 'Trigger', 'Status', 'Actions' */
@@ -1434,6 +1465,24 @@
 	.doc-body {
 		margin-left: 20px;
 		margin-right: 20px;
+	}
+	
+	body.magic {
+		margin-top: 3vh;
+	}
+	body.magic #d_footer {
+		position: relative;
+		width: auto;
+		top: 0;
+		margin-top: 0px;
+		margin-bottom: 20px;
+	}
+	body.magic div.dialog_content {
+		margin: 20px 0px 0px 0px;
+	}
+	
+	.summary_grid.triple {
+		grid-template-columns: 1fr 1fr;
 	}
 	
 	/* 'Enabled', 'Event Title', 'Category', 'Plugin', 'Target', 'Trigger', 'Status', 'Actions' */

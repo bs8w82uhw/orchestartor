@@ -36,6 +36,17 @@ body.login div.header {
 	background-position: center center;
 }
 
+body.magic {
+	margin-top: 10vh;
+}
+body.magic div.header {
+	position: relative;
+	background-position: center center;
+}
+body.magic div.dialog_content {
+	margin: 20px;
+}
+
 /* div.header > div.header_title {
 	color: var(--theme-color);
 }
@@ -183,9 +194,19 @@ body.dark .button.delete {
 	25% { box-shadow: 0px 0px 12px 6px var(--theme-color); }
 	100% { box-shadow: 0px 0px 24px 12px transparent; }
 }
-
 .button.pulse {
 	animation: btn_pulse_kf 0.75s ease-in-out;
+	animation-fill-mode: forwards;
+}
+
+@keyframes btn_absorb_kf {
+	0% { box-shadow: 0px 0px 24px 12px transparent; }
+	50% { box-shadow: 0px 0px 12px 6px var(--theme-color); }
+	90% { box-shadow: 0px 0px 2px 1px var(--theme-color-highlight); }
+	100% { box-shadow: 0px 0px 1px transparent; }
+}
+.button.absorb {
+	animation: btn_absorb_kf 0.75s ease-in-out;
 	animation-fill-mode: forwards;
 }
 
@@ -290,8 +311,10 @@ div.inline_page_message {
 	transform: scale(1.4);
 }
 
-.dragover {
-	box-shadow: var(--theme-color) 0px 0px 8px 2px;
+body.dragover .dialog {
+	/* box-shadow: var(--theme-color) 0px 0px 20px inset; */
+	outline: 2px dashed var(--theme-color);
+	outline-offset: 2px;
 }
 
 .fixed_page {
@@ -2039,4 +2062,15 @@ span.hot_key {
 	font-weight: normal;
 	
 	cursor: default;
+}
+
+/* Magic Landing Page */
+
+.magic_section {
+	margin-top: 30px;
+}
+
+.magic_section.user_content pre {
+	white-space: pre-wrap;
+	word-break: break-word;
 }
