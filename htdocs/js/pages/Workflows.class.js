@@ -1528,6 +1528,10 @@ Page.Workflows = class Workflows extends Page.Events {
 			node.data.algo = $('#fe_wfde_algo').val();
 			node.data.tags = $('#fe_wfde_tags').val();
 			
+			if (self.event.id && (node.data.event == self.event.id)) {
+				return app.badField('#fe_wfde_event', config.ui.errors.wfde_event_self);
+			}
+			
 			var event = find_object( app.events, { id: node.data.event } );
 			node.data.params = self.getParamValues(event.fields, false); // do not validate here
 			if (!node.data.params) return; // invalid

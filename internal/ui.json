@@ -781,6 +781,7 @@
 		"new_wf_no_groups": "You must define at least one server group to add workflows.",
 		"wfde_no_events": "Please create at least one event before adding a workflow event node.",
 		"wfde_event_not_found": "Event ID \"[node.data.event]\" could not be found.",
+		"wfde_event_self": "Cannot use the current workflow as an event node.",
 		"wfdj_no_cats": "You must define at least one category to add workflow plugin nodes.",
 		"wfdj_no_plugins": "You must create at least one Plugin to add workflow plugin nodes.",
 		"wfdj_plugin_not_found": "Plugin ID \"[node.data.plugin]\" could not be found.",
