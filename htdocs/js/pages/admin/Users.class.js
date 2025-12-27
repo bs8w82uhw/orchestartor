@@ -444,6 +444,7 @@ Page.Users = class Users extends Page.PageUtils {
 		if (!this.active) return; // sanity
 		
 		// Nav.go( 'Users?sub=list' );
+		this.div.find('#fe_eu_password').val('');
 		this.triggerSaveComplete();
 		app.showMessage('success', "The user was saved successfully.");
 		
