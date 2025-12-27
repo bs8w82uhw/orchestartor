@@ -93,6 +93,7 @@ try {
 catch (err) {;}
 
 var is_running = false;
+var is_container = false;
 if (is_preinstalled) {
 	var pid_file = log_dir + '/xyops.pid';
 	try {
@@ -100,6 +101,13 @@ if (is_preinstalled) {
 		is_running = process.kill( pid, 0 );
 	}
 	catch (err) {;}
+}
+
+// if we're in foreground mode via env var (i.e. docker) assume process is not running
+// (docker's `--restart unless-stopped` should restart the service)
+if (process.env['XYOPS_foreground']) {
+	is_running = false;
+	is_container = true;
 }
 
 print( "Fetching release list...\n");
@@ -190,7 +198,7 @@ cp.exec('curl -s ' + gh_releases_url, function (err, stdout, stderr) {
 		
 		print( is_preinstalled ? "Updating dependencies...\n" : "Installing dependencies...\n");
 		
-		var npm_cmd = is_preinstalled ? "npm update --unsafe-perm" : "npm install --unsafe-perm";
+		var npm_cmd = "npm install";
 		logonly( "Executing command: " + npm_cmd + "\n" );
 		
 		// install dependencies via npm
@@ -222,6 +230,12 @@ cp.exec('curl -s ' + gh_releases_url, function (err, stdout, stderr) {
 						if (is_running) {
 							try { cp.execSync( base_dir + "/bin/control.sh start", { stdio: 'inherit' } ); }
 							catch (err) { die("Failed to start xyOps: " + err); }
+							print("\n");
+						}
+						else if (is_container) {
+							// special container mode -- EXIT the service after upgrade (docker should restart it)
+							try { cp.execSync( base_dir + "/bin/control.sh stop", { stdio: 'inherit' } ); }
+							catch (err) { die("Failed to stop xyOps service: " + err); }
 							print("\n");
 						}
 					}

@@ -10,14 +10,16 @@ To start quickly and just get xyOps up and running to test it out, you can use t
 
 ```sh
 docker run \
+	--detach \
 	--init \
-	-v xy-data:/opt/xyops/data \
-	-v /var/run/docker.sock:/var/run/docker.sock \
-	-p 5522:5522 \
-	-p 5523:5523 \
 	--name "xyops01" \
 	--hostname "xyops01" \
+	--restart unless-stopped \
+	-v xy-data:/opt/xyops/data \
+	-v /var/run/docker.sock:/var/run/docker.sock \
 	-e TZ="America/Los_Angeles" \
+	-p 5522:5522 \
+	-p 5523:5523 \
 	ghcr.io/pixlcore/xyops:latest
 ```
 
@@ -30,7 +32,7 @@ A few notes:
 - In this case xyOps will have a self-signed cert for TLS, which the worker will accept by default.  See [TLS](#tls) for more details.
 - Change the `TZ` environment variable to your local timezone, for proper midnight log rotation and daily stat resets.
 - If you plan on using the container long term, please make sure to [rotate the secret key](#secret-key-rotation).
-- The `/var/run/docker.sock` bind is optional, and allows xyOps to launch its own containers (i.e. for the [Plugin Marketplace](marketplace.md)).
+- The `/var/run/docker.sock` bind is optional, and allows xyOps to launch its own containers (i.e. for the [Docker Plugin](plugins.md#docker-plugin), and the [Plugin Marketplace](marketplace.md)).
 
 As an aside, when you add worker servers via the UI, secret keys are not used (nor are they *ever* sent over the wire).  Instead, a special cryptographic token is used to authenticate new worker servers.  You can also add batches of servers in bulk via API Keys.  See [Adding Servers](servers.md#adding-servers) for more details.
 
@@ -196,8 +198,9 @@ Here is a docker command for running Nginx:
 
 ```sh
 docker run \
-	--name xyops-nginx \
+	--detach
 	--init \
+	--name xyops-nginx \
 	-e XYOPS_masters="xyops01.yourcompany.com,xyops02.yourcompany.com" \
 	-e XYOPS_port="5522" \
 	-v "$(pwd)/tls.crt:/etc/tls.crt:ro" \
@@ -232,9 +235,11 @@ Once you have Nginx running, we can fire up the xyOps backend.  This is document
 
 ```sh
 docker run \
+	--detach \
+	--init \
 	--name xyops1 \
 	--hostname xyops01.yourcompany.com \
-	--init \
+	--restart unless-stopped \
 	-e XYOPS_masters="xyops01.yourcompany.com,xyops02.yourcompany.com" \
 	-e TZ="America/Los_Angeles" \
 	-v "$(pwd)/config.json:/opt/xyops/conf/config.json:ro" \
