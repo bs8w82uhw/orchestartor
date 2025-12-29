@@ -17,6 +17,7 @@ docker run \
 	--restart unless-stopped \
 	-v xy-data:/opt/xyops/data \
 	-v /var/run/docker.sock:/var/run/docker.sock \
+	-e XYOPS_xysat_local="true" \
 	-e TZ="America/Los_Angeles" \
 	-p 5522:5522 \
 	-p 5523:5523 \
@@ -25,16 +26,15 @@ docker run \
 
 Then hit http://localhost:5522/ in your browser for HTTP, or https://localhost:5523/ for HTTPS (note that this will have a self-signed cert -- see [TLS](#tls) below).  A default administrator account will be created with username `admin` and password `admin`.  This will create a Docker volume (`xy-data`) to persist the xyOps database, which by default is a hybrid of a SQLite DB and the filesystem itself for file storage.
 
-Note that in order to add worker servers so you can actually run jobs, the container needs to be *addressable on your network* by its hostname.  Typically this is done by adding the hostname to your local DNS, or using a `/etc/hosts` file.  If you only want to add workers as local containers, you can [create a network](https://docs.docker.com/reference/cli/docker/network/create/), and put everything in there.
-
 A few notes:
 
 - In this case xyOps will have a self-signed cert for TLS, which the worker will accept by default.  See [TLS](#tls) for more details.
 - Change the `TZ` environment variable to your local timezone, for proper midnight log rotation and daily stat resets.
+- The `XYOPS_xysat_local` environment variable causes xyOps to launch [xySat](#satellite) in the background, in the same container.  This is so you can start running jobs right away -- it is great for testing and home labs, but not recommended for production setups.
 - If you plan on using the container long term, please make sure to [rotate the secret key](#secret-key-rotation).
 - The `/var/run/docker.sock` bind is optional, and allows xyOps to launch its own containers (i.e. for the [Docker Plugin](plugins.md#docker-plugin), and the [Plugin Marketplace](marketplace.md)).
 
-As an aside, when you add worker servers via the UI, secret keys are not used (nor are they *ever* sent over the wire).  Instead, a special cryptographic token is used to authenticate new worker servers.  You can also add batches of servers in bulk via API Keys.  See [Adding Servers](servers.md#adding-servers) for more details.
+Note that in order to add worker servers, the container needs to be *addressable on your network* by its hostname.  Typically this is done by adding the hostname to your local DNS, or using a `/etc/hosts` file.  If you only want to add workers as local containers, you can [create a network](https://docs.docker.com/reference/cli/docker/network/create/), and put everything in there.  See [Adding Servers](servers.md#adding-servers) for more details.
 
 ### Configuration
 
@@ -50,7 +50,7 @@ See the [Configuration Guide](config.md) for full details on how to customize th
 
 This section covers manually installing xyOps on a server (outside of Docker).
 
-Please note that xyOps currently only works on POSIX-compliant operating systems, which basically means Unix/Linux and macOS.  You'll also need to have [Node.js](https://nodejs.org/en/download/) pre-installed on your server.  Please note that we **strongly suggest that you install the LTS version of Node.js**.  While xyOps should work on the "current" release channel, LTS is more stable and more widely tested.  See [Node.js Releases](https://nodejs.org/en/about/releases/) for details.
+Please note that the xyOps conductor currently only works on POSIX-compliant operating systems, which basically means Unix/Linux and macOS.  You'll also need to have [Node.js](https://nodejs.org/en/download/) pre-installed on your server.  Please note that we **strongly suggest that you install the LTS version of Node.js**.  While xyOps should work on the "current" release channel, LTS is more stable and more widely tested.  See [Node.js Releases](https://nodejs.org/en/about/releases/) for details.
 
 xyOps also requires NPM to be preinstalled.  Now, this is typically bundled with and automatically installed with Node.js, but if you install Node.js by hand, you may have to install NPM yourself.
 
@@ -80,11 +80,11 @@ See our [Command Line Guide](cli.md) for controlling the xyOps service via comma
 
 ### Adding Conductors Manually
 
-When you manually install xyOps, it creates a cluster of one, and promotes itself to primary.  To add additional servers, follow these instructions.
+When you manually install xyOps, it creates a cluster of one, and promotes itself to primary.  To add backup conductors, follow these instructions.
 
 First, for multi-conductor setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).  See [Storage Engines](https://github.com/jhuckaby/pixl-server-storage#engines) for details.
 
-Once you have storage setup and working, stop the xyOps service, and edit the `/opt/xyops/conf/masters.json` file:
+Once you have external storage setup and working, stop the xyOps service, and edit the `/opt/xyops/conf/masters.json` file:
 
 ```json
 {

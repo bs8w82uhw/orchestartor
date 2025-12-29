@@ -63,12 +63,19 @@ RUN chmod 644 node_modules/useragent-ng/lib/regexps.js
 
 RUN node bin/build.js dist
 
+# install xysat locally
+RUN mkdir /opt/xyops/satellite; \
+  cd /opt/xyops/satellite; \
+  curl -L https://github.com/pixlcore/xysat/archive/main.tar.gz | tar zxvf - --strip-components 1; \
+  npm install; \
+  cd /opt/xyops;
+
 RUN mkdir -p data
 VOLUME /opt/xyops/data
 
 RUN mkdir -p logs
 RUN mkdir -p temp
-RUN chown node:node data logs conf temp test
+RUN chown node:node data logs conf temp test satellite
 
 USER node
 
