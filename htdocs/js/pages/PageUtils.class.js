@@ -2443,7 +2443,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 					var text_args = { 
 						id: elem_id, 
 						type: param.variant || 'text', 
-						value: elem_value, 
+						value: '' + elem_value, 
 						class: 'monospace', 
 						disabled: elem_dis, 
 						autocomplete: 'off' 
@@ -2474,6 +2474,17 @@ Page.PageUtils = class PageUtils extends Page.Base {
 					}
 					else {
 						html += '<div class="button small secondary" onClick="$P().editPluginParamCode(\'' + plugin_id + '\',\'' + param.id + '\')"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>Edit Code...</div>';
+					}
+				break;
+				
+				case 'json':
+					if (typeof(elem_value) == 'object') elem_value = JSON.stringify(elem_value, null, "\t");
+					html += self.getFormTextarea({ id: elem_id, value: elem_value, rows: 1, disabled: elem_dis, style: 'display:none' });
+					if (elem_dis) {
+						html += '<div class="button small secondary" onClick="$P().viewPluginParamCode(\'' + plugin_id + '\',\'' + param.id + '\')"><i class="mdi mdi-code-json">&nbsp;</i>View JSON...</div>';
+					}
+					else {
+						html += '<div class="button small secondary" onClick="$P().editPluginParamCode(\'' + plugin_id + '\',\'' + param.id + '\')"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>Edit JSON...</div>';
 					}
 				break;
 				
@@ -2579,6 +2590,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		this.editCodeAuto({
 			title: param.title, 
 			code: elem_value, 
+			format: (param.type == 'json') ? 'json' : '',
 			callback: function(new_value) {
 				$('#' + elem_id).val( new_value );
 				if (!Dialog.active) self.triggerEditChange();
@@ -2626,6 +2638,20 @@ Page.PageUtils = class PageUtils extends Page.Base {
 					else if (!force && param.variant && !param.variant.match(/^(password|text|tel)$/) && !$('#fe_pp_' + plugin_id + '_' + CSS.escape(param.id))[0].validity.valid) {
 						app.badField('#fe_pp_' + plugin_id + '_' + CSS.escape(param.id), "The &ldquo;" + param.title + "&rdquo; field is invalid.");
 						is_valid = false;
+					}
+					else if (param.type == 'json') {
+						try { params[ param.id ] = JSON.parse( params[param.id] ); }
+						catch (err) {
+							app.badField('#fe_pp_' + plugin_id + '_' + CSS.escape(param.id), "The &ldquo;" + param.title + "&rdquo; field is invalid.");
+							is_valid = false;
+						}
+					}
+					else if (param.variant == 'number') {
+						params[ param.id ] = parseFloat( params[ param.id ] );
+						if (isNaN(params[ param.id ])) {
+							app.badField('#fe_pp_' + plugin_id + '_' + CSS.escape(param.id), "The &ldquo;" + param.title + "&rdquo; field is invalid.");
+							is_valid = false;
+						}
 					}
 				break;
 			} // switch param.type
@@ -4135,7 +4161,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 						nice_type = variant.title;
 						nice_icon = variant.icon;
 					}
-					if (param.value.length) pairs.push([ 'Default', '&ldquo;' + strip_html(param.value) + '&rdquo;' ]);
+					if (param.value.toString().length) pairs.push([ 'Default', '&ldquo;' + strip_html(param.value) + '&rdquo;' ]);
 					else pairs.push([ "(No default)" ]);
 				break;
 				
@@ -4147,6 +4173,11 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				case 'code':
 					if (param.value.length) pairs.push([ 'Default', '(' + param.value.length + ' chars)' ]);
 					else pairs.push([ "(No default)" ]);
+				break;
+				
+				case 'json':
+					var len = JSON.stringify(param.value, null, "\t").length;
+					pairs.push([ 'Default', '(' + len + ' chars)' ]);
 				break;
 				
 				case 'checkbox':
@@ -4212,9 +4243,10 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		var param = (idx > -1) ? this.params[idx] : { type: 'text', variant: 'text', value: '' };
 		var title = (idx > -1) ? "Editing Parameter" : "New Parameter";
 		var btn = (idx > -1) ? ['check-circle', "Accept"] : ['plus-circle', "Add Param"];
+		var old_param = param;
 		
 		// prepare control type menu
-		var ctypes = (this.controlTypes || ['checkbox', 'code', 'hidden', 'select', 'text', 'textarea']).map (function(key) { 
+		var ctypes = (this.controlTypes || ['checkbox', 'code', 'json', 'hidden', 'select', 'text', 'textarea']).map (function(key) { 
 			return { 
 				id: key, 
 				title: config.ui.control_type_labels[key],
@@ -4301,12 +4333,22 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			label: 'Default Value:',
 			content: this.getFormTextarea({
 				id: 'fe_epa_value_code',
-				rows: 5,
-				class: 'monospace',
-				spellcheck: 'false',
-				value: (param.value || '').toString()
-			}),
-			caption: "Enter the default value for the code editor."
+				rows: 1,
+				value: (param.value || '').toString(),
+				style: 'display:none'
+			}) + '<div class="button small secondary" onClick="$P().edit_default_code_param()"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>Edit Code...</div>',
+			caption: "Enter the default value for the code parameter."
+		});
+		html += this.getFormRow({
+			id: 'd_epa_value_json',
+			label: 'Default Value:',
+			content: this.getFormTextarea({
+				id: 'fe_epa_value_json',
+				rows: 1,
+				value: JSON.stringify(param.value || {}, null, "\t"),
+				style: 'display:none'
+			}) + '<div class="button small secondary" onClick="$P().edit_default_json_param()"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>Edit JSON...</div>',
+			caption: 'Enter the default value for the JSON parameter.'
 		});
 		html += this.getFormRow({
 			id: 'd_epa_value_checkbox',
@@ -4395,7 +4437,6 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			app.clearError();
 			
 			// start a fresh param object so we don't taint the original on errors
-			var old_param = param;
 			param = {};
 			
 			param.id = $('#fe_epa_id').val().trim();
@@ -4424,6 +4465,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 					param.value = $('#fe_epa_value_text').val();
 					param.variant = $('#fe_epa_text_variant').val();
 					param.required = !!$('#fe_epa_required').is(':checked');
+					if (param.variant == 'number') param.value = parseFloat(param.value) || 0;
 				break;
 				
 				case 'textarea':
@@ -4434,6 +4476,11 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				case 'code':
 					param.value = $('#fe_epa_value_code').val();
 					param.required = !!$('#fe_epa_required').is(':checked');
+				break;
+				
+				case 'json':
+					try { param.value = JSON.parse( $('#fe_epa_value_json').val() ); }
+					catch (e) { param.value = {}; }
 				break;
 				
 				case 'checkbox':
@@ -4481,7 +4528,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		} ); // Dialog.confirm
 		
 		var change_param_type = function(new_type) {
-			$('#d_epa_value_text, #d_epa_value_textarea, #d_epa_value_code, #d_epa_value_checkbox, #d_epa_value_select, #d_epa_value_hidden, #d_epa_value_toolset').hide();
+			$('#d_epa_value_text, #d_epa_value_textarea, #d_epa_value_code, #d_epa_value_json, #d_epa_value_checkbox, #d_epa_value_select, #d_epa_value_hidden, #d_epa_value_toolset').hide();
 			$('#d_epa_value_' + new_type).show();
 			$('#d_epa_required').toggle( !!new_type.match(/^(text|textarea|code)$/) );
 			$('#d_epa_text_variant').toggle( !!new_type.match(/^(text)$/) );
@@ -4499,6 +4546,29 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		
 		SingleSelect.init( $('#fe_epa_type, #fe_epa_text_variant') );
 		Dialog.autoResize();
+	}
+	
+	edit_default_code_param() {
+		// popup code editor for code param
+		this.editCodeAuto({
+			title: "Edit Default Code", 
+			code: $('#fe_epa_value_code').val(), 
+			callback: function(new_value) {
+				$('#fe_epa_value_code').val( new_value );
+			}
+		});
+	}
+	
+	edit_default_json_param() {
+		// popup code editor for json param
+		this.editCodeAuto({
+			title: "Edit Default JSON", 
+			code: $('#fe_epa_value_json').val(), 
+			format: 'json',
+			callback: function(new_value) {
+				$('#fe_epa_value_json').val( new_value );
+			}
+		});
 	}
 	
 	deleteParam(idx) {
@@ -4647,7 +4717,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 					var text_args = { 
 						id: elem_id, 
 						type: param.variant || 'text', 
-						value: elem_value, 
+						value: '' + elem_value, 
 						class: 'monospace', 
 						disabled: elem_dis, 
 						autocomplete: 'off' 
@@ -4672,13 +4742,23 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				break;
 				
 				case 'code':
-					// html += self.getFormTextarea({ id: elem_id, value: elem_value, rows: 5, class: 'monospace', disabled: elem_dis });
 					html += self.getFormTextarea({ id: elem_id, value: elem_value, rows: 1, disabled: elem_dis, style: 'display:none', 'data-title': param.title });
 					if (elem_dis) {
 						html += '<div class="button small secondary" onClick="$P().viewParamCode(\'' + param.id + '\')"><i class="mdi mdi-code-json">&nbsp;</i>View Code...</div>';
 					}
 					else {
 						html += '<div class="button small secondary" onClick="$P().editParamCode(\'' + param.id + '\')"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>Edit Code...</div>';
+					}
+				break;
+				
+				case 'json':
+					if (typeof(elem_value) == 'object') elem_value = JSON.stringify(elem_value, null, "\t");
+					html += self.getFormTextarea({ id: elem_id, value: elem_value, rows: 1, disabled: elem_dis, style: 'display:none', 'data-title': param.title, 'data-format': 'json' });
+					if (elem_dis) {
+						html += '<div class="button small secondary" onClick="$P().viewParamCode(\'' + param.id + '\')"><i class="mdi mdi-code-json">&nbsp;</i>View JSON...</div>';
+					}
+					else {
+						html += '<div class="button small secondary" onClick="$P().editParamCode(\'' + param.id + '\')"><i class="mdi mdi-text-box-edit-outline">&nbsp;</i>Edit JSON...</div>';
 					}
 				break;
 				
@@ -4715,10 +4795,12 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		var elem_id = 'fe_uf_' + CSS.escape(param_id);
 		var elem_value = $('#' + elem_id).val();
 		var title = $('#' + elem_id).data('title');
+		var format = $('#' + elem_id).data('format') || '';
 		
 		this.editCodeAuto({
 			title: title, 
 			code: elem_value, 
+			format: format,
 			callback: function(new_value) {
 				$('#' + elem_id).val( new_value );
 				if (!Dialog.active) self.triggerEditChange();
@@ -4744,6 +4826,20 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				else if (validate && param.variant && !param.variant.match(/^(password|text|tel)$/) && !$('#fe_uf_' + param.id)[0].validity.valid) {
 					app.badField('#fe_uf_' + CSS.escape(param.id), "The &ldquo;" + param.title + "&rdquo; field is invalid.");
 					is_valid = false;
+				}
+				else if (param.type == 'json') {
+					try { params[ param.id ] = JSON.parse( params[param.id] ); }
+					catch (err) {
+						app.badField('#fe_uf_' + CSS.escape(param.id), "The &ldquo;" + param.title + "&rdquo; field is invalid.");
+						is_valid = false;
+					}
+				}
+				else if (param.variant == 'number') {
+					params[ param.id ] = parseFloat( params[ param.id ] );
+					if (isNaN(params[ param.id ])) {
+						app.badField('#fe_uf_' + CSS.escape(param.id), "The &ldquo;" + param.title + "&rdquo; field is invalid.");
+						is_valid = false;
+					}
 				}
 			}
 		});

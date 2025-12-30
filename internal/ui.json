@@ -1016,6 +1016,7 @@
 		"text": "Text Field",
 		"textarea": "Text Box",
 		"code": "Code Editor",
+		"json": "JSON Editor",
 		"checkbox": "Checkbox",
 		"select": "Menu",
 		"hidden": "Hidden",
@@ -1025,7 +1026,8 @@
 	"control_type_icons": {
 		"text": "form-textbox",
 		"textarea": "form-textarea",
-		"code": "code-json",
+		"code": "code-brackets",
+		"json": "code-json",
 		"checkbox": "checkbox-marked-outline",
 		"select": "form-dropdown",
 		"hidden": "eye-off-outline",

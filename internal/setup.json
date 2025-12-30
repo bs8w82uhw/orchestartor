@@ -138,7 +138,7 @@
 			"modified": 1434125333,
 			"created": 1434125333,
 			"params": [
-				{ "id":"duration", "type":"text", "title":"Test Duration (seconds)", "value": "60", "required": true },
+				{ "id":"duration", "type":"text", "variant":"number", "title":"Test Duration (seconds)", "value": 60, "required": true },
 				{ "id":"action", "type":"select", "title":"Simulate Result", "value": "Success, Error, Warning, Critical, Crash" },
 				{ "id":"custom", "type":"text", "title":"Custom Value", "value":"" },
 				{ "id":"burn", "type":"checkbox", "title":"Burn Memory/CPU", "value": false },
@@ -232,7 +232,7 @@
 					"type": "text",
 					"caption": "Set the maximum number of CPU cores the container is allowed to use, or 0 for unlimited.",
 					"locked": false,
-					"value": "1",
+					"value": 1,
 					"variant": "number",
 					"required": false
 				},
