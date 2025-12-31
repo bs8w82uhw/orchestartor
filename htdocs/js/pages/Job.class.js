@@ -2899,6 +2899,8 @@ Page.Job = class Job extends Page.PageUtils {
 		if (job.input && job.input.files) files = files.concat( job.input.files.map( function(file) { return { ...file, source: 'input' }; } ) );
 		if (job.files) files = files.concat( job.files.map( function(file) { return { ...file, source: 'output' }; } ) );
 		
+		files = files.filter( function(file) { return !!file.filename; } );
+		
 		html += this.getBasicGrid( files, cols, 'file', function(file, idx) {
 			var url = '/' + file.path;
 			var classes = [];
