@@ -26,6 +26,7 @@ tags.forEach( function(tag, idx) {
 	lines.forEach( function(line) {
 		var matches = line.trim().match(/^(\w+)\s+(\w+)\s+([\d\-]+)\s+(.+)$/);
 		if (!matches) return;
+		if (matches[4].match(/\b(CHANGELOG)\b/)) return;
 		
 		var url = 'https://github.com/pixlcore/xyops/commit/' + matches[2];
 		
