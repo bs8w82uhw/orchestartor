@@ -796,7 +796,7 @@ A "text" parameter type is presented to the user as a single-line text field.
 
 An optional "variant" property may be included, which changes the visible UI control in the browser: `color`, `date`, `datetime-local`, `email`, `number`, `password`, `text`, `time`, `tel` or `url`.
 
-Note that the parameter value is always set to a string -- the "variant" only controls the visual UI control and behavior.
+Note that the parameter value is almost always set to a string -- the "variant" only controls the visual UI control and behavior.  However, the "number" variant is a special case, where the value will actually be parsed and stored in the parameters as an actual JavaScript Number.
 
 ### Textarea
 
@@ -804,7 +804,13 @@ A "textarea" parameter type is presented to the user as a multi-line text box.  
 
 ### Code
 
-A "code" parameter type is a variant of the textarea, but it is presented to the user as a button that pops up a full code editor dialog.  The user can enter "code" of any language (often JSON), and the format is automatically detected and syntax-highlighted.
+A "code" parameter type is a variant of the textarea, but it is presented to the user as a button that pops up a full code editor dialog.  The user can enter "code" of any language, and the format is automatically detected and syntax-highlighted.
+
+### JSON
+
+A "JSON" parameter type is a variant of the textarea, but it is presented to the user as a button that pops up a full code editor dialog with JSON syntax-highlighting and line numbers.  The JSON is also validated, so the user can only enter a proper JSON document.
+
+This type is special in that the JSON is parsed and stored in the parameters as a real object (not a string).
 
 ### Menu
 
