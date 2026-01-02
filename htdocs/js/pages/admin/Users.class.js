@@ -332,7 +332,7 @@ Page.Users = class Users extends Page.PageUtils {
 		html += '<div class="box_buttons">';
 			html += '<div class="button cancel mobile_collapse" onClick="$P().cancel_user_edit()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>Close</span></div>';
 			html += '<div class="button danger mobile_collapse" onClick="$P().show_delete_account_dialog()"><i class="mdi mdi-trash-can-outline">&nbsp;</i><span>Delete...</span></div>';
-			html += '<div class="button danger mobile_collapse" onClick="$P().logout_all()"><i class="mdi mdi-power-standby">&nbsp;</i>Logout...</div>';
+			html += '<div class="button danger mobile_collapse" onClick="$P().logout_all()"><i class="mdi mdi-power-standby">&nbsp;</i><span>Logout...</span></div>';
 			html += '<div class="button secondary mobile_collapse" onClick="$P().go_edit_history()"><i class="mdi mdi-history">&nbsp;</i><span>History...</span></div>';
 			html += '<div class="button save phone_collapse" id="btn_save" onClick="$P().do_save_user()"><i class="mdi mdi-floppy">&nbsp;</i><span>Save Changes</span></div>';
 		html += '</div>'; // box_buttons
