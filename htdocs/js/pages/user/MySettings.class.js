@@ -253,8 +253,9 @@ Page.MySettings = class MySettings extends Page.Base {
 		// a/v settings
 		html += '<div class="box">';
 		html += '<div class="box_title">';
-			html += 'Audio / Visual Settings';
+			html += 'Audio / Visual Adjustments';
 			html += '<div class="button right phone_collapse" onClick="$P().reset_av()"><i class="mdi mdi-undo-variant">&nbsp;</i>Reset to Defaults</div>';
+			html += '<div class="box_subtitle" style="font-style:italic; color:var(--label-color)">(Press &ldquo;Escape&rdquo; key to reset these.)</div>';
 		html += '</div>';
 		html += '<div class="box_content" style="margin-bottom:30px">';
 		
@@ -749,6 +750,11 @@ Page.MySettings = class MySettings extends Page.Base {
 		}
 		
 		return settings;
+	}
+	
+	onKeyDown(event) {
+		// esc key needs to reset av settings
+		if (event.keyCode == 27) this.reset_av();
 	}
 	
 	saveChanges() {
