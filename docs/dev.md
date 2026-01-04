@@ -45,7 +45,7 @@ xyOps contains some compiled binary dependencies (namely [sqlite3](https://npmjs
 For Debian (Ubuntu) OSes:
 
 ```sh
-apt-get install build-essential
+apt-get install build-essential python3-setuptools
 ```
 
 For RedHat (Fedora / CentOS):
