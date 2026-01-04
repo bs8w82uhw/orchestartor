@@ -104,6 +104,13 @@ bin/control.sh start
 
 Replace `v1.0.0` with the desired xyOps version from the [official release list](https://github.com/pixlcore/xyops/releases), or `main` for the head revision (unstable).
 
+If you would like xyOps to automatically start itself on server reboot, issue this command:
+
+```sh
+cd /opt/xyops
+npm run boot
+```
+
 ### Command Line
 
 See our [Command Line Guide](cli.md) for controlling the xyOps service via command-line.
