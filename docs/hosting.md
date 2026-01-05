@@ -60,7 +60,7 @@ Then hit http://localhost:5522/ in your browser for HTTP, or https://localhost:5
 
 A few notes:
 
-- **Important:** Please change the `xyops01` sample hostname to something that resolves and is addressable on your network.  Without this, many features will not work properly.
+- **Important:** Please change the sample `xyops01` hostname to something that actually resolves and is addressable on your network.  Without this, many features will not work properly.
 - In this case xyOps will have a self-signed cert for TLS, which the worker will accept by default.  See [TLS](#tls) for more details.
 - Change the `TZ` environment variable to your local timezone, for proper midnight log rotation and daily stat resets.
 - The `XYOPS_xysat_local` environment variable causes xyOps to launch [xySat](#satellite) in the background, in the same container.  This is so you can start running jobs right away -- it is great for testing and home labs, but not recommended for production setups.
