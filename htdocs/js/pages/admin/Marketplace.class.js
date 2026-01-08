@@ -409,14 +409,17 @@ Page.Marketplace = class Marketplace extends Page.PageUtils {
 		
 		var install_btn_text = installed ? `Upgrade ${ucfirst(product.type)}...` : `Install ${ucfirst(product.type)}...`;
 		var install_btn_icon = installed ? 'package-up' : 'package-down';
+		var install_btn_class = 'default';
 		var edit_btn_text = 'Edit...';
+		
+		if (installed && (installed.marketplace.version == product.versions[0])) install_btn_class = '';
 		
 		// summary grid
 		html += '<div class="box">';
 			html += '<div class="box_title">';
 				html += product.title;
 				
-				html += '<div class="button default right phone_collapse" title="' + install_btn_text + '" onClick="$P().do_install_select_version()"><i class="mdi mdi-' + install_btn_icon + '">&nbsp;</i><span>' + install_btn_text + '</span></div>';
+				html += '<div class="button ' + install_btn_class + ' right phone_collapse" title="' + install_btn_text + '" onClick="$P().do_install_select_version()"><i class="mdi mdi-' + install_btn_icon + '">&nbsp;</i><span>' + install_btn_text + '</span></div>';
 				if (installed) {
 					html += '<div class="button right secondary phone_collapse" title="' + edit_btn_text + '" onClick="$P().do_edit()"><i class="mdi mdi-file-edit-outline">&nbsp;</i><span>' + edit_btn_text + '</span></div>';
 				}
