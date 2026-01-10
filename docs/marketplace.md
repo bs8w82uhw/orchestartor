@@ -116,6 +116,7 @@ On the Plugin Edit screen, xyOps provides a "**Export...**" button.  Click this 
 				"id": "pmb6q7bh3hy",
 				"title": "Upload S3 File",
 				"type": "event",
+				"enabled": true,
 				"command": "npx -y github:myorg/xyplug-upload-s3-file#v1.0.0",
 				"script": "",
 				"icon": "aws",
