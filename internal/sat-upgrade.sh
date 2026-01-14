@@ -17,6 +17,9 @@ if [ ! -f "$INSTALL_DIR/package.json" ]; then
     exit 1
 fi
 
+# unset daemon flag
+unset __daemon
+
 # Make sure we're logging everything
 LOG_DIR="$INSTALL_DIR/logs"
 LOG_FILE="$LOG_DIR/background.log"
