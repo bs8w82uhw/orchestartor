@@ -1,5 +1,17 @@
 # xyOps Changelog
 
+## Version v0.9.26
+
+> January 14, 2026
+
+- [`3f6f452`](https://github.com/pixlcore/xyops/commit/3f6f452ee32dbef74528e01bfce45d3b62a90c62): Version 0.9.26
+- [`4634325`](https://github.com/pixlcore/xyops/commit/46343258b237f66518d0b650dd07e8173250b68c): Multi: Include hostID in notice/critical messages for backup server startup.
+- [`b1203c5`](https://github.com/pixlcore/xyops/commit/b1203c5208d9c0c95de4ad4dbce1a3eb9ee7a7ee): Satellite Upgrade Script: Unset "__daemon" variable (used by pixl-server)
+- [`839df82`](https://github.com/pixlcore/xyops/commit/839df824e7bc7765b1abf35b35a95b6a4af08c76): Multi: When spawning shell for background commands, remove "__daemon" var (used by pixl-server).
+- [`bae34ac`](https://github.com/pixlcore/xyops/commit/bae34ac1b2437fe7ace7162db5adfa3dcaa19232): Satellite Upgrade Script: Unset "__daemon" env var so pixl-server properly forks (for non-docker installs)
+- [`c508266`](https://github.com/pixlcore/xyops/commit/c5082663877e3ef2c7ec5628dfd4e86f4dada31f): Install Script: Improve output, and remove old unused code.
+- [`60fb1d0`](https://github.com/pixlcore/xyops/commit/60fb1d02693550d34d18878aaf2ea446dabb106f): Comm/Multi: Add sanity checks on websocket data format, in case remote side is still on an older version.
+
 ## Version v0.9.25
 
 > January 14, 2026
