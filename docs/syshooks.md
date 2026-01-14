@@ -297,6 +297,20 @@ Example:
 
 Note that assigned tickets automatically send out an email to all assignees (assuming [tickets.email_enabled](config.md#tickets-email_enabled) is enabled), so this is yet another way to receive an email for specific activity reports.
 
+If you want to create an extremely loud and annoying ticket, set the `due` property to `today`, which will start sending out daily overdue reminders to all assignees:
+
+```json
+"hooks": {
+	"critical": {
+		"ticket": {
+			"assignees": ["admin"],
+			"type": "issue",
+			"due": "today"
+		}
+	}
+}
+```
+
 ## Example Payloads
 
 These are sample activity JSON payloads sent to shell exec and simple web hooks.  Note that in practice they are all compacted onto a single line.
