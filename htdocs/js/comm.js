@@ -373,6 +373,7 @@ app.comm = {
 		
 		// some activity types should be warnings or errors
 		if (item.action.match(/^(error)/)) type = 'error';
+		else if (item.action.match(/^(critical)/)) type = 'critical';
 		else if (item.action.match(/^(warning|server_remove|alert_new)/)) type = 'warning';
 		
 		// override toast icon if we have a better one
