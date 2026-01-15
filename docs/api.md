@@ -3012,6 +3012,36 @@ Parameters:
 
 For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Jobs Database Table](db.dm#jobs) schema for the available columns you can search on.
 
+Query examples for the `query` parameter:
+
+- `tags:_success`: All successful jobs. Successful jobs are tagged with the hidden `_success` system tag.
+- `tags:_error`: All failed jobs for any reason. Failed jobs are tagged with the hidden `_error` system tag.
+- `code:warning`: All jobs with a code of `warning`.
+- `code:critical`: All jobs with a code of `critical`.
+- `code:abort`: All aborted jobs.
+- `event:emk5piv8f6j2n49y`: Jobs for a specific event by its [Event.id](data.md#event-id).
+- `category:general`: Jobs for a specific category by its [Category.id](data.md#category-id).
+- `tags:important`: Jobs tagged with a user tag by its [Tag.id](data.md#tag-id).
+- `source:scheduler`: Jobs started by a specific source (see [Job.source](data.md#job-source)).
+- `source:workflow`: All workflow sub-jobs.
+- `plugin:shellplug`: Jobs using a specific Plugin by its [Plugin.id](data.md#plugin-id).
+- `plugin:_workflow`: Special Plugin ID to search for all workflows.
+- `server:smkee2akcswxcapy`: Jobs that ran on a specific server by its [Server.id](data.md#server-id).
+- `groups:main`: Jobs that ran on a server in a group by its [Group.id](data.md#group-id).
+
+Multiple columns can be queried by separating them with spaces. For example, `tags:_error category:general` requires both clauses to match. For multi-word columns like `tags`, you can match multiple values by separating them with spaces, e.g. `tags:flag important` (requires both tags). For an OR list on a single column, use a pipe separator, e.g. `tags:flag|important`.
+
+Date and number fields (like `date`) accept:
+
+- Unix timestamp in seconds (quantized to the nearest hour internally), e.g. `1768430906`.
+- A date in `YYYY-MM-DD` (quantized to midnight in the local server time zone).
+- `today` (midnight in the local server time zone).
+- `now` (current local server time).
+
+Example date range for all jobs in the year 2025: `date:>=2025-01-01 date:<2026-01-01`.
+
+Sorting: use `sort_by=completed` to sort by job completion time (not quantized), or `sort_by=elapsed` to sort by elapsed time. Set `sort_dir=1` for ascending or `sort_dir=-1` for descending. To find the longest running jobs, set `query=*`, `sort_by=elapsed`, and `sort_dir=-1`.
+
 Example response:
 
 ```json
@@ -3055,6 +3085,24 @@ Parameters:
 
 For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Servers Database Table](db.dm#servers) schema for the available columns you can search on.
 
+Query examples for the `query` parameter:
+
+- `web` or `keywords:web`: Search the default keywords field.
+- `groups:main`: Servers in a specific group by its [Group.id](data.md#group-id).
+- `os_platform:linux`: Servers on a given OS platform.
+- `os_distro:ubuntu`: Servers running a specific OS distribution.
+- `os_release:22_04`: Servers running a specific OS release.
+- `os_arch:x86_64`: Servers with a specific CPU architecture.
+- `cpu_virt:kvm`: Servers running under a specific virtualization vendor.
+- `cpu_brand:intel`: Servers with a specific CPU brand string.
+- `cpu_cores:8`: Servers with a specific core count.
+- `created:>=2025-01-01 created:<2026-01-01`: Servers created in 2025.
+- `modified:>=today`: Servers modified today (last modified or last contact).
+
+You can combine columns with spaces for AND logic, e.g. `groups:main os_distro:ubuntu`. Use `|` for OR on a single column, e.g. `os_platform:linux|windows`.
+
+Date and number fields (like `created` and `modified`) accept Unix timestamps, `YYYY-MM-DD`, `today`, and `now`, and are quantized to the nearest hour internally.
+
 Example response:
 
 ```json
@@ -3086,6 +3134,19 @@ Parameters:
 | `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
 
 For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Alerts Database Table](db.dm#alerts) schema for the available columns you can search on.
+
+Query examples for the `query` parameter:
+
+- `active:true`: All active alert invocations.
+- `alert:al12345`: Invocations for a specific alert definition by its [Alert.id](data.md#alert-id).
+- `server:smkee2akcswxcapy`: Invocations for a specific server by its [Server.id](data.md#server-id).
+- `groups:main`: Invocations for servers in a specific group by its [Group.id](data.md#group-id).
+- `jobs:jabc123`: Invocations related to a specific job by its [Job.id](data.md#job-id).
+- `tickets:tmgpmoorz6p`: Invocations related to a specific ticket by its [Ticket.id](data.md#ticket-id).
+- `start:>=2025-01-01 start:<2026-01-01`: Alerts that fired in 2025.
+- `end:>=today`: Alerts cleared today.
+
+Date and number fields (like `start` and `end`) accept Unix timestamps, `YYYY-MM-DD`, `today`, and `now`, and are quantized to the nearest hour internally.
 
 Example response:
 
@@ -3119,6 +3180,22 @@ Parameters:
 | `verbose` | Boolean | Optional. If `true`, include heavy nested fields (e.g., `data.processes`, `data.mounts`, group keys). Defaults to `false` (these are pruned). |
 
 For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Snapshots Database Table](db.dm#snapshots) schema for the available columns you can search on.
+
+Query examples for the `query` parameter:
+
+- `type:server`: Server snapshots only.
+- `type:group`: Group snapshots only.
+- `source:alert`: Snapshots created by alert actions.
+- `source:watch`: Snapshots created by watches.
+- `source:user`: Snapshots created manually by users.
+- `source:job`: Snapshots created by job actions.
+- `server:smkee2akcswxcapy`: Snapshots for a specific server by its [Server.id](data.md#server-id).
+- `groups:main`: Group snapshots for a specific group by its [Group.id](data.md#group-id).
+- `alerts:al12345`: Snapshots that captured a specific alert invocation by its [AlertInvocation.id](data.md#alertinvocation-id).
+- `jobs:jabc123`: Snapshots that captured a specific job by its [Job.id](data.md#job-id).
+- `date:>=2025-01-01 date:<2026-01-01`: Snapshots captured in 2025.
+
+Date and number fields (like `date`) accept Unix timestamps, `YYYY-MM-DD`, `today`, and `now`, and are quantized to the nearest hour internally.
 
 Example response:
 
@@ -3188,6 +3265,16 @@ Parameters:
 | `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
 
 For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Activity Database Table](db.dm#activity) schema for the available columns you can search on.
+
+Query examples for the `query` parameter:
+
+- `action:job_error`: Activity items for a specific action (see [Activity.action](data.md#activity-action)).
+- `action:alert_new|alert_cleared`: Activity items matching multiple actions.
+- `keywords:admin`: Activity items that mention a specific username or ID.
+- `date:>=2025-01-01 date:<2026-01-01`: Activity in 2025.
+- `date:>=today`: Activity logged today.
+
+The activity index exposes only three searchable columns: `action`, `keywords`, and `date`. Date and number fields (like `date`) accept Unix timestamps, `YYYY-MM-DD`, `today`, and `now`, and are quantized to the nearest hour internally.
 
 Example response:
 
