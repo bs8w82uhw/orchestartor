@@ -10,6 +10,8 @@ Page.Events = class Events extends Page.PageUtils {
 		// called once at page load
 		this.default_sub = 'list';
 		this.dom_prefix = 'ee';
+		
+		this.handleJobsChangedViewDebounce = debounce( this.handleJobsChangedView.bind(this), 1000 );
 	}
 	
 	onActivate(args) {
@@ -1243,19 +1245,26 @@ Page.Events = class Events extends Page.PageUtils {
 		} ); // confirm
 	}
 	
+	handleJobsChangedView() {
+		// called via debounce when jobs changed on view page
+		if (!this.active || !this.event) return; // sanity
+		
+		this.renderActiveJobs();
+		this.getQueuedJobs();
+		this.fetchJobHistory();
+		
+		// recompute upcoming: shift() entries off if they happened
+		this.autoExpireUpcomingJobs();
+		this.renderUpcomingJobs();
+	}
+	
 	handleStatusUpdateView(data) {
 		// received status update from server, see if major or minor
 		var self = this;
 		var div = this.div;
 		
 		if (data.jobsChanged) {
-			this.renderActiveJobs();
-			this.getQueuedJobs();
-			this.fetchJobHistory();
-			
-			// recompute upcoming: shift() entries off if they happened
-			this.autoExpireUpcomingJobs();
-			this.renderUpcomingJobs();
+			this.handleJobsChangedViewDebounce();
 		}
 		else {
 			// fast update without redrawing entire table

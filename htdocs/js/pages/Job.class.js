@@ -10,6 +10,9 @@ Page.Job = class Job extends Page.PageUtils {
 		// called once at page load
 		this.colors = app.colors;
 		this.header_bar_width = 175;
+		
+		// throttle this API call for dealing with heavy jobs
+		this.getWorkflowQueueSummaryDebounce = debounce( this.getWorkflowQueueSummary.bind(this), 1000 );
 	}
 	
 	onActivate(args) {
@@ -1061,7 +1064,7 @@ Page.Job = class Job extends Page.PageUtils {
 		this.decorateWorkflowNodes();
 		
 		// we have to fetch queued job information separately
-		if (!this.job.final) this.getWorkflowQueueSummary();
+		if (!this.job.final) this.getWorkflowQueueSummaryDebounce();
 		
 		// show orange notification if sus level has increased
 		if (!this.lastSuspendedCount) this.lastSuspendedCount = 0;
@@ -1235,14 +1238,18 @@ Page.Job = class Job extends Page.PageUtils {
 	getWorkflowQueueSummary() {
 		// fetch summary of queued job counts per node
 		var self = this;
+		if (!self.active || !self.job || self.job.final) return; // sanity checks
+		
 		var workflow = this.job.workflow;
 		var $cont = this.wfGetContainer();
+		if (!workflow || !workflow.nodes || !$cont.length) return; // more sanity checks
 		
 		app.api.get( 'app/get_workflow_job_summary', { 'workflow.job': this.job.id, state: 'queued' }, function(resp) {
-			if (!self.active || !resp || !resp.nodes || !self.job || self.job.final) return; // sanity checks
+			if (!self.active || !resp || !resp.nodes || !self.job || self.job.final) return; // even more sanity checks
 			
 			workflow.nodes.filter( function(node) { return !!node.type.match(/^(event|job)$/); } ).forEach( function(node) {
 				var $div = $cont.find(`#d_wfn_${node.id} > .wf_active_bar > .wf_active_widget.wf_queued`);
+				if (!$div.length) return; // sanity
 				var count = resp.nodes[node.id] || 0;
 				
 				if (count) $div.show().html( `<i class="mdi mdi-tray-full"></i><span>${commify(count)}</span>` );
