@@ -2016,6 +2016,10 @@ div.code_viewer {
 	overflow-y: scroll;
 }
 
+div.code_viewer pre code {
+	font-size: 12px;
+}
+
 div.code_viewer pre {
 	margin-top: 0;
 }
