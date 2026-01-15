@@ -1,5 +1,17 @@
 # xyOps Changelog
 
+## Version v0.9.28
+
+> January 15, 2026
+
+- [`58edcc9`](https://github.com/pixlcore/xyops/commit/58edcc91ee4bc66d387ce3511699b001c3485c17): Version 0.9.28
+- [`dfe967c`](https://github.com/pixlcore/xyops/commit/dfe967cf26e3f8c66e97381644c4a3ba2d54b2cd): Scalability: Add deboucing for several API in the UI, to better handle large job / queue throughput.
+- [`56558c1`](https://github.com/pixlcore/xyops/commit/56558c175ecbe10c931fac32bb5b347941cebb5d): Event List UI: Add more options in the actions column. Fixes #53.
+- [`363f5b7`](https://github.com/pixlcore/xyops/commit/363f5b7b68f12129d257cdf6848382be2b2aaa0e): User Settings: Add option to show milliseconds in dates/times.  Fixes #52.
+- [`6754d72`](https://github.com/pixlcore/xyops/commit/6754d723087c4cb9bd2942f3516ad87eb88a4131): API Doc: Added query examples to main search APIs.
+- [`4fdad84`](https://github.com/pixlcore/xyops/commit/4fdad84560629592236067ab876685dbcd70ba3d): Docs: Complete Activity.action in data.md and link syshooks to it.
+- [`3aeb7d0`](https://github.com/pixlcore/xyops/commit/3aeb7d031529c6eaa0b1110e0296e86245125ac2): API Doc: Remove sentence.
+
 ## Version v0.9.27
 
 > January 14, 2026
