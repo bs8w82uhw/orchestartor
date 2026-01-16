@@ -640,8 +640,6 @@ Page.Marketplace = class Marketplace extends Page.PageUtils {
 		var ver = resp.version;
 		var json = resp.data;
 		
-		console.log(resp);
-		
 		if (!json.version || (json.version !== '1.0') || !json.type || (json.type !== 'xypdf') || !json.items || !json.items[0]) {
 			return app.doError("Unknown Format: Marketplace file is not an xyOps Portable Data Object.");
 		}
@@ -737,6 +735,7 @@ Page.Marketplace = class Marketplace extends Page.PageUtils {
 				Dialog.hideProgress();
 				app.cacheBust = hires_time_now();
 				app.showMessage('success', `${product.title} ${ver} was installed successfully.`);
+				self.confettiParty();
 				
 				// create/update entry in app[list] due to race condition with ws broadcast
 				var new_obj = resp[ opts.name ];
@@ -748,7 +747,7 @@ Page.Marketplace = class Marketplace extends Page.PageUtils {
 			} ); // api.post
 		};
 		
-		self.highlightCodeBlocks('#dialog .markdown-body');
+		this.highlightCodeBlocks('#dialog .markdown-body');
 	}
 	
 	onDeactivate() {
