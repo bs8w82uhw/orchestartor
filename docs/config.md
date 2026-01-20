@@ -463,6 +463,10 @@ This section is for the client-side configuration, used in the xyOps web applica
 
 This string is the product name displayed in the UI and included in email/version text (default: `xyOps`).
 
+### client.company
+
+This string is displayed as part of the copyright message at the bottom-left corner of the UI (default: `PixlCore LLC`).
+
 ### client.logo_url
 
 This path string points to the logo used in the UI header/sidebar and in emails (default: `images/logotype.png`).
