@@ -978,6 +978,7 @@
 		},
 		"Job": {
 			"do_confirm_run_again": { "keys": ["KeyR"], "title": "Run Job Again" },
+			"do_edit_event": { "keys": ["KeyE"], "title": "Edit Event" },
 			"doAddToTicket": { "keys": ["KeyA"], "title": "Add Job to Ticket" },
 			"doCreateTicket": { "keys": ["KeyC"], "title": "Create Job Ticket" },
 			"do_delete_job": { "keys": ["Backspace"], "title": "Delete Job" },
