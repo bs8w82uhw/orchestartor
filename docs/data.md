@@ -3320,6 +3320,10 @@ If the job is a sub-job inside of a parent workflow, the `workflow.launcher` pro
 
 If the job is a sub-job inside of a parent workflow, the `workflow.params` property will contain all the user parameters provided at workflow launch (if any).
 
+### JobWorkflow.now
+
+If the job is a sub-job inside of a parent workflow, the `workflow.now` property will contain the value of the parent workflow's [Job.now](#job-now) value.  This is either the timestamp of when the workflow started, or it could be a timestamp in the past if the workflow is being run as part of [Catch-Up](triggers.md#catch-up).
+
 ### Privileges
 
 The Privileges object describes which actions are allowed for a [User](#user), a [Role](#role), or an [API Key](#api-key).  For more details, see [Privileges](privileges.md).  Here is an example set of privileges in JSON format:
