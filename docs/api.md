@@ -3007,6 +3007,7 @@ Parameters:
 | `sort_by` | String | Optional. Field to sort by. Defaults to `completed`. |
 | `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
 | `verbose` | Boolean | Optional. If `true`, include verbose job fields (`actions`, `activity`, `input`, `files`, etc.). Defaults to `false` (i.e. these are pruned). |
+| `select` | Array | Optional.  If included, will only return the [Job](data.md#job) properties specified in the array, e.g. `["id", "files"]`.  Overrides `verbose`. |
 
 For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Jobs Database Table](db.dm#jobs) schema for the available columns you can search on.
 
@@ -3014,6 +3015,7 @@ Query examples for the `query` parameter:
 
 - `tags:_success`: All successful jobs. Successful jobs are tagged with the hidden `_success` system tag.
 - `tags:_error`: All failed jobs for any reason. Failed jobs are tagged with the hidden `_error` system tag.
+- `tags:_files`: All jobs that produced output files.
 - `code:warning`: All jobs with a code of `warning`.
 - `code:critical`: All jobs with a code of `critical`.
 - `code:abort`: All aborted jobs.
