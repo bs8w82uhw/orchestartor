@@ -106,12 +106,12 @@ function summarize_event_timing(trigger, idx) {
 			var result = '';
 			switch (m_g1) {
 				case '-1': result = 'last day'; break;
-				case '-2': result = '2nd last'; break;
-				case '-3': result = '3rd last'; break;
-				case '-4': result = '4th last'; break;
-				case '-5': result = '5th last'; break;
-				case '-6': result = '6th last'; break;
-				case '-7': result = '7th last'; break;
+				case '-2': result = '2nd last day'; break;
+				case '-3': result = '3rd last day'; break;
+				case '-4': result = '4th last day'; break;
+				case '-5': result = '5th last day'; break;
+				case '-6': result = '6th last day'; break;
+				case '-7': result = '7th last day'; break;
 				default: 
 					if (m_g1.match(/^1[1-9]$/)) result = m_g1 + 'th'; // teens break the rule (11th, 12th, 13th, etc.)
 					else result = m_g1 + _number_suffixes[ parseInt( m_g1.substring(m_g1.length - 1) ) ]; 
