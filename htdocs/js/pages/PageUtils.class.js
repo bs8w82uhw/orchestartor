@@ -2411,7 +2411,8 @@ Page.PageUtils = class PageUtils extends Page.Base {
 						value: '' + elem_value, 
 						class: 'monospace', 
 						disabled: elem_dis, 
-						autocomplete: 'off' 
+						autocomplete: 'off',
+						spellcheck: 'false'
 					};
 					if (!param.variant || param.variant.match(/^(password|text|tel)$/)) {
 						// only show explorer icon for non-validating text variants
@@ -2428,7 +2429,8 @@ Page.PageUtils = class PageUtils extends Page.Base {
 						value: elem_value, 
 						rows: 5, 
 						class: 'monospace', 
-						disabled: elem_dis 
+						disabled: elem_dis,
+						spellcheck: 'false'
 					}) + explore_end;
 				break;
 				
@@ -4764,7 +4766,8 @@ Page.PageUtils = class PageUtils extends Page.Base {
 						value: '' + elem_value, 
 						class: 'monospace', 
 						disabled: elem_dis, 
-						autocomplete: 'off' 
+						autocomplete: 'off',
+						spellcheck: 'false'
 					};
 					if (!param.variant || param.variant.match(/^(password|text|tel)$/)) {
 						// only show explorer icon for non-validating text variants
@@ -4781,7 +4784,8 @@ Page.PageUtils = class PageUtils extends Page.Base {
 						value: elem_value, 
 						rows: 5, 
 						class: 'monospace', 
-						disabled: elem_dis 
+						disabled: elem_dis,
+						spellcheck: 'false'
 					}) + explore_end;
 				break;
 				
