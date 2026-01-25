@@ -96,6 +96,36 @@ See the [Job](data.md#job) structure for more details on these properties.
 
 Note that all Plugin parameters are also passed to your Plugin process as environment variables (with IDs converted as needed).
 
+##### Input Files
+
+If your job is passed input files (either by a previous job, attached workflow node, or by manual user upload), they are made available to your Event Plugin, and file metadata is provided to you as well.
+
+First, all job input files are automatically written out to the job's unique temp directory, which is also the current working directory for your plugin.  This directory will be empty *except* for any input files, so you can use a [glob](https://en.wikipedia.org/wiki/Glob_%28programming%29) to list them.  However, the list of files is also provided to you via the [Job.input](data.md#job-input) object, specifically `input.files`.  Here is an example:
+
+```json
+"input": {
+	"data": {},
+	"files": [
+		{
+			"id": "fmktcdzp1skybhk9",
+			"date": 1769321584,
+			"filename": "mario.mp3",
+			"size": 309425,
+			"username": "admin"
+		},
+		{
+			"id": "fmktcdzpasm25ncs",
+			"date": 1769321584,
+			"filename": "webb_2.jpg",
+			"size": 1065694,
+			"username": "admin"
+		}
+	]
+}
+```
+
+So you can also discover and iterate over your input files by accessing this data structure.
+
 #### Output
 
 Your Plugin is expected to write JSON to STDOUT in order to report status back to the xyOps primary conductor.  At the very least, you need to notify xyOps that the job was completed, and the result of the job (i.e. success or fail).  This is done by printing a JSON object with a `xy` property set to `1` (indicating the [xyOps Wire Protocol](xywp.md) version), and a `code` property set to `0` indicating success.  You need to make sure the JSON is compacted onto a single line, and ends with a single EOL character (`\n` on Unix).  Example:
@@ -256,7 +286,7 @@ To set the label for a job, simply include a `label` property in your Plugin's J
 
 This would cause the "Reindex Database" label to be displayed alongside the Job ID.
 
-##### Data
+##### Output Data
 
 To include arbitrary data output from your job, which will be automatically passed to the next job (via workflow node connection or run event action), use this message format:
 
@@ -277,7 +307,7 @@ The format of the `data` object is freeform, and can contain whatever content yo
 
 Note that if you send multiple messages with `data` properties, the previous data is overwritten (i.e. the latter prevails).
 
-##### Files
+##### Output Files
 
 To upload files as part of your job output, you can simply tell xyOps where they are on disk.  When your job completes, the files will be attached and uploaded with the job data, and displayed in the UI.  They will also be passed to the next job if applicable (via workflow node connection or run event action).  Here is an example:
 
