@@ -57,7 +57,7 @@ Page.Categories = class Categories extends Page.PageUtils {
 		this.categories = resp.rows;
 		
 		// NOTE: Don't change these columns without also changing the responsive css column collapse rules in style.css
-		var cols = ['<i class="mdi mdi-menu"></i>', 'Category Title', 'Category ID', 'Events', 'Author', 'Created', 'Actions'];
+		var cols = ['<i class="mdi mdi-menu"></i>', 'Category Title', 'Category ID', 'Events / Jobs', 'Author', 'Created', 'Actions'];
 		// if (app.isCategoryLimited()) cols.shift();
 		
 		var drag_handle = app.isCategoryLimited() ? '<div class="td_drag_handle" style="cursor:default"><i class="mdi mdi-menu"></i></div>' : 
@@ -83,6 +83,14 @@ Page.Categories = class Categories extends Page.PageUtils {
 			
 			var cat_events = find_objects( app.events, { category: item.id } );
 			var num_events = cat_events.length;
+			
+			// check inside workflows too
+			find_objects( app.events, { type: 'workflow' } ).forEach( function(event) {
+				if (!event.workflow || !event.workflow.nodes) return; // sanity
+				event.workflow.nodes.forEach( function(node) {
+					if ((node.type == 'job') && node.data && (node.data.category == item.id)) num_events++;
+				} );
+			} );
 			
 			var tds = [
 				drag_handle,
@@ -372,6 +380,15 @@ Page.Categories = class Categories extends Page.PageUtils {
 		var cat_events = find_objects( app.events, { category: this.category.id } );
 		var num_events = cat_events.length;
 		if (num_events) return app.doError("Sorry, you cannot delete a category that has events assigned to it.");
+		
+		// check inside workflows too
+		find_objects( app.events, { type: 'workflow' } ).forEach( function(event) {
+			if (!event.workflow || !event.workflow.nodes) return; // sanity
+			event.workflow.nodes.forEach( function(node) {
+				if ((node.type == 'job') && node.data && (node.data.category == self.category.id)) num_events++;
+			} );
+		} );
+		if (num_events) return app.doError("Sorry, you cannot delete a category that has workflow jobs assigned to it.");
 		
 		Dialog.confirmDanger( 'Delete Category', "Are you sure you want to <b>permanently delete</b> the event category &ldquo;" + this.category.title + "&rdquo;?  There is no way to undo this action.", ['trash-can', 'Delete'], function(result) {
 			if (result) {
