@@ -90,10 +90,39 @@ chmod 775 *.sh bin/*
 echo "Upgrade complete."
 echo "Restarting service."
 
-# Stop running service
-./bin/node main.js stop
+# If running in a container / foreground mode, stop ONLY and exit.
+if [ -n "${SATELLITE_foreground+x}" ]; then
+	echo "SATELLITE_foreground is set -- stopping service only."
+	./bin/node main.js stop
+	exit 0
+fi
 
-# start satellite in background
-if [ -z "${SATELLITE_foreground+x}" ]; then
+# Prefer systemd when present so systemctl keeps accurate state.
+USE_SYSTEMD=0
+if command -v systemctl >/dev/null 2>&1 && command -v systemd-run >/dev/null 2>&1; then
+	# Avoid false-positives (e.g. systemctl installed but systemd isn't PID 1)
+	if [ -d /run/systemd/system ]; then
+		# Ask systemd first; fall back to unit-file existence checks.
+		if systemctl list-unit-files 2>/dev/null | grep -q '^xysat\.service'; then
+			USE_SYSTEMD=1
+		elif [ -f /etc/systemd/system/xysat.service ] || [ -f /lib/systemd/system/xysat.service ] || [ -f /usr/lib/systemd/system/xysat.service ]; then
+			USE_SYSTEMD=1
+		fi
+	fi
+fi
+
+if [ "$USE_SYSTEMD" -eq 1 ]; then
+	echo "Linux systemd detected -- restarting via systemctl."
+	if systemctl is-active --quiet xysat.service 2>/dev/null; then
+		echo "xySat is active under systemd -- restarting via systemd-run handoff."
+		systemd-run --quiet --collect --unit=xysat-upgrade-restart --property=StandardOutput=append:"$LOG_FILE" --property=StandardError=append:"$LOG_FILE" /bin/sh -c '/bin/systemctl restart xysat.service'
+		exit 0;
+	fi
+	echo "xySat is NOT active under systemd -- stopping manually, then starting under systemd."
+	./bin/node main.js stop
+	systemctl start xysat.service
+else
+	echo "Linux systemd not detected -- restarting via direct commands."
+	./bin/node main.js stop
 	./bin/node main.js start
 fi

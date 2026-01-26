@@ -82,4 +82,24 @@ chmod 775 *.sh bin/*
 ./bin/node main.js install
 
 # start satellite in background
-./bin/node main.js start
+# Prefer systemd when present so systemctl keeps accurate state.
+USE_SYSTEMD=0
+if command -v systemctl >/dev/null 2>&1; then
+	# Avoid false-positives (e.g. systemctl installed but systemd isn't PID 1)
+	if [ -d /run/systemd/system ]; then
+		# Ask systemd first; fall back to unit-file existence checks.
+		if systemctl list-unit-files 2>/dev/null | grep -q '^xysat\.service'; then
+			USE_SYSTEMD=1
+		elif [ -f /etc/systemd/system/xysat.service ] || [ -f /lib/systemd/system/xysat.service ] || [ -f /usr/lib/systemd/system/xysat.service ]; then
+			USE_SYSTEMD=1
+		fi
+	fi
+fi
+
+if [ "$USE_SYSTEMD" -eq 1 ]; then
+	echo "Linux systemd detected -- starting xySat via systemctl..."
+	systemctl start xysat.service
+else
+	echo "Starting xySat service..."
+	./bin/node main.js start
+fi
