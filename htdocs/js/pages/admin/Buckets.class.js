@@ -32,7 +32,7 @@ Page.Buckets = class Buckets extends Page.PageUtils {
 	gosub_list(args) {
 		// show bucket list
 		app.setWindowTitle( "Storage Buckets" );
-		app.setHeaderTitle( '<i class="mdi mdi-pail-outline">&nbsp;</i>Storage Buckets' );
+		app.setHeaderTitle( '<i class="mdi mdi-pail">&nbsp;</i>Storage Buckets' );
 		
 		// this.loading();
 		// app.api.post( 'app/get_buckets', copy_object(args), this.receive_buckets.bind(this) );
