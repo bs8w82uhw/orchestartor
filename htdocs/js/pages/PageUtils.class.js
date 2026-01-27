@@ -3813,7 +3813,9 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		var icon = alt_icon;
 		var pole = `<div class="wf_pole wf_output_pole"><i class="mdi mdi-chevron-right"></i></div>`;
 		
+		// massage titles
 		if (!trigger.enabled) short_desc = '(Disabled)';
+		if (trigger.type.match(/^(interval|single)$/)) nice_title = alt_type;
 		
 		if (trigger.type.match(/^(catchup|range|blackout|delay|precision|plugin)$/)) {
 			// option triggers are rendered as pure circles with no pole
@@ -4946,6 +4948,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			case 'interval':
 				nice_icon = '<i class="mdi mdi-calendar-clock"></i>';
 				nice_type = 'Schedule';
+				alt_type = 'Interval';
 				short_desc = get_text_from_seconds(item.duration || 0, true, false);
 				nice_desc = '<i class="mdi mdi-timer-sand">&nbsp;</i><b>Interval:</b> ' + get_text_from_seconds(item.duration || 0, false, false);
 			break;
@@ -4960,6 +4963,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			case 'single':
 				nice_icon = '<i class="mdi mdi-calendar-clock"></i>';
 				nice_type = 'Schedule';
+				alt_type = 'Single Shot';
 				short_desc = summarize_event_timing(item);
 				nice_desc = '<i class="mdi mdi-alarm-check">&nbsp;</i><b>Single Shot:</b> ' + short_desc;
 			break;
