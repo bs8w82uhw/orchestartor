@@ -54,6 +54,8 @@ div.header > div.header_title > i {
 	color: var(--theme-color);
 } */
 
+div.header_widget > * { pointer-events: none; }
+
 div.header_widget.marquee {
 	--active-color: var(--theme-color);
 	border: 1px solid transparent !important;
