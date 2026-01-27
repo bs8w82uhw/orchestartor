@@ -22,7 +22,7 @@ Page.Base = class Base extends Page {
 		// this is the override here:
 		if ((link === true) && !item.id) link = false;
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon || 'key') + '"></i>';
 		if (link) {
 			if (link === true) link = '#APIKeys?sub=edit&id=' + item.id;
@@ -69,7 +69,7 @@ Page.Base = class Base extends Page {
 		if (typeof(item) == 'string') item = find_object(app.groups, { id: item });
 		if (!item) return '(None)';
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(item.title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon || 'server-network') + '"></i>';
 		if (link) {
 			if (link === true) link = '#Groups?sub=view&id=' + item.id;
@@ -92,7 +92,7 @@ Page.Base = class Base extends Page {
 		// if user cannot edit categories, no linky!
 		if (!app.hasPrivilege('edit_categories')) link = false;
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(item.title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon || 'folder-open-outline') + '"></i>';
 		if (link) {
 			if (link === true) link = '#Categories?sub=edit&id=' + item.id;
@@ -112,7 +112,7 @@ Page.Base = class Base extends Page {
 		if (typeof(item) == 'string') item = find_object(app.monitors, { id: item });
 		if (!item) return '(None)';
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(item.title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon || 'chart-line') + '"></i>';
 		if (link) {
 			html += '<a href="#Monitors?sub=edit&id=' + item.id + '">';
@@ -131,7 +131,7 @@ Page.Base = class Base extends Page {
 		if (typeof(item) == 'string') item = find_object(app.alerts, { id: item });
 		if (!item) return '(None)';
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(item.title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon ? item.icon : (item.enabled ? 'bell-outline' : 'bell-off-outline')) + '"></i>';
 		if (link) {
 			html += '<a href="#AlertSetup?sub=edit&id=' + item.id + '">';
@@ -270,7 +270,7 @@ Page.Base = class Base extends Page {
 		if (item.job && app.activeJobs[item.job]) icon_name = 'timer-play-outline';
 		else if (item.job) icon_name = 'timer-outline';
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(short_cmd) + '">';
 		var icon = '<i class="mdi mdi-' + icon_name + '"></i>';
 		if (link) {
 			if (typeof(link) != 'string') {
@@ -293,7 +293,7 @@ Page.Base = class Base extends Page {
 		if (typeof(item) == 'string') item = find_object(app.channels, { id: item });
 		if (!item) return '(None)';
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(item.title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon || 'bullhorn-outline') + '"></i>';
 		if (link) {
 			html += '<a href="#Channels?sub=edit&id=' + item.id + '">';
@@ -312,7 +312,7 @@ Page.Base = class Base extends Page {
 		if (typeof(item) == 'string') item = find_object(app.web_hooks, { id: item });
 		if (!item) return '(None)';
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(item.title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon || 'webhook') + '"></i>';
 		if (link) {
 			html += '<a href="#WebHooks?sub=edit&id=' + item.id + '">';
@@ -331,7 +331,7 @@ Page.Base = class Base extends Page {
 		if (typeof(item) == 'string') item = find_object(app.buckets, { id: item });
 		if (!item) return '(None)';
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(item.title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon || 'pail-outline') + '"></i>';
 		if (link) {
 			html += '<a href="#Buckets?sub=edit&id=' + item.id + '">';
@@ -350,7 +350,7 @@ Page.Base = class Base extends Page {
 		if (typeof(item) == 'string') item = find_object(app.secrets, { id: item });
 		if (!item) return '(None)';
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(item.title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon || 'shield-lock-outline') + '"></i>';
 		if (link) {
 			html += '<a href="#Secrets?sub=edit&id=' + item.id + '">';
@@ -369,7 +369,7 @@ Page.Base = class Base extends Page {
 		if (typeof(item) == 'string') item = find_object(app.plugins, { id: item });
 		if (!item) return '(None)';
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(item.title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon || 'power-plug-outline') + '"></i>';
 		if (link) {
 			if (item.marketplace) html += '<a href="#Marketplace?id=' + item.marketplace.id + '">';
@@ -414,7 +414,7 @@ Page.Base = class Base extends Page {
 			default_icon = 'clipboard-flow-outline';
 		}
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(item.title) + '">';
 		var icon = '<i class="mdi mdi-' + (item.icon || default_icon) + '"></i>';
 		if (link) {
 			html += '<a href="' + loc + '?id=' + item.id + '">';
@@ -509,9 +509,9 @@ Page.Base = class Base extends Page {
 		}
 		if (!item) return '(None)';
 		
+		var text = item.title || app.formatHostname(item.hostname);
 		var html = '<span class="nowrap">';
 		var icon = '<i class="mdi mdi-' + (item.offline ? 'close-network-outline' : (item.icon || 'router-network')) + '"></i>';
-		var text = item.title || app.formatHostname(item.hostname);
 		if (link) {
 			html += '<a href="#Servers?id=' + item.id + '">' + icon + '<span data-private>' + text + '</span></a>';
 		}
@@ -592,7 +592,7 @@ Page.Base = class Base extends Page {
 			}
 		}
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(tag.title) + '">';
 		var icon = '<i class="mdi mdi-' + (tag.icon || 'tag-outline') + '"></i>';
 		
 		if (link) {
@@ -622,7 +622,7 @@ Page.Base = class Base extends Page {
 		}
 		if (!algo) return 'n/a';
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(algo.title) + '">';
 		var icon = '<i class="mdi mdi-' + (algo.icon || default_icon) + '"></i>';
 		html += icon + algo.title;
 		html += '</span>';
@@ -643,7 +643,7 @@ Page.Base = class Base extends Page {
 			}
 		}
 		
-		var html = '<span class="nowrap">';
+		var html = '<span class="nowrap" title="' + encode_attrib_entities(role.title) + '">';
 		var icon = '<i class="mdi mdi-' + (role.icon || 'account-group-outline') + '"></i>';
 		
 		if (link) {
@@ -680,7 +680,7 @@ Page.Base = class Base extends Page {
 		else if (ext.match(/^(pdf)$/)) icon = 'file-sign';
 		else if (ext.match(/^(zip|tar|gz|xz)$/)) icon = 'file-cabinet';
 		
-		html += '<span class="nowrap">';
+		html += '<span class="nowrap" title="' + encode_attrib_entities(filename) + '">';
 		icon = '<i class="mdi mdi-' + icon + '"></i>';
 		
 		if (link) {
