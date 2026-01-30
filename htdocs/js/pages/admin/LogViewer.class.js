@@ -292,7 +292,13 @@ Page.LogViewer = class LogViewer extends Page.PageUtils {
 			}
 		}
 		
-		app.api.post( 'app/admin_search_logs', args, this.receiveResults.bind(this) );
+		var sargs = copy_object(args);
+		if ((sargs.date == 'custom') && sargs.custom_date) {
+			sargs.date = sargs.custom_date;
+			delete sargs.custom_date;
+		}
+		
+		app.api.post( 'app/admin_search_logs', sargs, this.receiveResults.bind(this) );
 	}
 	
 	receiveResults(resp) {
