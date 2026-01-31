@@ -4164,8 +4164,10 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				case 'text':
 					if (param.variant && (param.variant !== 'text')) {
 						var variant = find_object( config.ui.text_field_variants, { id: param.variant } );
-						nice_type = variant.title;
-						nice_icon = variant.icon;
+						if (variant) {
+							nice_type = variant.title;
+							nice_icon = variant.icon;
+						}
 					}
 					if (param.value.toString().length) pairs.push([ 'Default', '&ldquo;' + strip_html(param.value) + '&rdquo;' ]);
 					else pairs.push([ "(No default)" ]);
