@@ -138,12 +138,19 @@ Page.APIKeys = class APIKeys extends Page.PageUtils {
 		html += '</div>';
 		html += '<div class="box_content">';
 		
-		this.api_key = { 
-			active: 1,
-			privileges: copy_object( config.default_user_privileges ),
-			roles: [],
-			expires: 0
-		};
+		if (this.clone) {
+			this.api_key = this.clone;
+			delete this.clone;
+			app.showMessage('info', "The API Key has been cloned as an unsaved draft.", 8);
+		}
+		else {
+			this.api_key = { 
+				active: 1,
+				privileges: copy_object( config.default_user_privileges ),
+				roles: [],
+				expires: 0
+			};
+		}
 		
 		// API Key
 		html += this.getFormRow({
@@ -299,8 +306,9 @@ Page.APIKeys = class APIKeys extends Page.PageUtils {
 		html += '<div class="box_buttons">';
 			html += '<div class="button cancel mobile_collapse" onClick="$P().cancel_api_key_edit()"><i class="mdi mdi-close-circle-outline">&nbsp;</i><span>Close</span></div>';
 			html += '<div class="button danger mobile_collapse" onClick="$P().show_delete_api_key_dialog()"><i class="mdi mdi-trash-can-outline">&nbsp;</i><span>Delete...</span></div>';
-			html += '<div class="button secondary mobile_collapse" onClick="$P().do_export()"><i class="mdi mdi-cloud-download-outline">&nbsp;</i><span>Export...</span></div>';
-			html += '<div class="button secondary mobile_collapse" onClick="$P().go_edit_history()"><i class="mdi mdi-history">&nbsp;</i><span>History...</span></div>';
+			html += '<div class="button secondary mobile_collapse" onClick="$P().do_clone()"><i class="mdi mdi-content-copy">&nbsp;</i><span>Clone...</span></div>';
+			html += '<div class="button secondary mobile_hide" onClick="$P().do_export()"><i class="mdi mdi-cloud-download-outline">&nbsp;</i><span>Export...</span></div>';
+			html += '<div class="button secondary mobile_hide" onClick="$P().go_edit_history()"><i class="mdi mdi-history">&nbsp;</i><span>History...</span></div>';
 			html += '<div class="button save phone_collapse" id="btn_save" onClick="$P().do_save_api_key()"><i class="mdi mdi-floppy">&nbsp;</i><span>Save Changes</span></div>';
 		html += '</div>'; // box_buttons
 		
@@ -312,6 +320,26 @@ Page.APIKeys = class APIKeys extends Page.PageUtils {
 		MultiSelect.init( this.div.find('select[multiple]') );
 		this.setupBoxButtonFloater();
 		this.setupEditTriggers();
+	}
+	
+	do_clone() {
+		// make copy of api key and jump over to new
+		app.clearError();
+		var api_key = this.get_api_key_form_json();
+		if (!api_key) return; // error
+		
+		var clone = deep_copy_object(api_key);
+		clone.title = "Copy of " + clone.title;
+		delete clone.id;
+		delete clone.key;
+		delete clone.mask;
+		delete clone.created;
+		delete clone.modified;
+		delete clone.revision;
+		delete clone.username;
+		
+		this.clone = clone;
+		Nav.go('APIKeys?sub=new');
 	}
 	
 	do_export() {
