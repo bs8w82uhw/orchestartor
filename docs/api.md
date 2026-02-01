@@ -1495,7 +1495,8 @@ See [Job.files](data.md#job-files) for how these are consumed by jobs.
 ### file
 
 ```
-GET /files/...  or  GET /api/app/file/v1?path=...
+GET /files/...
+GET /api/app/file/v1?path=...
 ```
 
 Serve a file from storage. This is a binary/streaming endpoint (not JSON). It supports full GET, HEAD, conditional requests via `ETag` and `If-Modified-Since`, and HTTP Range requests for partial content. You can access files by direct path under `/files/...`, or via `GET /api/app/file/v1?path=...`.
@@ -5592,7 +5593,8 @@ Example response:
 ### echo
 
 ```
-GET /api/app/echo/v1  or  POST /api/app/echo/v1
+GET /api/app/echo/v1
+POST /api/app/echo/v1
 ```
 
 Diagnostic endpoint that echoes request details. Useful for testing connectivity, headers, cookies, parameter parsing, and multipart uploads. The response is pretty-printed and intentionally does not include the standard `code` field.
