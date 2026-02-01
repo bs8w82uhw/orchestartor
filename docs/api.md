@@ -5443,6 +5443,132 @@ Example response:
 
 In addition to the [Standard Response Format](#standard-response-format), this includes an `id` property, which is an internal job ID (the bulk logout happens asynchronously in the background).  To track the progress of the job, poll the [get_internal_jobs](#get_internal_jobs) API.
 
+### admin_search_logs
+
+```
+POST /api/app/admin_search_logs/v1
+```
+
+Search the local xyOps system log files (current or archived) and return matching rows. Admin only.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `log` | String | **(Required)** Log name to search, e.g. `xyOps`. Must match one of the standard log filenames, sans extension. |
+| `rows` | Number | **(Required)** Max rows to return, from `1` to `1000`. The API keeps the last N matching rows from the file. |
+| `match` | String | Optional. Text or pattern to search for. If omitted, all rows match. |
+| `regex` | Boolean | Optional. If `true`, interpret `match` as a regular expression. |
+| `case` | Boolean | Optional. If `true`, search is case sensitive. |
+| `cols` | Array(String) or String | Optional. Columns to return, as an array or comma-delimited list. Defaults to all [log_columns](config.md#log_columns). |
+| `date` | String | Optional. Date in `YYYY-MM-DD` format. If omitted, searches the current live log. If set, searches the archived log for that day. |
+
+Example request:
+
+```json
+{
+	"log": "xyOps",
+	"match": "ERROR",
+	"rows": 100,
+	"cols": "hires_epoch,category,code,msg,data",
+	"case": 0,
+	"regex": 0,
+	"date": "2026-01-31"
+}
+```
+
+Example response:
+
+```json
+{
+	"code": 0,
+	"rows": [
+		{
+			"hires_epoch": 1769812345.123,
+			"category": "server",
+			"code": "error",
+			"msg": "Failed to connect to storage",
+			"data": "{\"error\":\"ECONNREFUSED\"}"
+		}
+	],
+	"list": { "length": 8924 }
+}
+```
+
+In addition to the [Standard Response Format](#standard-response-format), this includes:
+
+- `rows`: Array of row objects with only the requested columns.
+- `list.length`: Total number of rows in the log file (not the number of matches).
+
+Notes:
+
+- If the archive is not configured or the file is missing for a given `date`, the API returns an empty `rows` array.
+- Valid column IDs come from [log_columns](config.md#log_columns) (e.g., `hires_epoch`, `date`, `hostname`, `pid`, `component`, `category`, `code`, `msg`, `data`).
+
+### admin_get_config
+
+```
+GET /api/app/admin_get_config/v1
+```
+
+Fetch the full xyOps configuration for the admin editor UI. Admin only.
+
+No input parameters.
+
+In addition to the [Standard Response Format](#standard-response-format), this returns:
+
+- `config`: The current configuration object with sensitive keys removed (`secret_key`, `SSO`, `Debug`, `config_overrides_file`).
+- `overrides`: The current configuration overrides object (sparse), with reserved keys removed.
+- `markdown`: The contents of `docs/config.md` used by the UI to build the editor.
+
+Example response:
+
+```json
+{
+	"code": 0,
+	"config": { "ui": { "log_files": ["xyOps"] }, "storage": { "engine": "Filesystem" } },
+	"overrides": { "ui.log_files": ["xyOps", "xyOps-plugins"] },
+	"markdown": "# Configuration\n\n..."
+}
+```
+
+Notably, the response omits protected / reserved properties including `secret_key`, `SSO`, `Debug`, and `config_overrides_file`, due to their sensitive nature.
+
+### admin_update_config
+
+```
+POST /api/app/admin_update_config/v1
+```
+
+Update configuration overrides, save them to disk, and hot reload the new settings. Admin only. The request is a sparse list of overrides that are merged into the live config.
+
+Parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| (Other) | Various | Any configuration override key, using the same path names as `docs/config.md` (for example `ui.log_files` or `storage.engine`). Values replace the existing value at that path. |
+
+Example request:
+
+```json
+{
+	"ui.log_files": ["xyOps", "xyOps-plugins"],
+	"storage.engine": "Filesystem"
+}
+```
+
+Example response:
+
+```json
+{ "code": 0 }
+```
+
+Notes:
+
+- Overrides are additive. Only the paths you include are updated.
+- Reserved keys cannot be set via this API: `secret_key`, `SSO`, `Debug`, `config_overrides_file`.
+- Some settings may require a full server restart to take effect (for example, changing the web server port).
+
 ### get_api_keys
 
 ```
