@@ -174,49 +174,33 @@ Page.Job = class Job extends Page.PageUtils {
 		
 		// summary
 		html += '<div id="d_job_summary" class="box">';
-			html += '<div class="box_title">';
+			html += '<div class="box_title grid">';
 				// html += 'Job Summary';
 				
 				if (job.final) {
 					// job is complete
-					if (job.test) html += '<span>Test Summary</span>';
-					else html += '<span>Job Summary</span>';
+					if (job.test) html += '<div class="btg_title">Test Summary</div>';
+					else html += '<div class="btg_title">Job Summary</div>';
 					
-					// html += '<div class="button right" onClick="$P().do_confirm_run_again()"><i class="mdi mdi-run-fast">&nbsp;</i>Run Again</div>';
-					// html += '<div class="button right secondary" onClick="$P().do_view_job_data()"><i class="mdi mdi-code-json">&nbsp;</i>View JSON...</div>';
-					// html += '<div class="button right danger" onClick="$P().do_delete_job()"><i class="mdi mdi-trash-can-outline">&nbsp;</i>Delete Job...</div>';
-					
-					html += '<div class="button icon right danger" title="Delete Job..." onClick="$P().do_delete_job()"><i class="mdi mdi-trash-can-outline"></i></div>';
-					
-					html += '<div class="button icon right secondary" title="Update Tags..." onClick="$P().do_update_tags(this)"><i class="mdi mdi-tag-plus-outline"></i></div>';
-					
-					// if (app.hasPrivilege('edit_tickets')) {
-					// 	html += '<div class="button icon right secondary sm_hide" title="Add to Ticket..." onClick="$P().doAddToTicket()"><i class="mdi mdi-text-box-search-outline"></i></div>';
-					// }
-					if (app.hasPrivilege('create_tickets') && app.hasPrivilege('edit_tickets')) {
-						html += '<div id="d_btn_job_ticket_actions" class="button icon right secondary sm_hide" title="Ticket Actions..." onClick="$P().popupTicketActions()"><i class="mdi mdi-text-box-plus-outline"></i></div>';
-					}
-					
-					// html += '<div class="button icon right secondary sm_hide" title="View JSON..." onClick="$P().do_view_job_data()"><i class="mdi mdi-code-json"></i></div>';
-					if (job.event && find_object(app.events, { id: job.event })) {
-						html += '<div class="button icon right secondary" title="Edit Event..." onClick="$P().do_edit_event()"><i class="mdi mdi-file-edit-outline"></i></div>';
-						html += '<div class="button icon right" title="Run Again..." onClick="$P().do_confirm_run_again()"><i class="mdi mdi-run-fast"></i></div>';
-					}
-					
-					html += '<div class="clear"></div>';
+					html += '<div class="btg_buttons">';
+						if (job.event && find_object(app.events, { id: job.event })) {
+							html += '<div class="button icon" title="Run Again..." onClick="$P().do_confirm_run_again()"><i class="mdi mdi-run-fast"></i></div>';
+							html += '<div class="button icon secondary" title="Edit Event..." onClick="$P().do_edit_event()"><i class="mdi mdi-file-edit-outline"></i></div>';
+						}
+						if (app.hasPrivilege('create_tickets') && app.hasPrivilege('edit_tickets')) {
+							html += '<div id="d_btn_job_ticket_actions" class="button icon secondary sm_hide" title="Ticket Actions..." onClick="$P().popupTicketActions()"><i class="mdi mdi-text-box-plus-outline"></i></div>';
+						}
+						html += '<div class="button icon secondary" title="Update Tags..." onClick="$P().do_update_tags(this)"><i class="mdi mdi-tag-plus-outline"></i></div>';
+						html += '<div class="button icon danger" title="Delete Job..." onClick="$P().do_delete_job()"><i class="mdi mdi-trash-can-outline"></i></div>';
+					html += '</div>'; // btg_buttons
 				}
 				else {
 					// job is in progress
-					// html += '<div id="d_live_progress_bar_cont" class="progress_bar_container" style="width:196px; float:left;">';
-					// 	html += '<div id="d_live_progress_bar" class="progress_bar_inner" style="width:0px;"></div>';
-					// html += '</div>';
-					// html += '<div id="d_live_pct" style="float:left; margin-left:15px;"></div>';
-					
-					html += '<span>Job In Progress</span>';
-					
-					html += '<div class="button right danger" onClick="$P().do_abort_job()"><i class="mdi mdi-cancel">&nbsp;</i>Abort Job...</div>';
-					html += '<div class="button right" id="btn_job_notify" onClick="$P().do_notify_me()"><i class="mdi mdi-' + notify_icon + '">&nbsp;</i>Notify Me</div>';
-					html += '<div class="clear"></div>';
+					html += '<div class="btg_title job_status"><i class="mdi mdi-autorenew mdi-spin">&nbsp;</i><span id="d_live_status">' + strip_html(job.status || 'Job In Progress') + '</span></div>';
+					html += '<div class="btg_buttons">';
+						html += '<div class="button" id="btn_job_notify" onClick="$P().do_notify_me()"><i class="mdi mdi-' + notify_icon + '">&nbsp;</i>Notify Me</div>';
+						html += '<div class="button danger" onClick="$P().do_abort_job()"><i class="mdi mdi-cancel">&nbsp;</i>Abort Job...</div>';
+					html += '</div>'; // btg_buttons
 				}
 			html += '</div>';
 			
@@ -1680,6 +1664,9 @@ Page.Job = class Job extends Page.PageUtils {
 		// don't bash the dom
 		if (job.redraw == this.redraw) return;
 		this.redraw = job.redraw;
+		
+		// custom job status
+		if (!job.final) this.div.find('#d_live_status').html( strip_html( job.status || 'Job In Progress' ) );
 		
 		// simple 2D data table
 		if (job.table && job.table.header && job.table.rows) {

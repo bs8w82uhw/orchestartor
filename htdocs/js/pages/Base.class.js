@@ -1280,8 +1280,10 @@ Page.Base = class Base extends Page {
 		var html = '';
 		var counter = Math.min(1, Math.max(0, job.progress || 1));
 		var bar_width = this.bar_width || 100;
+		var bar_units = 'px';
 		var cx = Math.floor( counter * bar_width );
 		var label = '' + Math.floor( (counter / 1.0) * 100 ) + '%';
+		var status_label = '';
 		
 		if (job.suspended) {
 			extra_classes.push('pending');
@@ -1312,11 +1314,20 @@ Page.Base = class Base extends Page {
 			break;
 		}
 		
-		html += '<div class="progress_bar_container ' + extra_classes.join(' ') + '" style="width:' + bar_width + 'px;" role="progressbar">';
-			html += '<div class="progress_bar_label first_half" style="width:' + bar_width + 'px;">' + label + '</div>';
+		if (job.status) {
+			// job has custom status so "replace" progress bar with it
+			extra_classes.push('status');
+			bar_width = 'auto';
+			bar_units = '';
+			if ((counter > 0) && (counter < 1)) status_label = `<b>(${label})</b> `;
+		}
+		
+		html += '<div class="progress_bar_container ' + extra_classes.join(' ') + '" style="width:' + bar_width + bar_units + ';" role="progressbar">';
+			html += '<div class="progress_bar_label first_half" style="width:' + bar_width + bar_units + ';">' + label + '</div>';
 			html += '<div class="progress_bar_inner" style="width:' + cx + 'px;">';
-				html += '<div class="progress_bar_label second_half" style="width:' + bar_width + 'px;">' + label + '</div>';
+				html += '<div class="progress_bar_label second_half" style="width:' + bar_width + bar_units + ';">' + label + '</div>';
 			html += '</div>';
+			html += '<div class="progress_bar_status">' + status_label + (job.status || '') + '</div>';
 		html += '</div>';
 		
 		return html;
@@ -1331,6 +1342,7 @@ Page.Base = class Base extends Page {
 		var cx = Math.floor( counter * bar_width );
 		var label = '' + Math.floor( (counter / 1.0) * 100 ) + '%';
 		var indeterminate = !!(counter == 1.0);
+		var status = !!job.status;
 		
 		var pending = !!((job.state == 'start_delay') || (job.state == 'retry_delay') || (job.state == 'queued') || job.suspended);
 		if (pending) { 
@@ -1351,9 +1363,14 @@ Page.Base = class Base extends Page {
 		
 		$cont.toggleClass('indeterminate', indeterminate);
 		$cont.toggleClass('pending', pending);
+		$cont.toggleClass('status', status);
 		
 		$cont.find('.progress_bar_inner').css('width', '' + cx + 'px');
 		$cont.find('.progress_bar_label').html( label );
+		if (status) {
+			var status_label = ((counter > 0) && (counter < 1)) ? `<b>(${label})</b> ` : '';
+			$cont.css('width', 'auto').find('.progress_bar_status').html( status_label + strip_html(job.status) );
+		}
 	}
 	
 	getNiceProgressBar(amount = 0, extra_classes = '', show_label = false) {

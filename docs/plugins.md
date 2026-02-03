@@ -154,10 +154,26 @@ In addition to reporting success or failure at the end of a job, you can also op
 { "xy": 1, "progress": 0.5 }
 ```
 
-This would show progress at 50% completion, and automatically calculate the estimated time remaining based on the duration and progress so far.  You can repeat this as often as you like, with as granular progress as you can provide.
+This would show progress at 50% completion, and automatically calculate the estimated time remaining based on the duration and progress so far.  You can repeat this as often as you like, with as granular progress as you can provide.  Note that the estimated time remaining is a "best guess effort", and is more accurate if your job progresses in a "linear" fashion, with regular progress updates.
 
 > [!IMPORTANT]
 > Beware of STDIO output buffering which many languages enable by default.  This may delay your progress updates (not to mention other output), unless you set it to auto-flush on every write.  See your specific language documentation for details.
+
+##### Status
+
+In addition to [indicating job progress](#progress), you can also set a "status" string, which is displayed on the live job details page during a job run.  Similar to the progress indicator, you can update this as often as you like, for e.g. to report which phase of a job you are in.  To set the job status, simply print a JSON document with a `xy` property set to `1`, and a `status` property set to any string you want.  Example:
+
+```json
+{ "xy": 1, "status": "Processing client report..." }
+```
+
+You can combine this with progress (and any other job updates too):
+
+```json
+{ "xy": 1, "progress": 0.5, "status": "Processing file 34 of 68..." }
+```
+
+Note that the status string is *only* displayed during a live job run, and not after the job completes.  It is shown just under the progress bar, replacing the summary box title heading.
 
 ##### Perf Metrics
 

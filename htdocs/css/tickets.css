@@ -131,6 +131,10 @@ div.box_title.comment div.btg_title i.mdi:before {
 	transform: scale(1.1);
 }
 
+div.box_title div.btg_title.job_status i.mdi {
+	font-size: 125%;
+}
+
 /* div.box_admin_container {
 	position: absolute;
 	width: 90px;

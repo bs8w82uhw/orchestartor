@@ -682,7 +682,15 @@ Specifies the timestamp at which point the job can be moved into a ready state. 
 
 ### Job.progress
 
-User-populated progress indicator, should be a floating point number between `0.0` to `1.0`.  Both extremes (`0.0` and `1.0`) display as "indeterminate" in the UI.
+Optional user-populated progress indicator, which should be a floating point number between `0.0` to `1.0`.  Both extremes (`0.0` and `1.0`) display as "indeterminate" in the UI.
+
+### Job.status
+
+Optional user-populated status string, which is displayed on the live job detail screen while the job is in progress.  It is shown just under the progress bar, replacing the summary box title heading.
+
+### Job.suspended
+
+Will be set to `true` if job is currently suspended, awaiting user action.  See [Suspend Job](actions.md#suspend-job) for details.
 
 ### Job.reconnected
 
