@@ -1,5 +1,15 @@
 # xyOps Changelog
 
+## Version v0.9.51
+
+> February 3, 2026
+
+- [`f1b5128`](https://github.com/pixlcore/xyops/commit/f1b512875e7c0e15aed8f5bd1c7419a92e7cd3ac): Version 0.9.51
+- [`e7fed95`](https://github.com/pixlcore/xyops/commit/e7fed957155721c4048d58dad17796fa2987d609): New Feature: Job status tagline displayed on live job details screen and all job progress bars.
+- [`a4a4424`](https://github.com/pixlcore/xyops/commit/a4a442410368a2cd65b6549271cfe75b0e19c8f5): Feature: Allow plugin / event param menus to specify values and labels separately.  Fixes #107.
+- [`63080ab`](https://github.com/pixlcore/xyops/commit/63080ab27d6551f30a82bb3c52080c8fe446318a): Feature: Remember event filters in the sidebar links for "Events" and "Workflows" pages.  Fixes #105.
+- [`00986d8`](https://github.com/pixlcore/xyops/commit/00986d8d5207e3b924f9f25a5b3f72c3befff464): Universal Actions / Limits: Add some additional crash protection in case the configuration is invalid.
+
 ## Version v0.9.50
 
 > February 1, 2026
