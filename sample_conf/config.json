@@ -53,6 +53,14 @@
 		],
 		"workflow": []
 	},
+	
+	"automation_manager": {
+		"enabled": false,
+		"mode": "advisory",
+		"roles": ["planner", "executor", "reviewer", "safety"],
+		"require_human_approval_for": ["high"]
+	},
+	
 	"alert_universal_actions": [
 		{
 			"enabled": true,

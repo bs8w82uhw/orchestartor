@@ -121,6 +121,41 @@ Example:
 ]
 ```
 
+## automation_manager
+<!-- Title: Automation Manager -->
+
+This object configures the AI Automation Manager policy layer used to evaluate automation tasks and (optionally) enforce approvals at runtime.
+
+Example:
+
+```json
+"automation_manager": {
+	"enabled": false,
+	"mode": "advisory",
+	"roles": ["planner", "executor", "reviewer", "safety"],
+	"require_human_approval_for": ["high"]
+}
+```
+
+### automation_manager.enabled
+
+Boolean toggle for the manager (default: `false`). When disabled, runtime job launch checks are skipped.
+
+### automation_manager.mode
+
+Policy mode string: `advisory` or `enforced` (default: `advisory`).
+
+- `advisory`: records policy decisions and recommendations.
+- `enforced`: blocks tasks/jobs that violate approval requirements.
+
+### automation_manager.roles
+
+Array of role names used by your operating model (default: `["planner","executor","reviewer","safety"]`).
+
+### automation_manager.require_human_approval_for
+
+Array of risk levels that require explicit human approval in enforced mode (default: `["high"]`).
+
 ## hostname_display_strip
 
 This regex string is removed from the end of hostnames for display and notifications (default: `\\.[\\w\\-]+\\.\\w+$`), e.g., to strip the domain suffix.

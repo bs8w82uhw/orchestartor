@@ -203,6 +203,31 @@ exports.tests = [
       // Accept environments that don't require optimization (non-SQLite)
       assert.ok(!!data.code, 'expected error for unsupported optimization');
     }
+  },
+
+  async function test_admin_get_automation_manager(test) {
+    // fetch automation manager status
+    let { data } = await this.request.json(this.api_url + '/app/get_automation_manager/v1', {});
+    assert.ok(data.code === 0, 'successful api response');
+    assert.ok(data.manager && typeof data.manager === 'object', 'expected manager object');
+    assert.ok(typeof data.manager.enabled === 'boolean', 'expected manager.enabled boolean');
+    assert.ok(typeof data.manager.mode === 'string', 'expected manager.mode string');
+    assert.ok(Array.isArray(data.manager.roles), 'expected manager.roles array');
+  },
+
+  async function test_admin_evaluate_automation_task(test) {
+    // evaluate a high-risk task with no human approval
+    let { data } = await this.request.json(this.api_url + '/app/evaluate_automation_task/v1', {
+      title: 'Unit test automation policy evaluation',
+      risk_level: 'high',
+      human_approved: false
+    });
+    assert.ok(data.code === 0, 'successful api response');
+    assert.ok(data.task && data.task.title === 'Unit test automation policy evaluation', 'expected task payload');
+    assert.ok(data.decision && typeof data.decision === 'object', 'expected decision payload');
+    assert.ok(typeof data.decision.allowed === 'boolean', 'expected decision.allowed boolean');
+    assert.ok(data.decision.risk_level === 'high', 'expected normalized risk level');
+    assert.ok(typeof data.decision.reason === 'string' && data.decision.reason.length > 0, 'expected decision reason');
   }
 
 ];

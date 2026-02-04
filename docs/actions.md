@@ -82,6 +82,20 @@ All [Action](data.md#action) objects include these common properties:
 
 Additional properties are required based on the action type.
 
+### Optional Automation Policy Fields
+
+When the Automation Manager is enabled, actions can optionally include policy hints:
+
+| Property | Type | Description |
+|---------|------|-------------|
+| `risk_level` | String | Optional risk level (`low`, `medium`, `high`) used for policy evaluation. |
+| `human_approved` | Boolean | Optional explicit approval flag for enforced policy flows. |
+
+Notes:
+
+- If omitted, `risk_level` defaults to `medium`.
+- Some action types may be treated as high-risk by policy (`run_event`, `plugin`, `disable`).
+
 ## Action Types
 
 ### Email

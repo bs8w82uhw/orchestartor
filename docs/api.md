@@ -60,6 +60,80 @@ Example error response:
 }
 ```
 
+## Automation Manager
+
+Automation Manager APIs expose policy status and task evaluation decisions for AI-assisted operations.
+
+### get_automation_manager
+
+```
+GET /api/app/get_automation_manager/v1
+```
+
+Returns current manager config status and recent policy decisions.  Administrator privileges are required.
+
+Example response:
+
+```json
+{
+	"code": 0,
+	"manager": {
+		"enabled": false,
+		"mode": "advisory",
+		"roles": ["planner", "executor", "reviewer", "safety"],
+		"require_human_approval_for": ["high"],
+		"recentDecisions": []
+	}
+}
+```
+
+### evaluate_automation_task
+
+```
+POST /api/app/evaluate_automation_task/v1
+```
+
+Evaluates one automation task against current policy and returns a decision payload.  Administrator privileges are required.
+
+Input parameters:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `id` | String | Optional task ID (auto-generated if omitted). |
+| `title` | String | Optional task title for traceability. |
+| `risk_level` | String | Optional risk level (`low`, `medium`, `high`), defaults to `medium`. |
+| `human_approved` | Boolean | Whether a human has explicitly approved the task. |
+
+Example request:
+
+```json
+{
+	"title": "Apply production config update",
+	"risk_level": "high",
+	"human_approved": false
+}
+```
+
+Example response:
+
+```json
+{
+	"code": 0,
+	"task": {
+		"id": "taskabc123",
+		"title": "Apply production config update",
+		"risk_level": "high",
+		"human_approved": false
+	},
+	"decision": {
+		"allowed": true,
+		"mode": "advisory",
+		"requires_human_approval": true,
+		"reason": "Advisory mode: human approval recommended for risk level: high"
+	}
+}
+```
+
 ## Alerts
 
 Alert APIs manage alert definitions. Use these endpoints to list, fetch, create, update, and delete alerts that evaluate monitor data and trigger actions (email, web hooks, snapshots, and more). Alerts run on the conductor and evaluate incoming monitor samples from servers; results appear in monitoring views and the activity log. Editing alerts typically requires appropriate privileges; read operations only require a valid session or API Key.
