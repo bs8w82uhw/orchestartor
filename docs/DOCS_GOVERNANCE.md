@@ -6,6 +6,8 @@ title: Documentation Governance
 
 This policy defines how documentation is managed for humans and AI agents. If a process is not documented and reviewed, it is considered not automation-ready.
 
+Russian mirror: `docs/ru-docs-governance.md`.
+
 ## Required Workflow
 
 1. All docs changes go through Pull Requests.
