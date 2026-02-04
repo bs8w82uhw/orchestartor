@@ -25,6 +25,7 @@ Focus project development on:
 9. Standardize policy/contract/execution evidence docs and adopt templates across AI workflows.
 10. Add automation KPIs (MTTR, automation coverage, % human escalations, policy violations).
 11. Prepare phased rollout plan: pilot team -> controlled expansion -> org standard.
+12. Run contract-driven debug cycle for each Automation Manager method and capture evidence.
 
 ## Documentation System Rollout Tasks
 

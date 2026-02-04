@@ -30,6 +30,15 @@
       "next_review_at": "2026-05-06"
     },
     {
+      "path": "docs/EXECUTION_automation-manager_2026-02.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
       "path": "docs/GRAMAX_SYNC.md",
       "owner": "docs-core",
       "status": "active",
@@ -37,6 +46,15 @@
       "risk_level": "high",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/METHOD_TEMPLATE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/POLICY_TEMPLATE.md",
@@ -136,6 +154,15 @@
       "risk_level": "medium",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/contract-debug-stages.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/cronicle.md",
@@ -244,6 +271,15 @@
       "risk_level": "medium",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/method-catalog-automation-manager.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/monitors.md",

@@ -70,9 +70,13 @@ Welcome to the xyOps documentation. xyOps is a job scheduler, workflow engine, a
 -  [**Development**](dev.md): Architecture overview, component list, client framework, and local dev setup.
 -  [**AI Automation Strategy**](ai-automation-knowledge-strategy.md): Multi-agent model, governance framework, and knowledge-system approach.
 -  [**Policies, Contracts, and Execution**](policies-contracts-execution.md): Documentation standard for policy rules, role contracts, and execution evidence.
+-  [**Method Template**](METHOD_TEMPLATE.md): Standard template for documenting method contracts.
+-  [**Method Catalog (Automation Manager)**](method-catalog-automation-manager.md): Tracked methods with policy and enforcement contracts.
+-  [**Contract Debug Stages**](contract-debug-stages.md): Step-by-step method debug process against contracts.
 -  [**Policy Template**](POLICY_TEMPLATE.md): Reusable template for policy documents.
 -  [**Contract Template**](CONTRACT_TEMPLATE.md): Reusable template for operational contracts.
 -  [**Execution Evidence Template**](EXECUTION_EVIDENCE_TEMPLATE.md): Reusable template for run evidence and audit trails.
+-  [**Execution Evidence (Automation Manager, 2026-02)**](EXECUTION_automation-manager_2026-02.md): First execution log for policy/enforcement rollout.
 -  [**Docs Governance**](DOCS_GOVERNANCE.md): Rules for PR flow, reviews, lifecycle statuses, and weekly hygiene.
 -  [**Gramax Sync Setup**](GRAMAX_SYNC.md): Repository-to-Gramax sync workflow and webhook setup.
 -  [**Logging**](logging.md): A list of all xyOps log files including descriptions and example rows.
