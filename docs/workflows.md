@@ -171,6 +171,12 @@ Repeat, Multiplex and Split support a "continue after controller" flow:
 -  Solder wires out of the controlled Event/Job node with the `continue` condition to define what happens next.
 -  When all iterations complete, if successes meet or exceed the threshold, all `continue` wires from that Event/Job fire. Otherwise nothing continues and the workflow may finish if no other nodes are active.
 
+Automation Manager note:
+
+-  If `automation_manager.enabled` is `true`, the controller continue stage is policy-evaluated before firing `continue` wires.
+-  You can optionally set `risk_level` and `human_approved` on controller node data to guide policy decisions.
+-  In `enforced` mode, the continue stage may be blocked if policy requires approval and `human_approved` is not set.
+
 Example: Event A -> Repeat (x10) -> Event A has a `continue` wire -> Event B. After all 10 runs of Event A finish, if at least N% succeed (per controller), Event B runs.
 
 ## Data Passing Between Nodes
