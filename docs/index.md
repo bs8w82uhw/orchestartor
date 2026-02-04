@@ -68,6 +68,7 @@ Welcome to the xyOps documentation. xyOps is a job scheduler, workflow engine, a
 
 -  [**Contributing**](https://github.com/pixlcore/xyops/blob/main/CONTRIBUTING.md): How to contribute to xyOps.
 -  [**Development**](dev.md): Architecture overview, component list, client framework, and local dev setup.
+-  [**Testing with Docker Compose**](testing-docker-compose.md): Containerized autonomous and manual test modes.
 -  [**AI Automation Strategy**](ai-automation-knowledge-strategy.md): Multi-agent model, governance framework, and knowledge-system approach.
 -  [**Policies, Contracts, and Execution**](policies-contracts-execution.md): Documentation standard for policy rules, role contracts, and execution evidence.
 -  [**Method Template**](METHOD_TEMPLATE.md): Standard template for documenting method contracts.

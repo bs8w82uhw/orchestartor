@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  xyops-test-auto:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /opt/xyops
+    command: ["npm", "test"]
+    environment:
+      NODE_ENV: test
+    volumes:
+      - .:/opt/xyops
+    profiles: ["auto"]
+
+  xyops-test-manual:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /opt/xyops
+    command: ["bash", "-lc", "node bin/build.js dev && bin/debug.sh"]
+    environment:
+      XYOPS_foreground: "true"
+      XYOPS_echo: "xyOps Transaction Error API Action Job Workflow Alert"
+      XYOPS_automation_manager__enabled: "true"
+      XYOPS_automation_manager__mode: "advisory"
+    volumes:
+      - .:/opt/xyops
+    ports:
+      - "5522:5522"
+      - "5523:5523"
+    profiles: ["manual"]
