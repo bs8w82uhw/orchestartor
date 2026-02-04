@@ -1,4 +1,6 @@
-# Local Contributing Workflow
+---
+title: Local Contributing Workflow
+---
 
 This file is a practical local workflow companion to `CONTRIBUTING.md`.
 
@@ -27,13 +29,13 @@ The test suite is integration-heavy and may take time.
 
 ## 4) Keep Changes Focused
 
-- Prefer small PRs with one clear purpose.
-- Avoid unrelated refactors and formatting churn.
-- Update docs (`docs/` or local guides) when behavior changes.
+-  Prefer small PRs with one clear purpose.
+-  Avoid unrelated refactors and formatting churn.
+-  Update docs (`docs/` or local guides) when behavior changes.
 
 ## 5) Useful Paths
 
-- `lib/` server logic and APIs
-- `htdocs/` web assets
-- `test/` suite and fixtures
-- `sample_conf/` config templates
+-  `lib/` server logic and APIs
+-  `htdocs/` web assets
+-  `test/` suite and fixtures
+-  `sample_conf/` config templates

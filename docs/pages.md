@@ -1,4 +1,6 @@
-# Page Descriptions
+---
+title: Page Descriptions
+---
 
 This document contains short descriptions of each top-level page.  They are displayed in the UI if the user has the preference enabled.
 
@@ -8,7 +10,7 @@ Completed jobs are stored for analysis, troubleshooting, and auditing. Job histo
 
 The Job Search page lets you browse and filter this history. Narrow by result (success, error, warning, critical, aborted), event or workflow, category, tags, source (scheduler, manual, API key, workflow, action, alert, plugin), plugin, server, group, and date range. You can also search inside logs and attached text files using plain text or regular expressions with optional case sensitivity.
 
-Save frequent queries as presets that appear in the sidebar for quick access. Presets are per‑user so you can keep personal workflows without affecting others. 
+Save frequent queries as presets that appear in the sidebar for quick access. Presets are per‑user so you can keep personal workflows without affecting others.
 
 Learn more: [Events](events.md), [Workflows](workflows.md), [Tags](tags.md).
 
@@ -18,7 +20,7 @@ Learn more: [Events](events.md), [Workflows](workflows.md), [Tags](tags.md).
 
 The Ticket Search page helps you find and manage this work. Click "**New Ticket**" to create one, or search by full‑text in the body, type, status (open, closed, draft), assignee, author, category, server, tags, and date range.
 
-Tickets can embed runnable events so you can launch jobs directly from a ticket. Attached files flow into those jobs as inputs and outputs are linked back for traceability. 
+Tickets can embed runnable events so you can launch jobs directly from a ticket. Attached files flow into those jobs as inputs and outputs are linked back for traceability.
 
 Learn more: [Tickets](tickets.md).
 
@@ -28,7 +30,7 @@ Learn more: [Tickets](tickets.md).
 
 The Event List page lets you browse, search, and manage events. Click "**New Event**" to add one, or filter by keywords (title), status (enabled or disabled), category, target (group or server), plugin, tags, triggers, actions, or author. Open any event to view or edit its configuration.
 
-Category defaults merge into event jobs, and per‑event limits and actions can refine behavior. Include a manual trigger if you want on‑demand runs via UI or API. 
+Category defaults merge into event jobs, and per‑event limits and actions can refine behavior. Include a manual trigger if you want on‑demand runs via UI or API.
 
 Learn more: [Events](events.md), [Categories](categories.md), [Plugins](plugins.md).
 
@@ -38,7 +40,7 @@ Learn more: [Events](events.md), [Categories](categories.md), [Plugins](plugins.
 
 The Workflow List page shows all workflow events. Click "**New Workflow**" to create a workflow, or filter the existing ones by keywords (title), status (enabled or disabled), category, target (group or server), tags, triggers, actions, or author to find what you need.
 
-Common controllers include split, join, repeat, multiplex, decision, and wait. The editor supports testing with custom inputs and optional action or limit suppression. 
+Common controllers include split, join, repeat, multiplex, decision, and wait. The editor supports testing with custom inputs and optional action or limit suppression.
 
 Learn more: [Workflows](workflows.md).
 
@@ -48,7 +50,7 @@ Learn more: [Workflows](workflows.md).
 
 The Category List page lets you create and manage categories. Set a title, color, icon, notes, enabled flag, and sort order. You can import/export and reorder categories to match your preferred layout.
 
-Defaults from categories merge into job runs, standardizing notifications and resource policies. Disabling a category prevents scheduling and manual runs for everything it contains. 
+Defaults from categories merge into job runs, standardizing notifications and resource policies. Disabling a category prevents scheduling and manual runs for everything it contains.
 
 Learn more: [Categories](categories.md), [Actions](actions.md), [Limits](limits.md).
 
@@ -58,7 +60,7 @@ Learn more: [Categories](categories.md), [Actions](actions.md), [Limits](limits.
 
 The Storage Bucket List page lets you create buckets, edit the JSON data pane, and upload or download files. You can replace or remove objects as needed, with filename normalization and size/count limits enforced by the server.
 
-Jobs can fetch from a bucket at start and store data or files on completion via actions, allowing loose coupling between processes and teams. 
+Jobs can fetch from a bucket at start and store data or files on completion via actions, allowing loose coupling between processes and teams.
 
 Learn more: [Buckets](buckets.md).
 
@@ -68,7 +70,7 @@ Learn more: [Buckets](buckets.md).
 
 The Tag List page lets you create, edit, and delete tag definitions with titles, optional icons, and notes. Tag IDs are the reference keys used by actions and plugins.
 
-Actions can be conditioned on tags present at job completion, and plugins can push tags at runtime to annotate jobs. 
+Actions can be conditioned on tags present at job completion, and plugins can push tags at runtime to annotate jobs.
 
 Learn more: [Tags](tags.md).
 
@@ -78,7 +80,7 @@ Learn more: [Tags](tags.md).
 
 The Alert Search page shows active and historical invocations so you can review conditions, timing, and downstream actions. Filter by alert definition, server, group, and date range to isolate incidents or trends.
 
-On fire or clear, actions can notify channels, create tickets, run events, and take snapshots. Alerts can also block new jobs or abort running jobs on affected servers. 
+On fire or clear, actions can notify channels, create tickets, run events, and take snapshots. Alerts can also block new jobs or abort running jobs on affected servers.
 
 Learn more: [Alerts](alerts.md).
 
@@ -88,7 +90,7 @@ Learn more: [Alerts](alerts.md).
 
 The Server List page shows the active fleet with labels, hostnames, IPs, OS and CPU details, and status. Filter by keywords and platform attributes, use "**Search History**" for offline servers, or click "**Add Server**" to generate a one‑line installer for Docker, Linux, macOS, or Windows.
 
-Opening a server presents live and historical charts, current processes and network connections, running and upcoming jobs, and active alerts with links to details. 
+Opening a server presents live and historical charts, current processes and network connections, running and upcoming jobs, and active alerts with links to details.
 
 Learn more: [Servers](servers.md).
 
@@ -98,7 +100,7 @@ Learn more: [Servers](servers.md).
 
 The Server Group List page lets you create, edit, and reorder groups. Click "**New Group**" to add one, set an optional hostname match, notes, and default alert actions.
 
-Opening a group shows aggregated charts, processes and connections across members, running and upcoming jobs, alerts, and controls for snapshots and watches. 
+Opening a group shows aggregated charts, processes and connections across members, running and upcoming jobs, alerts, and controls for snapshots and watches.
 
 Learn more: [Server Groups](groups.md).
 
@@ -108,7 +110,7 @@ Learn more: [Server Groups](groups.md).
 
 The Snapshot History page lists captured records. Filter by source (alert, user, watch, job), server, group, and date range to locate relevant entries and trends.
 
-Opening a snapshot shows frozen server or group data with quick metrics and minute‑level monitors, processes, connections, jobs, and alerts from the exact capture moment. 
+Opening a snapshot shows frozen server or group data with quick metrics and minute‑level monitors, processes, connections, jobs, and alerts from the exact capture moment.
 
 Learn more: [Snapshots](snapshots.md).
 
@@ -118,7 +120,7 @@ Your account profile includes your identity, credentials, roles, and avatar. Kee
 
 The My Account page lets you change your display name, email address, and password, and upload or replace your avatar image. You can also select an icon to display alongside your name in the UI.
 
-The page shows which roles you are assigned so you can understand your effective permissions at a glance. 
+The page shows which roles you are assigned so you can understand your effective permissions at a glance.
 
 ## MySettings
 
@@ -126,7 +128,7 @@ Preferences control the look, feel, and behavior of the UI for your account. The
 
 The My Settings page lets you configure locale, region, timezone, number format, and hour cycle. You can adjust motion, contrast, vision accessibility, notifications, visual effects, and streamer mode, along with volume, brightness, contrast, hue, and saturation.
 
-Keyboard shortcuts can be tailored for efficiency. Settings travel with your account and apply across devices. 
+Keyboard shortcuts can be tailored for efficiency. Settings travel with your account and apply across devices.
 
 ## MySecurity
 
@@ -150,7 +152,7 @@ Alert definitions describe what to watch on servers and what to do when conditio
 
 The Alert Setup page lists and manages these definitions. Click "**New Alert**" to create one, test expressions against live data, and configure warm‑up/cool‑down samples, overlays, and options.
 
-Alerts can notify channels, create tickets, run events, take snapshots, and optionally limit or abort jobs on affected servers while active. 
+Alerts can notify channels, create tickets, run events, take snapshots, and optionally limit or abort jobs on affected servers while active.
 
 Learn more: [Alerts](alerts.md).
 
@@ -160,7 +162,7 @@ Learn more: [Alerts](alerts.md).
 
 The API Keys page lets you create and manage keys. Click "**New API Key**" to set a title, description, privileges, roles, and an optional expiration. Keys can be disabled or deleted at any time.
 
-Key values are shown only once and stored as salted SHA‑256 hashes thereafter. Scope keys narrowly and expire them when appropriate. 
+Key values are shown only once and stored as salted SHA‑256 hashes thereafter. Scope keys narrowly and expire them when appropriate.
 
 Learn more: [API Reference](api.md).
 
@@ -170,7 +172,7 @@ Learn more: [API Reference](api.md).
 
 The Channels page lets you define and manage these bundles. Click "**New Channel**" to pick users, external emails, a web hook, an optional run‑event, an optional sound, and an optional per‑day cap.
 
-Channels execute their sub‑actions in parallel and record results for auditing. Use icons and concise titles for easy recognition. 
+Channels execute their sub‑actions in parallel and record results for auditing. Use icons and concise titles for easy recognition.
 
 Learn more: [Channels](channels.md).
 
@@ -190,7 +192,7 @@ Learn more: [Servers](servers.md).
 
 The Monitors page lets you define these metrics. Click "**New Monitor**" to provide an expression, data type, optional regex extraction, and delta or rate options. You can scope a monitor to specific groups.
 
-Well‑tuned monitors produce clear visualizations and stable alert conditions for capacity and performance tracking. 
+Well‑tuned monitors produce clear visualizations and stable alert conditions for capacity and performance tracking.
 
 Learn more: [Monitors](monitors.md), [Alerts](alerts.md).
 
@@ -200,7 +202,7 @@ Learn more: [Monitors](monitors.md), [Alerts](alerts.md).
 
 The Plugins page lists installed plugins and lets you add new ones. Click "**New Plugin**" to create and configure parameters, icons, and notes for a plugin type.
 
-Plugins can accept parameters, interact with secrets, push updates during runs, and attach files or data to jobs. 
+Plugins can accept parameters, interact with secrets, push updates during runs, and attach files or data to jobs.
 
 Learn more: [Plugins](plugins.md).
 
@@ -210,7 +212,7 @@ Learn more: [Plugins](plugins.md).
 
 The Secrets page lets administrators create secrets, define variables, and assign usage to events, categories, plugins, or web hooks. Enable or disable secrets without deleting them, and decrypt values only when necessary.
 
-At runtime, jobs receive secret variables as environment variables and web hooks expand them in templates. Usage is logged and administrator decryption is audited. 
+At runtime, jobs receive secret variables as environment variables and web hooks expand them in templates. Usage is logged and administrator decryption is audited.
 
 Learn more: [Secrets](secrets.md).
 
@@ -228,7 +230,7 @@ Maintenance actions include importing, exporting, and deleting bulk data, runnin
 
 The Users page lists accounts and provides tools for creation, editing, suspension, unlocking, and deletion. Click "**New User**" to set identity fields, initial password, privileges, and roles.
 
-Use this area to manage onboarding and ongoing access, including avatars, password changes, and resource restrictions. 
+Use this area to manage onboarding and ongoing access, including avatars, password changes, and resource restrictions.
 
 Learn more: [Users and Roles](users.md).
 
@@ -238,7 +240,7 @@ Learn more: [Users and Roles](users.md).
 
 The Roles page lets you create and manage these bundles. Click "**New Role**" to define privileges and optional category or group limits, then enable it for use.
 
-Changes to roles affect assigned users and take effect shortly after saving. Use roles to standardize policy across teams. 
+Changes to roles affect assigned users and take effect shortly after saving. Use roles to standardize policy across teams.
 
 Learn more: [Users and Roles](users.md).
 
@@ -248,7 +250,7 @@ Learn more: [Users and Roles](users.md).
 
 The Web Hooks page lets you create definitions with URL, method, headers, optional body, timeouts, retries, redirect handling, daily caps, and TLS options. Click "**New Web Hook**" to get started.
 
-Templates can include job or alert context and reference assigned secrets for tokens or credentials. Executions record timing and success for troubleshooting. 
+Templates can include job or alert context and reference assigned secrets for tokens or credentials. Executions record timing and success for troubleshooting.
 
 Learn more: [Web Hooks](webhooks.md).
 

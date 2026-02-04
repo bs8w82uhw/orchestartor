@@ -1,4 +1,6 @@
-# Data Structures
+---
+title: Data Structures
+---
 
 ## Overview
 
@@ -73,7 +75,7 @@ Optional notes or comments about the alert.
 ### Alert.username
 
 The user or API Key who created the alert.
-	
+
 ### Alert.modified
 
 The Unix timestamp when the alert was last modified.
@@ -477,14 +479,14 @@ An array of server or group targets to run the event.  Each item of the array is
 
 When multiple servers are in the [Event.targets](#event-targets) array, xyOps uses a select algorithm to select a server to run the job.  The available algorithms are:
 
-| Algorithm | Notes |
-|-----------|-------|
-| `random` | Randomly pick a server from the list. |
-| `round_robin` | Pick each server in sequence, then repeat. |
-| `least_cpu` | Pick the server with the least CPU usage. |
-| `least_mem` | Pick the server with the least memory usage. |
+| Algorithm      | Notes                                                           |
+|----------------|-----------------------------------------------------------------|
+| `random`       | Randomly pick a server from the list.                           |
+| `round_robin`  | Pick each server in sequence, then repeat.                      |
+| `least_cpu`    | Pick the server with the least CPU usage.                       |
+| `least_mem`    | Pick the server with the least memory usage.                    |
 | `prefer_first` | Prefer the first server when alphabetically sorted by hostname. |
-| `prefer_last` | Prefer the last server when alphabetically sorted by hostname. |
+| `prefer_last`  | Prefer the last server when alphabetically sorted by hostname.  |
 
 ### Event.notes
 
@@ -567,15 +569,15 @@ An integer value representing the sort order of the group.  Lower values are sor
 
 A job is a running (or previously ran) instance of an event.  The job structure has nearly all the same properties as [Event](#event) with these differences:
 
-| Property Name | Note |
-|---------------|--------|
-| `id` | Replaced with [Job.id](#job-id). |
-| `event` | The [Event.id](#event-id]) of the event which spawned the job. |
-| `title` | Removed from job structure when event is copied. |
-| `enabled` | Removed from job structure when event is copied. |
-| `created` | Removed from job structure when event is copied. |
-| `modified` | Removed from job structure when event is copied. |
-| `triggers` | Removed from job structure when event is copied. |
+| Property Name | Note                                                           |
+|---------------|----------------------------------------------------------------|
+| `id`          | Replaced with [Job.id](#job-id).                               |
+| `event`       | The [Event.id](#event-id]) of the event which spawned the job. |
+| `title`       | Removed from job structure when event is copied.               |
+| `enabled`     | Removed from job structure when event is copied.               |
+| `created`     | Removed from job structure when event is copied.               |
+| `modified`    | Removed from job structure when event is copied.               |
+| `triggers`    | Removed from job structure when event is copied.               |
 
 And these additions:
 
@@ -587,10 +589,10 @@ An auto-generated, unique, lowercase alphanumeric ID for the job, which will alw
 
 An optional string representing a custom job type.  Values include:
 
-| Job Type | Note | 
-|----------|------|
-| `workflow` | Job is a top-level workflow control job, which will spawn sub-jobs. | 
-| `adhoc` | Job is running as an ad-hoc under a workflow, with no event attached. | 
+| Job Type   | Note                                                                  |
+|------------|-----------------------------------------------------------------------|
+| `workflow` | Job is a top-level workflow control job, which will spawn sub-jobs.   |
+| `adhoc`    | Job is running as an ad-hoc under a workflow, with no event attached. |
 
 ### Job.event
 
@@ -628,15 +630,15 @@ Custom job environment variables to inject into the executable when spawning it.
 
 Specifies which state the job is currently in.  Here is a list of all the possible states:
 
-| Job State | Description |
-|-----------|-------------|
-| `queued` | Job is queued and waiting for an open slot to move to `ready` state. |
-| `start_delay` | Job has a custom starting delay.  The timestamp at which the delay expires should be in [Job.until](#job-until). |
+| Job State     | Description                                                                                                        |
+|---------------|--------------------------------------------------------------------------------------------------------------------|
+| `queued`      | Job is queued and waiting for an open slot to move to `ready` state.                                               |
+| `start_delay` | Job has a custom starting delay.  The timestamp at which the delay expires should be in [Job.until](#job-until).   |
 | `retry_delay` | Job is currently in a retry delay.  The timestamp at which the delay expires should be in [Job.until](#job-until). |
-| `ready` | Job is ready to start. |
-| `active` | Job is currently active (running). |
-| `finishing` | Job is finishing (uploading logs and/or files). |
-| `complete` | Job is complete. |
+| `ready`       | Job is ready to start.                                                                                             |
+| `active`      | Job is currently active (running).                                                                                 |
+| `finishing`   | Job is finishing (uploading logs and/or files).                                                                    |
+| `complete`    | Job is complete.                                                                                                   |
 
 ### Job.started
 
@@ -662,11 +664,11 @@ The job's "now" time, as an Unix timestamp, which is the time at which the job w
 
 When a job completes, the `code` denotes the result.  Zero (`0`) means success, any other value means the job failed.  You can use this to specify your own internal error code, or just specify `1` for a generic error.  Any number or string is acceptable.  There are a few special values that xyOps recognizes:
 
-| Job Code | Meaning |
-|----------|---------|
-| `warning` | This denotes that a job failed by only with a "warning", not a full error. |
-| `critical` | This denotes that the job failed critically, and needs immediate attention. |
-| `abort` | This denotes that the job was manually aborted, either by a user or an API call. |
+| Job Code   | Meaning                                                                          |
+|------------|----------------------------------------------------------------------------------|
+| `warning`  | This denotes that a job failed by only with a "warning", not a full error.       |
+| `critical` | This denotes that the job failed critically, and needs immediate attention.      |
+| `abort`    | This denotes that the job was manually aborted, either by a user or an API call. |
 
 ### Job.description
 
@@ -712,35 +714,35 @@ An array of meta log entries for the job.
 
 A string ID indicating what spawned the job.  This will be one of:
 
-| Source | Description |
-|--------|-------------|
-| `scheduler` | Job was spawned normally via the scheduler. |
-| `plugin` | Job was spawned from a Scheduler Plugin. |
-| `key` | Job was spawned via a HTTP request to the `run_event` API using an API Key.  There will be an additional property named `key` containing the internal API Key ID (non-secret). |
-| `user` | Job was spawned manually via user request in the UI.  There will be an additional property named `username` containing the username of the user who initiated the action. |
-| `action` | Job was spawned by a custom job action (i.e. start, complete, success or fail action condition).  [Job.parent](#job-parent) will also be present in this case. |
-| `alert` | Job was spawned by an alert notification from the server monitoring system. |
-| `workflow` | Job was spawned as part of a workflow sequence. |
+| Source      | Description                                                                                                                                                                    |
+|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `scheduler` | Job was spawned normally via the scheduler.                                                                                                                                    |
+| `plugin`    | Job was spawned from a Scheduler Plugin.                                                                                                                                       |
+| `key`       | Job was spawned via a HTTP request to the `run_event` API using an API Key.  There will be an additional property named `key` containing the internal API Key ID (non-secret). |
+| `user`      | Job was spawned manually via user request in the UI.  There will be an additional property named `username` containing the username of the user who initiated the action.      |
+| `action`    | Job was spawned by a custom job action (i.e. start, complete, success or fail action condition).  [Job.parent](#job-parent) will also be present in this case.                 |
+| `alert`     | Job was spawned by an alert notification from the server monitoring system.                                                                                                    |
+| `workflow`  | Job was spawned as part of a workflow sequence.                                                                                                                                |
 
 ### Job.parent
 
 When the job was launched from another job (custom action or workflow step), this will contain information about the parent job which spawned the current job.  It will be an object with the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `job` | String | The [Job.id](#job-id) of the job which launched the current job. |
-| `event` | String | The [Event.id](#event-id) of the job which launched the current job. |
-| `code` | Mixed | The [Job.code](#job-code) of the job which launched the current job. |
+| Property Name | Type   | Description                                                                        |
+|---------------|--------|------------------------------------------------------------------------------------|
+| `job`         | String | The [Job.id](#job-id) of the job which launched the current job.                   |
+| `event`       | String | The [Event.id](#event-id) of the job which launched the current job.               |
+| `code`        | Mixed  | The [Job.code](#job-code) of the job which launched the current job.               |
 | `description` | String | The [Job.description](#job-description) of the job which launched the current job. |
 
 ### Job.input
 
 When another job passes data or files to the current job, an `input` object is populated.  The object may have the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `data` | Object | A user-defined object containing arbitrary data for the job. |
-| `files` | Array | An array of files supplied to the job, from a previous job, storage bucket, or trigger plugin |
+| Property Name | Type   | Description                                                                                   |
+|---------------|--------|-----------------------------------------------------------------------------------------------|
+| `data`        | Object | A user-defined object containing arbitrary data for the job.                                  |
+| `files`       | Array  | An array of files supplied to the job, from a previous job, storage bucket, or trigger plugin |
 
 The format of the `data` object is freeform, and completely user-defined.  The `files` array will be formatted the same as [Job.files](#job-files).
 
@@ -784,11 +786,11 @@ This is a place where the job can store arbitrary data, which will be passed to 
 
 This will contain information about all uploaded files for the job.  While the job is running, the user can populate this array to attach files for the job.  Each item in the array can be a simple string (file path or glob), a sub-array of file path and filename, a sub-array of file path, filename, and a `true` boolean to delete the file after uploading, or an object with the following properties:
 
-| Property Name | Description |
-|---------------|-------------|
-| `path` | Path to the file on disk, or a glob matching multiple files. |
-| `filename` | Custom destination filename to use when uploading.  Do not combine with a glob path. |
-| `delete` | Set this to `true` to delete the file(s) after uploading. |
+| Property Name | Description                                                                          |
+|---------------|--------------------------------------------------------------------------------------|
+| `path`        | Path to the file on disk, or a glob matching multiple files.                         |
+| `filename`    | Custom destination filename to use when uploading.  Do not combine with a glob path. |
+| `delete`      | Set this to `true` to delete the file(s) after uploading.                            |
 
 Once the job is complete, the files will be uploaded and the array will be recreated as an array of objects, one per file, with each object following the [File](#file) structure.
 
@@ -1039,17 +1041,17 @@ The script to execute for the plugin, which is optional and depends on the comma
 
 A set of custom parameters to pass to the plugin when it is executed (for non-monitor Plugins only).  These are the parameter definitions, which users then populate in the UI when setting up events / workflows.  Each item in the `params` array should be an object with the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | A lowercase alphanumeric ID for the parameter (can also contain underscores). |
-| `title` | String | A visual title for the parameter, displayed in the UI. |
-| `type` | String | The parameter type ID, which should be one of: `text`, `textarea`, `code`, `checkbox`, `select`, `hidden`, or `toolset`. |
-| `variant` | String | For `text` type controls, you can optionally set a UI input variant: `color`, `date`, `datetime-local`, `email`, `number`, `password`, `text`, `time`, `tel` or `url`. |
-| `value` | Mixed | The default value for the parameter. |
-| `data` | Object | Specifically for the `toolset` type, this contains all the tool details. |
-| `caption` | String | Optionally display a caption under the UI control. |
-| `required` | Boolean | Set this to `true` to require a value to be entered for the parameter. |
-| `locked` | Boolean | Set this to `true` to lock editing to administrators only. |
+| Property Name | Type    | Description                                                                                                                                                            |
+|---------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | A lowercase alphanumeric ID for the parameter (can also contain underscores).                                                                                          |
+| `title`       | String  | A visual title for the parameter, displayed in the UI.                                                                                                                 |
+| `type`        | String  | The parameter type ID, which should be one of: `text`, `textarea`, `code`, `checkbox`, `select`, `hidden`, or `toolset`.                                               |
+| `variant`     | String  | For `text` type controls, you can optionally set a UI input variant: `color`, `date`, `datetime-local`, `email`, `number`, `password`, `text`, `time`, `tel` or `url`. |
+| `value`       | Mixed   | The default value for the parameter.                                                                                                                                   |
+| `data`        | Object  | Specifically for the `toolset` type, this contains all the tool details.                                                                                               |
+| `caption`     | String  | Optionally display a caption under the UI control.                                                                                                                     |
+| `required`    | Boolean | Set this to `true` to require a value to be entered for the parameter.                                                                                                 |
+| `locked`      | Boolean | Set this to `true` to lock editing to administrators only.                                                                                                             |
 
 ### Plugin.groups
 
@@ -1071,9 +1073,9 @@ This is the GID (group account) to run the plugin under.  The GID may be either 
 
 This string specifies how xySat should terminate processes when a job is aborted.  This is only used for Event Plugins.  The accepted values are as follows:
 
-- `none` means that **no** processes are killed on abort.  This is only used for very special cases.
-- `parent` means that only the **parent** process is killed on abort.  This is the default behavior for new Plugins.
-- `all` means that **all** processes are killed on abort.  Meaning, xySat will traverse the process tree from the parent process down, and kill everything.
+-  `none` means that **no** processes are killed on abort.  This is only used for very special cases.
+-  `parent` means that only the **parent** process is killed on abort.  This is the default behavior for new Plugins.
+-  `all` means that **all** processes are killed on abort.  Meaning, xySat will traverse the process tree from the parent process down, and kill everything.
 
 ### Plugin.runner
 
@@ -1213,10 +1215,10 @@ An optional icon ID for the role, displayed in the UI.  Icons are sourced from [
 
 An array of secret fields.  These are stored encrypted.  Each element of the array must be an object with the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `name` | String | The name of the variable, e.g. `DB_PASSWORD`.  Use standard POSIX environment variable naming rules. |
-| `value` | String | The value of the variable, e.g. `CorrectHorseBatteryStaple`. |
+| Property Name | Type   | Description                                                                                          |
+|---------------|--------|------------------------------------------------------------------------------------------------------|
+| `name`        | String | The name of the variable, e.g. `DB_PASSWORD`.  Use standard POSIX environment variable naming rules. |
+| `value`       | String | The value of the variable, e.g. `CorrectHorseBatteryStaple`.                                         |
 
 Secret values are always stored as strings (as they are delivered via environment variables).  If you need to store binary data in a secret, you can encode it with [Base64](https://en.wikipedia.org/wiki/Base64).
 
@@ -1552,13 +1554,13 @@ An array of [Tag.id](#tag-id)s to associate with the ticket.
 
 An array of objects representing [Event](#event)s attached to the ticket.  Each event can be customized to run jobs from the ticket, and contain the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | The [Event.id](#event-id) of the event. |
-| `targets` | Array | An optional array of targets ([Group.id](#group-id)s or [Server.id](#server-id)s) overriding the event defaults. |
-| `algo` | String | An optional server selection algorithm, overriding the default [Event.algo](#event-algo) from the event. |
-| `tags` | Array | An optional array of [Tag.id](#tag-id)s to apply to jobs that run from the ticket event, overriding the event defaults. |
-| `params` | Object | If the event has [Event.fields](#event-fields) defined, this object will override the defaults and be merged into [Event.params](#event-params) when jobs run. |
+| Property Name | Type   | Description                                                                                                                                                    |
+|---------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String | The [Event.id](#event-id) of the event.                                                                                                                        |
+| `targets`     | Array  | An optional array of targets ([Group.id](#group-id)s or [Server.id](#server-id)s) overriding the event defaults.                                               |
+| `algo`        | String | An optional server selection algorithm, overriding the default [Event.algo](#event-algo) from the event.                                                       |
+| `tags`        | Array  | An optional array of [Tag.id](#tag-id)s to apply to jobs that run from the ticket event, overriding the event defaults.                                        |
+| `params`      | Object | If the event has [Event.fields](#event-fields) defined, this object will override the defaults and be merged into [Event.params](#event-params) when jobs run. |
 
 ### Ticket.files
 
@@ -1568,16 +1570,16 @@ An array of [File](#file) objects uploaded to the ticket.
 
 This array contains a list of all the changes made to the ticket, including things like changing status, assignees, and also comments added.  Each element in the array should be an object with the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | A unique lowercase alphanumeric ID for the change. |
-| `type` | String | The change type, which should be one of: `change` or `comment`. |
-| `username` | String | The username of the user who made the change. |
-| `date` | Number | The Unix timestamp of the change. |
-| `key` | String | This identifies which ticket property was changed, or one of two special values: `created` (ticket created) or `delete` (comment deleted). |
-| `value` | Mixed | When `key` is present, this is the new value that the property was changed to. |
-| `body` | String | For `comment` types, this is the comment body in Markdown source format. |
-| `edited` | Number | When comments are edited, this is present and set to the last modified date, in Unix seconds. |
+| Property Name | Type   | Description                                                                                                                                |
+|---------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String | A unique lowercase alphanumeric ID for the change.                                                                                         |
+| `type`        | String | The change type, which should be one of: `change` or `comment`.                                                                            |
+| `username`    | String | The username of the user who made the change.                                                                                              |
+| `date`        | Number | The Unix timestamp of the change.                                                                                                          |
+| `key`         | String | This identifies which ticket property was changed, or one of two special values: `created` (ticket created) or `delete` (comment deleted). |
+| `value`       | Mixed  | When `key` is present, this is the new value that the property was changed to.                                                             |
+| `body`        | String | For `comment` types, this is the comment body in Markdown source format.                                                                   |
+| `edited`      | Number | When comments are edited, this is present and set to the last modified date, in Unix seconds.                                              |
 
 ### Ticket.username
 
@@ -1908,98 +1910,98 @@ A unique lowercase alphanumeric ID which is automatically assigned when the acti
 
 A string identifying the action which took place.  Here is the list of possible actions, along with a template string used to generate an action summary in the UI:
 
-| Action ID | Description / Template |
-|-----------|------------------|
-| `notice` | General notice, e.g. "Background server upgrade completed". |
-| `warning` | General warning, e.g. "Server connecting with duplicate hostname...". |
-| `error` | General error (not currently used: for future use). |
-| `critical` | General critical, e.g. "Crash log found at startup". |
-| `job_start` | Job started (before remote launch). |
-| `job_complete` | Job completed, regardless of outcome. |
-| `job_success` | Job completed successfully (`code` is `0` or `false`). |
-| `job_error` | Job completed with any error (`code` is non-zero/non-false). |
-| `job_warning` | Job completed with `code` set to `warning`. |
-| `job_critical` | Job completed with `code` set to `critical`. |
-| `job_abort` | Job was aborted (user or failure condition). |
-| `job_tag:TAGID` | Job completed and has the specified tag. |
-| `alert_new` | Alert fired on a server. |
-| `alert_cleared` | Alert cleared on a server. |
-| `alert_create` | `Alert definition created: [description] ([alert.id])` |
-| `alert_update` | `Alert definition updated: [description] ([alert.id])` |
-| `alert_delete` | `Alert definition deleted: [description] ([alert.id])` |
-| `alert_update_tickets` | `Alert invocation tickets updated: #[description]` |
-| `alert_delete_invocation` | `Alert invocation deleted: #[description]` |
-| `apikey_create` | `API Key created: [description]` |
-| `apikey_update` | `API Key updated: [description]` |
-| `apikey_delete` | `API Key deleted: [description]` |
-| `category_create` | `Category created: [description] ([category.id])` |
-| `category_update` | `Category updated: [description] ([category.id])` |
-| `category_delete` | `Category deleted: [description] ([category.id])` |
-| `category_multi_update` | `Multiple categories updated ([updated]).` |
-| `channel_create` | `Channel created: [description] ([channel.id])` |
-| `channel_update` | `Channel updated: [description] ([channel.id])` |
-| `channel_delete` | `Channel deleted: [description] ([channel.id])` |
-| `event_create` | `Event created: [description] ([event.id])` |
-| `event_update` | `Event updated: [description] ([event.id])` |
-| `event_delete` | `Event deleted: [description] ([event.id])` |
-| `job_update` | `Job updated: #[description]` |
-| `job_update_tags` | `Job tags updated: #[description]` |
-| `job_update_tickets` | `Job tickets updated: #[description]` |
-| `job_update_comments` | `Job comments updated: #[description]` |
-| `job_abort` | `Job aborted: #[description]: [reason]` |
-| `job_delete` | `Job deleted: #[description]` |
-| `job_delete_file` | `Job file deleted: #[description]: [path]` |
-| `job_resume` | `Job has been resumed: #[description]` |
-| `queue_flush` | `Flushed job queue for event: #[description]` |
-| `group_create` | `Server group created: [description] ([group.id])` |
-| `group_update` | `Server group updated: [description] ([group.id])` |
-| `group_delete` | `Server group deleted: [description] ([group.id])` |
-| `group_multi_update` | `Multiple server groups updated ([updated]).` |
-| `group_watch` | `A watch for [duration] was set on the group: [group.title] ([group.id])` |
-| `monitor_create` | `Monitor created: [description] ([monitor.id])` |
-| `monitor_update` | `Monitor updated: [description] ([monitor.id])` |
-| `monitor_delete` | `Monitor deleted: [description] ([monitor.id])` |
-| `monitor_multi_update` | `Multiple monitors updated ([updated]).` |
-| `plugin_create` | `Plugin created: [description] ([plugin.id])` |
-| `plugin_update` | `Plugin updated: [description] ([plugin.id])` |
-| `plugin_delete` | `Plugin deleted: [description] ([plugin.id])` |
-| `tag_create` | `Tag created: [description] ([tag.id])` |
-| `tag_update` | `Tag updated: [description] ([tag.id])` |
-| `tag_delete` | `Tag deleted: [description] ([tag.id])` |
-| `web_hook_create` | `Web Hook created: [description] ([web_hook.id])` |
-| `web_hook_update` | `Web Hook updated: [description] ([web_hook.id])` |
-| `web_hook_delete` | `Web Hook deleted: [description] ([web_hook.id])` |
-| `bucket_create` | `Bucket created: [description] ([bucket.id])` |
-| `bucket_update` | `Bucket updated: [description] ([bucket.id])` |
-| `bucket_delete` | `Bucket deleted: [description] ([bucket.id])` |
-| `secret_create` | `Secret created: [description] ([secret.id])` |
-| `secret_update` | `Secret updated: [description] ([secret.id])` |
-| `secret_delete` | `Secret deleted: [description] ([secret.id])` |
-| `secret_access` | `Secret was accessed: [description] ([secret.id])` |
-| `ticket_create` | `Ticket #[ticket.num] created: [ticket.subject] ([ticket.id])` |
-| `ticket_update` | `Ticket #[ticket.num] updated: [ticket.subject] ([ticket.id])` |
-| `ticket_delete` | `Ticket #[ticket.num] deleted: [ticket.subject] ([ticket.id])` |
-| `ticket_add_change` | `Ticket comment added: #[ticket.num]: [ticket.subject] ([ticket.id])` |
-| `ticket_update_change` | `Ticket comment updated: #[ticket.num]: [ticket.subject] ([ticket.id])` |
-| `user_create` | `User created: [user.full_name] ([user.username])` |
-| `user_update` | `User updated: [user.full_name] ([user.username])` |
-| `user_delete` | `User deleted: [user.full_name] ([user.username])` |
-| `user_login` | `User logged in: [user.full_name] ([user.username])` |
-| `user_password` | `User password was changed: [user.full_name] ([user.username])` |
-| `role_create` | `Role created: [description] ([role.id])` |
-| `role_update` | `Role updated: [description] ([role.id])` |
-| `role_delete` | `Role deleted: [description] ([role.id])` |
-| `server_add` | `Server connected to the network: [hostname]` |
-| `server_remove` | `Server disconnected from the network: [hostname]` |
-| `server_delete` | `Server deleted: [hostname]` |
-| `server_update` | `Server information was updated: [hostname]` |
-| `server_watch` | `A watch for [duration] was set on the server: [hostname]` |
-| `master_primary` | `Conductor server is now primary: [host]` |
-| `peer_add` | `Conductor server added to the network: [host]` |
-| `peer_disconnect` | `Conductor serfer disconnected from the network: [host]` |
-| `peer_command` | `Control command [commands] sent to conductor server: [host]` |
-| `state_update` | `Internal state updated: [description]` |
-| `internal_job` | `Internal job completed: [job.title]` |
+| Action ID                 | Description / Template                                                    |
+|---------------------------|---------------------------------------------------------------------------|
+| `notice`                  | General notice, e.g. "Background server upgrade completed".               |
+| `warning`                 | General warning, e.g. "Server connecting with duplicate hostname...".     |
+| `error`                   | General error (not currently used: for future use).                       |
+| `critical`                | General critical, e.g. "Crash log found at startup".                      |
+| `job_start`               | Job started (before remote launch).                                       |
+| `job_complete`            | Job completed, regardless of outcome.                                     |
+| `job_success`             | Job completed successfully (`code` is `0` or `false`).                    |
+| `job_error`               | Job completed with any error (`code` is non-zero/non-false).              |
+| `job_warning`             | Job completed with `code` set to `warning`.                               |
+| `job_critical`            | Job completed with `code` set to `critical`.                              |
+| `job_abort`               | Job was aborted (user or failure condition).                              |
+| `job_tag:TAGID`           | Job completed and has the specified tag.                                  |
+| `alert_new`               | Alert fired on a server.                                                  |
+| `alert_cleared`           | Alert cleared on a server.                                                |
+| `alert_create`            | `Alert definition created: [description] ([alert.id])`                    |
+| `alert_update`            | `Alert definition updated: [description] ([alert.id])`                    |
+| `alert_delete`            | `Alert definition deleted: [description] ([alert.id])`                    |
+| `alert_update_tickets`    | `Alert invocation tickets updated: #[description]`                        |
+| `alert_delete_invocation` | `Alert invocation deleted: #[description]`                                |
+| `apikey_create`           | `API Key created: [description]`                                          |
+| `apikey_update`           | `API Key updated: [description]`                                          |
+| `apikey_delete`           | `API Key deleted: [description]`                                          |
+| `category_create`         | `Category created: [description] ([category.id])`                         |
+| `category_update`         | `Category updated: [description] ([category.id])`                         |
+| `category_delete`         | `Category deleted: [description] ([category.id])`                         |
+| `category_multi_update`   | `Multiple categories updated ([updated]).`                                |
+| `channel_create`          | `Channel created: [description] ([channel.id])`                           |
+| `channel_update`          | `Channel updated: [description] ([channel.id])`                           |
+| `channel_delete`          | `Channel deleted: [description] ([channel.id])`                           |
+| `event_create`            | `Event created: [description] ([event.id])`                               |
+| `event_update`            | `Event updated: [description] ([event.id])`                               |
+| `event_delete`            | `Event deleted: [description] ([event.id])`                               |
+| `job_update`              | `Job updated: #[description]`                                             |
+| `job_update_tags`         | `Job tags updated: #[description]`                                        |
+| `job_update_tickets`      | `Job tickets updated: #[description]`                                     |
+| `job_update_comments`     | `Job comments updated: #[description]`                                    |
+| `job_abort`               | `Job aborted: #[description]: [reason]`                                   |
+| `job_delete`              | `Job deleted: #[description]`                                             |
+| `job_delete_file`         | `Job file deleted: #[description]: [path]`                                |
+| `job_resume`              | `Job has been resumed: #[description]`                                    |
+| `queue_flush`             | `Flushed job queue for event: #[description]`                             |
+| `group_create`            | `Server group created: [description] ([group.id])`                        |
+| `group_update`            | `Server group updated: [description] ([group.id])`                        |
+| `group_delete`            | `Server group deleted: [description] ([group.id])`                        |
+| `group_multi_update`      | `Multiple server groups updated ([updated]).`                             |
+| `group_watch`             | `A watch for [duration] was set on the group: [group.title] ([group.id])` |
+| `monitor_create`          | `Monitor created: [description] ([monitor.id])`                           |
+| `monitor_update`          | `Monitor updated: [description] ([monitor.id])`                           |
+| `monitor_delete`          | `Monitor deleted: [description] ([monitor.id])`                           |
+| `monitor_multi_update`    | `Multiple monitors updated ([updated]).`                                  |
+| `plugin_create`           | `Plugin created: [description] ([plugin.id])`                             |
+| `plugin_update`           | `Plugin updated: [description] ([plugin.id])`                             |
+| `plugin_delete`           | `Plugin deleted: [description] ([plugin.id])`                             |
+| `tag_create`              | `Tag created: [description] ([tag.id])`                                   |
+| `tag_update`              | `Tag updated: [description] ([tag.id])`                                   |
+| `tag_delete`              | `Tag deleted: [description] ([tag.id])`                                   |
+| `web_hook_create`         | `Web Hook created: [description] ([web_hook.id])`                         |
+| `web_hook_update`         | `Web Hook updated: [description] ([web_hook.id])`                         |
+| `web_hook_delete`         | `Web Hook deleted: [description] ([web_hook.id])`                         |
+| `bucket_create`           | `Bucket created: [description] ([bucket.id])`                             |
+| `bucket_update`           | `Bucket updated: [description] ([bucket.id])`                             |
+| `bucket_delete`           | `Bucket deleted: [description] ([bucket.id])`                             |
+| `secret_create`           | `Secret created: [description] ([secret.id])`                             |
+| `secret_update`           | `Secret updated: [description] ([secret.id])`                             |
+| `secret_delete`           | `Secret deleted: [description] ([secret.id])`                             |
+| `secret_access`           | `Secret was accessed: [description] ([secret.id])`                        |
+| `ticket_create`           | `Ticket #[ticket.num] created: [ticket.subject] ([ticket.id])`            |
+| `ticket_update`           | `Ticket #[ticket.num] updated: [ticket.subject] ([ticket.id])`            |
+| `ticket_delete`           | `Ticket #[ticket.num] deleted: [ticket.subject] ([ticket.id])`            |
+| `ticket_add_change`       | `Ticket comment added: #[ticket.num]: [ticket.subject] ([ticket.id])`     |
+| `ticket_update_change`    | `Ticket comment updated: #[ticket.num]: [ticket.subject] ([ticket.id])`   |
+| `user_create`             | `User created: [user.full_name] ([user.username])`                        |
+| `user_update`             | `User updated: [user.full_name] ([user.username])`                        |
+| `user_delete`             | `User deleted: [user.full_name] ([user.username])`                        |
+| `user_login`              | `User logged in: [user.full_name] ([user.username])`                      |
+| `user_password`           | `User password was changed: [user.full_name] ([user.username])`           |
+| `role_create`             | `Role created: [description] ([role.id])`                                 |
+| `role_update`             | `Role updated: [description] ([role.id])`                                 |
+| `role_delete`             | `Role deleted: [description] ([role.id])`                                 |
+| `server_add`              | `Server connected to the network: [hostname]`                             |
+| `server_remove`           | `Server disconnected from the network: [hostname]`                        |
+| `server_delete`           | `Server deleted: [hostname]`                                              |
+| `server_update`           | `Server information was updated: [hostname]`                              |
+| `server_watch`            | `A watch for [duration] was set on the server: [hostname]`                |
+| `master_primary`          | `Conductor server is now primary: [host]`                                 |
+| `peer_add`                | `Conductor server added to the network: [host]`                           |
+| `peer_disconnect`         | `Conductor serfer disconnected from the network: [host]`                  |
+| `peer_command`            | `Control command [commands] sent to conductor server: [host]`             |
+| `state_update`            | `Internal state updated: [description]`                                   |
+| `internal_job`            | `Internal job completed: [job.title]`                                     |
 
 ### Activity.description
 
@@ -2417,7 +2419,7 @@ Detailed information about the operating system running on the server.  Here is 
 
 ### ServerMonitorData.platform
 
-The platform of the server, as reported by the Node.js [os.platform()](https://nodejs.org/api/os.html#osplatform) function.  Possible values are `aix`, `darwin`, `freebsd`, `linux`, `openbsd`, `sunos`, and `win32`.
+The platform of the server, as reported by the Node.js [os.platform()](https://nodejs.org/api/os.html#osplatform) function.  Possible values are `aix`, `darwin`, `freebsd`, `linux`, `openbsd`, `sunos`, and `win32`.
 
 ### ServerMonitorData.process
 
@@ -2730,20 +2732,20 @@ The `scheduler` object contains properties specific to the job scheduler subsyst
 
 The `events` object holds state information about all events, namely their cursor for [Catch-Up](triggers.md#catch-up) mode, and information about previously completed jobs.  Here are the properties stored per event, each in `events.EVENTID.`:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `cursor` | Number | For [Catch-Up](triggers.md#catch-up) events, this contains the event's current timestamp, which is used to run all missed jobs during an outage window. |
-| `last_code` | Mixed | The [Job.code](#job-code) from the last completed job, if any. |
-| `last_job` | String | The [Job.id](#job-id) of the last completed job, if any. |
-| `total_elapsed` | Number | The total job elapsed time across all completed jobs (used to compute average). |
-| `total_count` | Number | Total completed jobs on record.  The `total_elapsed` is divided by this number to get an average job elapsed time for the event. |
+| Property Name   | Type   | Description                                                                                                                                             |
+|-----------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `cursor`        | Number | For [Catch-Up](triggers.md#catch-up) events, this contains the event's current timestamp, which is used to run all missed jobs during an outage window. |
+| `last_code`     | Mixed  | The [Job.code](#job-code) from the last completed job, if any.                                                                                          |
+| `last_job`      | String | The [Job.id](#job-id) of the last completed job, if any.                                                                                                |
+| `total_elapsed` | Number | The total job elapsed time across all completed jobs (used to compute average).                                                                         |
+| `total_count`   | Number | Total completed jobs on record.  The `total_elapsed` is divided by this number to get an average job elapsed time for the event.                        |
 
 ### State.watches
 
 xyOps keeps track of server and group watches (automatic monitoring snapshots) in this object.  The data layout is as follows:
 
-- Server watches are stored in `watches.servers.SERVERID`.
-- Group watches are stored in `watches.groups.GROUPID`.
+-  Server watches are stored in `watches.servers.SERVERID`.
+-  Group watches are stored in `watches.groups.GROUPID`.
 
 The property values are Unix seconds, set to when the watch should end.  Example in JSON format:
 
@@ -2786,11 +2788,11 @@ This action would fire when the job resulted in an error, and it would send an e
 
 Each action object should have the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `enabled` | Boolean | Specifies whether the action is enabled (`true`) or disabled (`false`). |
-| `condition` | String | Specifies the condition which runs the action.  See [Action.conditions](#action-condition) below. |
-| `type` | String | Specifies which action will take place when the condition fires.  See [Action.type](#action-type) below. |
+| Property Name | Type    | Description                                                                                              |
+|---------------|---------|----------------------------------------------------------------------------------------------------------|
+| `enabled`     | Boolean | Specifies whether the action is enabled (`true`) or disabled (`false`).                                  |
+| `condition`   | String  | Specifies the condition which runs the action.  See [Action.conditions](#action-condition) below.        |
+| `type`        | String  | Specifies which action will take place when the condition fires.  See [Action.type](#action-type) below. |
 
 Additional properties may be present based on the type.
 
@@ -2798,38 +2800,38 @@ Additional properties may be present based on the type.
 
 Each action has a `condition` property which specifies when it should fire.  The value may be one of:
 
-| Condition ID | Description |
-|------------|-------------|
-| `start` | Fires on job start. |
-| `complete` | Fires on job completion, regardless of the outcome. |
-| `success` | Fires on job success, i.e. when the `code` property is `0` or `false`. |
-| `error` | Fires on job errors, i.e. when the `code` property is any true value or string. |
-| `warning` | Fires on job warnings, i.e. when the `code` property is set to `"warning"`. |
-| `critical` | Fires on critical errors, i.e. when the `code` property is set to `"critical"`. |
-| `abort` | Fires when the job is aborted, either by user or special event (e.g. lost server). |
-| `tag:TAGID` | Fires on job completion only when a specific tag is present on the job. |
-| `alert_new` | Fires when a new alert is triggered on a server. |
-| `alert_cleared` | Fires when an active alert has cleared. |
+| Condition ID    | Description                                                                        |
+|-----------------|------------------------------------------------------------------------------------|
+| `start`         | Fires on job start.                                                                |
+| `complete`      | Fires on job completion, regardless of the outcome.                                |
+| `success`       | Fires on job success, i.e. when the `code` property is `0` or `false`.             |
+| `error`         | Fires on job errors, i.e. when the `code` property is any true value or string.    |
+| `warning`       | Fires on job warnings, i.e. when the `code` property is set to `"warning"`.        |
+| `critical`      | Fires on critical errors, i.e. when the `code` property is set to `"critical"`.    |
+| `abort`         | Fires when the job is aborted, either by user or special event (e.g. lost server). |
+| `tag:TAGID`     | Fires on job completion only when a specific tag is present on the job.            |
+| `alert_new`     | Fires when a new alert is triggered on a server.                                   |
+| `alert_cleared` | Fires when an active alert has cleared.                                            |
 
 #### Action.type
 
 Each action has a `type` property which dictates what will happen when the condition fires.  The different types are listed below:
 
-| Type ID | Description |
-|---------|-------------|
-| `email` | Send email to one or more addresses.  The addresses should be in an extra property named `email` (comma-separated). |
-| `web_hook` | Fire off a web hook (HTTP POST) for the action.  The URL should be specified in a property named `url`. |
-| `run_event` | Run a custom job for the action.  The Event ID should be specified in a property named `event_id`. |
-| `channel` | Activate a notification channel for the action.  The Channel ID should be specified in a property named `channel_id`. |
-| `disable` | Disable the event for the action (no extra properties defined). |
-| `delete` | Delete the event for the action (no extra properties defined). |
-| `snapshot` | Take a server snapshot for the action (no extra properties defined). |
-| `suspend` | Suspend (pause) a workflow until a user resumes in the UI.  No extra properties defined. |
-| `tag` | Add one or more [Tags](tags.md) to the running job or workflow. |
-| `store` | Store data in a storage bucket. Requires `bucket_id` (the [Bucket.id](#bucket-id)), `bucket_sync` (species if files and/or data should be stored), and `bucket_glob` (glob pattern to match on files). |
-| `fetch` | Fetch data from a storage bucket. Requires `bucket_id` (the [Bucket.id](#bucket-id)), `bucket_sync` (species if files and/or data should be fetched), and `bucket_glob` (glob pattern to match on files). |
-| `ticket` | Create a ticket.  Requires `ticket_type` (see [Ticket.type](#ticket-type)), `ticket_assignees` (an array of [User.username](#user-username)s), and `ticket_tags` (an array of [Tag.id](#tag-id)s). |
-| `plugin` | Invoke a custom Plugin for the action.  Requires `plugin_id` (the [Plugin.id](#plugin-id)) and `params` (custom parameters defined by the Plugin). |
+| Type ID     | Description                                                                                                                                                                                               |
+|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `email`     | Send email to one or more addresses.  The addresses should be in an extra property named `email` (comma-separated).                                                                                       |
+| `web_hook`  | Fire off a web hook (HTTP POST) for the action.  The URL should be specified in a property named `url`.                                                                                                   |
+| `run_event` | Run a custom job for the action.  The Event ID should be specified in a property named `event_id`.                                                                                                        |
+| `channel`   | Activate a notification channel for the action.  The Channel ID should be specified in a property named `channel_id`.                                                                                     |
+| `disable`   | Disable the event for the action (no extra properties defined).                                                                                                                                           |
+| `delete`    | Delete the event for the action (no extra properties defined).                                                                                                                                            |
+| `snapshot`  | Take a server snapshot for the action (no extra properties defined).                                                                                                                                      |
+| `suspend`   | Suspend (pause) a workflow until a user resumes in the UI.  No extra properties defined.                                                                                                                  |
+| `tag`       | Add one or more [Tags](tags.md) to the running job or workflow.                                                                                                                                           |
+| `store`     | Store data in a storage bucket. Requires `bucket_id` (the [Bucket.id](#bucket-id)), `bucket_sync` (species if files and/or data should be stored), and `bucket_glob` (glob pattern to match on files).    |
+| `fetch`     | Fetch data from a storage bucket. Requires `bucket_id` (the [Bucket.id](#bucket-id)), `bucket_sync` (species if files and/or data should be fetched), and `bucket_glob` (glob pattern to match on files). |
+| `ticket`    | Create a ticket.  Requires `ticket_type` (see [Ticket.type](#ticket-type)), `ticket_assignees` (an array of [User.username](#user-username)s), and `ticket_tags` (an array of [Tag.id](#tag-id)s).        |
+| `plugin`    | Invoke a custom Plugin for the action.  Requires `plugin_id` (the [Plugin.id](#plugin-id)) and `params` (custom parameters defined by the Plugin).                                                        |
 
 ### Limit
 
@@ -2847,10 +2849,10 @@ This would set a time limit of 3600 seconds (1 hour) for running jobs.
 
 Each limit object should have the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `enabled` | Boolean | Specifies whether the limit is enabled (`true`) or disabled (`false`). |
-| `type` | String | Specifies the type of limit.  See [Limit.type](#limit-type) below. |
+| Property Name | Type    | Description                                                            |
+|---------------|---------|------------------------------------------------------------------------|
+| `enabled`     | Boolean | Specifies whether the limit is enabled (`true`) or disabled (`false`). |
+| `type`        | String  | Specifies the type of limit.  See [Limit.type](#limit-type) below.     |
 
 Additional properties may be present based on the type.
 
@@ -2860,28 +2862,28 @@ When limits are assigned to categories, they act as defaults for events in that 
 
 Each limit has a `type` property which specifies what it governs.  The different types are described below:
 
-| Type ID | Title | Description |
-|---------|-------|-------------|
-| `time` | **Max Run Time** | Set a maximum run time for jobs.  The limit should be in a property named `duration`, specified as seconds. |
-| `job` | **Max Concurrent Jobs** | Set a maximum number of concurrent jobs for the event.  The number should be a in property named `amount`. |
-| `log` | **Max Output Size** | Set a maximum limit on the output size for jobs.  The limit should be in a property named `amount`, specified as bytes. |
-| `mem` | **Max Memory Limit** | Set a maximum limit for memory usage for jobs (includes all child processes).  The limit should be in a property named `amount`, specified as bytes.  The sustain duration should be in a property named `duration`, specified as seconds. |
-| `cpu` | **Max CPU % Limit** | Set a maximum limit for CPU usage for jobs (includes all child processes).  The limit should be in a property named `amount`, specified as a percentage of one CPU core.  The sustain duration should be in a property named `duration`, specified as seconds. |
-| `retry` | **Max Retry Limit** | Set a maximum number of retries allowed for failed jobs.  The number of retries should be in a property named `amount`, and optionally the delay between retries should be in a property named `duration`, specified as seconds. |
-| `queue` | **Max Queue Limit** | Set a maximum number of jobs that may be queued up, if other limits prevent them from running concurrently.  The number should be in a property named `amount`. |
-| `file` | **Max File Limit** | Set a limit on the number and types of files allowed by the job.  This is a soft limit, and does not abort the job (the files are pruned if limits exceeded). |
+| Type ID | Title                   | Description                                                                                                                                                                                                                                                    |
+|---------|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `time`  | **Max Run Time**        | Set a maximum run time for jobs.  The limit should be in a property named `duration`, specified as seconds.                                                                                                                                                    |
+| `job`   | **Max Concurrent Jobs** | Set a maximum number of concurrent jobs for the event.  The number should be a in property named `amount`.                                                                                                                                                     |
+| `log`   | **Max Output Size**     | Set a maximum limit on the output size for jobs.  The limit should be in a property named `amount`, specified as bytes.                                                                                                                                        |
+| `mem`   | **Max Memory Limit**    | Set a maximum limit for memory usage for jobs (includes all child processes).  The limit should be in a property named `amount`, specified as bytes.  The sustain duration should be in a property named `duration`, specified as seconds.                     |
+| `cpu`   | **Max CPU % Limit**     | Set a maximum limit for CPU usage for jobs (includes all child processes).  The limit should be in a property named `amount`, specified as a percentage of one CPU core.  The sustain duration should be in a property named `duration`, specified as seconds. |
+| `retry` | **Max Retry Limit**     | Set a maximum number of retries allowed for failed jobs.  The number of retries should be in a property named `amount`, and optionally the delay between retries should be in a property named `duration`, specified as seconds.                               |
+| `queue` | **Max Queue Limit**     | Set a maximum number of jobs that may be queued up, if other limits prevent them from running concurrently.  The number should be in a property named `amount`.                                                                                                |
+| `file`  | **Max File Limit**      | Set a limit on the number and types of files allowed by the job.  This is a soft limit, and does not abort the job (the files are pruned if limits exceeded).                                                                                                  |
 
 The **Max Run Time** (`time`), **Max Memory Limit** (`mem`), **Max CPU % Limit** (`cpu`) and **Max Output Size** (`log`) limit types all accept a set of additional parameters that enable special actions to take place when the limit is exceeded:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `tags` | Array | An optional set of [Tag.id](#tag-id)s to apply to the job when the limit is exceeded. |
-| `users` | Array | An optional set of [User.username](#user-username)s to send an email to about the limit violation. |
-| `email` | String | An optional list of custom email addresses (in CSV format) to send to. |
-| `web_hook` | String | An optional [WebHook.id](#webhook-id) to fire when the limit is exceeded. |
-| `text` | String | If `web_hook` is populated, this can contain a custom text string to append to the web hook text. |
-| `snapshot` | Boolean | If set to `true`, a [server snapshot](snapshots.md) is taken when the limit is exceeded. |
-| `abort` | Boolean | If set to `true`, the job is aborted when the limit is exceeded. |
+| Property Name | Type    | Description                                                                                        |
+|---------------|---------|----------------------------------------------------------------------------------------------------|
+| `tags`        | Array   | An optional set of [Tag.id](#tag-id)s to apply to the job when the limit is exceeded.              |
+| `users`       | Array   | An optional set of [User.username](#user-username)s to send an email to about the limit violation. |
+| `email`       | String  | An optional list of custom email addresses (in CSV format) to send to.                             |
+| `web_hook`    | String  | An optional [WebHook.id](#webhook-id) to fire when the limit is exceeded.                          |
+| `text`        | String  | If `web_hook` is populated, this can contain a custom text string to append to the web hook text.  |
+| `snapshot`    | Boolean | If set to `true`, a [server snapshot](snapshots.md) is taken when the limit is exceeded.           |
+| `abort`       | Boolean | If set to `true`, the job is aborted when the limit is exceeded.                                   |
 
 ### Trigger
 
@@ -2900,10 +2902,10 @@ This would run every day at 4:30 AM (repeating).
 
 Each trigger object should have the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `enabled` | Boolean | Specifies whether the trigger is enabled (`true`) or disabled (`false`). |
-| `type` | String | Specifies the type of trigger.  See [Trigger.type](#trigger-type) below. |
+| Property Name | Type    | Description                                                              |
+|---------------|---------|--------------------------------------------------------------------------|
+| `enabled`     | Boolean | Specifies whether the trigger is enabled (`true`) or disabled (`false`). |
+| `type`        | String  | Specifies the type of trigger.  See [Trigger.type](#trigger-type) below. |
 
 Additional properties may be present based on the type.
 
@@ -2911,18 +2913,18 @@ Additional properties may be present based on the type.
 
 Each trigger has a `type` property which describes its behavior.  The different types are listed below:
 
-| Type ID | Title | Description |
-|---------|-------|-------------|
-| `manual` | **Manual Run** | Allow the event to be executed manually (in the UI or API). |
-| `schedule` | **Schedule** | Set a repeating schedule to run the event (hourly, daily, etc.).  See [Schedule Rules](#schedule-rules) below. |
-| `interval` | **Interval** | Run the event on a repeating interval, given a starting date/time.  See [Intervals](#intervals) below. |
-| `single` | **Single Shot** | Set a single future exact date/time to run.  Requires an additional `epoch` property, set to the [Unix timestamp](https://en.wikipedia.org/wiki/Unix_time) at which to run. |
-| `catchup` | **Catch-Up** | Ensure that *every* scheduled job runs, even if it has to run late. |
-| `range` | **Range** | Set a starting and/or ending date for a repeating event.  Requires additional `start` and/or `end` properties, set to [Unix timestamps](https://en.wikipedia.org/wiki/Unix_time). |
-| `blackout` | **Blackout** | Set a blackout date/time range when the event *cannot* run.  Requires additional `start` and `end` properties, set to [Unix timestamps](https://en.wikipedia.org/wiki/Unix_time). |
-| `delay` | **Delay** | Set an optional starting delay for all scheduled jobs.  Requires an additional `duration` property, set to the number of seconds to delay each job by. |
-| `precision` | **Precision** | Set an optional array of exact `seconds` to fire jobs within the current scheduled minute. |
-| `plugin` | **Plugin** | Custom scheduler Plugin (user-defined).  Requires an additional `plugin_id` property, as well as a `params` object, for Plugin-defined configuration. |
+| Type ID     | Title           | Description                                                                                                                                                                       |
+|-------------|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `manual`    | **Manual Run**  | Allow the event to be executed manually (in the UI or API).                                                                                                                       |
+| `schedule`  | **Schedule**    | Set a repeating schedule to run the event (hourly, daily, etc.).  See [Schedule Rules](#schedule-rules) below.                                                                    |
+| `interval`  | **Interval**    | Run the event on a repeating interval, given a starting date/time.  See [Intervals](#intervals) below.                                                                            |
+| `single`    | **Single Shot** | Set a single future exact date/time to run.  Requires an additional `epoch` property, set to the [Unix timestamp](https://en.wikipedia.org/wiki/Unix_time) at which to run.       |
+| `catchup`   | **Catch-Up**    | Ensure that *every* scheduled job runs, even if it has to run late.                                                                                                               |
+| `range`     | **Range**       | Set a starting and/or ending date for a repeating event.  Requires additional `start` and/or `end` properties, set to [Unix timestamps](https://en.wikipedia.org/wiki/Unix_time). |
+| `blackout`  | **Blackout**    | Set a blackout date/time range when the event *cannot* run.  Requires additional `start` and `end` properties, set to [Unix timestamps](https://en.wikipedia.org/wiki/Unix_time). |
+| `delay`     | **Delay**       | Set an optional starting delay for all scheduled jobs.  Requires an additional `duration` property, set to the number of seconds to delay each job by.                            |
+| `precision` | **Precision**   | Set an optional array of exact `seconds` to fire jobs within the current scheduled minute.                                                                                        |
+| `plugin`    | **Plugin**      | Custom scheduler Plugin (user-defined).  Requires an additional `plugin_id` property, as well as a `params` object, for Plugin-defined configuration.                             |
 
 ##### Schedule Rules
 
@@ -2968,15 +2970,15 @@ For a more complex example, this would run only in year 2023, from March to May,
 
 Here is a list of all the `schedule` type trigger object properties and their descriptions:
 
-| Trigger Property | Range | Description |
-|-----------------|-------|-------------|
-| `years` | ∞ | One or more years in YYYY format. |
-| `months` | 1 - 12 | One or more months, where January is 1 and December is 12. |
-| `days` | 1 - 31 | One or more month days, from 1 to 31. |
-| `weekdays` | 0 - 6 | One or more weekdays, where Sunday is 0, and Saturday is 6. |
-| `hours` | 0 - 23 | One or more hours in 24-hour time, from 0 to 23. |
-| `minutes` | 0 - 59 | One or more minutes, from 0 to 59. |
-| `timezone` | n/a | Optional timezone to evaluate the schedule entry in.  Defaults to the conductor server timezone. |
+| Trigger Property | Range  | Description                                                                                      |
+|------------------|--------|--------------------------------------------------------------------------------------------------|
+| `years`          | ∞      | One or more years in YYYY format.                                                                |
+| `months`         | 1 - 12 | One or more months, where January is 1 and December is 12.                                       |
+| `days`           | 1 - 31 | One or more month days, from 1 to 31.                                                            |
+| `weekdays`       | 0 - 6  | One or more weekdays, where Sunday is 0, and Saturday is 6.                                      |
+| `hours`          | 0 - 23 | One or more hours in 24-hour time, from 0 to 23.                                                 |
+| `minutes`        | 0 - 59 | One or more minutes, from 0 to 59.                                                               |
+| `timezone`       | n/a    | Optional timezone to evaluate the schedule entry in.  Defaults to the conductor server timezone. |
 
 ##### Intervals
 
@@ -2993,11 +2995,11 @@ The interval trigger type requires a `start` (epoch seconds) and a `duration` (t
 
 That example `start` time is 2025/12/18 18:29:00 Pacific, so it would run the event on that exact timestamp, and then again every 90 seconds afterwards.  Examples:
 
-- 2025/12/18 18:29:00 Pacific
-- 2025/12/18 18:30:30 Pacific
-- 2025/12/18 18:32:00 Pacific
-- 2025/12/18 18:33:30 Pacific
-- ...and so on.
+-  2025/12/18 18:29:00 Pacific
+-  2025/12/18 18:30:30 Pacific
+-  2025/12/18 18:32:00 Pacific
+-  2025/12/18 18:33:30 Pacific
+-  ...and so on.
 
 ### Workflow
 
@@ -3125,25 +3127,25 @@ A string constant representing the node type, which will be one of: `event`, `jo
 
 Nodes may have a `data` property which contains information specific to the node type.  Here is a summary of how this property is used:
 
-| Node Type | Data Description |
-|-----------|------------------|
-| `event` | Will contain an `event` property, which refers to the [Event](#event), as well as properties that override defaults set in the event. |
-| `job` | Will contain most of the properties from the [Event](#event) object, to run an ad-hoc job without an explicit event definition. |
-| `trigger` | Not used.  Trigger nodes use their [WorkflowNode.id](#workflownode-id) property to link to the [Event.trigger](#event-trigger), which is the source of truth for the trigger. |
-| `limit` | Will contain properties from the [Limit](#limit) object. |
-| `action` | Will contain properties from the [Action](#action) object. |
-| `controller` | Will contain properties specific to the controller type.  See below. |
+| Node Type    | Data Description                                                                                                                                                              |
+|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `event`      | Will contain an `event` property, which refers to the [Event](#event), as well as properties that override defaults set in the event.                                         |
+| `job`        | Will contain most of the properties from the [Event](#event) object, to run an ad-hoc job without an explicit event definition.                                               |
+| `trigger`    | Not used.  Trigger nodes use their [WorkflowNode.id](#workflownode-id) property to link to the [Event.trigger](#event-trigger), which is the source of truth for the trigger. |
+| `limit`      | Will contain properties from the [Limit](#limit) object.                                                                                                                      |
+| `action`     | Will contain properties from the [Action](#action) object.                                                                                                                    |
+| `controller` | Will contain properties specific to the controller type.  See below.                                                                                                          |
 
 For controller nodes, see the following table for details on how the `data` property is used:
 
-| Controller Type | Data Description |
-|-----------------|------------------|
-| `multiplex` | Will contain `stagger` (delay in seconds) for staggering jobs across servers, and `continue` (percentage) for gating success. |
-| `wait` | Will contain `wait` (delay in seconds). |
-| `repeat` | Will contain `repeat` (iteration count), and `continue` (percentage) for gating success. |
-| `split` | Will contain `split` (expression to split on), and `continue` (percentage) for gating success. |
-| `join` | Not used. |
-| `decision` | Will contain `label` (custom title), `icon` (custom icon), and `decision` (expression to evaluate). |
+| Controller Type | Data Description                                                                                                              |
+|-----------------|-------------------------------------------------------------------------------------------------------------------------------|
+| `multiplex`     | Will contain `stagger` (delay in seconds) for staggering jobs across servers, and `continue` (percentage) for gating success. |
+| `wait`          | Will contain `wait` (delay in seconds).                                                                                       |
+| `repeat`        | Will contain `repeat` (iteration count), and `continue` (percentage) for gating success.                                      |
+| `split`         | Will contain `split` (expression to split on), and `continue` (percentage) for gating success.                                |
+| `join`          | Not used.                                                                                                                     |
+| `decision`      | Will contain `label` (custom title), `icon` (custom icon), and `decision` (expression to evaluate).                           |
 
 #### WorkflowNode.x
 
@@ -3357,57 +3359,57 @@ Note that the `admin` privilege, when present, implicitly enables all other priv
 
 When job actions are executed, including firing web hooks and sending emails, the following data structure is used to expand macros in the web hook text and email body content.  It is also passed to custom action Plugins.
 
-| Property Path | Type | Description |
-|---------------|------|-------------|
-| `job` | Object | The current [Job](#job) object. |
-| `action` | Object | The current [Action](#action) object. |
-| `event` | Object | The [Event](#event) object from which the job was launched. |
-| `category` | Object | The [Category](#category) object for the job's category. |
-| `plugin` | Object | The [Plugin](#plugin) object for the job's event plugin (n/a for workflows). |
-| `server` | Object | The [Server](#server) object for the server that ran the job (if applicable). |
-| `nice_server` | String | A nice string representation of the current server (title, hostname or conductor host ID). |
-| `nice_hostname` | String | A nice string representation of the current server hostname, if applicable. |
-| `links` | Object | An object containing URLs for use in the email body text or web hook text. |
-| `links.job_details` | String | A fully-qualified URL to the job details page (requires login). |
-| `links.job_log` | String | A fully-qualified URL to the raw job output (auth included in URL). |
-| `links.job_files` | String | A markdown-formatted list of URLs to all the job's output files (auth included in URLs). |
-| `display` | Object | An object containing various formatted strings ready for display. |
-| `display.elapsed` | String | Human readable job elapsed time, if fired on job complete. |
-| `display.log_size` | String | Human readable job output size, if applicable. |
-| `display.perf` | String | A string representing the job performance metrics, if provided. |
-| `display.mem` | String | A human-readable string representing the average memory usage of the job, if available. |
-| `display.cpu` | String | A human-readable string representing the average CPU usage of the job, if available. |
-| `text` | String | A short summary of the action, using [hook_text_templates](config.md#hook_text_templates) as the template, and all macros expanded. |
+| Property Path       | Type   | Description                                                                                                                         |
+|---------------------|--------|-------------------------------------------------------------------------------------------------------------------------------------|
+| `job`               | Object | The current [Job](#job) object.                                                                                                     |
+| `action`            | Object | The current [Action](#action) object.                                                                                               |
+| `event`             | Object | The [Event](#event) object from which the job was launched.                                                                         |
+| `category`          | Object | The [Category](#category) object for the job's category.                                                                            |
+| `plugin`            | Object | The [Plugin](#plugin) object for the job's event plugin (n/a for workflows).                                                        |
+| `server`            | Object | The [Server](#server) object for the server that ran the job (if applicable).                                                       |
+| `nice_server`       | String | A nice string representation of the current server (title, hostname or conductor host ID).                                          |
+| `nice_hostname`     | String | A nice string representation of the current server hostname, if applicable.                                                         |
+| `links`             | Object | An object containing URLs for use in the email body text or web hook text.                                                          |
+| `links.job_details` | String | A fully-qualified URL to the job details page (requires login).                                                                     |
+| `links.job_log`     | String | A fully-qualified URL to the raw job output (auth included in URL).                                                                 |
+| `links.job_files`   | String | A markdown-formatted list of URLs to all the job's output files (auth included in URLs).                                            |
+| `display`           | Object | An object containing various formatted strings ready for display.                                                                   |
+| `display.elapsed`   | String | Human readable job elapsed time, if fired on job complete.                                                                          |
+| `display.log_size`  | String | Human readable job output size, if applicable.                                                                                      |
+| `display.perf`      | String | A string representing the job performance metrics, if provided.                                                                     |
+| `display.mem`       | String | A human-readable string representing the average memory usage of the job, if available.                                             |
+| `display.cpu`       | String | A human-readable string representing the average CPU usage of the job, if available.                                                |
+| `text`              | String | A short summary of the action, using [hook_text_templates](config.md#hook_text_templates) as the template, and all macros expanded. |
 
 ### AlertHookData
 
 When alerts fire and clear, the following data structure is used to expand macros in the web hook text and email body content.  It is also passed to Action Plugins:
 
-| Property Path | Type | Description |
-|---------------|------|-------------|
-| `condition` | String | The current action taking place, will be one of `alert_new` or `alert_cleared`. |
-| `alert_def` | Object | The current [Alert](#alert) definition object. |
-| `alert` | Object | The current [AlertInvocation](#alertinvocation) object. |
-| `params` | Object | The current [ServerMonitorData](#servermonitordata) data from the server. |
-| `server` | Object | The [Server](#server) object for the server on which the alert fired or cleared. |
-| `active_jobs` | Array | An array of the current active jobs on the server, each with an `id` ([Job.id](#job-id)) and `event` ([Event.id](#event-id)) property. |
-| `date_time` | String | A human-readable localized date/time string, in the server's timezone. |
-| `nice_group` | String | A string representing the title of the primary server group. |
-| `nice_elapsed` | String | A human-readable representation of the alert elapsed time (if `alert_cleared`). |
-| `nice_load_avg` | String | A string representation of the current server load average. |
-| `nice_mem_total` | String | A string representation of the current server total memory. |
-| `nice_mem_avail` | String | A string representation of the current server available memory. |
-| `nice_uptime` | String | A string representation of the current server uptime. |
-| `nice_cpu` | String | A string representation of the current server CPU usage. |
-| `nice_os` | String | A string representation of the current server operating system. |
-| `nice_notes` | String | The current alert notes field, from the alert definition. |
-| `nice_hostname` | String | A string representation of the current server hostname. |
-| `nice_server` | String | A string representation of the current server title (or hostname, if no custom title). |
-| `nice_virt` | String | A string representation of the current server virtualization / container system, if applicable. |
-| `links` | Object | An object containing URLs for use in the email body text or web hook text. |
-| `links.server_url` | String | A fully-qualified URL to the job details page (requires login). |
-| `links.alert_url` | String | A fully-qualified URL to the job details page (requires login). |
-| `text` | String | A short summary of the action, using [hook_text_templates](config.md#hook_text_templates) as the template, and all macros expanded. |
+| Property Path      | Type   | Description                                                                                                                            |
+|--------------------|--------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `condition`        | String | The current action taking place, will be one of `alert_new` or `alert_cleared`.                                                        |
+| `alert_def`        | Object | The current [Alert](#alert) definition object.                                                                                         |
+| `alert`            | Object | The current [AlertInvocation](#alertinvocation) object.                                                                                |
+| `params`           | Object | The current [ServerMonitorData](#servermonitordata) data from the server.                                                              |
+| `server`           | Object | The [Server](#server) object for the server on which the alert fired or cleared.                                                       |
+| `active_jobs`      | Array  | An array of the current active jobs on the server, each with an `id` ([Job.id](#job-id)) and `event` ([Event.id](#event-id)) property. |
+| `date_time`        | String | A human-readable localized date/time string, in the server's timezone.                                                                 |
+| `nice_group`       | String | A string representing the title of the primary server group.                                                                           |
+| `nice_elapsed`     | String | A human-readable representation of the alert elapsed time (if `alert_cleared`).                                                        |
+| `nice_load_avg`    | String | A string representation of the current server load average.                                                                            |
+| `nice_mem_total`   | String | A string representation of the current server total memory.                                                                            |
+| `nice_mem_avail`   | String | A string representation of the current server available memory.                                                                        |
+| `nice_uptime`      | String | A string representation of the current server uptime.                                                                                  |
+| `nice_cpu`         | String | A string representation of the current server CPU usage.                                                                               |
+| `nice_os`          | String | A string representation of the current server operating system.                                                                        |
+| `nice_notes`       | String | The current alert notes field, from the alert definition.                                                                              |
+| `nice_hostname`    | String | A string representation of the current server hostname.                                                                                |
+| `nice_server`      | String | A string representation of the current server title (or hostname, if no custom title).                                                 |
+| `nice_virt`        | String | A string representation of the current server virtualization / container system, if applicable.                                        |
+| `links`            | Object | An object containing URLs for use in the email body text or web hook text.                                                             |
+| `links.server_url` | String | A fully-qualified URL to the job details page (requires login).                                                                        |
+| `links.alert_url`  | String | A fully-qualified URL to the job details page (requires login).                                                                        |
+| `text`             | String | A short summary of the action, using [hook_text_templates](config.md#hook_text_templates) as the template, and all macros expanded.    |
 
 ### QuickmonData
 
@@ -3461,26 +3463,26 @@ Every minute, xyOps takes the current [ServerMonitorData](#servermonitordata) fr
 
 The object consists of the following properties:
 
-| Property Path | Type | Description |
-|---------------|------|-------------|
-| `count` | Number | The number of samples represented in this DB entry.  For daily, monthly and yearly systems, this will generally be greater than 1, and the totals will all be divided by it (i.e. averaged). |
-| `date` | Number | The date/time of the first sample in the DB entry, in Unix seconds. |
-| `epoch_div` | Number | The Unix seconds divided by a constant defined by the current system. |
-| `totals` | Object | An object containing all the [Monitor](#monitor) totals. |
+| Property Path | Type   | Description                                                                                                                                                                                  |
+|---------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `count`       | Number | The number of samples represented in this DB entry.  For daily, monthly and yearly systems, this will generally be greater than 1, and the totals will all be divided by it (i.e. averaged). |
+| `date`        | Number | The date/time of the first sample in the DB entry, in Unix seconds.                                                                                                                          |
+| `epoch_div`   | Number | The Unix seconds divided by a constant defined by the current system.                                                                                                                        |
+| `totals`      | Object | An object containing all the [Monitor](#monitor) totals.                                                                                                                                     |
 
 ### File
 
 A file object is used to represent a file in storage.  It is used for [Job.files](#job-files), [Ticket.files](#ticket-files), and [Bucket.files](#bucket-files).  The object consists of the following properties:
 
-| Property Path | Type | Description |
-|---------------|------|-------------|
-| `path` | String | A normalized path to the file in storage, which can also be used as a URI path for viewing / downloading. |
-| `filename` | String | The filename of the file. |
-| `size` | Number | The size of the file in bytes. |
-| `date` | Number | The file's creation date as Unix seconds. |
-| `job` | String | If the file was created from a job, this will contain the [Job.id](#job-id). |
-| `server` | String | If the file was created on a server, this will contain the [Server.id](#server-id). |
-| `ticket` | String | If the file was created for a ticket, this will contain the [Ticket.id](#ticket-id). |
+| Property Path | Type   | Description                                                                                               |
+|---------------|--------|-----------------------------------------------------------------------------------------------------------|
+| `path`        | String | A normalized path to the file in storage, which can also be used as a URI path for viewing / downloading. |
+| `filename`    | String | The filename of the file.                                                                                 |
+| `size`        | Number | The size of the file in bytes.                                                                            |
+| `date`        | Number | The file's creation date as Unix seconds.                                                                 |
+| `job`         | String | If the file was created from a job, this will contain the [Job.id](#job-id).                              |
+| `server`      | String | If the file was created on a server, this will contain the [Server.id](#server-id).                       |
+| `ticket`      | String | If the file was created for a ticket, this will contain the [Ticket.id](#ticket-id).                      |
 
 Here is an example in JSON format:
 

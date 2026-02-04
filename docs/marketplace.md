@@ -1,4 +1,6 @@
-# Plugin Marketplace
+---
+title: Plugin Marketplace
+---
 
 ## Overview
 
@@ -8,30 +10,29 @@ This document explains how to create and publish your own xyOps Plugins.  Market
 
 The marketplace doesn't actually "host" Plugins -- it merely provides a search mechanism to discover them.  The Plugins themselves are hosted on package repositories like NPM, PyPI or GitHub, and the marketplace links to them.
 
-> [!NOTE]
-> For marketplace v1, your source code repository must be hosted on GitHub.  We will expand to support other hosts like GitLab and BitBucket in the future.
+> \[!NOTE\] For marketplace v1, your source code repository must be hosted on GitHub.  We will expand to support other hosts like GitLab and BitBucket in the future.
 
 ## Requirements
 
 To publish your xyOps Plugin to the marketplace, it must:
 
-- Be free to use
-	- The Plugin may need to access a 3rd party paid service, which is fine.
-	- By "free" we mean that the Plugin itself doesn't cost any money to install (our marketplace has no "buy" button).
-- Be hosted publicly on GitHub.
-	- We will expand to support other hosts in the future.
-- Be able to execute using a self-contained download + launch combo command.
-	- Examples of these include [npx](https://docs.npmjs.com/cli/commands/npx), [uvx](https://docs.astral.sh/uv/guides/tools/), [go run](https://pkg.go.dev/cmd/go#hdr-Compile_and_run_Go_program), and [docker run](https://docs.docker.com/reference/cli/docker/container/run/).
-	- The command must download a specific tagged version or commit hash of the Plugin.
-- Be fully open source using an [OSI-approved license](https://opensource.org/licenses).
-	- All Plugin dependencies must also adhere to this requirement.
-- Declare any user data or metrics collection.
-	- If the Plugin collects user data for any reason, this must be declared in the [README](#readme).
-	- An exception is when 3rd party services collect their own data, outside of the author's control.
-- Be fully legal to use.
-	- The Plugin must not violate any laws or terms of service, directly or indirectly.
-- Be family friendly.
-	- No adult content, bad language, etc.
+-  Be free to use
+   -  The Plugin may need to access a 3rd party paid service, which is fine.
+   -  By "free" we mean that the Plugin itself doesn't cost any money to install (our marketplace has no "buy" button).
+-  Be hosted publicly on GitHub.
+   -  We will expand to support other hosts in the future.
+-  Be able to execute using a self-contained download + launch combo command.
+   -  Examples of these include [npx](https://docs.npmjs.com/cli/commands/npx), [uvx](https://docs.astral.sh/uv/guides/tools/), [go run](https://pkg.go.dev/cmd/go#hdr-Compile_and_run_Go_program), and [docker run](https://docs.docker.com/reference/cli/docker/container/run/).
+   -  The command must download a specific tagged version or commit hash of the Plugin.
+-  Be fully open source using an [OSI-approved license](https://opensource.org/licenses).
+   -  All Plugin dependencies must also adhere to this requirement.
+-  Declare any user data or metrics collection.
+   -  If the Plugin collects user data for any reason, this must be declared in the [README](#readme).
+   -  An exception is when 3rd party services collect their own data, outside of the author's control.
+-  Be fully legal to use.
+   -  The Plugin must not violate any laws or terms of service, directly or indirectly.
+-  Be family friendly.
+   -  No adult content, bad language, etc.
 
 PixlCore reserves the right to reject any Plugin submission it deems inappropriate for the marketplace.
 
@@ -39,10 +40,10 @@ PixlCore reserves the right to reject any Plugin submission it deems inappropria
 
 Your Plugin will need to be able to self-download and self-launch using a combo shell command.  These commands typically download software into a temporary cached directory, install all dependencies, and launch your Plugin all in one fell swoop.  Examples of these commands include:
 
-- [npx](https://docs.npmjs.com/cli/commands/npx) - If your Plugin is written in Node.js, this is the perfect command to use.
-- [uvx](https://docs.astral.sh/uv/guides/tools/) - If your Plugin is written in Python, then `uvx` is definitely the tool for you.
-- [go run](https://pkg.go.dev/cmd/go#hdr-Compile_and_run_Go_program) - If your Plugin is written in Go, use `go run` which can download and run your Plugin using one command.
-- [docker run](https://docs.docker.com/reference/cli/docker/container/run/) - If your Plugin ships as a docker container on a public container registry, then use `docker run`.
+-  [npx](https://docs.npmjs.com/cli/commands/npx) - If your Plugin is written in Node.js, this is the perfect command to use.
+-  [uvx](https://docs.astral.sh/uv/guides/tools/) - If your Plugin is written in Python, then `uvx` is definitely the tool for you.
+-  [go run](https://pkg.go.dev/cmd/go#hdr-Compile_and_run_Go_program) - If your Plugin is written in Go, use `go run` which can download and run your Plugin using one command.
+-  [docker run](https://docs.docker.com/reference/cli/docker/container/run/) - If your Plugin ships as a docker container on a public container registry, then use `docker run`.
 
 ### npx
 
@@ -159,25 +160,25 @@ Commit this file to your Plugin's source code repository.  It must live at the r
 
 Make sure your Plugin has a detailed `README.md` file at the root level of your code repository.  It should be in [Markdown](https://daringfireball.net/projects/markdown/syntax) format, specifically [GitHub-Flavored Markdown](https://github.github.com/gfm/).  This file will serve as your product details page when users click on your Plugin from the marketplace search results.  Your README should have the following:
 
-- A detailed English description of what your Plugin does.
-	- Non-English locales will be introduced soon.
-- A list of the CLI requirements needed to install the Plugin.
-	- e.g. `npx`, `git`, `uvx`, `go`, and/or `docker`.
-- A list of all environment variables required by your Plugin.
-	- e.g. API keys, auth tokens, secrets, etc.
-- Declare any user data or metrics collection.
-- Usage examples (nice-to-have).
+-  A detailed English description of what your Plugin does.
+   -  Non-English locales will be introduced soon.
+-  A list of the CLI requirements needed to install the Plugin.
+   -  e.g. `npx`, `git`, `uvx`, `go`, and/or `docker`.
+-  A list of all environment variables required by your Plugin.
+   -  e.g. API keys, auth tokens, secrets, etc.
+-  Declare any user data or metrics collection.
+-  Usage examples (nice-to-have).
 
 ## Logo
 
 Your Plugin should have a logo image, for displaying in the marketplace search results.  It should be:
 
-- 1:1 aspect ratio (square)
-- Alpha transparent and light/dark friendly
-- At least 128x128px
-- PNG format
-- Named `logo.png`
-- Stored at the root level of your repo
+-  1:1 aspect ratio (square)
+-  Alpha transparent and light/dark friendly
+-  At least 128x128px
+-  PNG format
+-  Named `logo.png`
+-  Stored at the root level of your repo
 
 ## License
 
@@ -214,8 +215,8 @@ Using [semver](https://semver.org/) style versioning is recommended, but not req
 
 See the following repositories which are good example Plugins to use as references:
 
-- [pixlcore/xyplug-bluesky](https://github.com/pixlcore/xyplug-bluesky)
-- [pixlcore/xyplug-stagehand](https://github.com/pixlcore/xyplug-stagehand)
+-  [pixlcore/xyplug-bluesky](https://github.com/pixlcore/xyplug-bluesky)
+-  [pixlcore/xyplug-stagehand](https://github.com/pixlcore/xyplug-stagehand)
 
 ## Marketplace Submission
 
@@ -244,20 +245,20 @@ Make a pull request, and add your Plugin metadata to the `marketplace.json` file
 
 Here are descriptions of the properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | The ID of your Plugin, which should be your GitHub Org and your repo ID, joined with a slash. |
-| `title` | String | A title for your Plugin.  Displayed in bold in the marketplace. |
-| `author` | String | The author of the Plugin (company or individual). |
-| `description` | String | A short description of your Plugin.  Displayed under the title in the marketplace. |
-| `versions` | Array | A sorted array of strings containing all the available versions (git tags) of your Plugin.  The latest release should be listed first. |
-| `type` | String | What type of item you are publishing.  Set this to `plugin` for v1 (will be expanded in the future). |
+| Property Name | Type   | Description                                                                                                                                                                        |
+|---------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String | The ID of your Plugin, which should be your GitHub Org and your repo ID, joined with a slash.                                                                                      |
+| `title`       | String | A title for your Plugin.  Displayed in bold in the marketplace.                                                                                                                    |
+| `author`      | String | The author of the Plugin (company or individual).                                                                                                                                  |
+| `description` | String | A short description of your Plugin.  Displayed under the title in the marketplace.                                                                                                 |
+| `versions`    | Array  | A sorted array of strings containing all the available versions (git tags) of your Plugin.  The latest release should be listed first.                                             |
+| `type`        | String | What type of item you are publishing.  Set this to `plugin` for v1 (will be expanded in the future).                                                                               |
 | `plugin_type` | String | If submitting a plugin, this specifies the plugin type.  Should be one of: `event`, `action`, `monitor` or `scheduler`.  You can find this value inside your Plugin's export data. |
-| `license` | String | The [SPDX Identifier](https://spdx.org/licenses/) for the open-source license your Plugin uses (must be OSI-approved). |
-| `tags` | Array | An array of keyword strings, used for searching. |
-| `requires` | Array | List the CLI requirements to launch your Plugin, e.g. `npx`, `uvx`, `go run` and/or `docker`. |
-| `created` | String | Date of first publication, in YYYY-MM-DD format. |
-| `modified` | String | Date of latest version, in YYYY-MM-DD format. |
+| `license`     | String | The [SPDX Identifier](https://spdx.org/licenses/) for the open-source license your Plugin uses (must be OSI-approved).                                                             |
+| `tags`        | Array  | An array of keyword strings, used for searching.                                                                                                                                   |
+| `requires`    | Array  | List the CLI requirements to launch your Plugin, e.g. `npx`, `uvx`, `go run` and/or `docker`.                                                                                      |
+| `created`     | String | Date of first publication, in YYYY-MM-DD format.                                                                                                                                   |
+| `modified`    | String | Date of latest version, in YYYY-MM-DD format.                                                                                                                                      |
 
 Note that all Plugin submissions are human-reviewed.  Please be prepared to wait several days before your Plugin is approved.  If your Plugin is denied, a xyOps team member will explain why, and help you to resubmit with the necessary changes to get approved.
 
@@ -267,8 +268,8 @@ You are free to distribute your Plugins outside the xyOps Marketplace.  To do so
 
 It is recommended that you either:
 
-- Configure your web server to include a `Content-Disposition: attachment` header, so browsers download the file when clicked, or...
-- Gzip-compress the file first, and host the `.json.gz` version.
+-  Configure your web server to include a `Content-Disposition: attachment` header, so browsers download the file when clicked, or...
+-  Gzip-compress the file first, and host the `.json.gz` version.
 
 To import a self-distributed Plugin into xyOps, the user simply has to navigate to the Plugin List by clicking the "**Plugins**" link in the sidebar, and then click the "**Import File...**" button, or drag & drop the downloaded file onto the browser window.  They will then be prompted to import the Plugin, at which point it can immediately be used in events and workflows.
 

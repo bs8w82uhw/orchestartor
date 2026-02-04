@@ -1,14 +1,16 @@
-# Project Task Backlog
+---
+title: Project Task Backlog
+---
 
 ## Priority Direction (Approved)
 
 Focus project development on:
 
-- AI automation capabilities inside xyOps.
-- An "Automation Manager" layer for autonomous planning/execution control.
-- Multi-agent workflows with clear role boundaries.
-- Strong regulations (SOP/runbooks/policies) and docs-as-code discipline.
-- Gramax (`https://gram.ax/ru`) as the primary knowledge base for AI agents.
+-  AI automation capabilities inside xyOps.
+-  An "Automation Manager" layer for autonomous planning/execution control.
+-  Multi-agent workflows with clear role boundaries.
+-  Strong regulations (SOP/runbooks/policies) and docs-as-code discipline.
+-  Gramax (`https://gram.ax/ru`) as the primary knowledge base for AI agents.
 
 ## Q1 Task Queue
 

@@ -1,4 +1,6 @@
-# Categories
+---
+title: Categories
+---
 
 ## Overview
 
@@ -6,14 +8,14 @@ Categories group related events and workflows, and are completely user-defined. 
 
 ## Key Points
 
-- Create as many custom categories as you like.
-- One category is assigned to each event/workflow (workflows behave like events in this case).
-- Defaults: category [Actions](actions.md) and [Limits](limits.md) auto-apply to all contained jobs. 
-	- Event → Category → Universal is the precedence for start-time limits; runtime limits can stack. 
-	- Actions are deduplicated by type/target.
-- Visuals: optional color and icon. The color appears as a background tint in event lists and running job lists. Icons come from Material Design Icons.
-- Enable/Disable: disabling a category prevents scheduling and launching for all events/workflows in it.
-- Order: Categories have a "sort order" which carries over to the event / workflow lists.
+-  Create as many custom categories as you like.
+-  One category is assigned to each event/workflow (workflows behave like events in this case).
+-  Defaults: category [Actions](actions.md) and [Limits](limits.md) auto-apply to all contained jobs.
+   -  Event -> Category -> Universal is the precedence for start-time limits; runtime limits can stack.
+   -  Actions are deduplicated by type/target.
+-  Visuals: optional color and icon. The color appears as a background tint in event lists and running job lists. Icons come from Material Design Icons.
+-  Enable/Disable: disabling a category prevents scheduling and launching for all events/workflows in it.
+-  Order: Categories have a "sort order" which carries over to the event / workflow lists.
 
 Minimal category example (JSON format):
 
@@ -38,37 +40,37 @@ See the full data shape: [Category](data.md#category)
 
 Categories can carry default job actions and resource limits that apply to all events and workflows in the category when jobs launch.
 
-- **Actions**
-  - Combined with event-level and universal actions; duplicates are deduped by type/target. See [Actions](actions.md).
-  - Common uses: email on `error`, fire a `web_hook` on `critical`, or kick off a cleanup event on `warning`.
-- **Limits**
-  - Serve as defaults; events/workflows may add more or override by type. See [Limits](limits.md).
-  - Start-time precedence: Event/Workflow → Category → Universal.
-  - Runtime limits (time/log/mem/cpu) can stack and trigger independently.
+-  **Actions**
+   -  Combined with event-level and universal actions; duplicates are deduped by type/target. See [Actions](actions.md).
+   -  Common uses: email on `error`, fire a `web_hook` on `critical`, or kick off a cleanup event on `warning`.
+-  **Limits**
+   -  Serve as defaults; events/workflows may add more or override by type. See [Limits](limits.md).
+   -  Start-time precedence: Event/Workflow -> Category -> Universal.
+   -  Runtime limits (time/log/mem/cpu) can stack and trigger independently.
 
 ## Visuals: Color and Icon
 
-- **Color**: background tint appears in event lists and running job lists. Available colors: `plain`, `red`, `green`, `blue`, `skyblue`, `yellow`, `purple`, `orange`.
-- **Icon**: optional Material Design Icon (e.g., `folder-outline`, `shield-alert-outline`). Icons are visual only.
+-  **Color**: background tint appears in event lists and running job lists. Available colors: `plain`, `red`, `green`, `blue`, `skyblue`, `yellow`, `purple`, `orange`.
+-  **Icon**: optional Material Design Icon (e.g., `folder-outline`, `shield-alert-outline`). Icons are visual only.
 
 ## Enable/Disable Behavior
 
-- Enabled categories: jobs schedule and launch normally.
-- Disabled categories: scheduler will not trigger contained events, and manual runs are blocked even if the event is enabled.
+-  Enabled categories: jobs schedule and launch normally.
+-  Disabled categories: scheduler will not trigger contained events, and manual runs are blocked even if the event is enabled.
 
 ## Managing
 
-- UI: Admin → Categories. Create/edit title, enabled, icon, color, notes, default actions and limits. Drag to reorder. Delete only when no events reference it. Import/Export JSON supported.
-- API: list, fetch, create, update, reorder, delete -- see [API: Categories](api.md#categories).
-- Privileges: [create_categories](privileges.md#create_categories), [edit_categories](privileges.md#edit_categories), [delete_categories](privileges.md#delete_categories).
+-  UI: Admin -> Categories. Create/edit title, enabled, icon, color, notes, default actions and limits. Drag to reorder. Delete only when no events reference it. Import/Export JSON supported.
+-  API: list, fetch, create, update, reorder, delete -- see [API: Categories](api.md#categories).
+-  Privileges: [create_categories](privileges.md#create_categories), [edit_categories](privileges.md#edit_categories), [delete_categories](privileges.md#delete_categories).
 
 ## API Quick Reference
 
-- `GET /api/app/get_categories/v1`: list all categories.
-- `GET /api/app/get_category/v1`: fetch one by `id`.
-- `POST /api/app/create_category/v1`: create (validates embedded `limits`/`actions`).
-- `POST /api/app/update_category/v1`: shallow-merge updates; updates `modified` and `revision`.
-- `POST /api/app/delete_category/v1`: delete; blocked if any events reference it.
+-  `GET /api/app/get_categories/v1`: list all categories.
+-  `GET /api/app/get_category/v1`: fetch one by `id`.
+-  `POST /api/app/create_category/v1`: create (validates embedded `limits`/`actions`).
+-  `POST /api/app/update_category/v1`: shallow-merge updates; updates `modified` and `revision`.
+-  `POST /api/app/delete_category/v1`: delete; blocked if any events reference it.
 
 ## Examples
 

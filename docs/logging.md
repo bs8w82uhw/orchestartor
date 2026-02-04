@@ -1,4 +1,6 @@
-# Logging
+---
+title: Logging
+---
 
 ## Overview
 
@@ -8,17 +10,17 @@ This document explains how logging works in xyOps, lists every application log f
 
 Each log row is bracket-delimited with the following columns, in order:
 
-| Log Column | Description |
-|---|---|
-| `hires_epoch` | High-resolution Unix time (floating point seconds). |
-| `date` | Human-readable timestamp: `YYYY-MM-DD HH:MI:SS` (local server time). |
-| `hostname` | Hostname of the server that wrote the log entry. |
-| `pid` | Process ID (PID) of the writer process. |
-| `component` | Component name that generated the entry. |
-| `category` | One of `debug`, `transaction`, or `error`. |
-| `code` | Debug level (1-10), transaction code, or error code. |
-| `msg` | Message text. |
-| `data` | Optional JSON data payload (may be empty). |
+| Log Column    | Description                                                          |
+|---------------|----------------------------------------------------------------------|
+| `hires_epoch` | High-resolution Unix time (floating point seconds).                  |
+| `date`        | Human-readable timestamp: `YYYY-MM-DD HH:MI:SS` (local server time). |
+| `hostname`    | Hostname of the server that wrote the log entry.                     |
+| `pid`         | Process ID (PID) of the writer process.                              |
+| `component`   | Component name that generated the entry.                             |
+| `category`    | One of `debug`, `transaction`, or `error`.                           |
+| `code`        | Debug level (1-10), transaction code, or error code.                 |
+| `msg`         | Message text.                                                        |
+| `data`        | Optional JSON data payload (may be empty).                           |
 
 Example row:
 
@@ -56,6 +58,7 @@ The [log_filename](config.md#log_filename) property defaults to `[component].log
 Below are all current application log files, each with a short description and one real example row captured from this repository.
 
 ### Action.log
+
 Actions fired by alerts, monitors, or job conditions (e.g., email, web hooks, plugins).
 
 ```
@@ -63,6 +66,7 @@ Actions fired by alerts, monitors, or job conditions (e.g., email, web hooks, pl
 ```
 
 ### API.log
+
 Incoming HTTP API requests, routing, authorization, and handler activity.
 
 ```
@@ -70,6 +74,7 @@ Incoming HTTP API requests, routing, authorization, and handler activity.
 ```
 
 ### Comm.log
+
 WebSocket client connections, disconnections, and page/activity updates.
 
 ```
@@ -77,6 +82,7 @@ WebSocket client connections, disconnections, and page/activity updates.
 ```
 
 ### Debug.log
+
 Internal debug service messages and diagnostics.
 
 ```
@@ -84,6 +90,7 @@ Internal debug service messages and diagnostics.
 ```
 
 ### Error.log
+
 All errors across the system (validation errors, storage issues, job failures, disconnects, etc.).
 
 ```
@@ -91,6 +98,7 @@ All errors across the system (validation errors, storage issues, job failures, d
 ```
 
 ### Filesystem.log
+
 Events from the local filesystem storage engine (binary files, paths, open/close, etc.).
 
 ```
@@ -98,6 +106,7 @@ Events from the local filesystem storage engine (binary files, paths, open/close
 ```
 
 ### Hybrid.log
+
 Hybrid document/binary storage orchestration and lifecycle.
 
 ```
@@ -105,6 +114,7 @@ Hybrid document/binary storage orchestration and lifecycle.
 ```
 
 ### Job.log
+
 Job creation, start/stop, and internal job lifecycle.
 
 ```
@@ -112,6 +122,7 @@ Job creation, start/stop, and internal job lifecycle.
 ```
 
 ### Maint.log
+
 Nightly maintenance and housekeeping tasks (daily stats reset, archival, cleanup).
 
 ```
@@ -119,6 +130,7 @@ Nightly maintenance and housekeeping tasks (daily stats reset, archival, cleanup
 ```
 
 ### Monitor.log
+
 Monitor evaluation, expressions, alert triggering/clearing, and data submission.
 
 ```
@@ -126,6 +138,7 @@ Monitor evaluation, expressions, alert triggering/clearing, and data submission.
 ```
 
 ### Multi.log
+
 Multi-server cluster status and conductor election.
 
 ```
@@ -133,6 +146,7 @@ Multi-server cluster status and conductor election.
 ```
 
 ### Scheduler.log
+
 Scheduler ticks, queue evaluation, and job due events.
 
 ```
@@ -140,6 +154,7 @@ Scheduler ticks, queue evaluation, and job due events.
 ```
 
 ### Secret.log
+
 Secret usage by plugins, hooks, and other components (no secret values are logged).
 
 ```
@@ -147,6 +162,7 @@ Secret usage by plugins, hooks, and other components (no secret values are logge
 ```
 
 ### SQLite.log
+
 SQLite-backed document store operations and lifecycle.
 
 ```
@@ -154,6 +170,7 @@ SQLite-backed document store operations and lifecycle.
 ```
 
 ### Storage.log
+
 Abstract storage operations across engines (get, put, commit, rollback, etc.).
 
 ```
@@ -161,6 +178,7 @@ Abstract storage operations across engines (get, put, commit, rollback, etc.).
 ```
 
 ### Transaction.log
+
 High-level application transactions for auditing and replay (creates, updates, completions, etc.).
 
 ```
@@ -168,6 +186,7 @@ High-level application transactions for auditing and replay (creates, updates, c
 ```
 
 ### Unbase.log
+
 Indexing and background record maintenance (e.g., activity index writes).
 
 ```
@@ -175,6 +194,7 @@ Indexing and background record maintenance (e.g., activity index writes).
 ```
 
 ### User.log
+
 User authentication events and sessions.
 
 ```
@@ -182,6 +202,7 @@ User authentication events and sessions.
 ```
 
 ### WebServer.log
+
 HTTP/HTTPS server lifecycle, connections, and request metrics.
 
 ```
@@ -189,6 +210,7 @@ HTTP/HTTPS server lifecycle, connections, and request metrics.
 ```
 
 ### Workflow.log
+
 Workflow node execution and job orchestration details.
 
 ```
@@ -196,6 +218,7 @@ Workflow node execution and job orchestration details.
 ```
 
 ### xyOps.log
+
 Main application lifecycle and component startup/shutdown.
 
 ```
@@ -219,8 +242,8 @@ Example format (stack trace truncated):
 
 xyOps automatically archives server logs every night at midnight (local server time):
 
-- All `.log` files in [log_dir](config.md#log_dir) are compressed with gzip and copied to a date-based path.
-- The destination is controlled by [log_archive_path](config.md#log_archive_path), which supports date/time placeholders.
+-  All `.log` files in [log_dir](config.md#log_dir) are compressed with gzip and copied to a date-based path.
+-  The destination is controlled by [log_archive_path](config.md#log_archive_path), which supports date/time placeholders.
 
 Default path pattern:
 

@@ -1,14 +1,16 @@
-# xyOps Backup Format
+---
+title: xyOps Backup Format
+---
 
 ## Overview
 
 This document describes the xyOps Backup Format (XYBK) v1.0, used to bulk export and import data from a xyOps system. The format supports selecting categories of data (lists, database indexes, and extras), or including everything. Files are [NDJSON](https://github.com/ndjson/ndjson-spec) with support for comment lines and blank lines, and are typically wrapped in [Gzip](https://en.wikipedia.org/wiki/Gzip) for transport.
 
-- **Title**: xyOps Backup Format
-- **ID**: XYBK
-- **Version**: 1.0
-- **Date**: December 12, 2025
-- **Authors**: Joseph Huckaby (PixlCore)
+-  **Title**: xyOps Backup Format
+-  **ID**: XYBK
+-  **Version**: 1.0
+-  **Date**: December 12, 2025
+-  **Authors**: Joseph Huckaby (PixlCore)
 
 XYBK is primarily consumed by the Admin "Export Data" and "Import Data" features. The exporter streams a Gzip-compressed NDJSON file to the client, and the importer accepts either plain NDJSON or Gzip-wrapped NDJSON.
 
@@ -16,9 +18,9 @@ XYBK is primarily consumed by the Admin "Export Data" and "Import Data" features
 
 An XYBK file is a sequence of UTF-8 text lines. Three types of lines are allowed:
 
-- **Comment**: Any line beginning with `#` is a comment and ignored by the importer.
-- **Blank**: Empty or whitespace-only lines are allowed and ignored.
-- **Record**: A single JSON object on one line (NDJSON). These are processed in order.
+-  **Comment**: Any line beginning with `#` is a comment and ignored by the importer.
+-  **Blank**: Empty or whitespace-only lines are allowed and ignored.
+-  **Record**: A single JSON object on one line (NDJSON). These are processed in order.
 
 The file begins with a short header emitted as a comment block (for human readability only):
 
@@ -41,9 +43,9 @@ Each NDJSON record must be exactly one of the following forms:
 { "key": "<storage_key>", "value": /* json_or_base64 */ }
 ```
 
-- Writes directly to [pixl-server-storage](https://github.com/jhuckaby/pixl-server-storage) as a key/value "put".
-- For binary keys, `value` contains a Base64 string. On import, binary detection is automatic via key pattern, and the value is decoded back to raw bytes.
-- For JSON keys, `value` is a JSON object which is stored as-is.
+-  Writes directly to [pixl-server-storage](https://github.com/jhuckaby/pixl-server-storage) as a key/value "put".
+-  For binary keys, `value` contains a Base64 string. On import, binary detection is automatic via key pattern, and the value is decoded back to raw bytes.
+-  For JSON keys, `value` is a JSON object which is stored as-is.
 
 ### Storage Command
 
@@ -51,9 +53,9 @@ Each NDJSON record must be exactly one of the following forms:
 { "cmd": "<method>", "args": [ /* arg1, arg2, ... */ ] }
 ```
 
-- Invokes a storage API on [pixl-server-storage](https://github.com/jhuckaby/pixl-server-storage), e.g. `listDelete`.
-- Arguments are passed as-is. The importer appends its own callback internally.
-- Used by exports to prepare state for re-population (e.g. delete list pages before re-creating them).
+-  Invokes a storage API on [pixl-server-storage](https://github.com/jhuckaby/pixl-server-storage), e.g. `listDelete`.
+-  Arguments are passed as-is. The importer appends its own callback internally.
+-  Used by exports to prepare state for re-population (e.g. delete list pages before re-creating them).
 
 ### Database Record
 
@@ -61,22 +63,22 @@ Each NDJSON record must be exactly one of the following forms:
 { "index": "<index_id>", "id": "<record_id>", "record": { /* ... */ } }
 ```
 
-- Inserts a database record into [Unbase](https://github.com/jhuckaby/pixl-server-unbase) via `unbase.insert(index, id, record)`.
-- Semantics are "create or replace" by ID.
+-  Inserts a database record into [Unbase](https://github.com/jhuckaby/pixl-server-unbase) via `unbase.insert(index, id, record)`.
+-  Semantics are "create or replace" by ID.
 
 ## Sections
 
 The exporter adds comment section headers to group related lines. These are informational only and ignored during import. You may encounter the following section headers:
 
-- `# List: <key>`
-- `# Database Index: <index> (<query>)`
-- `# User Data:`
-- `# Bucket Data`
-- `# Bucket Files`
-- `# Encrypted Secret Data`
-- `# Job Files (<query>)`
-- `# Ticket Files (<query>)`
-- `# Monitor Timeline Data (<query>)`
+-  `# List: <key>`
+-  `# Database Index: <index> (<query>)`
+-  `# User Data:`
+-  `# Bucket Data`
+-  `# Bucket Files`
+-  `# Encrypted Secret Data`
+-  `# Job Files (<query>)`
+-  `# Ticket Files (<query>)`
+-  `# Monitor Timeline Data (<query>)`
 
 ### Lists
 
@@ -104,7 +106,7 @@ The `items` array contains the actual list items. Pages are emitted from `first_
 
 Typical list keys exported under `global/` include:
 
-- `alerts`, `api_keys`, `buckets`, `categories`, `channels`, `events`, `groups`, `monitors`, `plugins`, `secrets`, `tags`, `users`, `roles`, `web_hooks`
+-  `alerts`, `api_keys`, `buckets`, `categories`, `channels`, `events`, `groups`, `monitors`, `plugins`, `secrets`, `tags`, `users`, `roles`, `web_hooks`
 
 Note: User account records themselves are not stored in `global/users` (that list holds the roster). Actual user records are exported under `users/<username>` (see "User Data" below).
 
@@ -124,12 +126,12 @@ See [Unbase](https://github.com/jhuckaby/pixl-server-unbase) for more details.
 
 User account records are exported as storage keys:
 
-- `users/<normalized_username>` → `{ ...user record... }`
+-  `users/<normalized_username>` -> `{ ...user record... }`
 
 If the "User Avatars" extra is selected, the following binary keys may also be included (Base64 values):
 
-- `users/<normalized_username>/avatar/64.png`
-- `users/<normalized_username>/avatar/256.png`
+-  `users/<normalized_username>/avatar/64.png`
+-  `users/<normalized_username>/avatar/256.png`
 
 Passwords in user records are stored as salted [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) hashes and are exported as stored.
 
@@ -137,22 +139,22 @@ Passwords in user records are stored as salted [bcrypt](https://en.wikipedia.org
 
 If the Buckets list is selected, the exporter also includes bucket data and may include file payloads, depending on extras:
 
-- `key: buckets/<bucket_id>/data` (JSON) containing the per-bucket metadata/data object.
-- `key: buckets/<bucket_id>/files` (JSON) containing each file payload keyed by its storage path. File payloads are Base64.
+-  `key: buckets/<bucket_id>/data` (JSON) containing the per-bucket metadata/data object.
+-  `key: buckets/<bucket_id>/files` (JSON) containing each file payload keyed by its storage path. File payloads are Base64.
 
 ### Secrets
 
 Secret vault metadata lives in the `global/secrets` list (exported like any list). The secret payloads themselves are exported under:
 
-- `key: secrets/<secret_id>` → Value is the encrypted blob (as stored). Contents are Base64-encoded encrypted data; secrets are not exported in plaintext.
+-  `key: secrets/<secret_id>` -> Value is the encrypted blob (as stored). Contents are Base64-encoded encrypted data; secrets are not exported in plaintext.
 
 ### Job and Ticket Files/Logs
 
 If selected via extras, job and ticket attachments are exported by key with Base64 payloads. For jobs, the compressed log may also be exported:
 
-- Job files: `key: <file_path>` for each file in a job’s `files[]` list (subject to max size).
-- Job log: `key: logs/jobs/<job_id>/log.txt.gz` if present and under size limit.
-- Ticket files: `key: <file_path>` for each file in a ticket’s `files[]` list (subject to max size).
+-  Job files: `key: <file_path>` for each file in a job’s `files[]` list (subject to max size).
+-  Job log: `key: logs/jobs/<job_id>/log.txt.gz` if present and under size limit.
+-  Ticket files: `key: <file_path>` for each file in a ticket’s `files[]` list (subject to max size).
 
 ### Monitor Timeline Data
 
@@ -162,16 +164,16 @@ Server monitor time-series are stored as lists under `timeline/<server_id>/<syst
 
 The UI exposes three selection groups which map to exported item types:
 
-- **Lists**: One or more of the standard lists under `global/` (see above). Choosing `users` also triggers "User Data" export for `users/<username>` records. Choosing `buckets` triggers "Bucket Data". Choosing `secrets` triggers "Encrypted Secret Data".
-- **Indexes**: One or more Unbase indexes by ID (optionally filtered by query).
-- **Extras**: Optional payloads and time-series:
-  - `job_files`
-  - `job_logs`
-  - `bucket_files`
-  - `ticket_files`
-  - `monitor_data`
-  - `stat_data` 
-  - `user_avatars`
+-  **Lists**: One or more of the standard lists under `global/` (see above). Choosing `users` also triggers "User Data" export for `users/<username>` records. Choosing `buckets` triggers "Bucket Data". Choosing `secrets` triggers "Encrypted Secret Data".
+-  **Indexes**: One or more Unbase indexes by ID (optionally filtered by query).
+-  **Extras**: Optional payloads and time-series:
+   -  `job_files`
+   -  `job_logs`
+   -  `bucket_files`
+   -  `ticket_files`
+   -  `monitor_data`
+   -  `stat_data`
+   -  `user_avatars`
 
 The exporter may be instructed to include "all" in any group. Internally, these selections are expanded into a stream of the record types described above.
 
@@ -181,9 +183,9 @@ Exports are streamed as Gzip files with a filename like `xyops-data-export-YYYY-
 
 ## Security Characteristics
 
-- **API Keys**: Only salted hashes are exported; plaintext API key material is never emitted. The `key` field is a salted SHA-256 digest stored at creation time.
-- **Secrets**: Secret payloads are exported as encrypted blobs (Base64); plaintext is never exported.
-- **Users**: Passwords are stored and exported as salted bcrypt hashes. No plaintext passwords are exported.
+-  **API Keys**: Only salted hashes are exported; plaintext API key material is never emitted. The `key` field is a salted SHA-256 digest stored at creation time.
+-  **Secrets**: Secret payloads are exported as encrypted blobs (Base64); plaintext is never exported.
+-  **Users**: Passwords are stored and exported as salted bcrypt hashes. No plaintext passwords are exported.
 
 ## Example
 
@@ -211,20 +213,20 @@ Snippet showing list export, API keys, and a database record:
 
 ## Parsing Rules
 
-- Comments and blank lines are ignored. Only lines that begin with `{` are parsed.
-- Lines are processed in order. Commands may prepare state (e.g. list deletion) before subsequent puts.
-- Key/value records are written via `storage.put(key, value)`. Binary keys are automatically Base64-decoded on import.
-- Database records are inserted via `unbase.insert(index, id, record)`.
-- Storage commands call the named method on the storage engine with provided args.
-- The importer streams and validates line-by-line, collecting up to 100 errors for reporting, and continues past non-fatal errors.
+-  Comments and blank lines are ignored. Only lines that begin with `{` are parsed.
+-  Lines are processed in order. Commands may prepare state (e.g. list deletion) before subsequent puts.
+-  Key/value records are written via `storage.put(key, value)`. Binary keys are automatically Base64-decoded on import.
+-  Database records are inserted via `unbase.insert(index, id, record)`.
+-  Storage commands call the named method on the storage engine with provided args.
+-  The importer streams and validates line-by-line, collecting up to 100 errors for reporting, and continues past non-fatal errors.
 
 ## Lists and Storage Notes
 
 xyOps stores most configuration objects as Lists. Useful references:
 
-- [pixl-server-storage](https://github.com/jhuckaby/pixl-server-storage)
-- [Lists](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Lists.md)
-- [Unbase](https://github.com/jhuckaby/pixl-server-unbase)
+-  [pixl-server-storage](https://github.com/jhuckaby/pixl-server-storage)
+-  [Lists](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Lists.md)
+-  [Unbase](https://github.com/jhuckaby/pixl-server-unbase)
 
 ## Versioning
 

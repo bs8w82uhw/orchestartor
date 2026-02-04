@@ -1,4 +1,6 @@
-# Self-Hosting
+---
+title: Self-Hosting
+---
 
 ## Overview
 
@@ -63,12 +65,12 @@ Then hit http://localhost:5522/ in your browser for HTTP, or https://localhost:5
 
 A few notes:
 
-- **Important:** Please change the sample `xyops01` hostname to something that actually resolves and is addressable on your network.  Without this, many features will not work properly.
-- In this case xyOps will have a self-signed cert for TLS, which the worker will accept by default.  See [TLS](#tls) for more details.
-- Change the `TZ` environment variable to your local timezone, for proper midnight log rotation and daily stat resets.
-- The `XYOPS_xysat_local` environment variable causes xyOps to launch [xySat](#satellite) in the background, in the same container.  This is so you can start running jobs right away -- it is great for testing and home labs, but not recommended for production setups.
-- If you plan on using the container long term, please make sure to [rotate the secret key](#secret-key-rotation).
-- The `/var/run/docker.sock` bind is optional, and allows xyOps to launch its own containers (i.e. for the [Docker Plugin](plugins.md#docker-plugin), and the [Plugin Marketplace](marketplace.md)).
+-  **Important:** Please change the sample `xyops01` hostname to something that actually resolves and is addressable on your network.  Without this, many features will not work properly.
+-  In this case xyOps will have a self-signed cert for TLS, which the worker will accept by default.  See [TLS](#tls) for more details.
+-  Change the `TZ` environment variable to your local timezone, for proper midnight log rotation and daily stat resets.
+-  The `XYOPS_xysat_local` environment variable causes xyOps to launch [xySat](#satellite) in the background, in the same container.  This is so you can start running jobs right away -- it is great for testing and home labs, but not recommended for production setups.
+-  If you plan on using the container long term, please make sure to [rotate the secret key](#secret-key-rotation).
+-  The `/var/run/docker.sock` bind is optional, and allows xyOps to launch its own containers (i.e. for the [Docker Plugin](plugins.md#docker-plugin), and the [Plugin Marketplace](marketplace.md)).
 
 Note that in order to add worker servers, the container needs to be *addressable on your network* by its hostname.  Typically this is done by adding the hostname to your local DNS, or using a `/etc/hosts` file.  See [Adding Servers](servers.md#adding-servers) for more details.
 
@@ -173,20 +175,20 @@ Make sure you [decommission your servers](servers.md#decommissioning-servers) fi
 
 ## Environment Variables
 
-xyOps supports a special environment variable syntax, which can specify command-line options as well as override any configuration settings.  The variable name syntax is `XYOPS_key` where `key` is one of several command-line options (see table below) or a JSON configuration property path.  These can come in handy for automating installations, and using container systems.  
+xyOps supports a special environment variable syntax, which can specify command-line options as well as override any configuration settings.  The variable name syntax is `XYOPS_key` where `key` is one of several command-line options (see table below) or a JSON configuration property path.  These can come in handy for automating installations, and using container systems.
 
 For overriding configuration properties by environment variable, you can specify any top-level JSON key from `config.json`, or a *path* to a nested property using double-underscore (`__`) as a path separator.  For boolean properties, you can use `true` or `false` strings, and xyOps will convert them.  Here is an example of some of the possibilities available:
 
-| Variable | Sample Value | Description |
-|----------|--------------|-------------|
-| `XYOPS_foreground` | `true` | Run xyOps in the foreground (no background daemon fork). |
-| `XYOPS_echo` | `true` | Echo the event log to the console (STDOUT), use in conjunction with `XYOPS_foreground`. |
-| `XYOPS_color` | `true` | Echo the event log with color-coded columns, use in conjunction with `XYOPS_echo`. |
-| `XYOPS_base_app_url` | `http://xyops.yourcompany.com` | Override the [base_app_url](config.md#base_app_url) configuration property. |
-| `XYOPS_email_from` | `xyops@yourcompany.com` | Override the [email_from](config.md#email_from) configuration property. |
-| `XYOPS_WebServer__port` | `80` | Override the `port` property *inside* the [WebServer](config.md#webserver) object. |
-| `XYOPS_WebServer__https_port` | `443` | Override the `https_port` property *inside* the [WebServer](config.md#webserver) object. |
-| `XYOPS_Storage__Filesystem__base_dir` | `/data/xyops` | Override the `base_dir` property *inside* the [Filesystem](config.md#storage-filesystem) object *inside* the [Storage](config.md#storage) object. |
+| Variable                              | Sample Value                   | Description                                                                                                                                       |
+|---------------------------------------|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `XYOPS_foreground`                    | `true`                         | Run xyOps in the foreground (no background daemon fork).                                                                                          |
+| `XYOPS_echo`                          | `true`                         | Echo the event log to the console (STDOUT), use in conjunction with `XYOPS_foreground`.                                                           |
+| `XYOPS_color`                         | `true`                         | Echo the event log with color-coded columns, use in conjunction with `XYOPS_echo`.                                                                |
+| `XYOPS_base_app_url`                  | `http://xyops.yourcompany.com` | Override the [base_app_url](config.md#base_app_url) configuration property.                                                                       |
+| `XYOPS_email_from`                    | `xyops@yourcompany.com`        | Override the [email_from](config.md#email_from) configuration property.                                                                           |
+| `XYOPS_WebServer__port`               | `80`                           | Override the `port` property *inside* the [WebServer](config.md#webserver) object.                                                                |
+| `XYOPS_WebServer__https_port`         | `443`                          | Override the `https_port` property *inside* the [WebServer](config.md#webserver) object.                                                          |
+| `XYOPS_Storage__Filesystem__base_dir` | `/data/xyops`                  | Override the `base_dir` property *inside* the [Filesystem](config.md#storage-filesystem) object *inside* the [Storage](config.md#storage) object. |
 
 Almost every [configuration property](config.md) can be overridden using this environment variable syntax.  The only exceptions are things like arrays, e.g. [log_columns](config.md#log_columns).
 
@@ -250,22 +252,22 @@ Alternatively, you can setup a proxy to sit in front of xyOps and handle TLS for
 
 For a load balanced multi-conductor setup with Nginx w/TLS, please read this section.  This is a complex setup, and requires advanced knowledge of all the components used.  Let me recommend our [Enterprise Plan](https://xyops.io/pricing) here, as we can set all this up for you.  Now, the way this configuration works is as follows:
 
-- [Nginx](https://nginx.org/) sits in front, and handles TLS termination, as well as routing requests to various backends.
-- Nginx handles xyOps multi-conductor using an embedded [Health Check Daemon](https://github.com/pixlcore/xyops-healthcheck) which runs in the same container.
-	- The health check keeps track of which conductor server is primary, and dynamically reconfigures and hot-reloads Nginx as needed.
-	- We maintain our own custom Nginx docker image for this (shown below), or you can [build your own from source](https://github.com/pixlcore/xyops-nginx/blob/main/Dockerfile).
+-  [Nginx](https://nginx.org/) sits in front, and handles TLS termination, as well as routing requests to various backends.
+-  Nginx handles xyOps multi-conductor using an embedded [Health Check Daemon](https://github.com/pixlcore/xyops-healthcheck) which runs in the same container.
+   -  The health check keeps track of which conductor server is primary, and dynamically reconfigures and hot-reloads Nginx as needed.
+   -  We maintain our own custom Nginx docker image for this (shown below), or you can [build your own from source](https://github.com/pixlcore/xyops-nginx/blob/main/Dockerfile).
 
 A few prerequisites for this setup:
 
-- For multi-conductor setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).  See [Storage Engines](https://github.com/jhuckaby/pixl-server-storage#engines) for details.
-- You will need a custom domain configured and TLS certs created and ready to attach.
-- You have your xyOps configuration file customized and ready to go ([config.json](https://github.com/pixlcore/xyops/blob/main/sample_conf/config.json)) (see below).
+-  For multi-conductor setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).  See [Storage Engines](https://github.com/jhuckaby/pixl-server-storage#engines) for details.
+-  You will need a custom domain configured and TLS certs created and ready to attach.
+-  You have your xyOps configuration file customized and ready to go ([config.json](https://github.com/pixlcore/xyops/blob/main/sample_conf/config.json)) (see below).
 
 For the examples below, we'll be using the following domain placeholders:
 
-- `xyops.yourcompany.com` - User-facing domain which should route to Nginx / SSO.
-- `xyops01.yourcompany.com` - Internal domain for conductor server #1.
-- `xyops02.yourcompany.com` - Internal domain for conductor server #2.
+-  `xyops.yourcompany.com` - User-facing domain which should route to Nginx / SSO.
+-  `xyops01.yourcompany.com` - Internal domain for conductor server #1.
+-  `xyops02.yourcompany.com` - Internal domain for conductor server #2.
 
 The reason why the conductor servers each need their own unique (internal) domain name is because of how the multi-conductor system works.  Each conductor server needs to be individually addressable, and reachable by all of your worker servers in your org.  Worker servers don't know or care about Nginx -- they contact conductors directly, and have their own auto-failover system.  Also, worker servers use a persistent WebSocket connection, and can send a large amount of traffic, depending on how many worker servers you have and how many jobs you run.  For these reasons, it's better to have worker servers connect the conductors directly, especially at production scale.
 
@@ -305,8 +307,8 @@ services:
 
 Let's talk about the Nginx setup.  We are pulling in our own Docker image here ([xyops-nginx](https://github.com/pixlcore/xyops-nginx)).  This is a wrapper around the official Nginx docker image, but it includes our [xyOps Health Check](https://github.com/pixlcore/xyops-healthcheck) daemon.  The health check monitors which conductor server is currently primary, and dynamically reconfigures Nginx on-the-fly as needed (so Nginx always routes to the current primary server only).  The image also comes with a fully preconfigured Nginx.  To use this image you will need to provide:
 
-- Your TLS certificate files, named `tls.crt` and `tls.key`, which are bound to `/etc/tls.crt` and `/etc/tls.key`, respectively.
-- The list of xyOps conductor server domain names, as a CSV list in the `XYOPS_masters` environment variable (used by health check).
+-  Your TLS certificate files, named `tls.crt` and `tls.key`, which are bound to `/etc/tls.crt` and `/etc/tls.key`, respectively.
+-  The list of xyOps conductor server domain names, as a CSV list in the `XYOPS_masters` environment variable (used by health check).
 
 Once you have Nginx running, we can fire up the xyOps backend.  This is documented separately as you'll usually want to run these on separate servers.  Here is the multi-conductor configuration as a single Docker run command:
 
@@ -349,14 +351,14 @@ For additional conductor servers you can simply duplicate the command and change
 
 A few things to note here:
 
-- We're using our official xyOps Docker image, but you can always [build your own from source](https://github.com/pixlcore/xyops/blob/main/Dockerfile).
-- All conductor server hostnames need to be listed in the `XYOPS_masters` environment variable, comma-separated.
-- All conductor servers need to be able to route to each other via their hostnames, so they can self-negotiate and hold elections.
-- The timezone (`TZ`) should be set to your company's main timezone, so things like midnight log rotation and daily stat resets work as expected.
-- The `/var/run/docker.sock` bind allows xyOps to launch its own containers (i.e. for the [Plugin Marketplace](marketplace.md)).
-- The `/local/path/to/xyops-conf` path should be changed to a location on the host where you want to store the xyOps configuration directory.
-	- xyOps will automatically populate this directory on first container launch.
-	- See the [xyOps Configuration Guide](config.md) for details on how to customize the `config.json` file in this directory.
+-  We're using our official xyOps Docker image, but you can always [build your own from source](https://github.com/pixlcore/xyops/blob/main/Dockerfile).
+-  All conductor server hostnames need to be listed in the `XYOPS_masters` environment variable, comma-separated.
+-  All conductor servers need to be able to route to each other via their hostnames, so they can self-negotiate and hold elections.
+-  The timezone (`TZ`) should be set to your company's main timezone, so things like midnight log rotation and daily stat resets work as expected.
+-  The `/var/run/docker.sock` bind allows xyOps to launch its own containers (i.e. for the [Plugin Marketplace](marketplace.md)).
+-  The `/local/path/to/xyops-conf` path should be changed to a location on the host where you want to store the xyOps configuration directory.
+   -  xyOps will automatically populate this directory on first container launch.
+   -  See the [xyOps Configuration Guide](config.md) for details on how to customize the `config.json` file in this directory.
 
 ## External Storage
 
@@ -382,8 +384,8 @@ Note that if you are also running xyOps in a Docker container on the same machin
 
 Pull up the MinIO web interface in your browser by navigating to `http://MINIO_HOSTNAME:9001`.  Login using the default MinIO admin username and password (definitely change these later):
 
-- **Username**: `minioadmin`
-- **Password**: `minioadmin`
+-  **Username**: `minioadmin`
+-  **Password**: `minioadmin`
 
 Create a new bucket, e.g. `xydata`.
 
@@ -426,7 +428,7 @@ Start xyOps back up, and it should be using the new MinIO engine!  It will creat
 
 ## Satellite
 
-**xyOps Satellite ([xySat](https://github.com/pixlcore/xysat))** is a companion to the xyOps system.  It is both a job runner, and a data collector for server monitoring and alerting.  xySat is designed to be installed on *all* of your servers, so it is lean, mean, and has zero dependencies.
+**xyOps Satellite (**[**xySat**](https://github.com/pixlcore/xysat)**)** is a companion to the xyOps system.  It is both a job runner, and a data collector for server monitoring and alerting.  xySat is designed to be installed on *all* of your servers, so it is lean, mean, and has zero dependencies.
 
 For instructions on how to install xySat, see [Adding Servers](servers.md#adding-servers).
 
@@ -455,22 +457,22 @@ xySat is configured automatically via the xyOps conductor server.  The [satellit
 
 Here are descriptions of the configuration properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `port` | Number | Specifies which port the xyOps conductor server will be listening on (default is `5522` for ws:// and `5523` for wss://). |
-| `secure` | Boolean | Set to `true` to use secure WebSocket (wss://) and HTTPS connections. |
-| `socket_opts` | Object | Options to pass to the WebSocket connection (see [WebSocket](https://github.com/websockets/ws/blob/master/doc/ws.md#class-websocket)). |
-| `pid_file` | String | Location of the PID file to ensure two satellites don't run simultaneously. |
-| `log_dir` | String | Location of the log directory, relative to the xySat base dir (`/opt/xyops/satellite`). |
-| `log_filename` | String | This string is the filename pattern used by the core logger (default: `[component].log`); supports log column placeholders like `[component]`. |
-| `log_crashes` | Boolean | This boolean enables capturing uncaught exceptions and crashes in the logger subsystem (default: `true`). |
-| `log_archive_path` | String | This string sets the nightly log archive path pattern (default: `logs/archives/[filename]-[yyyy]-[mm]-[dd].log.gz`). |
-| `log_archive_keep` | String | How many days to keep log archives before auto-deleting the oldest ones. |
-| `temp_dir` | String | Location of temp directory, relative to the base dir (`/opt/xyops/satellite`). |
-| `debug_level` | Number | This number sets the verbosity level for the logger (default: `5`; 1 = quiet, 10 = very verbose). |
-| `child_kill_timeout` | Number | Number of seconds to wait after sending a SIGTERM to follow-up with a SIGKILL. |
-| `monitoring_enabled` | Boolean | Enable or disable the monitoring subsystem (i.e. send monitoring metrics every minute). |
-| `quickmon_enabled` | Boolean | Enable or disable the quick monitors, which send lightweight metrics every second. |
+| Property Name        | Type    | Description                                                                                                                                    |
+|----------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `port`               | Number  | Specifies which port the xyOps conductor server will be listening on (default is `5522` for ws:// and `5523` for wss://).                      |
+| `secure`             | Boolean | Set to `true` to use secure WebSocket (wss://) and HTTPS connections.                                                                          |
+| `socket_opts`        | Object  | Options to pass to the WebSocket connection (see [WebSocket](https://github.com/websockets/ws/blob/master/doc/ws.md#class-websocket)).         |
+| `pid_file`           | String  | Location of the PID file to ensure two satellites don't run simultaneously.                                                                    |
+| `log_dir`            | String  | Location of the log directory, relative to the xySat base dir (`/opt/xyops/satellite`).                                                        |
+| `log_filename`       | String  | This string is the filename pattern used by the core logger (default: `[component].log`); supports log column placeholders like `[component]`. |
+| `log_crashes`        | Boolean | This boolean enables capturing uncaught exceptions and crashes in the logger subsystem (default: `true`).                                      |
+| `log_archive_path`   | String  | This string sets the nightly log archive path pattern (default: `logs/archives/[filename]-[yyyy]-[mm]-[dd].log.gz`).                           |
+| `log_archive_keep`   | String  | How many days to keep log archives before auto-deleting the oldest ones.                                                                       |
+| `temp_dir`           | String  | Location of temp directory, relative to the base dir (`/opt/xyops/satellite`).                                                                 |
+| `debug_level`        | Number  | This number sets the verbosity level for the logger (default: `5`; 1 = quiet, 10 = very verbose).                                              |
+| `child_kill_timeout` | Number  | Number of seconds to wait after sending a SIGTERM to follow-up with a SIGKILL.                                                                 |
+| `monitoring_enabled` | Boolean | Enable or disable the monitoring subsystem (i.e. send monitoring metrics every minute).                                                        |
+| `quickmon_enabled`   | Boolean | Enable or disable the quick monitors, which send lightweight metrics every second.                                                             |
 
 #### Overriding The Connect URL
 
@@ -515,14 +517,14 @@ Please note that for proxying HTTPS (SSL) requests, unless you have pre-configur
 
 The types of proxies supported are:
 
-| Protocol | Example |
-|----------|---------|
-| `http` | `http://proxy-server-over-tcp.com:3128` |
-| `https` | `https://proxy-server-over-tls.com:3129` |
-| `socks` | `socks://username:password@some-socks-proxy.com:9050` |
+| Protocol | Example                                                |
+|----------|--------------------------------------------------------|
+| `http`   | `http://proxy-server-over-tcp.com:3128`                |
+| `https`  | `https://proxy-server-over-tls.com:3129`               |
+| `socks`  | `socks://username:password@some-socks-proxy.com:9050`  |
 | `socks5` | `socks5://username:password@some-socks-proxy.com:9050` |
-| `socks4` | `socks4://some-socks-proxy.com:9050` |
-| `pac-*` | `pac+http://www.example.com/proxy.pac` |
+| `socks4` | `socks4://some-socks-proxy.com:9050`                   |
+| `pac-*`  | `pac+http://www.example.com/proxy.pac`                 |
 
 Make sure to set the environment variables across your server fleet, so things like the [HTTP Request Plugin](plugins.md#http-request-plugin) will also adhere.
 
@@ -561,8 +563,8 @@ xyOps supports fully air-gapped server installs and upgrades.  Here is how it wo
 
 For Docker containers, make sure that your local Docker has our images stored locally, so they aren't pulled from the repository.  Our official containers are available at the following locations:
 
-- **xyOps**: https://github.com/pixlcore/xyops/pkgs/container/xyops
-- **xySat**: https://github.com/pixlcore/xysat/pkgs/container/xysat
+-  **xyOps**: https://github.com/pixlcore/xyops/pkgs/container/xyops
+-  **xySat**: https://github.com/pixlcore/xysat/pkgs/container/xysat
 
 ## Secret Key Rotation
 
@@ -570,20 +572,20 @@ xyOps uses a single secret key on every conductor server. This key encrypts stor
 
 ### Overview
 
-- **Secure generation**: A new cryptographically secure key is generated by the primary conductor and is never transmitted in plaintext.
-- **Orchestrated rotation**: The scheduler is paused, queued jobs are flushed, and active jobs are aborted before rotation proceeds.
-- **Seamless re-encryption**: All stored secrets are re-encrypted with the new key.
-- **Re-authentication**: All connected xySat servers are re-authenticated and issued new auth tokens automatically.
-- **Peer distribution**: The new key is distributed to all conductor peers (backup conductors) encrypted using the prior key.
-- **Persistent config**: The new key is written to `/opt/xyops/conf/overrides.json`. The base `config.json` is not modified by design (often mounted read-only in Docker).
-- **Not impacted**: Existing user sessions and API keys remain valid and are not affected by key rotation.
+-  **Secure generation**: A new cryptographically secure key is generated by the primary conductor and is never transmitted in plaintext.
+-  **Orchestrated rotation**: The scheduler is paused, queued jobs are flushed, and active jobs are aborted before rotation proceeds.
+-  **Seamless re-encryption**: All stored secrets are re-encrypted with the new key.
+-  **Re-authentication**: All connected xySat servers are re-authenticated and issued new auth tokens automatically.
+-  **Peer distribution**: The new key is distributed to all conductor peers (backup conductors) encrypted using the prior key.
+-  **Persistent config**: The new key is written to `/opt/xyops/conf/overrides.json`. The base `config.json` is not modified by design (often mounted read-only in Docker).
+-  **Not impacted**: Existing user sessions and API keys remain valid and are not affected by key rotation.
 
 ### Pre-Checks
 
 Before starting a rotation, ensure that all conductors and all worker servers are online and healthy:
 
-- Verify that every conductor is reachable and participating in the cluster.
-- Verify that all worker servers show as online in the Servers list.
+-  Verify that every conductor is reachable and participating in the cluster.
+-  Verify that all worker servers show as online in the Servers list.
 
 If a node is offline during rotation, it will not receive updates automatically. See [Offline Recovery](#offline-recovery) below.
 
@@ -609,8 +611,8 @@ If a worker server missed the rotation, you can recover it by deriving a new aut
 
 What you need:
 
-- The current secret key from the primary conductor. This is only available on-disk via SSH to the conductor: `/opt/xyops/conf/overrides.json` (`secret_key`). It is not retrievable via API.
-- The offline server's alphanumeric ID (e.g. `smf4j79snhe`). You can find this in the UI on the server history page, or on the server itself in `/opt/xyops/satellite/config.json`.
+-  The current secret key from the primary conductor. This is only available on-disk via SSH to the conductor: `/opt/xyops/conf/overrides.json` (`secret_key`). It is not retrievable via API.
+-  The offline server's alphanumeric ID (e.g. `smf4j79snhe`). You can find this in the UI on the server history page, or on the server itself in `/opt/xyops/satellite/config.json`.
 
 Compute the SHA-256 of the concatenation: `SERVER_ID + SECRET_KEY`, and use the hex digest as the new auth token. Example:
 
@@ -625,21 +627,21 @@ Then edit the satellite config on the worker:
 /opt/xyops/satellite/config.json
 ```
 
-Set the `auth_token` property to the computed SHA-256 hex string. Save the file -- the satellite will auto-reload and attempt to reconnect within ~30 seconds. Check the satellite logs for troubleshooting.
+Set the `auth_token` property to the computed SHA-256 hex string. Save the file -- the satellite will auto-reload and attempt to reconnect within \~30 seconds. Check the satellite logs for troubleshooting.
 
 #### Update an Offline Conductor
 
 If a conductor was offline during rotation, SSH to it and update the key by hand:
 
-1) Open `/opt/xyops/conf/overrides.json` on the offline conductor.
-2) Set the `secret_key` property to the new key from the primary conductor. If the file lacks `secret_key` (e.g. first rotation), add it.
-3) Save the file and restart the conductor service if needed.
+1. Open `/opt/xyops/conf/overrides.json` on the offline conductor.
+2. Set the `secret_key` property to the new key from the primary conductor. If the file lacks `secret_key` (e.g. first rotation), add it.
+3. Save the file and restart the conductor service if needed.
 
 After the update, the conductor will rejoin the cluster with the correct key.
 
 ### Best Practices
 
-- Schedule rotations during a maintenance window to tolerate job aborts.
-- Confirm node health beforehand to avoid manual recovery steps.
-- Store the current key securely and restrict SSH access to conductors.
-- Rotate periodically as part of your security program (see [Security Checklist](scaling.md#security-checklist)).
+-  Schedule rotations during a maintenance window to tolerate job aborts.
+-  Confirm node health beforehand to avoid manual recovery steps.
+-  Store the current key securely and restrict SSH access to conductors.
+-  Rotate periodically as part of your security program (see [Security Checklist](scaling.md#security-checklist)).

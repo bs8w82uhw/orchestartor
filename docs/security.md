@@ -1,4 +1,6 @@
-# Security
+---
+title: Security
+---
 
 ## Overview
 
@@ -39,8 +41,9 @@ This email account is only accessible by members of the core team for the purpos
 6. The patch is confirmed to resolve the vulnerability.
 7. The fix is released and users are notified that they should update urgently.
 8. The [security advisory](https://github.com/pixlcore/xyops/security/advisories) is published when (whichever happens sooner):
-  - The CVE details are published by [MITRE](https://www.mitre.org/), [NIST](https://www.nist.gov/), etc.
-  - Roughly 7 days after users have been notified the update is available.
+
+-  The CVE details are published by [MITRE](https://www.mitre.org/), [NIST](https://www.nist.gov/), etc.
+-  Roughly 7 days after users have been notified the update is available.
 
 ## Credit
 

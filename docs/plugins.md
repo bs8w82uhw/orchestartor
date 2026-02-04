@@ -1,4 +1,6 @@
-# Plugins
+---
+title: Plugins
+---
 
 ## Overview
 
@@ -14,12 +16,12 @@ Event Plugins are the main type of Plugin in xyOps, as they actually are the cod
 
 Several built-in Event Plugins ship with xyOps.  They are:
 
-| Plugin Name | Description |
-|-------------|-------------|
-| **[Shell Plugin](#shell-plugin)** | The Shell Plugin allows you to easily create events that execute arbitrary shell code, without having to learn the xyOps Plugin API. |
-| **[HTTP Request Plugin](#http-request-plugin)** | The HTTP Plugin can send HTTP requests to any URL, and supports a variety of protocols and options, including custom headers and custom body content. |
-| **[Test Plugin](#test-plugin)** | The Test Plugin exists mainly to test xyOps, but it can also be useful for testing pieces of workflows.  It outputs sample data and optionally a sample file, which are passed to downstream events, if connected. |
-| **[Docker Plugin](#docker-plugin)** | The Docker Plugin allows you to run custom scripts inside a Docker container.  Similar to the [Shell Plugin](#shell-plugin), you can specify any custom code to run, and in any language, as long as it supports a [Shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) line. |
+| Plugin Name                                     | Description                                                                                                                                                                                                                                                                          |
+|-------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [**Shell Plugin**](#shell-plugin)               | The Shell Plugin allows you to easily create events that execute arbitrary shell code, without having to learn the xyOps Plugin API.                                                                                                                                                 |
+| [**HTTP Request Plugin**](#http-request-plugin) | The HTTP Plugin can send HTTP requests to any URL, and supports a variety of protocols and options, including custom headers and custom body content.                                                                                                                                |
+| [**Test Plugin**](#test-plugin)                 | The Test Plugin exists mainly to test xyOps, but it can also be useful for testing pieces of workflows.  It outputs sample data and optionally a sample file, which are passed to downstream events, if connected.                                                                   |
+| [**Docker Plugin**](#docker-plugin)             | The Docker Plugin allows you to run custom scripts inside a Docker container.  Similar to the [Shell Plugin](#shell-plugin), you can specify any custom code to run, and in any language, as long as it supports a [Shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) line. |
 
 To write your own Event Plugin, all you need is to provide a command-line executable, and have it read and write JSON over [STDIN and STDOUT](https://en.wikipedia.org/wiki/Standard_streams).  Information about the current job is passed as a JSON document to your STDIN, and you can send back status updates and completion events simply by writing JSON to your STDOUT.
 
@@ -33,12 +35,12 @@ As with most other Plugin types, you can define custom parameters for Event Plug
 
 When Event Plugins are invoked via a job launching, they are passed a JSON document on STDIN (compressed onto a single line).  The following top-level properties will be present in the object:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `xy` | Number | Indicates the [xyOps Wire Protocol](xywp.md) version.  Will be set to `1`. |
-| `type` | String | The [Plugin.type](data.md#plugin-type), which will be set to `event`. |
-| `params` | Object | If the Plugin defines any parameters, their values will be here. |
-| (Other) | Various | All the properties from the [Job](data.md#job) object are included here. |
+| Property Name | Type    | Description                                                                |
+|---------------|---------|----------------------------------------------------------------------------|
+| `xy`          | Number  | Indicates the [xyOps Wire Protocol](xywp.md) version.  Will be set to `1`. |
+| `type`        | String  | The [Plugin.type](data.md#plugin-type), which will be set to `event`.      |
+| `params`      | Object  | If the Plugin defines any parameters, their values will be here.           |
+| (Other)       | Various | All the properties from the [Job](data.md#job) object are included here.   |
 
 Here is an example JSON document sent to an Event Plugin's STDIN as part of a job launch:
 
@@ -156,8 +158,7 @@ In addition to reporting success or failure at the end of a job, you can also op
 
 This would show progress at 50% completion, and automatically calculate the estimated time remaining based on the duration and progress so far.  You can repeat this as often as you like, with as granular progress as you can provide.  Note that the estimated time remaining is a "best guess effort", and is more accurate if your job progresses in a "linear" fashion, with regular progress updates.
 
-> [!IMPORTANT]
-> Beware of STDIO output buffering which many languages enable by default.  This may delay your progress updates (not to mention other output), unless you set it to auto-flush on every write.  See your specific language documentation for details.
+> \[!IMPORTANT\] Beware of STDIO output buffering which many languages enable by default.  This may delay your progress updates (not to mention other output), unless you set it to auto-flush on every write.  See your specific language documentation for details.
 
 ##### Status
 
@@ -205,12 +206,12 @@ The slightly more complex format produced by our own [pixl-perf](https://www.npm
 
 If your Plugin produces statistics or other tabular data, you can have xyOps render this into a table on the Job Details page.  You can do this during or at the end of a job run.  Simply print a JSON object with a property named `table`, containing the following keys:
 
-| Property Name | Description |
-|---------------|-------------|
-| `title` | Optional title displayed above the table, defaults to "Job Data Table". |
-| `header` | Optional array of header columns, displayed in shaded bold above the main data rows. |
-| `rows` | **Required** array of rows, with each one being its own inner array of column values. |
-| `caption` | Optional caption to show under the table (centered, small gray text). |
+| Property Name | Description                                                                           |
+|---------------|---------------------------------------------------------------------------------------|
+| `title`       | Optional title displayed above the table, defaults to "Job Data Table".               |
+| `header`      | Optional array of header columns, displayed in shaded bold above the main data rows.  |
+| `rows`        | **Required** array of rows, with each one being its own inner array of column values. |
+| `caption`     | Optional caption to show under the table (centered, small gray text).                 |
 
 Here is an example data table.  Note that this has been expanded for documentation purposes, but in practice your JSON needs to be compacted onto a single line when printed to STDOUT.
 
@@ -241,11 +242,11 @@ Here is an example data table.  Note that this has been expanded for documentati
 
 If you would prefer to generate your own custom HTML content from your Plugin code, and just have it rendered into the Job Details page, you can do that as well.  Simply print a JSON object with a property named `html`, containing the following keys:
 
-| Property Name | Description |
-|---------------|-------------|
-| `title` | Optional title displayed above the section, defaults to "Job Custom Data". |
-| `content` | **Required** Raw HTML content to render into the page. |
-| `caption` | Optional caption to show under your HTML (centered, small gray text). |
+| Property Name | Description                                                                |
+|---------------|----------------------------------------------------------------------------|
+| `title`       | Optional title displayed above the section, defaults to "Job Custom Data". |
+| `content`     | **Required** Raw HTML content to render into the page.                     |
+| `caption`     | Optional caption to show under your HTML (centered, small gray text).      |
 
 Here is an example HTML report.  Note that this has been expanded for documentation purposes, but in practice your JSON needs to be compacted onto a single line when printed to STDOUT.
 
@@ -416,13 +417,13 @@ As with most other Plugin types, you can define custom parameters for Action Plu
 
 When Action Plugins are invoked, they are passed a JSON document on STDIN (compressed to a single line).  The following top-level properties will be present in the object:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `xy` | Number | Indicates the [xyOps Wire Protocol](xywp.md) version.  Will be set to `1`. |
-| `type` | String | The [Plugin.type](data.md#plugin-type), which will be set to `action`. |
-| `condition` | String | The [Action.condition](data.md#action-condition) which activated the Plugin. |
-| `params` | Object | If the Plugin defines any parameters, their values will be here. |
-| (Other) | Various | Based on context; see below. |
+| Property Name | Type    | Description                                                                  |
+|---------------|---------|------------------------------------------------------------------------------|
+| `xy`          | Number  | Indicates the [xyOps Wire Protocol](xywp.md) version.  Will be set to `1`.   |
+| `type`        | String  | The [Plugin.type](data.md#plugin-type), which will be set to `action`.       |
+| `condition`   | String  | The [Action.condition](data.md#action-condition) which activated the Plugin. |
+| `params`      | Object  | If the Plugin defines any parameters, their values will be here.             |
+| (Other)       | Various | Based on context; see below.                                                 |
 
 If the Action Plugin is being invoked in job-related context (i.e. on job start, job complete, or other job actions) the contents of [JobHookData](data.md#jobhookdata) will also be merged in at the top-level.  Similarly, if the plugin is being invoked in an alert-related context (alert fired or cleared), then the contents of [AlertHookData](data.md#alerthookdata) will be merged in.
 
@@ -618,25 +619,25 @@ When your trigger plugin is invoked, it will be passed an array of all the event
 
 As with all xyOps STDIO communication, the JSON will always have a top-level `xy` property set to `1` (the [xyOps Wire Protocol](xywp.md) version), and a `type` property set to `trigger`.  Also present is an `items` array, which will contain an element for each event that has the plugin assigned as a trigger.  It is up to your plugin code to decide if each event should launch a job or not.  You are also provided some other information about the events:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `timezone` | String | The currently selected timezone for the event. |
-| `now` | Number | The current time for the potential job launch in Epoch seconds.  Note that this may be in the past, if xyOps is catching up on missed events. |
-| `dargs` | Object | The current date/tme for the job launch, separated out into individual numerical elements, in the event's timezone.  See below for details. |
-| `params` | Object | This object will contain your plugin's own custom defined parameters, filled out by the user at the event level. |
-| `job` | Object | This is a copy of the [Event](data-strictured.md#event) object that will be used to launch the job if your plugin decides it should. |
+| Property Name | Type   | Description                                                                                                                                   |
+|---------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `timezone`    | String | The currently selected timezone for the event.                                                                                                |
+| `now`         | Number | The current time for the potential job launch in Epoch seconds.  Note that this may be in the past, if xyOps is catching up on missed events. |
+| `dargs`       | Object | The current date/tme for the job launch, separated out into individual numerical elements, in the event's timezone.  See below for details.   |
+| `params`      | Object | This object will contain your plugin's own custom defined parameters, filled out by the user at the event level.                              |
+| `job`         | Object | This is a copy of the [Event](data-strictured.md#event) object that will be used to launch the job if your plugin decides it should.          |
 
 Here are descriptions of all the `dargs` date/time properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `year` | Number | The year as an integer, e.g. `2025`. |
-| `month` | Number | The month number from `1` to `12`. |
-| `day` | Number | The month day from `1` to `31`. |
-| `rday` | Number | The reverse month day (e.g. the last day of the month will be `-1`, the second-to-last day will be `-2`, and so on). |
-| `weekday` | Number | A number representing the day of the week, from `0` (Sunday) to `6` (Saturday). |
-| `hour` | Number | The hour in 24-hour format (from `0` to `23`). |
-| `minute` | Number | The minute number from `0` to `59`. |
+| Property Name | Type   | Description                                                                                                          |
+|---------------|--------|----------------------------------------------------------------------------------------------------------------------|
+| `year`        | Number | The year as an integer, e.g. `2025`.                                                                                 |
+| `month`       | Number | The month number from `1` to `12`.                                                                                   |
+| `day`         | Number | The month day from `1` to `31`.                                                                                      |
+| `rday`        | Number | The reverse month day (e.g. the last day of the month will be `-1`, the second-to-last day will be `-2`, and so on). |
+| `weekday`     | Number | A number representing the day of the week, from `0` (Sunday) to `6` (Saturday).                                      |
+| `hour`        | Number | The hour in 24-hour format (from `0` to `23`).                                                                       |
+| `minute`      | Number | The minute number from `0` to `59`.                                                                                  |
 
 The JSON will be provided to your plugin as a single line on STDIN.  You will need to read and parse the JSON to iterate over the `items` array.  Here is an example in Node.js (but you can use any language you want):
 
@@ -793,11 +794,11 @@ Monitor Plugins differ from the other xyOps Plugin types in that they are not pa
 
 Here is an example.  This Plugin actually ships with xyOps, and it tracks the total number of open files on the server:
 
-- **Plugin Title**: Count Open Files
-- **Plugin ID**: `open_files`
-- **Command**: `/bin/sh`
-- **Script**: `cat /proc/sys/fs/file-nr`
-- **Format**: `text`
+-  **Plugin Title**: Count Open Files
+-  **Plugin ID**: `open_files`
+-  **Command**: `/bin/sh`
+-  **Script**: `cat /proc/sys/fs/file-nr`
+-  **Format**: `text`
 
 That's it -- that's the entire Plugin, including the source code.  In this example the code is this small `/bin/sh` shell script:
 
@@ -821,16 +822,14 @@ But that's fine!  The syntax doesn't matter at this point.  What happens is, thi
 
 Then separately, we define a [Monitor](monitors.md) which pulls the appropriate value (in this case the first number) out of the raw text:
 
-- **Monitor Title**: Open Files
-- **Expression**: `commands.open_files`
-- **Data Match**: `(\\d+)`
-- **Data Type**: `integer`
+-  **Monitor Title**: Open Files
+-  **Expression**: `commands.open_files`
+-  **Data Match**: `(\\d+)`
+-  **Data Type**: `integer`
 
 And it's as simple as that.  Our custom monitor now graphs the total open files on the server over time, based on a custom command we execute.
 
 If your Monitor Plugin is set to XML or JSON format, you can actually output a large, multi-value data structure, and different monitors can grab specific values out of it.  This is really useful for things like grabbing **all** of your application's performance metrics in one command, output it as a large JSON/XML structure, and then you can configure individual xyOps monitors to pull out and graph specific values.  Alerts can trigger on the data values as well.
-
-
 
 ## Plugin Parameters
 
@@ -1126,8 +1125,7 @@ echo "75%"
 
 This would allow xyOps to show a graphical progress bar in the UI, and estimate the time remaining based on the elapsed time and current progress.
 
-> [!TIP]
-> The Shell Plugin actually supports any interpreted scripting language, including Node.js, PHP, Perl, Python, and more.  Basically, any language that supports a [Shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) line will work in the Shell Plugin.  Just change the `#!/bin/sh` to point to your interpreter of choice.
+> \[!TIP\] The Shell Plugin actually supports any interpreted scripting language, including Node.js, PHP, Perl, Python, and more.  Basically, any language that supports a [Shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) line will work in the Shell Plugin.  Just change the `#!/bin/sh` to point to your interpreter of choice.
 
 ### HTTP Request Plugin
 
@@ -1135,17 +1133,17 @@ xyOps ships with a built-in "HTTP Request" Plugin, which you can use to send sim
 
 Here are the parameters it accepts:
 
-| Plugin Parameter | Description |
-|------------------|-------------|
-| **Method** | Select the HTTP request method, either GET, HEAD or POST. |
-| **URL** | Enter your fully-qualified URL here, which must begin with either `http://` or `https://`. |
-| **Headers** | Optionally include any custom request headers here, one per line. |
-| **POST Data** | If you are sending a HTTP POST, enter the raw POST data here. |
-| **Timeout** | Enter the timeout in seconds, which is measured as the time to first byte in the response. |
-| **Follow Redirects** | Check this box to automatically follow HTTP redirect responses (up to 32 of them). |
-| **SSL Cert Bypass** | Check this box if you need to make HTTPS requests to servers with invalid SSL certificates (self-signed or other). |
-| **Success Match** | Optionally enter a regular expression here, which is matched against the response body.  If specified, this must match to consider the job a success. |
-| **Error Match** | Optionally enter a regular expression here, which is matched against the response body.  If this matches the response body, then the job is aborted with an error. |
+| Plugin Parameter     | Description                                                                                                                                                        |
+|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Method**           | Select the HTTP request method, either GET, HEAD or POST.                                                                                                          |
+| **URL**              | Enter your fully-qualified URL here, which must begin with either `http://` or `https://`.                                                                         |
+| **Headers**          | Optionally include any custom request headers here, one per line.                                                                                                  |
+| **POST Data**        | If you are sending a HTTP POST, enter the raw POST data here.                                                                                                      |
+| **Timeout**          | Enter the timeout in seconds, which is measured as the time to first byte in the response.                                                                         |
+| **Follow Redirects** | Check this box to automatically follow HTTP redirect responses (up to 32 of them).                                                                                 |
+| **SSL Cert Bypass**  | Check this box if you need to make HTTPS requests to servers with invalid SSL certificates (self-signed or other).                                                 |
+| **Success Match**    | Optionally enter a regular expression here, which is matched against the response body.  If specified, this must match to consider the job a success.              |
+| **Error Match**      | Optionally enter a regular expression here, which is matched against the response body.  If this matches the response body, then the job is aborted with an error. |
 
 #### Request Chaining
 
@@ -1177,14 +1175,14 @@ In this example an HTTP request was made that returned those specific response h
 
 Secondly, you can chain an HTTP Request into *another* HTTP Request, and use the chained data values from the previous response in the next request.  To do this, you need to utilize a special `{{ mustache }}` template syntax in the second request, to lookup values in the `data` object from the first one.  You can use these placeholders in the **URL**, **Request Headers** and **POST Data** text fields.  Example:
 
-- **URL**: `http://myserver.com/test.json?key={{ data.json.key1 }}`
-- **Headers**: `X-UUID: {{ data.headers['x-uuid'] }}`
+-  **URL**: `http://myserver.com/test.json?key={{ data.json.key1 }}`
+-  **Headers**: `X-UUID: {{ data.headers['x-uuid'] }}`
 
 Here you can see we are using two placeholders, one in the URL and another in the HTTP request headers.  These are looking up values from a *previous* HTTP Request event, and passing them into the next request.  Specifically, we are using:
 
-| Placeholder | Description |
-|-------------|-------------|
-| `{{ data.json.key1 }}` | This placeholder is looking up the `key` value from the JSON data (body content) of the previous HTTP response.  Using our example response shown above, this would resolve to `value1`. |
+| Placeholder                    | Description                                                                                                                                                                                         |
+|--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `{{ data.json.key1 }}`         | This placeholder is looking up the `key` value from the JSON data (body content) of the previous HTTP response.  Using our example response shown above, this would resolve to `value1`.            |
 | `{{ data.headers['x-uuid'] }}` | This placeholder is looking up the `X-UUID` response header from the previous HTTP response.  Using our example response shown above, this would resolve to `7617a494-823f-4566-8f8b-f479c2a6e707`. |
 
 So once the second request is sent off, after placeholder expansion the URL would actually resolve to:
@@ -1211,13 +1209,13 @@ Note that the secrets will be printed on the job output screen.
 
 The Test Plugin exists mainly to test xyOps, but it can also be useful for testing pieces of workflows.  It outputs sample data and optionally a sample file, which are passed to downstream events, if connected.  It can also simulate various job outcomes (success, fail, etc.).  It offers the following parameters:
 
-| Plugin Parameter | Type | Description |
-|------------------|------|-------------|
-| **Test Duration** | Number | The number of seconds to run before reporting completion.  Progress is always reported. |
-| **Simulate Result** | Menu | Select which result to simulate (Success, Error, Warning, Critical, Crash). |
-| **Burn Memory/CPU** | Checkbox | If checked the Plugin will use some memory and CPU (it will allocate 128-256MB of memory and use about 10% of a CPU core doing math in a loop). |
-| **Generate Network Traffic** | Checkbox | If checked the Plugin will make continuous network requests downloading large binary data blobs (from GitHub). |
-| **Upload Sample File** | Checkbox | If checked the Plugin will produce a sample file and attach it to the job output. |
+| Plugin Parameter             | Type     | Description                                                                                                                                     |
+|------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test Duration**            | Number   | The number of seconds to run before reporting completion.  Progress is always reported.                                                         |
+| **Simulate Result**          | Menu     | Select which result to simulate (Success, Error, Warning, Critical, Crash).                                                                     |
+| **Burn Memory/CPU**          | Checkbox | If checked the Plugin will use some memory and CPU (it will allocate 128-256MB of memory and use about 10% of a CPU core doing math in a loop). |
+| **Generate Network Traffic** | Checkbox | If checked the Plugin will make continuous network requests downloading large binary data blobs (from GitHub).                                  |
+| **Upload Sample File**       | Checkbox | If checked the Plugin will produce a sample file and attach it to the job output.                                                               |
 
 ### Docker Plugin
 
@@ -1229,21 +1227,21 @@ This is built on top of [docker run](https://docs.docker.com/reference/cli/docke
 
 The Docker Plugin uses the following parameters:
 
-| Plugin Parameter | Type | Description |
-|------------------|------|-------------|
-| **Image Name** | Text | The name of the Docker image to use, which can be local or remote. |
-| **Image Version** | Text | The version of the image to use, or `latest`. |
-| **Container Name** | Text | The name of the Docker container, which can use macros such as `{{id}}` to make it unique per job. |
-| **Max CPUs** | Number | The max number of CPU cores the container is allowed to use, or 0 for unlimited. |
-| **Max Memory** | Text | The max amount of memory to allow the container to use (default is unlimited). |
-| **Join Network** | Text | Optionally specify a Docker network name for the container to join. |
-| **Command Extras** | Text | Optionally add any extra command-line arguments to pass to `docker run` (for e.g. volume mounts). |
-| **Launch Command** | Text | The initial command to run as the container starts.  It is recommended to use [xyRun](https://github.com/pixlcore/xyrun) for this, so resources are monitored, and files are managed properly. |
-| **Run Mode** | Menu | Choose whether you want the entire job JSON data to be sent to STDIN, or only the script source (advanced). |
-| **Script Source** | Text | The code to run inside the container.  You can use any language that supports a shebang line. |
-| **Init Process Manager** | Checkbox | Run an "init" inside the container that forwards signals and reaps processes. |
-| **Ephemeral Container** | Checkbox | Automatically delete the container after the job completes (recommended). |
-| **Verbose Logging** | Checkbox | Enable verbose debug logging (raw docker command, etc.) |
+| Plugin Parameter         | Type     | Description                                                                                                                                                                                    |
+|--------------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Image Name**           | Text     | The name of the Docker image to use, which can be local or remote.                                                                                                                             |
+| **Image Version**        | Text     | The version of the image to use, or `latest`.                                                                                                                                                  |
+| **Container Name**       | Text     | The name of the Docker container, which can use macros such as `{{id}}` to make it unique per job.                                                                                             |
+| **Max CPUs**             | Number   | The max number of CPU cores the container is allowed to use, or 0 for unlimited.                                                                                                               |
+| **Max Memory**           | Text     | The max amount of memory to allow the container to use (default is unlimited).                                                                                                                 |
+| **Join Network**         | Text     | Optionally specify a Docker network name for the container to join.                                                                                                                            |
+| **Command Extras**       | Text     | Optionally add any extra command-line arguments to pass to `docker run` (for e.g. volume mounts).                                                                                              |
+| **Launch Command**       | Text     | The initial command to run as the container starts.  It is recommended to use [xyRun](https://github.com/pixlcore/xyrun) for this, so resources are monitored, and files are managed properly. |
+| **Run Mode**             | Menu     | Choose whether you want the entire job JSON data to be sent to STDIN, or only the script source (advanced).                                                                                    |
+| **Script Source**        | Text     | The code to run inside the container.  You can use any language that supports a shebang line.                                                                                                  |
+| **Init Process Manager** | Checkbox | Run an "init" inside the container that forwards signals and reaps processes.                                                                                                                  |
+| **Ephemeral Container**  | Checkbox | Automatically delete the container after the job completes (recommended).                                                                                                                      |
+| **Verbose Logging**      | Checkbox | Enable verbose debug logging (raw docker command, etc.)                                                                                                                                        |
 
 #### Custom Images
 
@@ -1251,12 +1249,11 @@ Feel free to create your own custom Docker image for use in the Docker Plugin.  
 
 If you use an image without xyRun, please note the following caveats:
 
-- Environment variables will not be set (i.e. `JOB_ID`, `JOB_NOW`, etc.).
-- Secrets will not be passed into the container.
+-  Environment variables will not be set (i.e. `JOB_ID`, `JOB_NOW`, etc.).
+-  Secrets will not be passed into the container.
 
 To use a pre-existing Docker image such as `ubuntu`, you can set the launch command to something like `sh`, and then set the "Run Mode" to "Script Source".  This will pipe in your script source directly to the STDIN of the launch process, e.g. `sh`, which will execute it inside the container.
 
 ## Plugin Marketplace
 
 xyOps has an integrated Plugin Marketplace, so you can expand the app's feature set by leveraging Plugins published both by PixlCore (the makers of xyOps), as well as the developer community.  For more on this, please see the [Marketplace Guide](marketplace.md).
-

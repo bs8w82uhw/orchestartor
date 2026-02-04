@@ -1,16 +1,18 @@
-# xyOps Portable Data Format
+---
+title: xyOps Portable Data Format
+---
 
 ## Overview
 
 This document describes the **xyOps Portable Data Format** (XYPDF) v1.0, which is a method of storage for data objects in xyOps.  It enables users to export, store, transfer, and import objects to and from xyOps installations.  Export and import functions are facilitated from the xyOps UI.
 
-- **Title**: xyOps Portable Data Format
-- **ID**: XYPDF
-- **Version**: 1.0
-- **Date**: November 16, 2025
-- **Authors**: Joseph Huckaby (PixlCore)
+-  **Title**: xyOps Portable Data Format
+-  **ID**: XYPDF
+-  **Version**: 1.0
+-  **Date**: November 16, 2025
+-  **Authors**: Joseph Huckaby (PixlCore)
 
-XYPDF is a [JSON](https://en.wikipedia.org/wiki/JSON) formatted text file with a specific layout.  The file can be plain text (with a `.json` file extension), or [Gzip](https://en.wikipedia.org/wiki/Gzip)-compressed (with a `.json.gz` file extension).  The JSON itself may be compacted or pretty-printed.
+XYPDF is a [JSON](https://en.wikipedia.org/wiki/JSON) formatted text file with a specific layout.  The file can be plain text (with a `.json` file extension), or [Gzip](https://en.wikipedia.org/wiki/Gzip)\-compressed (with a `.json.gz` file extension).  The JSON itself may be compacted or pretty-printed.
 
 ## User Interface
 
@@ -20,38 +22,38 @@ xyOps allows the user to "export" objects of various types in the UI.  When this
 
 The top-level JSON properties in the XYPDF file are defined as follows:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `type` | String | File format identifier, should be set to `xypdf`. |
-| `version` | String | File format version, should be set to `1.0` |
+| Property Name | Type   | Description                                                                            |
+|---------------|--------|----------------------------------------------------------------------------------------|
+| `type`        | String | File format identifier, should be set to `xypdf`.                                      |
+| `version`     | String | File format version, should be set to `1.0`                                            |
 | `description` | String | Optional human-readable description of file, will be `xyOps Portable Data` if present. |
-| `items` | Array | An array of sub-objects that define each item in the file.  See below for more. |
+| `items`       | Array  | An array of sub-objects that define each item in the file.  See below for more.        |
 
 Each item the `items` array will be an object with the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `type` | String | Data type identifier, e.g. `plugin`. See below for full list. |
-| `data` | Object | The actual contents of the object (format varies -- see below). |
+| Property Name | Type   | Description                                                     |
+|---------------|--------|-----------------------------------------------------------------|
+| `type`        | String | Data type identifier, e.g. `plugin`. See below for full list.   |
+| `data`        | Object | The actual contents of the object (format varies -- see below). |
 
 ## Object Types
 
 The following object types can be exported from xyOps and included in XYPDF files:
 
-| Data Structure | Type ID | Notes |
-|----------------|---------|-------|
-| [Alert](data.md#alert) | `alert` | - |
-| [APIKey](data.md#apikey) | `api_key` | - |
-| [Bucket](data.md#bucket) | `bucket` | Only includes bucket metadata, not actual files or data. |
-| [Category](data.md#category) | `category` | - |
-| [Channel](data.md#channel) | `channel` | - |
-| [Event](data.md#event) | `event` | Workflows are part of this group, as they are just events with extra properties. |
-| [Group](data.md#group) | `group` | - |
-| [Monitor](data.md#monitor) | `monitor` | - |
-| [Plugin](data.md#plugin) | `plugin` | - |
-| [Role](data.md#role) | `role` | - |
-| [Tag](data.md#tag) | `tag` | - |
-| [WebHook](data.md#webhook) | `web_hook` | - |
+| Data Structure               | Type ID    | Notes                                                                            |
+|------------------------------|------------|----------------------------------------------------------------------------------|
+| [Alert](data.md#alert)       | `alert`    | \-                                                                               |
+| [APIKey](data.md#apikey)     | `api_key`  | \-                                                                               |
+| [Bucket](data.md#bucket)     | `bucket`   | Only includes bucket metadata, not actual files or data.                         |
+| [Category](data.md#category) | `category` | \-                                                                               |
+| [Channel](data.md#channel)   | `channel`  | \-                                                                               |
+| [Event](data.md#event)       | `event`    | Workflows are part of this group, as they are just events with extra properties. |
+| [Group](data.md#group)       | `group`    | \-                                                                               |
+| [Monitor](data.md#monitor)   | `monitor`  | \-                                                                               |
+| [Plugin](data.md#plugin)     | `plugin`   | \-                                                                               |
+| [Role](data.md#role)         | `role`     | \-                                                                               |
+| [Tag](data.md#tag)           | `tag`      | \-                                                                               |
+| [WebHook](data.md#webhook)   | `web_hook` | \-                                                                               |
 
 ## Examples
 
@@ -109,5 +111,5 @@ Also, if any object in an imported XYPDF file will **replace existing data** the
 
 ## References
 
-- [JSON](https://en.wikipedia.org/wiki/JSON)
-- [Gzip](https://en.wikipedia.org/wiki/Gzip)
+-  [JSON](https://en.wikipedia.org/wiki/JSON)
+-  [Gzip](https://en.wikipedia.org/wiki/Gzip)

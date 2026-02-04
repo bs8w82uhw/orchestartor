@@ -1,4 +1,6 @@
-# Actions
+---
+title: Actions
+---
 
 ## Overview
 
@@ -8,10 +10,10 @@ This document explains how actions work, the conditions they support, and detail
 
 ## Key Points
 
-- Actions are small definition objects with three core fields: `enabled`, `condition`, and `type`. Extra fields depend on the type.
-- Job actions live in events and may fire when the job starts or completes with a specific outcome. Some action types are job-only.  Categories and universal defaults can add actions.
-- Alert actions live in alert definitions and fire when an alert is created (fired) and/or cleared. Groups and universal defaults can add actions.
-- Actions execute in parallel and are deduplicated per type + target (e.g., same email recipients, same web hook ID). Results are recorded in activity logs with details where available.
+-  Actions are small definition objects with three core fields: `enabled`, `condition`, and `type`. Extra fields depend on the type.
+-  Job actions live in events and may fire when the job starts or completes with a specific outcome. Some action types are job-only.  Categories and universal defaults can add actions.
+-  Alert actions live in alert definitions and fire when an alert is created (fired) and/or cleared. Groups and universal defaults can add actions.
+-  Actions execute in parallel and are deduplicated per type + target (e.g., same email recipients, same web hook ID). Results are recorded in activity logs with details where available.
 
 Example minimal action (JSON format):
 
@@ -26,57 +28,57 @@ Example minimal action (JSON format):
 
 ## Where Actions Are Defined
 
-- **Event editor**: Add job actions to run on job start or completion outcomes.
-- **Workflow builder**: Attach job actions to workflow nodes.
-- **Alert setup**: Add alert actions to run when alerts fire and/or clear.
-- **Categories**: Event categories can set default job actions.
-- **Groups**: Server groups can set default alert actions.
-- **Universal**: The server config can add universal job and alert actions.
+-  **Event editor**: Add job actions to run on job start or completion outcomes.
+-  **Workflow builder**: Attach job actions to workflow nodes.
+-  **Alert setup**: Add alert actions to run when alerts fire and/or clear.
+-  **Categories**: Event categories can set default job actions.
+-  **Groups**: Server groups can set default alert actions.
+-  **Universal**: The server config can add universal job and alert actions.
 
 ## Action Conditions
 
 Each action has a `condition` selecting when it runs.
 
-- **Job conditions**:
-  - `start`: When the job first starts (before remote launch).
-  - `complete`: When the job completes, regardless of outcome.
-  - `success`: When the job completes successfully (i.e. with `code` equal to `0` or `false`).
-  - `error`: When the job completes with any error (i.e. non-zero/non-false `code`).
-  - `warning`: When the job completes with `code` set to `"warning"`.
-  - `critical`: When the job completes with `code` set to `"critical"`.
-  - `abort`: When the job is aborted (by user or failure condition).
-  - `tag:TAGID`: On job completion, only if the tag is present on the job.
-- **Alert conditions**:
-  - `alert_new`: When an alert fires on a server.
-  - `alert_cleared`: When an active alert clears.
+-  **Job conditions**:
+   -  `start`: When the job first starts (before remote launch).
+   -  `complete`: When the job completes, regardless of outcome.
+   -  `success`: When the job completes successfully (i.e. with `code` equal to `0` or `false`).
+   -  `error`: When the job completes with any error (i.e. non-zero/non-false `code`).
+   -  `warning`: When the job completes with `code` set to `"warning"`.
+   -  `critical`: When the job completes with `code` set to `"critical"`.
+   -  `abort`: When the job is aborted (by user or failure condition).
+   -  `tag:TAGID`: On job completion, only if the tag is present on the job.
+-  **Alert conditions**:
+   -  `alert_new`: When an alert fires on a server.
+   -  `alert_cleared`: When an active alert clears.
 
 Notes:
 
-- Job completion actions only fire if the job was not retried.  This includes tag conditions.
-- Job start actions run before remote launch; a start action can suspend or abort a job before it launches.
+-  Job completion actions only fire if the job was not retried.  This includes tag conditions.
+-  Job start actions run before remote launch; a start action can suspend or abort a job before it launches.
 
 ## How Actions Run
 
-- **Execution**: All matched actions for a given trigger run in parallel.
-- **Deduplication**: Actions are deduped by a composite of type and target (e.g., email recipients, web hook ID, event ID, channel ID, plugin ID, bucket ID). This prevents sending duplicates when multiple sources contribute the same action.
-- **Recording**: For jobs, action activity and details appear in the job's Activity log and metadata. For alerts, the invocation stores action results and details.
+-  **Execution**: All matched actions for a given trigger run in parallel.
+-  **Deduplication**: Actions are deduped by a composite of type and target (e.g., email recipients, web hook ID, event ID, channel ID, plugin ID, bucket ID). This prevents sending duplicates when multiple sources contribute the same action.
+-  **Recording**: For jobs, action activity and details appear in the job's Activity log and metadata. For alerts, the invocation stores action results and details.
 
 ## Compatibility
 
 Some action types are job-only and cannot be used with alerts:
 
-- Job-only: Store Bucket (`store`), Fetch Bucket (`fetch`), Disable Event (`disable`), Delete Event (`delete`), Suspend Job (`suspend`).
-- All others can be used with both jobs and alerts.
+-  Job-only: Store Bucket (`store`), Fetch Bucket (`fetch`), Disable Event (`disable`), Delete Event (`delete`), Suspend Job (`suspend`).
+-  All others can be used with both jobs and alerts.
 
 ## Action Object
 
 All [Action](data.md#action) objects include these common properties:
 
-| Property | Type | Description |
-|---------|------|-------------|
-| `enabled` | Boolean | Enable (`true`) or disable (`false`) the action. |
-| `condition` | String | When to run the action. See Action Conditions. |
-| `type` | String | Which action to perform. See Action Types below. |
+| Property    | Type    | Description                                      |
+|-------------|---------|--------------------------------------------------|
+| `enabled`   | Boolean | Enable (`true`) or disable (`false`) the action. |
+| `condition` | String  | When to run the action. See Action Conditions.   |
+| `type`      | String  | Which action to perform. See Action Types below. |
 
 Additional properties are required based on the action type.
 
@@ -88,11 +90,11 @@ Send an email notification to one or more users and/or explicit email addresses.
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `users` | Array(String) | Optional | Array of [User.username](data.md#user-username) values to email. |
-| `email` | String | Optional | One or more additional recipients, comma-separated. |
-| `body` | String | Optional | Optionally customize the email subject and body using Markdown (see [Custom Email](#custom-email) below). |
+| Name    | Type          | Required | Description                                                                                               |
+|---------|---------------|----------|-----------------------------------------------------------------------------------------------------------|
+| `users` | Array(String) | Optional | Array of [User.username](data.md#user-username) values to email.                                          |
+| `email` | String        | Optional | One or more additional recipients, comma-separated.                                                       |
+| `body`  | String        | Optional | Optionally customize the email subject and body using Markdown (see [Custom Email](#custom-email) below). |
 
 Example (job error):
 
@@ -133,16 +135,16 @@ In addition, special metadata key/value pairs may be specified using [HTML Comme
 
 Here is the list of supported comment properties you can include:
 
-| Comment Key | Description |
-|-------------|-------------|
-| `To` | Becomes the email "To" header.  Use `{{email_to}}` for the combined list of recipients from the action. |
-| `From` | Becomes the email "From" header.  Defaults to the [email_from](config.md#email_from) global configuration property. |
-| `Subject` | Becomes the email "Subject" header. |
-| `Title` | Displayed in large bold text inside the HTML email header.  Usually less verbose than the subject. |
-| `Button` | Optionally include a large button in the header with a label and a link (separated by a pipe). |
-| `Logo_URL` | Optionally customize the URL to the logo image used in the HTML email header. |
-| `Version` | Optionally customize the version text shown in the HTML email footer. |
-| `Copyright` | Optionally customize the copyright text shown in the HTML email footer. |
+| Comment Key | Description                                                                                                         |
+|-------------|---------------------------------------------------------------------------------------------------------------------|
+| `To`        | Becomes the email "To" header.  Use `{{email_to}}` for the combined list of recipients from the action.             |
+| `From`      | Becomes the email "From" header.  Defaults to the [email_from](config.md#email_from) global configuration property. |
+| `Subject`   | Becomes the email "Subject" header.                                                                                 |
+| `Title`     | Displayed in large bold text inside the HTML email header.  Usually less verbose than the subject.                  |
+| `Button`    | Optionally include a large button in the header with a label and a link (separated by a pipe).                      |
+| `Logo_URL`  | Optionally customize the URL to the logo image used in the HTML email header.                                       |
+| `Version`   | Optionally customize the version text shown in the HTML email footer.                                               |
+| `Copyright` | Optionally customize the copyright text shown in the HTML email footer.                                             |
 
 Here is the full template used when jobs complete successfully:
 
@@ -186,10 +188,10 @@ Fire a configured outbound web hook. xyOps sends a templated payload with rich c
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `web_hook` | String | Yes | The [WebHook.ID](data.md#webhook-id) for the hook. |
-| `text` | String | Optional | Extra text appended to the generated message text. |
+| Name       | Type   | Required | Description                                        |
+|------------|--------|----------|----------------------------------------------------|
+| `web_hook` | String | Yes      | The [WebHook.ID](data.md#webhook-id) for the hook. |
+| `text`     | String | Optional | Extra text appended to the generated message text. |
 
 Example (job critical):
 
@@ -222,10 +224,10 @@ Launch another event as a follow-up action. The new job inherits context, and fo
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `event_id` | String | Yes | Target [Event.id](data.md#event-id) to run. |
-| `params` | Object | Optional | Override parameters for the launched event. |
+| Name       | Type   | Required | Description                                 |
+|------------|--------|----------|---------------------------------------------|
+| `event_id` | String | Yes      | Target [Event.id](data.md#event-id) to run. |
+| `params`   | Object | Optional | Override parameters for the launched event. |
 
 Example (job warning):
 
@@ -258,9 +260,9 @@ Notify a configured channel. Channels can bundle users (email/notify), a web hoo
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `channel_id` | String | Yes | Notification [Channel.id](data.md@channel-id). |
+| Name         | Type   | Required | Description                                    |
+|--------------|--------|----------|------------------------------------------------|
+| `channel_id` | String | Yes      | Notification [Channel.id](data.md@channel-id). |
 
 Example (job error):
 
@@ -320,11 +322,11 @@ Create a ticket with a generated body based on context (job or alert). The ticke
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `ticket_type` | String | Yes | See [Ticket.type](data.md#ticket-type) (e.g., `issue`, `task`, etc.). |
-| `ticket_assignees` | Array(String) | Yes | Array of [User.username](data.md#user-username) assignees. |
-| `ticket_tags` | Array(String) | Optional | Array of [Tag.id](data.md#tag-id) values. |
+| Name               | Type          | Required | Description                                                           |
+|--------------------|---------------|----------|-----------------------------------------------------------------------|
+| `ticket_type`      | String        | Yes      | See [Ticket.type](data.md#ticket-type) (e.g., `issue`, `task`, etc.). |
+| `ticket_assignees` | Array(String) | Yes      | Array of [User.username](data.md#user-username) assignees.            |
+| `ticket_tags`      | Array(String) | Optional | Array of [Tag.id](data.md#tag-id) values.                             |
 
 Example (job error):
 
@@ -360,10 +362,10 @@ Invoke a custom Action Plugin. xyOps executes your plugin command/script with a 
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `plugin_id` | String | Yes | The [Plugin.id](data.md#plugin-id) of a plugin with `type: "action"`. |
-| `params` | Object | Optional | Plugin-defined parameter values. |
+| Name        | Type   | Required | Description                                                           |
+|-------------|--------|----------|-----------------------------------------------------------------------|
+| `plugin_id` | String | Yes      | The [Plugin.id](data.md#plugin-id) of a plugin with `type: "action"`. |
+| `params`    | Object | Optional | Plugin-defined parameter values.                                      |
 
 Example (job success):
 
@@ -397,12 +399,12 @@ Suspend the running job until a user resumes it in the UI. Optionally notify use
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `users` | Array(String) | Optional | Array of [User.username](data.md#user-username) values to email. |
-| `email` | String | Optional | One or more additional recipients, comma-separated. |
-| `web_hook` | String | Optional | [WebHook.id](data.md#webhook-id) to fire on suspension. |
-| `text` | String | Optional | Extra text appended to the suspension web hook message. |
+| Name       | Type          | Required | Description                                                      |
+|------------|---------------|----------|------------------------------------------------------------------|
+| `users`    | Array(String) | Optional | Array of [User.username](data.md#user-username) values to email. |
+| `email`    | String        | Optional | One or more additional recipients, comma-separated.              |
+| `web_hook` | String        | Optional | [WebHook.id](data.md#webhook-id) to fire on suspension.          |
+| `text`     | String        | Optional | Extra text appended to the suspension web hook message.          |
 
 Example (job start):
 
@@ -456,11 +458,11 @@ Store job data and/or files into a storage bucket. You can control whether to sy
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `bucket_id` | String | Yes | [Bucket.id](data.md#bucket-id) target. |
-| `bucket_sync` | String | Yes | Controls what types of data are stored.  One of `data`, `files`, `data_and_files`. |
-| `bucket_glob` | String | Optional | Glob pattern to match selective job files and only store those (default `*`). |
+| Name          | Type   | Required | Description                                                                        |
+|---------------|--------|----------|------------------------------------------------------------------------------------|
+| `bucket_id`   | String | Yes      | [Bucket.id](data.md#bucket-id) target.                                             |
+| `bucket_sync` | String | Yes      | Controls what types of data are stored.  One of `data`, `files`, `data_and_files`. |
+| `bucket_glob` | String | Optional | Glob pattern to match selective job files and only store those (default `*`).      |
 
 Example (job success):
 
@@ -483,11 +485,11 @@ Fetch bucket data and/or files and attach them to the job's input context. Files
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `bucket_id` | String | Yes | [Bucket.id](data.md#bucket-id) target. |
-| `bucket_sync` | String | Yes | Controls what types of data are fetched.  One of `data`, `files`, `data_and_files`. |
-| `bucket_glob` | String | Optional | Glob pattern to match selective job files and only fetch those (default `*`). |
+| Name          | Type   | Required | Description                                                                         |
+|---------------|--------|----------|-------------------------------------------------------------------------------------|
+| `bucket_id`   | String | Yes      | [Bucket.id](data.md#bucket-id) target.                                              |
+| `bucket_sync` | String | Yes      | Controls what types of data are fetched.  One of `data`, `files`, `data_and_files`. |
+| `bucket_glob` | String | Optional | Glob pattern to match selective job files and only fetch those (default `*`).       |
 
 Example (job start):
 
@@ -508,9 +510,9 @@ Apply a custom set of tags to the job or workflow.
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `tags` | Array | Yes | A list of [Tag.id](data.md#tag-id)s to apply. |
+| Name   | Type  | Required | Description                                   |
+|--------|-------|----------|-----------------------------------------------|
+| `tags` | Array | Yes      | A list of [Tag.id](data.md#tag-id)s to apply. |
 
 Example (job complete):
 
@@ -527,12 +529,12 @@ Note that tags are deduplicated when the job completes.
 
 ## Notes and Tips
 
-- For job actions, the email/web hook payloads include job links, log excerpts, performance metrics and any attached files (where applicable).
-- For alert actions, payloads include friendly server details, links to the server and alert, and the alert message.
-- Tag-based job conditions are specified as `tag:TAGID` and fire only at job completion.
-- Bucket actions respect configured limits such as maximum file size and maximum files per bucket.
+-  For job actions, the email/web hook payloads include job links, log excerpts, performance metrics and any attached files (where applicable).
+-  For alert actions, payloads include friendly server details, links to the server and alert, and the alert message.
+-  Tag-based job conditions are specified as `tag:TAGID` and fire only at job completion.
+-  Bucket actions respect configured limits such as maximum file size and maximum files per bucket.
 
 ## See Also
 
-- [Action](data.md#action) data structure
-- [Alerts](alerts.md)
+-  [Action](data.md#action) data structure
+-  [Alerts](alerts.md)

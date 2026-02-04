@@ -1,4 +1,6 @@
-# Command Line
+---
+title: Command Line
+---
 
 ## Overview
 
@@ -10,18 +12,18 @@ Here are all the xyOps services available to you on the command line.  Most of t
 
 Here are all the accepted commands:
 
-| Command | Description |
-|---------|-------------|
-| `start` | Starts xyOps in daemon mode. See [Starting and Stopping](CommandLine.md#starting-and-stopping). |
-| `stop` | Stops the xyOps daemon and waits for exit. See [Starting and Stopping](CommandLine.md#starting-and-stopping). |
-| `restart` | Calls `stop`, then `start`, in sequence. See [Starting and Stopping](CommandLine.md#starting-and-stopping).  |
-| `status` | Checks whether xyOps is currently running. See [Starting and Stopping](CommandLine.md#starting-and-stopping).  |
-| `admin` | Creates new emergency admin account (specify user / pass). See [Recover Admin Access](CommandLine.md#recover-admin-access). |
-| `grant` | Manually grant a privilege to a user: `bin/control.sh grant USERNAME PRIVILEGE_ID`. |
-| `revoke` | Manually revoke a privilege from a user: `bin/control.sh revoke USERNAME PRIVILEGE_ID`. |
-| `upgrade` | Upgrades xyOps to the latest stable (or specify version). See [Upgrading xyOps](CommandLine.md#upgrading-xyops). |
-| `version` | Outputs the current xyOps package version and exits. |
-| `help` | Displays a list of available commands and exits. |
+| Command   | Description                                                                                                                 |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------|
+| `start`   | Starts xyOps in daemon mode. See [Starting and Stopping](CommandLine.md#starting-and-stopping).                             |
+| `stop`    | Stops the xyOps daemon and waits for exit. See [Starting and Stopping](CommandLine.md#starting-and-stopping).               |
+| `restart` | Calls `stop`, then `start`, in sequence. See [Starting and Stopping](CommandLine.md#starting-and-stopping).                 |
+| `status`  | Checks whether xyOps is currently running. See [Starting and Stopping](CommandLine.md#starting-and-stopping).               |
+| `admin`   | Creates new emergency admin account (specify user / pass). See [Recover Admin Access](CommandLine.md#recover-admin-access). |
+| `grant`   | Manually grant a privilege to a user: `bin/control.sh grant USERNAME PRIVILEGE_ID`.                                         |
+| `revoke`  | Manually revoke a privilege from a user: `bin/control.sh revoke USERNAME PRIVILEGE_ID`.                                     |
+| `upgrade` | Upgrades xyOps to the latest stable (or specify version). See [Upgrading xyOps](CommandLine.md#upgrading-xyops).            |
+| `version` | Outputs the current xyOps package version and exits.                                                                        |
+| `help`    | Displays a list of available commands and exits.                                                                            |
 
 ## Starting and Stopping
 
@@ -127,6 +129,6 @@ To fetch a single record from a database:
 
 This is a low-level developer tool, and requires advanced knowledge of the database system in xyOps.  To learn more, see:
 
-- The `/opt/xyops/internal/unbase.json` file, which describes all the database tables in xyOps.
-- The [Unbase](https://github.com/jhuckaby/pixl-server-unbase) database system which powers xyOps.
-- The [query syntax](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries) documentation.
+-  The `/opt/xyops/internal/unbase.json` file, which describes all the database tables in xyOps.
+-  The [Unbase](https://github.com/jhuckaby/pixl-server-unbase) database system which powers xyOps.
+-  The [query syntax](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries) documentation.

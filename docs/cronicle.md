@@ -1,4 +1,6 @@
-# Cronicle
+---
+title: Cronicle
+---
 
 ## Overview
 
@@ -22,8 +24,7 @@ To import your Cronicle data into xyOps, follow these steps:
 4. In the "**File Format**" menu, select "**Cronicle Data Format**".
 5. Click the "**Choose File...**" button and select your Cronicle data export file.
 
-> [!WARNING]
-> The bulk import operation is destructive, and will delete all data in the way.  Also, this will abort all running jobs, flush all queued jobs, and the scheduler will automatically be paused.
+> \[!WARNING\] The bulk import operation is destructive, and will delete all data in the way.  Also, this will abort all running jobs, flush all queued jobs, and the scheduler will automatically be paused.
 
 Once the process is complete, a notification will appear in the bottom-left corner of your screen.  Then, you can click on the "**Activity**" tab in the sidebar, locate the completed import job (should be the topmost entry) and click the "**Details...**" link to see a full report, including any warnings or errors.
 
@@ -51,8 +52,7 @@ You can also set it via environment variable if you like:
 XYOPS_satellite__config__cronicle="true"
 ```
 
-> [!NOTE]
-> Changing the Satellite Configuration requires a restart for the changes to take effect across all your servers.
+> \[!NOTE\] Changing the Satellite Configuration requires a restart for the changes to take effect across all your servers.
 
 ## White-Label UI
 
@@ -90,5 +90,5 @@ Also, stopping the primary xyOps service does not abort any running jobs.  They 
 
 User and API Key privileges are automatically migrated over to xyOps, but there are a couple of exceptions:
 
-- Cronicle's **Toggle Scheduler** user privilege doesn't exist in xyOps.  The feature exists, but it is limited to administrators only.
-- Cronicle's undocumented `job_read_only` privilege doesn't exist in xyOps.  Instead, individual Plugin and Event parameters can be marked as "administrator locked" (only admins can write to them), and the Shell Plugin script param is preconfigured this way.
+-  Cronicle's **Toggle Scheduler** user privilege doesn't exist in xyOps.  The feature exists, but it is limited to administrators only.
+-  Cronicle's undocumented `job_read_only` privilege doesn't exist in xyOps.  Instead, individual Plugin and Event parameters can be marked as "administrator locked" (only admins can write to them), and the Shell Plugin script param is preconfigured this way.

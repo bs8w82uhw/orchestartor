@@ -1,4 +1,6 @@
-# Limits
+---
+title: Limits
+---
 
 ## Overview
 
@@ -6,10 +8,10 @@ Limits are self-imposed restrictions you can place on your events, to govern res
 
 In some cases when multiple limits of the same type are present for a job, only one limit will apply.  This is true for [Max Concurrent Jobs](#max-concurrent-jobs), [Max Retry Limit](#max-retry-limit), [Max Queue Limit](#max-queue-limit), and [Max File Limit](#max-file-limit).  For these limits xyOps will pick the first enabled limit it finds of the selected type, with the limits presorted in this order:
 
-- Event defined limits *(highest priority)*
-- Workflow limit nodes
-- Category inherited limits
-- Universal inherited limits *(lowest priority)*
+-  Event defined limits *(highest priority)*
+-  Workflow limit nodes
+-  Category inherited limits
+-  Universal inherited limits *(lowest priority)*
 
 For other limit types, e.g. [Max Run Time](#max-run-time), [Max Output Size](#max-output-size), [Max CPU Limit](#max-cpu-limit) and [Max Memory Limit](#max-memory-limit), when multiple limits are present, all of them are applied.  For example, you may want to emit a warning when a job uses 500MB of memory, but abort the job if the memory usage reaches 1GB.  You can achieve this by adding two separate limits, and they will both be honored.
 
@@ -17,10 +19,10 @@ This document explains how limits work, where they are defined, precedence and i
 
 ## Key Points
 
-- Limits apply to both events and workflows. Workflows are just events in this context and support all limit types.
-- Categories can define default limits that auto-inherit to all events in the category. Events can override category defaults.
-- Universal defaults can be set in the main config and auto-inherit to all jobs/workflows.
-- Resource limits for running jobs (time, log size, memory, CPU) can trigger additional actions such as applying tags, sending email, firing a web hook, taking a snapshot, and optionally aborting the job.
+-  Limits apply to both events and workflows. Workflows are just events in this context and support all limit types.
+-  Categories can define default limits that auto-inherit to all events in the category. Events can override category defaults.
+-  Universal defaults can be set in the main config and auto-inherit to all jobs/workflows.
+-  Resource limits for running jobs (time, log size, memory, CPU) can trigger additional actions such as applying tags, sending email, firing a web hook, taking a snapshot, and optionally aborting the job.
 
 Minimal example (JSON):
 
@@ -34,28 +36,28 @@ Minimal example (JSON):
 
 ## Where Limits Are Defined
 
-- **Event / Workflow** editor: Add limits directly to a specific job or workflow.
-- **Category** editor: Add default limits that all events in the category inherit.
-- **Configuration**: Add universal defaults in `job_universal_limits` for event jobs or only workflows.
+-  **Event / Workflow** editor: Add limits directly to a specific job or workflow.
+-  **Category** editor: Add default limits that all events in the category inherit.
+-  **Configuration**: Add universal defaults in `job_universal_limits` for event jobs or only workflows.
 
 ## Scope, Inheritance, and Precedence
 
-- All three sources can contribute limits: event/workflow, category, and universal.
-- Precedence is by source order when launching jobs:
-	- Event/workflow limits first (highest precedence)
-	- Category limits next
-	- Universal limits last
-- xyOps consults the first matching limit by `type` for start-time checks like Max Concurrent Jobs (`job`) and Max Queue (`queue`). 
-- For running resource checks (`time`, `log`, `mem`, `cpu`), multiple limits can exist, and they all apply, and can perform separate actions.
+-  All three sources can contribute limits: event/workflow, category, and universal.
+-  Precedence is by source order when launching jobs:
+   -  Event/workflow limits first (highest precedence)
+   -  Category limits next
+   -  Universal limits last
+-  xyOps consults the first matching limit by `type` for start-time checks like Max Concurrent Jobs (`job`) and Max Queue (`queue`).
+-  For running resource checks (`time`, `log`, `mem`, `cpu`), multiple limits can exist, and they all apply, and can perform separate actions.
 
 ## Limit Object
 
 All [Limit](data.md#limit) objects include these common properties:
 
-| Property | Type | Description |
-|---------|------|-------------|
+| Property  | Type    | Description                                     |
+|-----------|---------|-------------------------------------------------|
 | `enabled` | Boolean | Enable (`true`) or disable (`false`) the limit. |
-| `type` | String | Which limit to apply. See Limit Types below. |
+| `type`    | String  | Which limit to apply. See Limit Types below.    |
 
 Additional properties are required based on the limit type.
 
@@ -69,17 +71,17 @@ Enforce a soft or hard cap on total job elapsed time. When exceeded, optional ac
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `type` | String | Yes | Set to `time` for max run time. |
-| `duration` | Number | Yes | Maximum runtime in seconds. |
-| `tags` | Array(String) | Optional | Apply these [Tag.id](data.md#tag-id) values when exceeded. |
-| `users` | Array(String) | Optional | Email these [User.username](data.md#user-username) users. |
-| `email` | String | Optional | Additional comma-separated email addresses. |
-| `web_hook` | String | Optional | Fire this [WebHook.id](data.md#webhook-id) when exceeded. |
-| `text` | String | Optional | Custom text appended to the web hook message. |
-| `snapshot` | Boolean | Optional | Take a server snapshot when exceeded. |
-| `abort` | Boolean | Optional | Abort the job when exceeded. |
+| Name       | Type          | Required | Description                                                |
+|------------|---------------|----------|------------------------------------------------------------|
+| `type`     | String        | Yes      | Set to `time` for max run time.                            |
+| `duration` | Number        | Yes      | Maximum runtime in seconds.                                |
+| `tags`     | Array(String) | Optional | Apply these [Tag.id](data.md#tag-id) values when exceeded. |
+| `users`    | Array(String) | Optional | Email these [User.username](data.md#user-username) users.  |
+| `email`    | String        | Optional | Additional comma-separated email addresses.                |
+| `web_hook` | String        | Optional | Fire this [WebHook.id](data.md#webhook-id) when exceeded.  |
+| `text`     | String        | Optional | Custom text appended to the web hook message.              |
+| `snapshot` | Boolean       | Optional | Take a server snapshot when exceeded.                      |
+| `abort`    | Boolean       | Optional | Abort the job when exceeded.                               |
 
 Example:
 
@@ -104,15 +106,15 @@ Limit how many jobs of the same event/workflow may run at once. If the cap is re
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `type` | String | Yes | Set to `job` for max concurrent jobs. |
-| `amount` | Number | Yes | Maximum number of concurrent active jobs for the event/workflow. |
+| Name     | Type   | Required | Description                                                      |
+|----------|--------|----------|------------------------------------------------------------------|
+| `type`   | String | Yes      | Set to `job` for max concurrent jobs.                            |
+| `amount` | Number | Yes      | Maximum number of concurrent active jobs for the event/workflow. |
 
 Notes:
 
-- Scope for workflows matches the workflow's event; for ad-hoc workflow node jobs, the queue scope includes the node ID.
-- Works in tandem with `queue`: without a queue, jobs are aborted when the limit is reached.
+-  Scope for workflows matches the workflow's event; for ad-hoc workflow node jobs, the queue scope includes the node ID.
+-  Works in tandem with `queue`: without a queue, jobs are aborted when the limit is reached.
 
 Example:
 
@@ -130,17 +132,17 @@ Cap the job's output/log size (bytes). When exceeded, optional actions can be ta
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `type` | String | Yes | Set to `log` for max output size. |
-| `amount` | Number | Yes | Maximum bytes of output/log content. |
-| `tags` | Array(String) | Optional | Apply these tags when exceeded. |
-| `users` | Array(String) | Optional | Email these users. |
-| `email` | String | Optional | Additional comma-separated email addresses. |
-| `web_hook` | String | Optional | Fire this web hook. |
-| `text` | String | Optional | Custom text appended to the web hook message. |
-| `snapshot` | Boolean | Optional | Take a server snapshot when exceeded. |
-| `abort` | Boolean | Optional | Abort the job when exceeded. |
+| Name       | Type          | Required | Description                                   |
+|------------|---------------|----------|-----------------------------------------------|
+| `type`     | String        | Yes      | Set to `log` for max output size.             |
+| `amount`   | Number        | Yes      | Maximum bytes of output/log content.          |
+| `tags`     | Array(String) | Optional | Apply these tags when exceeded.               |
+| `users`    | Array(String) | Optional | Email these users.                            |
+| `email`    | String        | Optional | Additional comma-separated email addresses.   |
+| `web_hook` | String        | Optional | Fire this web hook.                           |
+| `text`     | String        | Optional | Custom text appended to the web hook message. |
+| `snapshot` | Boolean       | Optional | Take a server snapshot when exceeded.         |
+| `abort`    | Boolean       | Optional | Abort the job when exceeded.                  |
 
 Example:
 
@@ -160,18 +162,18 @@ Cap total memory usage for the job (including child processes). The limit trigge
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `type` | String | Yes | Set to `mem` for max memory limit. |
-| `amount` | Number | Yes | Maximum memory in bytes. |
-| `duration` | Number | Yes | Sustain time in seconds over the limit before triggering. |
-| `tags` | Array(String) | Optional | Apply these tags when exceeded. |
-| `users` | Array(String) | Optional | Email these users. |
-| `email` | String | Optional | Additional comma-separated email addresses. |
-| `web_hook` | String | Optional | Fire this web hook. |
-| `text` | String | Optional | Custom text appended to the web hook message. |
-| `snapshot` | Boolean | Optional | Take a server snapshot when exceeded. |
-| `abort` | Boolean | Optional | Abort the job when exceeded. |
+| Name       | Type          | Required | Description                                               |
+|------------|---------------|----------|-----------------------------------------------------------|
+| `type`     | String        | Yes      | Set to `mem` for max memory limit.                        |
+| `amount`   | Number        | Yes      | Maximum memory in bytes.                                  |
+| `duration` | Number        | Yes      | Sustain time in seconds over the limit before triggering. |
+| `tags`     | Array(String) | Optional | Apply these tags when exceeded.                           |
+| `users`    | Array(String) | Optional | Email these users.                                        |
+| `email`    | String        | Optional | Additional comma-separated email addresses.               |
+| `web_hook` | String        | Optional | Fire this web hook.                                       |
+| `text`     | String        | Optional | Custom text appended to the web hook message.             |
+| `snapshot` | Boolean       | Optional | Take a server snapshot when exceeded.                     |
+| `abort`    | Boolean       | Optional | Abort the job when exceeded.                              |
 
 Example:
 
@@ -193,18 +195,18 @@ Cap CPU usage for the job (including child processes). The limit triggers only i
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `type` | String | Yes | Set to `cpu` for max CPU limit. |
-| `amount` | Number | Yes | CPU percentage, where `100` equals one core fully utilized. |
-| `duration` | Number | Yes | Sustain time in seconds over the limit before triggering. |
-| `tags` | Array(String) | Optional | Apply these tags when exceeded. |
-| `users` | Array(String) | Optional | Email these users. |
-| `email` | String | Optional | Additional comma-separated email addresses. |
-| `web_hook` | String | Optional | Fire this web hook. |
-| `text` | String | Optional | Custom text appended to the web hook message. |
-| `snapshot` | Boolean | Optional | Take a server snapshot when exceeded. |
-| `abort` | Boolean | Optional | Abort the job when exceeded. |
+| Name       | Type          | Required | Description                                                 |
+|------------|---------------|----------|-------------------------------------------------------------|
+| `type`     | String        | Yes      | Set to `cpu` for max CPU limit.                             |
+| `amount`   | Number        | Yes      | CPU percentage, where `100` equals one core fully utilized. |
+| `duration` | Number        | Yes      | Sustain time in seconds over the limit before triggering.   |
+| `tags`     | Array(String) | Optional | Apply these tags when exceeded.                             |
+| `users`    | Array(String) | Optional | Email these users.                                          |
+| `email`    | String        | Optional | Additional comma-separated email addresses.                 |
+| `web_hook` | String        | Optional | Fire this web hook.                                         |
+| `text`     | String        | Optional | Custom text appended to the web hook message.               |
+| `snapshot` | Boolean       | Optional | Take a server snapshot when exceeded.                       |
+| `abort`    | Boolean       | Optional | Abort the job when exceeded.                                |
 
 Example:
 
@@ -226,11 +228,11 @@ Control how many retries are attempted for failed jobs, and optionally how long 
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `type` | String | Yes | Set to `retry` for max retry limit. |
-| `amount` | Number | Yes | Maximum number of retries to attempt. `0` disables retries. |
-| `duration` | Number | Optional | Delay in seconds between retries. |
+| Name       | Type   | Required | Description                                                 |
+|------------|--------|----------|-------------------------------------------------------------|
+| `type`     | String | Yes      | Set to `retry` for max retry limit.                         |
+| `amount`   | Number | Yes      | Maximum number of retries to attempt. `0` disables retries. |
+| `duration` | Number | Optional | Delay in seconds between retries.                           |
 
 Example:
 
@@ -249,10 +251,10 @@ Cap how many jobs are allowed to wait in the queue when concurrency or server av
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `type` | String | Yes | Set to `queue` for max queue limit. |
-| `amount` | Number | Yes | Maximum number of queued jobs allowed. `0` disables queueing. |
+| Name     | Type   | Required | Description                                                   |
+|----------|--------|----------|---------------------------------------------------------------|
+| `type`   | String | Yes      | Set to `queue` for max queue limit.                           |
+| `amount` | Number | Yes      | Maximum number of queued jobs allowed. `0` disables queueing. |
 
 Example:
 
@@ -270,11 +272,11 @@ Soft limit that prunes incoming files (from job input) before launch. It can cap
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `type` | String | Yes | Set to `file` for max file limit. |
-| `amount` | Number | Yes | Maximum number of input files allowed. `0` means **no** files permitted. |
-| `size` | Number | Optional | Maximum total combined size (bytes) for all files. |
+| Name     | Type   | Required | Description                                                                                                      |
+|----------|--------|----------|------------------------------------------------------------------------------------------------------------------|
+| `type`   | String | Yes      | Set to `file` for max file limit.                                                                                |
+| `amount` | Number | Yes      | Maximum number of input files allowed. `0` means **no** files permitted.                                         |
+| `size`   | Number | Optional | Maximum total combined size (bytes) for all files.                                                               |
 | `accept` | String | Optional | Comma-separated list of file extensions to allow (include the leading dot, case-insensitive), e.g. `.json,.csv`. |
 
 Example:
@@ -295,11 +297,11 @@ This limit will quietly prevent additional job launches if a specific daily cond
 
 Parameters:
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `type` | String | Yes | Set to `day` for max daily limit. |
-| `condition` | String | Yes | Which job [condition](data.md#action-condition) to track in the daily stats (e.g. `complete`). |
-| `amount` | Number | Yes | Maximum number of conditions allowed per day. |
+| Name        | Type   | Required | Description                                                                                    |
+|-------------|--------|----------|------------------------------------------------------------------------------------------------|
+| `type`      | String | Yes      | Set to `day` for max daily limit.                                                              |
+| `condition` | String | Yes      | Which job [condition](data.md#action-condition) to track in the daily stats (e.g. `complete`). |
+| `amount`    | Number | Yes      | Maximum number of conditions allowed per day.                                                  |
 
 Example:
 
@@ -334,10 +336,10 @@ Example:
 
 ## Notes and Behavior
 
-- Start-time enforcement: `job`, `queue`, and `file` limits are evaluated before launch. `job`/`queue` determine whether a job runs now, queues, or aborts. `file` prunes input.
-- Runtime enforcement: `time`, `log`, `mem`, `cpu` are checked while the job runs. `mem` and `cpu` require sustained overages for their `duration` before triggering.
-- Triggered actions: For `time`, `log`, `mem`, `cpu`, when exceeded xyOps can apply tags, send emails, fire a web hook (with optional extra text), take a snapshot, and abort the job. All actions are recorded in the job's Activity log with details.
-- Multiple similar limits: If multiple sources define the same type, the event/workflow definition takes precedence for start-time checks.
-- Queues and scope: Queues are per event. For ad-hoc workflow node runs, the queue scope includes the node identifier to avoid cross-contending unrelated nodes. Queues are used both when `job` concurrency is saturated and when no matching servers are currently available.
+-  Start-time enforcement: `job`, `queue`, and `file` limits are evaluated before launch. `job`/`queue` determine whether a job runs now, queues, or aborts. `file` prunes input.
+-  Runtime enforcement: `time`, `log`, `mem`, `cpu` are checked while the job runs. `mem` and `cpu` require sustained overages for their `duration` before triggering.
+-  Triggered actions: For `time`, `log`, `mem`, `cpu`, when exceeded xyOps can apply tags, send emails, fire a web hook (with optional extra text), take a snapshot, and abort the job. All actions are recorded in the job's Activity log with details.
+-  Multiple similar limits: If multiple sources define the same type, the event/workflow definition takes precedence for start-time checks.
+-  Queues and scope: Queues are per event. For ad-hoc workflow node runs, the queue scope includes the node identifier to avoid cross-contending unrelated nodes. Queues are used both when `job` concurrency is saturated and when no matching servers are currently available.
 
 See also: [Limit](data.md#limit) and [Limit Types](data.md#limit-type) for the canonical data structure definitions.

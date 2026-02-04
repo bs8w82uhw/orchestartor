@@ -1,4 +1,6 @@
-# Single Sign-On 
+---
+title: Single Sign-On
+---
 
 ## Overview
 
@@ -11,10 +13,10 @@ xyOps uses the "trusted headers" implementation for SSO, allowing for easy integ
 The trusted header flow works as follows:
 
 1. The authentication tool sits in front, and redirects the user to the identity provider as needed.
-	- Some of these auth tools can also provide SSL termination for you, or be used in combination with a proxy such as [Nginx](https://nginx.org/) for SSL.
+   -  Some of these auth tools can also provide SSL termination for you, or be used in combination with a proxy such as [Nginx](https://nginx.org/) for SSL.
 2. Once the user is authenticated, the tool forwards the request to xyOps and includes a set of special "trusted headers".
 3. xyOps detects the headers and creates/updates a user account as necessary, and logs the user in using its own session system.
-	- xyOps can also automatically assign user roles and/or privileges based on groups you define in your identity provider.
+   -  xyOps can also automatically assign user roles and/or privileges based on groups you define in your identity provider.
 
 ## Setup
 
@@ -137,19 +139,19 @@ All the SSO settings for xyOps are contained in the `/opt/xyops/conf/sso.json` f
 
 Here are descriptions of all the SSO properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `enabled` | Boolean | Set this to `true` to enable SSO login (and disable classic user/pass login!). |
-| `whitelist` | Array | This allows you to limit the trusted headers mechanism to the proxy that performed the auth.  See [Live Production](#live-production) for more on this. |
-| `header_map` | Object | This allows you to map trusted headers to standard xyOps user properties.  See [Header Map](#header-map) below for details. |
-| `cleanup_username` | Boolean | Set this to `true` to cleanup the username received from the trusted headers.  See [Header Map](#header-map) below for details. |
-| `cleanup_full_name` | Boolean | Set this to `true` to cleanup the user's full name received from the trusted headers.  See [Header Map](#header-map) below for details. |
-| `group_role_map` | Object | Automatically assign roles to users based on groups received from the trusted headers.  See [User Groups](#user-groups) below for details. |
-| `group_privilege_map` | Object | Automatically assign privileges to users based on groups received from the trusted headers.  See [User Groups](#user-groups) below for details. |
-| `replace_roles` | Boolean | Set this to `true` to replace **all** the user's roles with those mapped via `group_role_map` only.  See [User Groups](#user-groups) below for details. |
-| `replace_privileges` | Boolean | Set this to `true` to replace **all** the user's privileges with those mapped via `group_role_map` only.  See [User Groups](#user-groups) below for details. |
-| `admin_bootstrap` | String | Temporarily assign full administrator privileges to a given user.  This is used for bootstrapping the system on initial setup.  See [Admin Bootstrap](#admin-bootstrap) for more. |
-| `logout_url` | String | Set this to the URL to redirect the user to after xyOps performs its own logout.  See [Logging Out](#logging-out) below for details. |
+| Property Name         | Type    | Description                                                                                                                                                                       |
+|-----------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `enabled`             | Boolean | Set this to `true` to enable SSO login (and disable classic user/pass login!).                                                                                                    |
+| `whitelist`           | Array   | This allows you to limit the trusted headers mechanism to the proxy that performed the auth.  See [Live Production](#live-production) for more on this.                           |
+| `header_map`          | Object  | This allows you to map trusted headers to standard xyOps user properties.  See [Header Map](#header-map) below for details.                                                       |
+| `cleanup_username`    | Boolean | Set this to `true` to cleanup the username received from the trusted headers.  See [Header Map](#header-map) below for details.                                                   |
+| `cleanup_full_name`   | Boolean | Set this to `true` to cleanup the user's full name received from the trusted headers.  See [Header Map](#header-map) below for details.                                           |
+| `group_role_map`      | Object  | Automatically assign roles to users based on groups received from the trusted headers.  See [User Groups](#user-groups) below for details.                                        |
+| `group_privilege_map` | Object  | Automatically assign privileges to users based on groups received from the trusted headers.  See [User Groups](#user-groups) below for details.                                   |
+| `replace_roles`       | Boolean | Set this to `true` to replace **all** the user's roles with those mapped via `group_role_map` only.  See [User Groups](#user-groups) below for details.                           |
+| `replace_privileges`  | Boolean | Set this to `true` to replace **all** the user's privileges with those mapped via `group_role_map` only.  See [User Groups](#user-groups) below for details.                      |
+| `admin_bootstrap`     | String  | Temporarily assign full administrator privileges to a given user.  This is used for bootstrapping the system on initial setup.  See [Admin Bootstrap](#admin-bootstrap) for more. |
+| `logout_url`          | String  | Set this to the URL to redirect the user to after xyOps performs its own logout.  See [Logging Out](#logging-out) below for details.                                              |
 
 ### Header Map
 
@@ -182,11 +184,11 @@ In this case we're using the email address as the username, full name, and email
 
 To perform header cleanup, set the `cleanup_username` and/or `cleanup_full_name` properties to `true`.  Here is what each does:
 
-- `cleanup_username` extracts a usable username from an email address.  It does this by grabbing everything up to the `@` symbol, stripping all illegal symbols (anything other than alphanumerics, dots, dashes, periods and underscores), and converting it to lower-case.  For example, `John.Smith@example.com` would become `john.smith`.
-	- This assumes all of your users have "company email addresses" and all share the same email domain, so the first part of their email addresses is a viable username.
-	- If you would rather use the full email address as the username, set `cleanup_username` to `false`.  This will use the full email address but still convert all illegal symbols to underscores, and lower-case the final result.  In this case `John.Smith@example.com` would become `john.smith_example.com`.
-- `cleanup_full_name` extracts a usable display name from an email address.  It does this by grabbing everything up to the `@` symbol, converting periods to spaces, and title-casing each word.  For example, `john.smith@example.com` would become `John Smith`.  Obviously this works best for `first.last` email address formats.
-	- If you set `cleanup_full_name` to false the user's full email address will be set to their display name.
+-  `cleanup_username` extracts a usable username from an email address.  It does this by grabbing everything up to the `@` symbol, stripping all illegal symbols (anything other than alphanumerics, dots, dashes, periods and underscores), and converting it to lower-case.  For example, `John.Smith@example.com` would become `john.smith`.
+   -  This assumes all of your users have "company email addresses" and all share the same email domain, so the first part of their email addresses is a viable username.
+   -  If you would rather use the full email address as the username, set `cleanup_username` to `false`.  This will use the full email address but still convert all illegal symbols to underscores, and lower-case the final result.  In this case `John.Smith@example.com` would become `john.smith_example.com`.
+-  `cleanup_full_name` extracts a usable display name from an email address.  It does this by grabbing everything up to the `@` symbol, converting periods to spaces, and title-casing each word.  For example, `john.smith@example.com` would become `John Smith`.  Obviously this works best for `first.last` email address formats.
+   -  If you set `cleanup_full_name` to false the user's full email address will be set to their display name.
 
 These complications are why it's important to first follow the initial [Setup](#setup) step above, where you can test your SSO setup with a pure passthrough echo server, so you can see exactly what fields your IdP sends over, and how your auth middleware maps those fields to request headers.  Armed with this knowledge, you'll know exactly how to configure the `header_map` in xyOps.
 
@@ -255,9 +257,9 @@ Note that the username must match exactly here, including any cleanup that may b
 
 When a user clicks the "Logout" button in the top-right corner of the xyOps UI, we need to perform some additional steps behind the scenes to *fully* log the user out.  With SSO in the mix, there are actually three cookies that need to be cleared:
 
-- The xyOps session cookie.
-- The OAuth2-Proxy cookie.
-- The external IdP cookie.
+-  The xyOps session cookie.
+-  The OAuth2-Proxy cookie.
+-  The external IdP cookie.
 
 xyOps handles the first one using its own API.  But you'll need to configure a custom `logout_url` in your `sso.json` file to redirect the user to afterwards.  With OAuth2-Proxy this should be set to:
 
@@ -331,10 +333,10 @@ services:
 
 A few things to note here:
 
-- The external port has been changed to 443.
-- We've set `OAUTH2_PROXY_COOKIE_SECURE` to `true`, as we'll be secure from this point onward.
-- You'll need to point a domain at the proxy, and add it to `OAUTH2_PROXY_WHITELIST_DOMAINS` (as well as your IdP domain).
-- Generate your TLS certificate files, and place them where Docker can find them (see below).
+-  The external port has been changed to 443.
+-  We've set `OAUTH2_PROXY_COOKIE_SECURE` to `true`, as we'll be secure from this point onward.
+-  You'll need to point a domain at the proxy, and add it to `OAUTH2_PROXY_WHITELIST_DOMAINS` (as well as your IdP domain).
+-  Generate your TLS certificate files, and place them where Docker can find them (see below).
 
 For the xyOps container, it needs several configuration files.  We are bind mapping a local host directory in the example above (`/local/path/to/xyops-conf`).  Please change this path to an appropriate location on the host where you want these files stored.  Launch the container once, and it will generate all config files for you.  Then, see the [xyOps Configuration Guide](config.md) for details on how to customize the files.  The TLS cert files also live in this directory.
 
@@ -348,26 +350,26 @@ In this case, since we are only running a single conductor server, we can route 
 
 For a load balanced multi-conductor setup with Nginx w/TLS and OAuth-Proxy for SSO, please read this section.  This is definitely the most complex setup, and requires advanced knowledge of all the components used.  Let me just plug our [Enterprise Plan](https://xyops.io/pricing) one last time, as we can set all this up for you.  Now, the way this configuration works is as follows:
 
-- [Nginx](https://nginx.org/) sits in front, and handles TLS termination, as well as routing requests to various backends.
-- [OAuth2-Proxy](https://github.com/oauth2-proxy/oauth2-proxy) handles SSO, and is integrated via Nginx using the [auth_request](https://nginx.org/en/docs/http/ngx_http_auth_request_module.html) directive.
-	- Meaning, OAuth2-Proxy sits "on the side" of the request flow, and is consulted for auth, then the request is routed from Nginx to xyOps.
-	- When Nginx routes the authenticated request to xyOps, it forwards along the "trusted headers" for automatic user creation / user login.
-- Nginx handles xyOps multi-conductor using an embedded [Health Check Daemon](https://github.com/pixlcore/xyops-healthcheck) which runs in the same container.
-	- The health check keeps track of which server is conductor, and dynamically reconfigures and hot-reloads Nginx as needed.
-	- We maintain our own custom Nginx docker image for this (shown below), or you can [build your own from source](https://github.com/pixlcore/xyops-nginx-sso/blob/main/Dockerfile).
+-  [Nginx](https://nginx.org/) sits in front, and handles TLS termination, as well as routing requests to various backends.
+-  [OAuth2-Proxy](https://github.com/oauth2-proxy/oauth2-proxy) handles SSO, and is integrated via Nginx using the [auth_request](https://nginx.org/en/docs/http/ngx_http_auth_request_module.html) directive.
+   -  Meaning, OAuth2-Proxy sits "on the side" of the request flow, and is consulted for auth, then the request is routed from Nginx to xyOps.
+   -  When Nginx routes the authenticated request to xyOps, it forwards along the "trusted headers" for automatic user creation / user login.
+-  Nginx handles xyOps multi-conductor using an embedded [Health Check Daemon](https://github.com/pixlcore/xyops-healthcheck) which runs in the same container.
+   -  The health check keeps track of which server is conductor, and dynamically reconfigures and hot-reloads Nginx as needed.
+   -  We maintain our own custom Nginx docker image for this (shown below), or you can [build your own from source](https://github.com/pixlcore/xyops-nginx-sso/blob/main/Dockerfile).
 
 A few prerequisites for this setup:
 
-- For multi-conductor setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).
-- You will need a custom domain configured and TLS certs created and ready to attach.
-- You have your xyOps configuration files customized and ready to go ([config.json](https://github.com/pixlcore/xyops/blob/main/sample_conf/config.json) and [sso.json](https://github.com/pixlcore/xyops/blob/main/sample_conf/sso.json)) (see below for details).
-- And of course you should have a pretested SSO configuration for OAuth2-Proxy, so you are confident that piece works before integrating it here.
+-  For multi-conductor setups, **you must have an external storage backend**, such as NFS, S3, or S3-compatible (MinIO, etc.).
+-  You will need a custom domain configured and TLS certs created and ready to attach.
+-  You have your xyOps configuration files customized and ready to go ([config.json](https://github.com/pixlcore/xyops/blob/main/sample_conf/config.json) and [sso.json](https://github.com/pixlcore/xyops/blob/main/sample_conf/sso.json)) (see below for details).
+-  And of course you should have a pretested SSO configuration for OAuth2-Proxy, so you are confident that piece works before integrating it here.
 
 For the examples below, we'll be using the following domain placeholders:
 
-- `xyops.yourcompany.com` - User-facing domain which should route to Nginx / SSO.
-- `xyops01.yourcompany.com` - Internal domain for conductor server #1.
-- `xyops02.yourcompany.com` - Internal domain for conductor server #2.
+-  `xyops.yourcompany.com` - User-facing domain which should route to Nginx / SSO.
+-  `xyops01.yourcompany.com` - Internal domain for conductor server #1.
+-  `xyops02.yourcompany.com` - Internal domain for conductor server #2.
 
 The reason why the conductor servers each need their own unique (internal) domain name is because of how the multi-conductor system works.  Each conductor server needs to be individually addressable, and reachable by all of your worker servers in your org.  Worker servers don't know or care about Nginx -- they contact conductors directly, and have their own auto-failover system.  Also, worker servers use a persistent WebSocket connection, and can send a large amount of traffic, depending on how many worker servers you have and how many jobs you run.  For these reasons, it's better to have worker servers connect the conductors directly, especially at production scale.
 
@@ -416,15 +418,15 @@ services:
 
 Let's talk about the Nginx setup first.  We are pulling in our own Docker image here ([xyops-nginx-sso](https://github.com/pixlcore/xyops-nginx-sso)).  This is a wrapper around the official Nginx docker image, but it includes our [xyOps Health Check](https://github.com/pixlcore/xyops-healthcheck) daemon.  The health check monitors which conductor server is currently primary, and dynamically reconfigures Nginx on-the-fly as needed (so Nginx always routes to the current primary server only).  The image also comes with a fully preconfigured Nginx, which will call to OAuth2-Proxy via the [auth_request](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html) mechanism.  To use this image you will need to provide:
 
-- Your TLS certificate files, named `tls.crt` and `tls.key`, which are bound to `/etc/tls.crt` and `/etc/tls.key`, respectively.
-- The list of xyOps conductor server domain names, as a CSV list in the `XYOPS_masters` environment variable (used by health check).
+-  Your TLS certificate files, named `tls.crt` and `tls.key`, which are bound to `/etc/tls.crt` and `/etc/tls.key`, respectively.
+-  The list of xyOps conductor server domain names, as a CSV list in the `XYOPS_masters` environment variable (used by health check).
 
 Next is the OAuth2-Proxy setup (we use the official Docker image here).  Configuration is largely discussed above, but there are a few key things to point out this time:
 
-- `OAUTH2_PROXY_UPSTREAMS` is set to a static response (`static://200`).  This is because with [auth_request](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html) mode OAuth2-Proxy doesn't talk directly to the backend.  Instead, Nginx makes "side requests" to it for auth, and then Nginx itself routes authenticated requests to the real backend.
-- `OAUTH2_PROXY_REVERSE_PROXY` is set to `true`.  This is required for running OAuth2-Proxy in auth_request mode.
-- `OAUTH2_PROXY_SET_XAUTHREQUEST` is set to `true`.  This returns the set of trusted headers in auth_request mode.
-- `OAUTH2_PROXY_SKIP_AUTH_ROUTES` has been removed, as OAuth2-Proxy doesn't actually do any routing in this configuration.
+-  `OAUTH2_PROXY_UPSTREAMS` is set to a static response (`static://200`).  This is because with [auth_request](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html) mode OAuth2-Proxy doesn't talk directly to the backend.  Instead, Nginx makes "side requests" to it for auth, and then Nginx itself routes authenticated requests to the real backend.
+-  `OAUTH2_PROXY_REVERSE_PROXY` is set to `true`.  This is required for running OAuth2-Proxy in auth_request mode.
+-  `OAUTH2_PROXY_SET_XAUTHREQUEST` is set to `true`.  This returns the set of trusted headers in auth_request mode.
+-  `OAUTH2_PROXY_SKIP_AUTH_ROUTES` has been removed, as OAuth2-Proxy doesn't actually do any routing in this configuration.
 
 Once you have those two components running, we can fire up the xyOps backend.  This is listed separately as you'll usually want to run these on dedicated servers.  Here is the multi-conductor configuration as a single Docker compose file.  For additional conductor servers you can simply duplicate this and change the hostname:
 
@@ -446,12 +448,12 @@ services:
 
 A few things to note here:
 
-- We're using our official xyOps Docker image, but you can always [build your own from source](https://github.com/pixlcore/xyops/blob/main/Dockerfile).
-- All conductor server hostnames need to be listed in the `XYOPS_masters` environment variable, comma-separated.
-- All conductor servers need to be able to route to each other via their hostnames, so they can self-negotiate and hold elections.
-- The timezone (`TZ`) should be set to your company's main timezone, so things like midnight log rotation and daily stat resets work as expected.
+-  We're using our official xyOps Docker image, but you can always [build your own from source](https://github.com/pixlcore/xyops/blob/main/Dockerfile).
+-  All conductor server hostnames need to be listed in the `XYOPS_masters` environment variable, comma-separated.
+-  All conductor servers need to be able to route to each other via their hostnames, so they can self-negotiate and hold elections.
+-  The timezone (`TZ`) should be set to your company's main timezone, so things like midnight log rotation and daily stat resets work as expected.
 
-For the xyOps container, it needs several configuration files.  We are bind mapping a local host directory in the example above (`/local/path/to/xyops-conf`).  Please change this path to an appropriate location on the host where you want these files stored.  Launch the container once, and it will generate all the config files for you.  Then, see the [xyOps Configuration Guide](config.md) for details on how to customize the files.  Specifically though, let's talk about `sso.conf` for this configuration.  This file is largely discussed above (see [Configuration](#configuration) above), but the [Header Map](#header-map) in particular is going to be different for Nginx + OAuth2-Proxy: 
+For the xyOps container, it needs several configuration files.  We are bind mapping a local host directory in the example above (`/local/path/to/xyops-conf`).  Please change this path to an appropriate location on the host where you want these files stored.  Launch the container once, and it will generate all the config files for you.  Then, see the [xyOps Configuration Guide](config.md) for details on how to customize the files.  Specifically though, let's talk about `sso.conf` for this configuration.  This file is largely discussed above (see [Configuration](#configuration) above), but the [Header Map](#header-map) in particular is going to be different for Nginx + OAuth2-Proxy:
 
 ```json
 "header_map": {
@@ -496,55 +498,55 @@ If you require [SAML](https://en.wikipedia.org/wiki/Security_Assertion_Markup_La
 
 ### Prerequisites
 
-- A [SSOReady](https://ssoready.com/) account (or self-host it) and an "Environment".
-- An external SAML IdP (e.g., Okta, Entra ID, OneLogin) configured in SSOReady.
-- Docker / Docker Compose running locally.
+-  A [SSOReady](https://ssoready.com/) account (or self-host it) and an "Environment".
+-  An external SAML IdP (e.g., Okta, Entra ID, OneLogin) configured in SSOReady.
+-  Docker / Docker Compose running locally.
 
 ### SSOReady Setup
 
 1. **Create an account / environment**
-	- Register / login at `https://app.ssoready.com/`.
-	- Create an environment (e.g., "Dev"). All keys you create live inside an environment.
+   -  Register / login at `https://app.ssoready.com/`.
+   -  Create an environment (e.g., "Dev"). All keys you create live inside an environment.
 2. **Create your Organization**
-	- In the SSOReady portal, create an Organization.
-	- Set or note its `organization_external_id` (e.g., `acme`).
-	- You'll pass this value on the authorization request so SSOReady knows *which* SAML connection to use.
+   -  In the SSOReady portal, create an Organization.
+   -  Set or note its `organization_external_id` (e.g., `acme`).
+   -  You'll pass this value on the authorization request so SSOReady knows *which* SAML connection to use.
 3. **Create a "SAML OAuth Client"**
-	- Go to "API Keys", then "Create SAML OAuth Client".
-	- Copy these values:
-		- **Client ID**: looks like `saml_oauth_client_...`
-		- **Client Secret**: looks like `ssoready_oauth_client_secret_...`
-		- These are your OAuth **client credentials** (not the org id).
+   -  Go to "API Keys", then "Create SAML OAuth Client".
+   -  Copy these values:
+      -  **Client ID**: looks like `saml_oauth_client_...`
+      -  **Client Secret**: looks like `ssoready_oauth_client_secret_...`
+      -  These are your OAuth **client credentials** (not the org id).
 4. **Add Redirect URL**
-	- You can find this on the "Overview" tab.
-	- Add `http://localhost:4180/oauth2/callback` for local testing.
-	- You must add it to the **OAuth Redirect URI** field specifically, as we're using SAML-over-OAuth.
-	- The redirect URL must match what you have set in OAuth2-Proxy **exactly** (scheme, host, port, path).
+   -  You can find this on the "Overview" tab.
+   -  Add `http://localhost:4180/oauth2/callback` for local testing.
+   -  You must add it to the **OAuth Redirect URI** field specifically, as we're using SAML-over-OAuth.
+   -  The redirect URL must match what you have set in OAuth2-Proxy **exactly** (scheme, host, port, path).
 
 ### OAuth2-Proxy Setup
 
 [OAuth2-Proxy](https://github.com/oauth2-proxy/oauth2-proxy) needs to be configured specifically for SSOReady.  We cannot use OIDC discovery mode, because we need to set custom URLs for all the endpoints.  Luckily, OAuth2-Proxy allows us to customize everything, including skipping discovery and specifying all the OAuth URLs manually.  Here is a list of all the [OAuth2-Proxy Config Options](https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#config-options) we need to set:
 
-| Config Property | Type | Description |
-|-----------------|------|-------------|
-| `provider` | String | Which OIDC provider to use. Set this to `oidc` for generic, which is what we want. |
-| `client_id` | String | Your SSOReady OAuth Client ID, which you get from the "SAML OAuth Client" page.  Looks like: `saml_oauth_client_********`. |
-| `client_secret` | String | Your SSOReady OAuth Client Secret, which you get from the "SAML OAuth Client" page.  Looks like: `ssoready_oauth_client_secret_********`. |
-| `skip_oidc_discovery` | Boolean | Skips the normal OIDC discovery process, as we are specifying all the individual URLs.  Set to `true`. |
-| `login_url` | URL | Custom Login URL for SSOReady, with Organization ID in tow.  Set to: `https://auth.ssoready.com/v1/oauth/authorize?organization_external_id=_ORG_`.  See below for details. |
-| `redeem_url` | URL | The token redemption endpoint.  Set to: `https://auth.ssoready.com/v1/oauth/token`.  This is custom for SSOReady. |
-| `oidc_jwks_url` | URL | The OIDC JWKS URI for token verification.  Set to: `https://auth.ssoready.com/v1/oauth/jwks`.  This is required for SSOReady SAML. |
-| `oidc_issuer_url` | URL | The OpenID Connect issuer URL.  For SSOReady this should be `https://auth.ssoready.com/v1/oauth`. |
-| `redirect_url` | URL | The OAuth Redirect URL, which needs to match what we set in the SSOReady portal: `http://localhost:4180/oauth2/callback`. |
-| `scope` | String | OAuth scope specification.  This list works for SSOReady: `openid profile email`. |
-| `oidc_email_claim` | String | Which OIDC claim contains the user's email.  For most SAML IdPs this should be set to `sub`. |
-| `email_domains` | String | Lock this down for live production, i.e. limit it to your email domain only, but for testing it can be set to `*`. |
-| `pass_user_headers` | Boolean | Pass along the "trusted headers" that xyOps uses to log the user in.  Set to `true`. |
-| `set_authorization_header` | Boolean | This sets the `Authorization Bearer` response header (useful in Nginx auth_request mode). Set to `true`. |
-| `skip_provider_button` | Boolean | Skip the OAuth2-Proxy splash screen, and instead log the user in immediately.  Set to `true`. |
-| `cookie_secret` | Base64 | Generate your own [base64-encoded cookie secret](https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret) for this. |
-| `http_address` | IP:Port | Network and port for OAuth2-Proxy to listen on.  Set to: `0.0.0.0:4180`. |
-| `upstreams` | URL | Where to pass the requests after authentication.  For testing, we'll use the [echo-server](https://hub.docker.com/r/ealen/echo-server) echoing web server, so set this to: `http://echo-server:80`. |
+| Config Property            | Type    | Description                                                                                                                                                                                         |
+|----------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `provider`                 | String  | Which OIDC provider to use. Set this to `oidc` for generic, which is what we want.                                                                                                                  |
+| `client_id`                | String  | Your SSOReady OAuth Client ID, which you get from the "SAML OAuth Client" page.  Looks like: `saml_oauth_client_********`.                                                                          |
+| `client_secret`            | String  | Your SSOReady OAuth Client Secret, which you get from the "SAML OAuth Client" page.  Looks like: `ssoready_oauth_client_secret_********`.                                                           |
+| `skip_oidc_discovery`      | Boolean | Skips the normal OIDC discovery process, as we are specifying all the individual URLs.  Set to `true`.                                                                                              |
+| `login_url`                | URL     | Custom Login URL for SSOReady, with Organization ID in tow.  Set to: `https://auth.ssoready.com/v1/oauth/authorize?organization_external_id=_ORG_`.  See below for details.                         |
+| `redeem_url`               | URL     | The token redemption endpoint.  Set to: `https://auth.ssoready.com/v1/oauth/token`.  This is custom for SSOReady.                                                                                   |
+| `oidc_jwks_url`            | URL     | The OIDC JWKS URI for token verification.  Set to: `https://auth.ssoready.com/v1/oauth/jwks`.  This is required for SSOReady SAML.                                                                  |
+| `oidc_issuer_url`          | URL     | The OpenID Connect issuer URL.  For SSOReady this should be `https://auth.ssoready.com/v1/oauth`.                                                                                                   |
+| `redirect_url`             | URL     | The OAuth Redirect URL, which needs to match what we set in the SSOReady portal: `http://localhost:4180/oauth2/callback`.                                                                           |
+| `scope`                    | String  | OAuth scope specification.  This list works for SSOReady: `openid profile email`.                                                                                                                   |
+| `oidc_email_claim`         | String  | Which OIDC claim contains the user's email.  For most SAML IdPs this should be set to `sub`.                                                                                                        |
+| `email_domains`            | String  | Lock this down for live production, i.e. limit it to your email domain only, but for testing it can be set to `*`.                                                                                  |
+| `pass_user_headers`        | Boolean | Pass along the "trusted headers" that xyOps uses to log the user in.  Set to `true`.                                                                                                                |
+| `set_authorization_header` | Boolean | This sets the `Authorization Bearer` response header (useful in Nginx auth_request mode). Set to `true`.                                                                                            |
+| `skip_provider_button`     | Boolean | Skip the OAuth2-Proxy splash screen, and instead log the user in immediately.  Set to `true`.                                                                                                       |
+| `cookie_secret`            | Base64  | Generate your own [base64-encoded cookie secret](https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret) for this.                                          |
+| `http_address`             | IP:Port | Network and port for OAuth2-Proxy to listen on.  Set to: `0.0.0.0:4180`.                                                                                                                            |
+| `upstreams`                | URL     | Where to pass the requests after authentication.  For testing, we'll use the [echo-server](https://hub.docker.com/r/ealen/echo-server) echoing web server, so set this to: `http://echo-server:80`. |
 
 Note that all of these configuration properties can be specified as environment variables, by converting them to upper-case and adding a `OAUTH2_PROXY_` prefix, e.g. `OAUTH2_PROXY_PROVIDER`.  We'll be doing this below in our Docker Compose setup.
 
@@ -560,9 +562,9 @@ Once everything is working, see the [Configuration](#configuration) section abov
 
 If your company does not have an OIDC or SAML provider, but does have an [LDAP](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol) or [Active Directory](https://en.wikipedia.org/wiki/Active_Directory) server, you can use [Authelia](https://www.authelia.com/) instead of OAuth2-Proxy.  Authelia works in the same way as OAuth2-Proxy, but supports LDAP or AD as an upstream user authentication provider.  It is also free and open source, and can forward trusted headers to xyOps.  See the following guides for assistance in setting this up:
 
-- [Authelia LDAP Setup](https://www.authelia.com/configuration/first-factor/ldap/)
-- [Authelia Active Directory Setup](https://www.authelia.com/integration/ldap/activedirectory/)
-- [Authelia SSO Trusted Headers](https://www.authelia.com/integration/trusted-header-sso/introduction/)
+-  [Authelia LDAP Setup](https://www.authelia.com/configuration/first-factor/ldap/)
+-  [Authelia Active Directory Setup](https://www.authelia.com/integration/ldap/activedirectory/)
+-  [Authelia SSO Trusted Headers](https://www.authelia.com/integration/trusted-header-sso/introduction/)
 
 The xyOps [Header Map](#header-map) should be set as follows:
 

@@ -1,4 +1,6 @@
-# Support Guide
+---
+title: Support Guide
+---
 
 ## Premium Support
 
@@ -46,9 +48,9 @@ https://discord.gg/FTzqmbGbdd
 
 Follow us on social media:
 
-- [Bluesky](https://pixlcore.bsky.social/)
-- [Mastodon](https://mastodon.social/@pixlcore)
-- [LinkedIn](https://linkedin.com/company/pixlcore)
+-  [Bluesky](https://pixlcore.bsky.social/)
+-  [Mastodon](https://mastodon.social/@pixlcore)
+-  [LinkedIn](https://linkedin.com/company/pixlcore)
 
 ## RSS feed
 

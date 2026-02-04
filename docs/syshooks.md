@@ -1,4 +1,6 @@
-# System Hooks
+---
+title: System Hooks
+---
 
 ## Overview
 
@@ -39,26 +41,26 @@ Example configuration:
 
 ## Activity Type IDs
 
-- See [Activity.action](data.md#activity-action) for a list of all the activity type IDs you can attach global system hook actions to:
-- See [Activity](data.md#activity) for details on the activity payload format and common properties.
+-  See [Activity.action](data.md#activity-action) for a list of all the activity type IDs you can attach global system hook actions to:
+-  See [Activity](data.md#activity) for details on the activity payload format and common properties.
 
 ## Job and Alert Conditions
 
 All job actions also fire System Hooks, using a `job_` prefix on the action condition. Common examples include:
 
-- `job_complete`: Any job completion (success or failure)
-- `job_success`: Successful completion
-- `job_error`: Any failed completion
-- `job_warning`: Completion with warning code
-- `job_critical`: Completion with critical code
-- `job_abort`: Job aborted by user or failure condition
+-  `job_complete`: Any job completion (success or failure)
+-  `job_success`: Successful completion
+-  `job_error`: Any failed completion
+-  `job_warning`: Completion with warning code
+-  `job_critical`: Completion with critical code
+-  `job_abort`: Job aborted by user or failure condition
 
 Tag-based job actions also emit hooks using the same `job_` prefix (for example, `job_tag:deploy`). See the "Action Conditions" section in [Actions](actions.md) for the full list of job and alert action conditions.
 
 Alert actions also fire System Hooks:
 
-- `alert_new`
-- `alert_cleared`
+-  `alert_new`
+-  `alert_cleared`
 
 ## Firehose Hook
 
@@ -381,6 +383,6 @@ Master Primary (`master_primary`), meaning a conductor server has taken over ope
 
 ## Tips
 
-- Send email on `critical` to page on-call and include the activity details.
-- Use a configured web hook to notify incident systems like OpsGenie on `error` or `critical`.
-- Use a firehose hook to stream all activity into a log pipeline via `shell_exec`.
+-  Send email on `critical` to page on-call and include the activity details.
+-  Use a configured web hook to notify incident systems like OpsGenie on `error` or `critical`.
+-  Use a firehose hook to stream all activity into a log pipeline via `shell_exec`.

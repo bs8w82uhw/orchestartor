@@ -1,4 +1,6 @@
-# API Reference
+---
+title: API Reference
+---
 
 ## Overview
 
@@ -111,9 +113,9 @@ GET /api/app/get_alert/v1
 
 This fetches a single alert definition given its ID. No specific privilege is required, besides a valid user session or API Key.  Both a HTTP GET with query string parameters and a HTTP POST with JSON are allowed.  The input parameters are as follows:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the alert to fetch. |
+| Property Name | Type   | Description                                               |
+|---------------|--------|-----------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the alert to fetch. |
 
 Here is an example request:
 
@@ -221,11 +223,11 @@ POST /api/app/test_alert/v1
 
 This tests an alert configuration, specifically the `expression` and `message` properties, against a specified server.  It tests both the syntax of the properties by pre-compiling them, and it also evaluates them against the specified server data, so you can see if the alert would fire given current conditions.  The [edit_alerts](privileges.md#edit_alerts) privilege is required, as well as a valid user session or API Key.  The request must be sent as an HTTP POST with a JSON body.  The input parameters are as follows:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `server` | String | **(Required)** The alphanumeric ID of the server to test the expression and message on. |
-| `expression` | String | **(Required)** The alert expression to test. |
-| `message` | String | **(Required)** The alert message to test. |
+| Property Name | Type   | Description                                                                             |
+|---------------|--------|-----------------------------------------------------------------------------------------|
+| `server`      | String | **(Required)** The alphanumeric ID of the server to test the expression and message on. |
+| `expression`  | String | **(Required)** The alert expression to test.                                            |
+| `message`     | String | **(Required)** The alert message to test.                                               |
 
 Here is an example request:
 
@@ -257,9 +259,9 @@ POST /api/app/delete_alert/v1
 
 This deletes an alert definition, specified by its ID. The [delete_alerts](privileges.md#delete_alerts) privilege is required, as well as a valid user session or API Key. The request must be sent as an HTTP POST with a JSON body. The input parameters are as follows:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the alert to delete. |
+| Property Name | Type   | Description                                                |
+|---------------|--------|------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the alert to delete. |
 
 Here is an example request:
 
@@ -327,9 +329,9 @@ GET /api/app/get_bucket/v1
 
 This retrieves the definition of a specific storage bucket, including its data and file list.  No specific privilege is required, besides a valid user session or API Key.  Here are the input parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the bucket to retrieve. |
+| Property Name | Type   | Description                                                   |
+|---------------|--------|---------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the bucket to retrieve. |
 
 And here is an example response:
 
@@ -436,9 +438,9 @@ POST /api/app/delete_bucket/v1
 
 This deletes a storage bucket, including all data and files, specified by its ID. The [delete_buckets](privileges.md#delete_buckets) privilege is required, as well as a valid user session or API Key. The request must be sent as an HTTP POST with a JSON body. The input parameters are as follows:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the bucket to delete. |
+| Property Name | Type   | Description                                                 |
+|---------------|--------|-------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the bucket to delete. |
 
 Here is an example request:
 
@@ -466,11 +468,11 @@ POST /api/app/write_bucket_data/v1
 
 This API allows you to write bucket data into a storage bucket.  The [edit_buckets](privileges.md#edit_buckets) privilege is required, as well as a valid user session or API Key.  The input parameters are as follows:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the bucket to write data to. |
-| `data` | Object | **(Required)** The data object to shallow-merge into the bucket data. |
-| `fetch` | Boolean | Optional flag requesting the entire data object be returned in the API response. |
+| Property Name | Type    | Description                                                                      |
+|---------------|---------|----------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The alphanumeric ID of the bucket to write data to.               |
+| `data`        | Object  | **(Required)** The data object to shallow-merge into the bucket data.            |
+| `fetch`       | Boolean | Optional flag requesting the entire data object be returned in the API response. |
 
 Here is an example request:
 
@@ -503,9 +505,9 @@ POST /api/app/upload_bucket_files/v1
 
 This API allows you to upload files into a storage bucket.  Unlike most of the other APIs, this one handles files, so it requires a `multipart/form-data` style request.  The parameters should be actual HTTP POST parameters, rather than JSON keys.  The [edit_buckets](privileges.md#edit_buckets) privilege is required, as well as a valid user session or API Key.  The input parameters are as follows:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the bucket to upload files to. |
+| Property Name | Type   | Description                                                          |
+|---------------|--------|----------------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the bucket to upload files to. |
 
 The file properties are automatically set based on the user files themselves, including the filename, file size, etc.  The `id` parameter is used to specify the target bucket for the upload.
 
@@ -521,11 +523,11 @@ POST /api/app/delete_bucket_file/v1
 
 This API deletes a file from a storage bucket. The [edit_buckets](privileges.md#edit_buckets) privilege is required, as well as a valid user session or API Key. The request must be sent as an HTTP POST with a JSON body. The input parameters are as follows:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the bucket to delete the file from. |
-| `filename` | String | **(Required)** The normalized filename of the file to delete. |
-	
+| Property Name | Type   | Description                                                               |
+|---------------|--------|---------------------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the bucket to delete the file from. |
+| `filename`    | String | **(Required)** The normalized filename of the file to delete.             |
+
 Here is an example request:
 
 ```json
@@ -594,9 +596,9 @@ GET /api/app/get_category/v1
 
 Fetch a single category definition by ID. No specific privilege is required beyond a valid user session or API Key. Both HTTP GET with query string parameters and HTTP POST with JSON are accepted. Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the category to fetch. |
+| Property Name | Type   | Description                                                  |
+|---------------|--------|--------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the category to fetch. |
 
 Example request:
 
@@ -666,8 +668,8 @@ In addition to the [Standard Response Format](#standard-response-format), this w
 
 Notes:
 
-- The server validates [Limits](data.md#limit) and [Actions](data.md#action).
-- `sort_order` is automatically assigned at the end of the current list.
+-  The server validates [Limits](data.md#limit) and [Actions](data.md#action).
+-  `sort_order` is automatically assigned at the end of the current list.
 
 ### update_category
 
@@ -679,10 +681,10 @@ Update an existing category by ID. Requires the [edit_categories](privileges.md#
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The category ID to update. |
-| (Other) | Various | Any updatable [Category](data.md#category) fields (e.g. `title`, `enabled`, `color`, `notes`, `limits`, `actions`). |
+| Property Name | Type    | Description                                                                                                         |
+|---------------|---------|---------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The category ID to update.                                                                           |
+| (Other)       | Various | Any updatable [Category](data.md#category) fields (e.g. `title`, `enabled`, `color`, `notes`, `limits`, `actions`). |
 
 Example request:
 
@@ -714,9 +716,9 @@ Delete an existing category by ID. Requires the [delete_categories](privileges.m
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The category ID to delete. |
+| Property Name | Type   | Description                               |
+|---------------|--------|-------------------------------------------|
+| `id`          | String | **(Required)** The category ID to delete. |
 
 Example request:
 
@@ -746,9 +748,9 @@ Update multiple categories in a single call. This endpoint is intended for updat
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `items` | Array(Object) | **(Required)** Array of objects, each with an `id` and the new `sort_order`. |
+| Property Name | Type          | Description                                                                  |
+|---------------|---------------|------------------------------------------------------------------------------|
+| `items`       | Array(Object) | **(Required)** Array of objects, each with an `id` and the new `sort_order`. |
 
 Example request:
 
@@ -771,10 +773,8 @@ Example response:
 
 Notes:
 
-- Only `sort_order` is updated by this endpoint.
-- `modified` and `revision` are not updated by design for multi-updates of sort order.
-
-
+-  Only `sort_order` is updated by this endpoint.
+-  `modified` and `revision` are not updated by design for multi-updates of sort order.
 
 ## Channels
 
@@ -831,9 +831,9 @@ Fetch a single channel definition by ID. No specific privilege is required beyon
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the channel to fetch. |
+| Property Name | Type   | Description                                                 |
+|---------------|--------|-------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the channel to fetch. |
 
 Example request:
 
@@ -918,10 +918,10 @@ Update an existing channel by ID. Requires the [edit_channels](privileges.md#edi
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The channel ID to update. |
-| (Other) | Various | Any updatable [Channel](data.md#channel) fields (e.g. `title`, `enabled`, `users`, `email`, `web_hook`, `run_event`, `sound`, `icon`, `max_per_day`, `notes`). |
+| Property Name | Type    | Description                                                                                                                                                    |
+|---------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The channel ID to update.                                                                                                                       |
+| (Other)       | Various | Any updatable [Channel](data.md#channel) fields (e.g. `title`, `enabled`, `users`, `email`, `web_hook`, `run_event`, `sound`, `icon`, `max_per_day`, `notes`). |
 
 Example request:
 
@@ -951,9 +951,9 @@ Delete an existing channel by ID. Requires the [delete_channels](privileges.md#d
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The channel ID to delete. |
+| Property Name | Type   | Description                              |
+|---------------|--------|------------------------------------------|
+| `id`          | String | **(Required)** The channel ID to delete. |
 
 Example request:
 
@@ -972,8 +972,6 @@ Example response:
 ```
 
 Deletions are permanent and cannot be undone.
-
-
 
 ## Events
 
@@ -1038,9 +1036,9 @@ Fetch a single event definition by ID. No specific privilege is required beyond 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the event to fetch. |
+| Property Name | Type   | Description                                               |
+|---------------|--------|-----------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the event to fetch. |
 
 Example request:
 
@@ -1075,13 +1073,13 @@ Fetch the revision history for a specific event from the activity log. Requires 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The event ID to fetch history for. |
-| `offset` | Number | Optional row offset for pagination. Defaults to `0`. |
-| `limit` | Number | Optional row limit for pagination. Defaults to `1`. |
-| `sort_by` | String | Optional sort field. Defaults to `_id`. |
-| `sort_dir` | Number | Optional sort direction. Use `-1` for descending (default) or `1` for ascending. |
+| Property Name | Type   | Description                                                                      |
+|---------------|--------|----------------------------------------------------------------------------------|
+| `id`          | String | **(Required)** The event ID to fetch history for.                                |
+| `offset`      | Number | Optional row offset for pagination. Defaults to `0`.                             |
+| `limit`       | Number | Optional row limit for pagination. Defaults to `1`.                              |
+| `sort_by`     | String | Optional sort field. Defaults to `_id`.                                          |
+| `sort_dir`    | Number | Optional sort direction. Use `-1` for descending (default) or `1` for ascending. |
 
 Example request:
 
@@ -1118,9 +1116,9 @@ Create a new event. Requires the [create_events](privileges.md#create_events) pr
 
 Notes:
 
-- For non-workflow events, `targets` and `plugin` are required.
-- For workflow events (`type: "workflow"`), the server sets `plugin` to `_workflow` and requires a `workflow` object; `targets` are not required.
-- Locked plugin/event parameters are enforced for non-admins and required fields are validated.
+-  For non-workflow events, `targets` and `plugin` are required.
+-  For workflow events (`type: "workflow"`), the server sets `plugin` to `_workflow` and requires a `workflow` object; `targets` are not required.
+-  Locked plugin/event parameters are enforced for non-admins and required fields are validated.
 
 Example request (non-workflow event):
 
@@ -1157,15 +1155,15 @@ Update an existing event by ID. Requires the [edit_events](privileges.md#edit_ev
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The event ID to update. |
-| (Other) | Various | Any updatable [Event](data.md#event) fields (e.g. `title`, `enabled`, `category`, `targets`, `algo`, `plugin`, `params`, `triggers`, `limits`, `actions`, `notes`). |
+| Property Name | Type    | Description                                                                                                                                                         |
+|---------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The event ID to update.                                                                                                                              |
+| (Other)       | Various | Any updatable [Event](data.md#event) fields (e.g. `title`, `enabled`, `category`, `targets`, `algo`, `plugin`, `params`, `triggers`, `limits`, `actions`, `notes`). |
 
 Special behavior:
 
-- Non-admins have locked plugin/event parameters enforced; required fields must be present.
-- You can update per-event state by passing `update_state` as an object of key/value pairs. These are stored in event state and removed from the event record itself.
+-  Non-admins have locked plugin/event parameters enforced; required fields must be present.
+-  You can update per-event state by passing `update_state` as an object of key/value pairs. These are stored in event state and removed from the event record itself.
 
 Example request:
 
@@ -1198,9 +1196,9 @@ Delete an existing event by ID. Requires the [delete_events](privileges.md#delet
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The event ID to delete. |
+| Property Name | Type    | Description                                                                              |
+|---------------|---------|------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The event ID to delete.                                                   |
 | `delete_jobs` | Boolean | Optional. If `true`, delete all historical jobs for the event (performed in background). |
 
 Example request:
@@ -1232,32 +1230,32 @@ Run an event on demand with optional overrides and optional file uploads. Requir
 
 Manual run rules:
 
-- The event must have an enabled `manual` trigger, unless you pass `test: true`.
-- Disabled events cannot be run unless you pass `test: true`.
+-  The event must have an enabled `manual` trigger, unless you pass `test: true`.
+-  Disabled events cannot be run unless you pass `test: true`.
 
 Input formats:
 
-- Pure JSON: Send `Content-Type: application/json` with a JSON body.
-- Multipart form-data (for file uploads): Send `Content-Type: multipart/form-data` and include a `json` field containing the full JSON payload (as a string), plus one or more file fields. All uploaded files are attached to `input.files` for the job.
+-  Pure JSON: Send `Content-Type: application/json` with a JSON body.
+-  Multipart form-data (for file uploads): Send `Content-Type: multipart/form-data` and include a `json` field containing the full JSON payload (as a string), plus one or more file fields. All uploaded files are attached to `input.files` for the job.
 
 Parameters (core):
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | The event ID to run. One of `id` or `title` is required. |
-| `title` | String | The event title to run (alternative to `id`). |
-| `params` | Object | Optional overrides for [Event.params](data.md#event-params). Missing keys fall back to the event's saved params. |
-| `input` | Object | Optional input object; may include `data` and/or `files` (see [Job.input](data.md#job-input)). Uploaded files are appended to `input.files`. |
-| `test` | Boolean | If `true`, bypasses manual-trigger and enabled checks and marks the job as a test. |
-| `tags` | Array | Optionally override tags set in the event.  Specify one or more [Tag.id](data.md#tag-id)s in the array. |
+| Property Name | Type    | Description                                                                                                                                  |
+|---------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | The event ID to run. One of `id` or `title` is required.                                                                                     |
+| `title`       | String  | The event title to run (alternative to `id`).                                                                                                |
+| `params`      | Object  | Optional overrides for [Event.params](data.md#event-params). Missing keys fall back to the event's saved params.                             |
+| `input`       | Object  | Optional input object; may include `data` and/or `files` (see [Job.input](data.md#job-input)). Uploaded files are appended to `input.files`. |
+| `test`        | Boolean | If `true`, bypasses manual-trigger and enabled checks and marks the job as a test.                                                           |
+| `tags`        | Array   | Optionally override tags set in the event.  Specify one or more [Tag.id](data.md#tag-id)s in the array.                                      |
 
 Additional behaviors:
 
-- Any properties from the event are overridable here.  See the [Event](data.md#event) data structure for details.
-- Nested keys using `parent/child` can be supplied as flat parameters (e.g. `params/foo=bar`).
-- When using multipart uploads, the `json` field should contain the exact JSON you would otherwise POST.
-- If the `post_data` query parameter is present, all raw POST fields are placed under `post_data` instead of being merged (advanced usage).
-- Non-admins have locked plugin/event parameters enforced; required fields must be present.
+-  Any properties from the event are overridable here.  See the [Event](data.md#event) data structure for details.
+-  Nested keys using `parent/child` can be supplied as flat parameters (e.g. `params/foo=bar`).
+-  When using multipart uploads, the `json` field should contain the exact JSON you would otherwise POST.
+-  If the `post_data` query parameter is present, all raw POST fields are placed under `post_data` instead of being merged (advanced usage).
+-  Non-admins have locked plugin/event parameters enforced; required fields must be present.
 
 Example: JSON POST (no files)
 
@@ -1355,10 +1353,10 @@ Upload one or more files for the authenticated user. This is a general-purpose u
 
 Notes:
 
-- Files are stored under a user-specific path and automatically expire per server configuration (see [file_expiration](config.md#file_expiration)).
-- All file paths will contain a unique cryptographic hash, rendering the URLs undiscoverable.
-- This API is used by the graphing library to provide links to chart snapshot images.
-- HTTP POST field names are arbitrary; all files in the request are processed.
+-  Files are stored under a user-specific path and automatically expire per server configuration (see [file_expiration](config.md#file_expiration)).
+-  All file paths will contain a unique cryptographic hash, rendering the URLs undiscoverable.
+-  This API is used by the graphing library to provide links to chart snapshot images.
+-  HTTP POST field names are arbitrary; all files in the request are processed.
 
 In addition to the [Standard Response Format](#standard-response-format), this will include a `urls` array of absolute URLs for the uploaded files.
 
@@ -1383,18 +1381,18 @@ Upload a file and associate it with a running job. This endpoint is primarily us
 
 Authentication methods:
 
-- API Key: Provide a valid API key via standard mechanisms (e.g., `X-API-Key` header or `api_key` param). For convenience, you may also pass it in an `auth` parameter.
-- Server token: Provide `server` (Server ID) and `auth` (a server token). The satellite computes this token; it's verified by the primary.
-- Job token: Provide `auth` computed for the job. The satellite computes this token; it's verified by the primary.
+-  API Key: Provide a valid API key via standard mechanisms (e.g., `X-API-Key` header or `api_key` param). For convenience, you may also pass it in an `auth` parameter.
+-  Server token: Provide `server` (Server ID) and `auth` (a server token). The satellite computes this token; it's verified by the primary.
+-  Job token: Provide `auth` computed for the job. The satellite computes this token; it's verified by the primary.
 
 Parameters (form + query):
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The running [Job.id](data.md#job-id). |
-| `auth` | String | **(Required)** Authentication token or API key (see above). |
-| `server` | String | Optional. Required only for the server token method. |
-| `file1` | File | **(Required)** The uploaded file content (multipart field name must be `file1`). |
+| Property Name | Type   | Description                                                                      |
+|---------------|--------|----------------------------------------------------------------------------------|
+| `id`          | String | **(Required)** The running [Job.id](data.md#job-id).                             |
+| `auth`        | String | **(Required)** Authentication token or API key (see above).                      |
+| `server`      | String | Optional. Required only for the server token method.                             |
+| `file1`       | File   | **(Required)** The uploaded file content (multipart field name must be `file1`). |
 
 Example multipart request (pseudocode):
 
@@ -1432,10 +1430,10 @@ Delete a file previously attached to a job. Requires a valid session or API Key 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
-| `path` | String | **(Required)** The exact storage path of the file to delete.  Must be a file attached to the specified job. |
+| Property Name | Type   | Description                                                                                                 |
+|---------------|--------|-------------------------------------------------------------------------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id).                                                                |
+| `path`        | String | **(Required)** The exact storage path of the file to delete.  Must be a file attached to the specified job. |
 
 Example request:
 
@@ -1466,8 +1464,8 @@ Upload one or more files intended as input to a job before it starts (e.g., from
 
 Notes:
 
-- Files automatically expire per [client.job_upload_settings.user_file_expiration](config.md#client-job_upload_settings) in server configuration.
-- The response provides metadata that can be supplied to `run_event` under `input.files`.
+-  Files automatically expire per [client.job_upload_settings.user_file_expiration](config.md#client-job_upload_settings) in server configuration.
+-  The response provides metadata that can be supplied to `run_event` under `input.files`.
 
 In addition to the [Standard Response Format](#standard-response-format), this will include a `files` array with metadata for each uploaded file.
 
@@ -1503,23 +1501,21 @@ Serve a file from storage. This is a binary/streaming endpoint (not JSON). It su
 
 Parameters (query):
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `path` | String | When using `/api/app/file/v1`, the relative storage path under `files/` to serve. |
-| `download` | String | Optional. If set, forces download. Use `1` to download with the original filename, or supply a custom filename. |
+| Property Name | Type   | Description                                                                                                     |
+|---------------|--------|-----------------------------------------------------------------------------------------------------------------|
+| `path`        | String | When using `/api/app/file/v1`, the relative storage path under `files/` to serve.                               |
+| `download`    | String | Optional. If set, forces download. Use `1` to download with the original filename, or supply a custom filename. |
 
 Behavior:
 
-- When content type is or contains `text/html`, downloads are enforced unless `download` is specified, to prevent HTML rendering in the browser.
-- Range requests return `206 Partial Content` with `Content-Range` and `Content-Length` headers.
-- HEAD requests return headers only, and may return `304 Not Modified` if applicable.
+-  When content type is or contains `text/html`, downloads are enforced unless `download` is specified, to prevent HTML rendering in the browser.
+-  Range requests return `206 Partial Content` with `Content-Range` and `Content-Length` headers.
+-  HEAD requests return headers only, and may return `304 Not Modified` if applicable.
 
 Examples:
 
-- Direct URL: `GET https://example.xyops.io/files/admin/report.csv`
-- API form: `GET https://example.xyops.io/api/app/file/v1?path=admin/report.csv&download=1`
-
-
+-  Direct URL: `GET https://example.xyops.io/files/admin/report.csv`
+-  API form: `GET https://example.xyops.io/api/app/file/v1?path=admin/report.csv&download=1`
 
 ## Groups
 
@@ -1569,9 +1565,9 @@ Fetch a single group definition by ID. No specific privilege is required beyond 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the group to fetch. |
+| Property Name | Type   | Description                                               |
+|---------------|--------|-----------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the group to fetch. |
 
 Example request:
 
@@ -1613,9 +1609,9 @@ Create a new server group. Requires the [create_groups](privileges.md#create_gro
 
 Parameters (required fields):
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `title` | String | **(Required)** Visual name for the group. |
+| Property Name    | Type   | Description                                                                         |
+|------------------|--------|-------------------------------------------------------------------------------------|
+| `title`          | String | **(Required)** Visual name for the group.                                           |
 | `hostname_match` | String | **(Required)** A regular expression string used to auto-match servers to the group. |
 
 Example request:
@@ -1641,8 +1637,8 @@ In addition to the [Standard Response Format](#standard-response-format), this w
 
 Notes:
 
-- Group alert actions are validated (see [Action](data.md#action)) via `alert_actions`.
-- `sort_order` is automatically assigned at the end of the current list.
+-  Group alert actions are validated (see [Action](data.md#action)) via `alert_actions`.
+-  `sort_order` is automatically assigned at the end of the current list.
 
 ### update_group
 
@@ -1654,10 +1650,10 @@ Update an existing group by ID. Requires the [edit_groups](privileges.md#edit_gr
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The group ID to update. |
-| (Other) | Various | Any updatable [Group](data.md#group) fields (e.g. `title`, `hostname_match`, `icon`, `notes`, `alert_actions`). |
+| Property Name | Type    | Description                                                                                                     |
+|---------------|---------|-----------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The group ID to update.                                                                          |
+| (Other)       | Various | Any updatable [Group](data.md#group) fields (e.g. `title`, `hostname_match`, `icon`, `notes`, `alert_actions`). |
 
 Example request:
 
@@ -1687,9 +1683,9 @@ Delete an existing group by ID. Requires the [delete_groups](privileges.md#delet
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The group ID to delete. |
+| Property Name | Type   | Description                            |
+|---------------|--------|----------------------------------------|
+| `id`          | String | **(Required)** The group ID to delete. |
 
 Example request:
 
@@ -1719,9 +1715,9 @@ Update multiple groups in a single call. This endpoint is intended for updating 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `items` | Array(Object) | **(Required)** Array of objects, each with an `id` and the new `sort_order`. |
+| Property Name | Type          | Description                                                                  |
+|---------------|---------------|------------------------------------------------------------------------------|
+| `items`       | Array(Object) | **(Required)** Array of objects, each with an `id` and the new `sort_order`. |
 
 Example request:
 
@@ -1744,8 +1740,8 @@ Example response:
 
 Notes:
 
-- Only `sort_order` is updated by this endpoint.
-- `modified` and `revision` are not updated by design for multi-updates of sort order.
+-  Only `sort_order` is updated by this endpoint.
+-  `modified` and `revision` are not updated by design for multi-updates of sort order.
 
 ### watch_group
 
@@ -1757,10 +1753,10 @@ Start or stop a watch on a group, which takes a snapshot once per minute for a s
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The group ID to watch. |
-| `duration` | Number | **(Required)** Duration in seconds. Set to `0` to cancel an existing watch. |
+| Property Name | Type   | Description                                                                 |
+|---------------|--------|-----------------------------------------------------------------------------|
+| `id`          | String | **(Required)** The group ID to watch.                                       |
+| `duration`    | Number | **(Required)** Duration in seconds. Set to `0` to cancel an existing watch. |
 
 Example request:
 
@@ -1791,9 +1787,9 @@ Create a snapshot for the specified group using the most recent server data. Req
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `group` | String | **(Required)** The group ID for which to create a snapshot. |
+| Property Name | Type   | Description                                                 |
+|---------------|--------|-------------------------------------------------------------|
+| `group`       | String | **(Required)** The group ID for which to create a snapshot. |
 
 Example request:
 
@@ -1816,8 +1812,6 @@ In addition to the [Standard Response Format](#standard-response-format), this w
 
 See [Snapshots](snapshots.md) for more details.
 
-
-
 ## Jobs
 
 Job APIs provide visibility and control over job executions. Use them to search, fetch details, watch progress, stream or fetch logs/files, and manage lifecycle (e.g., abort). Jobs are created by running events or workflows; job data includes parameters, inputs (data/files), outputs and result codes. Access is constrained by category/group permissions and specific job privileges.
@@ -1832,12 +1826,12 @@ Fetch active jobs with optional filters, pagination and sorting. Active jobs inc
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `offset` | Number | Optional row offset. Defaults to `0`. |
-| `limit` | Number | Optional row limit. Defaults to all matching rows. |
-| `sort_by` | String | Optional sort field. Defaults to `started`. |
-| `sort_dir` | Number | Optional sort direction. Use `-1` for descending (default) or `1` for ascending. |
+| Property Name | Type    | Description                                                                       |
+|---------------|---------|-----------------------------------------------------------------------------------|
+| `offset`      | Number  | Optional row offset. Defaults to `0`.                                             |
+| `limit`       | Number  | Optional row limit. Defaults to all matching rows.                                |
+| `sort_by`     | String  | Optional sort field. Defaults to `started`.                                       |
+| `sort_dir`    | Number  | Optional sort direction. Use `-1` for descending (default) or `1` for ascending.  |
 | other filters | Various | Optional job property filters (e.g., `state`, `event`, `server`, `workflow.job`). |
 
 In addition to the [Standard Response Format](#standard-response-format), this will include a `rows` array containing the matching active jobs, and a `list` object containing list metadata (e.g. `length` for total rows without pagination).
@@ -1911,10 +1905,10 @@ Fetch a single job's details, running or completed. Requires a valid user sessio
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id) to fetch. |
-| `remove` | Array | Optional array of property names to exclude from the returned job object (e.g., heavy fields). |
+| Property Name | Type   | Description                                                                                    |
+|---------------|--------|------------------------------------------------------------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id) to fetch.                                          |
+| `remove`      | Array  | Optional array of property names to exclude from the returned job object (e.g., heavy fields). |
 
 Example request:
 
@@ -1946,10 +1940,10 @@ Fetch multiple jobs (running or completed) by IDs. Requires a valid user session
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `ids` | Array(String) | **(Required)** Array of [Job.id](data.md#job-id) values. |
-| `verbose` | Boolean | Optional. If `true`, includes heavy fields; otherwise they are pruned. |
+| Property Name | Type          | Description                                                            |
+|---------------|---------------|------------------------------------------------------------------------|
+| `ids`         | Array(String) | **(Required)** Array of [Job.id](data.md#job-id) values.               |
+| `verbose`     | Boolean       | Optional. If `true`, includes heavy fields; otherwise they are pruned. |
 
 Example request:
 
@@ -1974,8 +1968,8 @@ Example response:
 
 Notes:
 
-- When `verbose` is not set, the following heavy fields are removed: `actions`, `activity`, `html`, `limits`, `procs`, `conns`, `table`, `timelines`, `input`, `data`, `files`.
-- See [Job](data.md#job) for details on the job object.
+-  When `verbose` is not set, the following heavy fields are removed: `actions`, `activity`, `html`, `limits`, `procs`, `conns`, `table`, `timelines`, `input`, `data`, `files`.
+-  See [Job](data.md#job) for details on the job object.
 
 ### get_job_log
 
@@ -1987,14 +1981,14 @@ Stream a job's log as plain text. Requires a valid user session (session auth).
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
+| Property Name | Type   | Description                                  |
+|---------------|--------|----------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id). |
 
 Response:
 
-- Returns HTTP `200 OK` with `Content-Type: text/plain; charset=utf-8`. For archived logs it may include `Content-Encoding: gzip`.
-- Returns `204 No Content` if no log is available.
+-  Returns HTTP `200 OK` with `Content-Type: text/plain; charset=utf-8`. For archived logs it may include `Content-Encoding: gzip`.
+-  Returns `204 No Content` if no log is available.
 
 ### view_job_log
 
@@ -2006,15 +2000,15 @@ View a job's log (plain text) via token authentication. This is useful for share
 
 Parameters (query):
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
-| `t` | String | **(Required)** The download token from [get_job](#get_job). |
+| Property Name | Type   | Description                                                 |
+|---------------|--------|-------------------------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id).                |
+| `t`           | String | **(Required)** The download token from [get_job](#get_job). |
 
 Response:
 
-- Returns HTTP `200 OK` with `Content-Type: text/plain; charset=utf-8`. For archived logs it may include `Content-Encoding: gzip`.
-- Returns `404 Not Found` if no log is available, or `403 Forbidden` if the token is invalid.
+-  Returns HTTP `200 OK` with `Content-Type: text/plain; charset=utf-8`. For archived logs it may include `Content-Encoding: gzip`.
+-  Returns `404 Not Found` if no log is available, or `403 Forbidden` if the token is invalid.
 
 ### download_job_log
 
@@ -2026,15 +2020,15 @@ Download a job's log as a file via token authentication. Obtain the `t` token fr
 
 Parameters (query):
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
-| `t` | String | **(Required)** The download token from [get_job](#get_job). |
+| Property Name | Type   | Description                                                 |
+|---------------|--------|-------------------------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id).                |
+| `t`           | String | **(Required)** The download token from [get_job](#get_job). |
 
 Response:
 
-- Returns HTTP `200 OK` with `Content-Type: text/plain; charset=utf-8` and a `Content-Disposition` suggesting a filename. For archived logs it may include `Content-Encoding: gzip`.
-- Returns `404 Not Found` if no log is available, or `403 Forbidden` if the token is invalid.
+-  Returns HTTP `200 OK` with `Content-Type: text/plain; charset=utf-8` and a `Content-Disposition` suggesting a filename. For archived logs it may include `Content-Encoding: gzip`.
+-  Returns `404 Not Found` if no log is available, or `403 Forbidden` if the token is invalid.
 
 ### tail_live_job_log
 
@@ -2042,14 +2036,14 @@ Response:
 GET /api/app/tail_live_job_log/v1
 ```
 
-Return a tail chunk of a live job's log (end-aligned ~32KB) to prime the real-time log viewer. Requires a valid user session or API Key, and the job must be active.
+Return a tail chunk of a live job's log (end-aligned \~32KB) to prime the real-time log viewer. Requires a valid user session or API Key, and the job must be active.
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
-| `bytes` | Number | Optional. Approximate number of bytes to return from the end. Defaults to `32678` (32K). |
+| Property Name | Type   | Description                                                                              |
+|---------------|--------|------------------------------------------------------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id).                                             |
+| `bytes`       | Number | Optional. Approximate number of bytes to return from the end. Defaults to `32678` (32K). |
 
 Example response:
 
@@ -2072,10 +2066,10 @@ Stream live job updates via [Server-sent events](https://developer.mozilla.org/e
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
-| `token` | String | Optional | A special auth token used by the [magic](#magic) API to stream jobs for the magic landing pages. |
+| Property Name | Type   | Description                                  |
+|---------------|--------|----------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id). |
+| `token`       | String | Optional                                     |
 
 The response will be streamed using [Server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).  The first update will include a JSON document containing the [Job.id](data.md#job.id), followed by multiple updates as the job runs, with a final update when the job completes.  Here is an example raw streaming response (many intermediate updates omitted for brevity):
 
@@ -2123,10 +2117,10 @@ Admin-only. Update a running or completed job. This is a powerful API intended f
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
-| (Other) | Various | Any writable job fields to update. Running jobs are updated in-memory; completed jobs are updated in storage. |
+| Property Name | Type    | Description                                                                                                   |
+|---------------|---------|---------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The [Job.id](data.md#job-id).                                                                  |
+| (Other)       | Various | Any writable job fields to update. Running jobs are updated in-memory; completed jobs are updated in storage. |
 
 Example response:
 
@@ -2146,16 +2140,16 @@ Resume a suspended active job. Requires the [run_jobs](privileges.md#run_jobs) p
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
-| `params` | Object | Optional. User parameters to merge into the job's `params` when resuming. |
+| Property Name | Type   | Description                                                               |
+|---------------|--------|---------------------------------------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id).                              |
+| `params`      | Object | Optional. User parameters to merge into the job's `params` when resuming. |
 
 Behavior:
 
-- Fails if the job is not active or not suspended.
-- Records suspension metadata (duration, resumed at/by, IPs, user agent) in the job's suspend action details for audit.
-- If provided, merges `params` into current job parameters upon resume.  This is used to collect user parameters in the UI at resume time.
+-  Fails if the job is not active or not suspended.
+-  Records suspension metadata (duration, resumed at/by, IPs, user agent) in the job's suspend action details for audit.
+-  If provided, merges `params` into current job parameters upon resume.  This is used to collect user parameters in the UI at resume time.
 
 Example request:
 
@@ -2182,9 +2176,9 @@ Toggle a completion notification e-mail for the current user on an active job. R
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
+| Property Name | Type   | Description                                  |
+|---------------|--------|----------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id). |
 
 Example response:
 
@@ -2207,10 +2201,10 @@ Replace the tags on a completed job. Requires the [tag_jobs](privileges.md#tag_j
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
-| `tags` | Array(String) | **(Required)** Full replacement list of tags for the job. |
+| Property Name | Type          | Description                                               |
+|---------------|---------------|-----------------------------------------------------------|
+| `id`          | String        | **(Required)** The [Job.id](data.md#job-id).              |
+| `tags`        | Array(String) | **(Required)** Full replacement list of tags for the job. |
 
 Example request:
 
@@ -2229,7 +2223,7 @@ Example response:
 
 Notes:
 
-- The job's activity log is appended to with a summary of tag changes.
+-  The job's activity log is appended to with a summary of tag changes.
 
 ### abort_job
 
@@ -2241,9 +2235,9 @@ Abort a running job. Requires the [abort_jobs](privileges.md#abort_jobs) privile
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
+| Property Name | Type   | Description                                  |
+|---------------|--------|----------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id). |
 
 Example response:
 
@@ -2261,9 +2255,9 @@ Delete a completed job, including logs and files. Requires the [delete_jobs](pri
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Job.id](data.md#job-id). |
+| Property Name | Type   | Description                                  |
+|---------------|--------|----------------------------------------------|
+| `id`          | String | **(Required)** The [Job.id](data.md#job-id). |
 
 Example response:
 
@@ -2283,9 +2277,9 @@ Flush all queued jobs for an event without triggering completion actions. Requir
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Event.id](data.md#event-id) whose queue to flush. |
+| Property Name | Type   | Description                                                           |
+|---------------|--------|-----------------------------------------------------------------------|
+| `id`          | String | **(Required)** The [Event.id](data.md#event-id) whose queue to flush. |
 
 Example response:
 
@@ -2297,8 +2291,6 @@ Example response:
 ```
 
 In addition to the [Standard Response Format](#standard-response-format), this will include a `count` property indicating how many queued jobs were removed.
-
-
 
 ## Monitors
 
@@ -2353,9 +2345,9 @@ Fetch a single monitor definition by ID. No specific privilege is required beyon
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the monitor to fetch. |
+| Property Name | Type   | Description                                                 |
+|---------------|--------|-------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the monitor to fetch. |
 
 Example response:
 
@@ -2394,9 +2386,9 @@ Create a new monitor. Requires the [create_monitors](privileges.md#create_monito
 
 Validation and behavior:
 
-- The `source` expression is validated; syntax errors are rejected.
-- If `data_match` is provided, it must compile as a valid regular expression.
-- `sort_order` is automatically assigned at the end of the current list.
+-  The `source` expression is validated; syntax errors are rejected.
+-  If `data_match` is provided, it must compile as a valid regular expression.
+-  `sort_order` is automatically assigned at the end of the current list.
 
 Example request:
 
@@ -2433,15 +2425,15 @@ Update an existing monitor by ID. Requires the [edit_monitors](privileges.md#edi
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The monitor ID to update. |
-| (Other) | Various | Any updatable [Monitor](data.md#monitor) fields (e.g. `title`, `source`, `data_type`, `suffix`, `display`, `min_vert_scale`, `groups`, `icon`, `notes`). |
+| Property Name | Type    | Description                                                                                                                                              |
+|---------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The monitor ID to update.                                                                                                                 |
+| (Other)       | Various | Any updatable [Monitor](data.md#monitor) fields (e.g. `title`, `source`, `data_type`, `suffix`, `display`, `min_vert_scale`, `groups`, `icon`, `notes`). |
 
 Validation and behavior:
 
-- If `source` is included, it is validated; syntax errors are rejected.
-- If `data_match` is included, it must compile as a valid regular expression.
+-  If `source` is included, it is validated; syntax errors are rejected.
+-  If `data_match` is included, it must compile as a valid regular expression.
 
 Example response:
 
@@ -2459,12 +2451,12 @@ Test a monitor configuration (expression and optional `data_match`) against a sp
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `server` | String | **(Required)** The [Server.id](data.md#server-id) to test against. |
-| `source` | String | **(Required)** The [Monitor.source](data.md#monitor-source) expression to evaluate. |
-| `data_type` | String | **(Required)** One of `integer`, `float`, `bytes`, `seconds`, or `milliseconds`. |
-| `data_match` | String | Optional JavaScript regular expression string to extract a value from text. |
+| Property Name | Type   | Description                                                                         |
+|---------------|--------|-------------------------------------------------------------------------------------|
+| `server`      | String | **(Required)** The [Server.id](data.md#server-id) to test against.                  |
+| `source`      | String | **(Required)** The [Monitor.source](data.md#monitor-source) expression to evaluate. |
+| `data_type`   | String | **(Required)** One of `integer`, `float`, `bytes`, `seconds`, or `milliseconds`.    |
+| `data_match`  | String | Optional JavaScript regular expression string to extract a value from text.         |
 
 Example request:
 
@@ -2498,9 +2490,9 @@ Delete an existing monitor by ID. Requires the [delete_monitors](privileges.md#d
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The monitor ID to delete. |
+| Property Name | Type   | Description                              |
+|---------------|--------|------------------------------------------|
+| `id`          | String | **(Required)** The monitor ID to delete. |
 
 Example response:
 
@@ -2520,9 +2512,9 @@ Update multiple monitors in a single call. This endpoint is intended for updatin
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `items` | Array(Object) | **(Required)** Array of objects, each with an `id` and the new `sort_order`. |
+| Property Name | Type          | Description                                                                  |
+|---------------|---------------|------------------------------------------------------------------------------|
+| `items`       | Array(Object) | **(Required)** Array of objects, each with an `id` and the new `sort_order`. |
 
 Example request:
 
@@ -2543,8 +2535,8 @@ Example response:
 
 Notes:
 
-- Only `sort_order` is updated by this endpoint.
-- `modified` and `revision` are not updated by design for multi-updates of sort order.
+-  Only `sort_order` is updated by this endpoint.
+-  `modified` and `revision` are not updated by design for multi-updates of sort order.
 
 ### get_quickmon_data
 
@@ -2556,10 +2548,10 @@ Fetch the current [QuickMonData](data.md#quickmondata) snapshots for servers (la
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `server` | String | Optional. Limit results to a single [Server.id](data.md#server-id). |
-| `group` | String | Optional. Limit results to servers in a specific [Group.id](data.md#group-id). |
+| Property Name | Type   | Description                                                                    |
+|---------------|--------|--------------------------------------------------------------------------------|
+| `server`      | String | Optional. Limit results to a single [Server.id](data.md#server-id).            |
+| `group`       | String | Optional. Limit results to servers in a specific [Group.id](data.md#group-id). |
 
 Example response:
 
@@ -2586,11 +2578,11 @@ Fetch the latest timeline entries for a specific system on a server, along with 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `server` | String | **(Required)** The [Server.id](data.md#server-id). |
-| `sys` | String | **(Required)** The timeline system ID to query (e.g., `hourly`, `daily`, `monthly` or `yearly`). |
-| `limit` | Number | **(Required)** The number of timeline entries to return. |
+| Property Name | Type   | Description                                                                                      |
+|---------------|--------|--------------------------------------------------------------------------------------------------|
+| `server`      | String | **(Required)** The [Server.id](data.md#server-id).                                               |
+| `sys`         | String | **(Required)** The timeline system ID to query (e.g., `hourly`, `daily`, `monthly` or `yearly`). |
+| `limit`       | Number | **(Required)** The number of timeline entries to return.                                         |
 
 Example response:
 
@@ -2616,12 +2608,12 @@ Fetch historical timeline entries for a specific server. Requires a valid user s
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `server` | String | **(Required)** The [Server.id](data.md#server-id). |
-| `sys` | String | **(Required)** The timeline system ID to query (e.g., `hourly`, `daily`, `monthly` or `yearly`). |
-| `date` | Number | **(Required)** Unix timestamp (seconds) specifying the start of the range of data to fetch. |
-| `limit` | Number | **(Required)** The number of timeline entries to return. |
+| Property Name | Type   | Description                                                                                      |
+|---------------|--------|--------------------------------------------------------------------------------------------------|
+| `server`      | String | **(Required)** The [Server.id](data.md#server-id).                                               |
+| `sys`         | String | **(Required)** The timeline system ID to query (e.g., `hourly`, `daily`, `monthly` or `yearly`). |
+| `date`        | Number | **(Required)** Unix timestamp (seconds) specifying the start of the range of data to fetch.      |
+| `limit`       | Number | **(Required)** The number of timeline entries to return.                                         |
 
 Example response:
 
@@ -2635,8 +2627,6 @@ Example response:
 In addition to the [Standard Response Format](#standard-response-format), this will include a `rows` array containing the historical [ServerTimelineData](data.md#servertimelinedata) entries.
 
 See [Monitors](monitors.md) for more details on the monitoring subsystem.
-
-
 
 ## Plugins
 
@@ -2690,9 +2680,9 @@ Fetch a single plugin definition by ID. No specific privilege is required, besid
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the plugin to fetch. |
+| Property Name | Type   | Description                                                |
+|---------------|--------|------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the plugin to fetch. |
 
 Example request:
 
@@ -2775,10 +2765,10 @@ See [Plugin](data.md#plugin) for details on the input properties. The request is
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the plugin to update. |
-| (Other) | Various | Any updatable [Plugin](data.md#plugin) fields (e.g. `title`, `enabled`, `type`, `command`, `script`, `params`, `groups`, `format`, `uid`, `gid`, `kill`, `icon`, `notes`). |
+| Property Name | Type    | Description                                                                                                                                                                |
+|---------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The alphanumeric ID of the plugin to update.                                                                                                                |
+| (Other)       | Various | Any updatable [Plugin](data.md#plugin) fields (e.g. `title`, `enabled`, `type`, `command`, `script`, `params`, `groups`, `format`, `uid`, `gid`, `kill`, `icon`, `notes`). |
 
 Example request:
 
@@ -2808,9 +2798,9 @@ Delete an existing plugin definition, specified by its ID. The [delete_plugins](
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the plugin to delete. |
+| Property Name | Type   | Description                                                 |
+|---------------|--------|-------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the plugin to delete. |
 
 Example request:
 
@@ -2823,9 +2813,6 @@ Example response:
 ```json
 { "code": 0 }
 ```
-
-
-
 
 ## Roles
 
@@ -2882,9 +2869,9 @@ Fetch a single role definition by ID. No specific privilege is required, besides
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the role to fetch. |
+| Property Name | Type   | Description                                              |
+|---------------|--------|----------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the role to fetch. |
 
 Example request:
 
@@ -2972,10 +2959,10 @@ See [Role](data.md#role) for details on the input properties. The request is sha
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the role to update. |
-| (Other) | Various | Any updatable [Role](data.md#role) fields (e.g. `title`, `enabled`, `categories`, `groups`, `privileges`, `icon`, `notes`). |
+| Property Name | Type    | Description                                                                                                                 |
+|---------------|---------|-----------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The alphanumeric ID of the role to update.                                                                   |
+| (Other)       | Various | Any updatable [Role](data.md#role) fields (e.g. `title`, `enabled`, `categories`, `groups`, `privileges`, `icon`, `notes`). |
 
 Example request:
 
@@ -3006,9 +2993,9 @@ Delete an existing user role, specified by its ID. The [delete_roles](privileges
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the role to delete. |
+| Property Name | Type   | Description                                               |
+|---------------|--------|-----------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the role to delete. |
 
 Example request:
 
@@ -3021,9 +3008,6 @@ Example response:
 ```json
 { "code": 0 }
 ```
-
-
-
 
 ## Search
 
@@ -3039,44 +3023,44 @@ Search completed jobs. Requires a valid user session or API Key. Results are aut
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `query` | String | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*` if omitted. |
-| `offset` | Number | Optional. Zero-based row offset for pagination. Defaults to `0`. |
-| `limit` | Number | Optional. Number of rows to return. Defaults to `1`. |
-| `sort_by` | String | Optional. Field to sort by. Defaults to `completed`. |
-| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
-| `verbose` | Boolean | Optional. If `true`, include verbose job fields (`actions`, `activity`, `input`, `files`, etc.). Defaults to `false` (i.e. these are pruned). |
-| `select` | Array | Optional.  If included, will only return the [Job](data.md#job) properties specified in the array, e.g. `["id", "files"]`.  Overrides `verbose`. |
+| Property Name | Type    | Description                                                                                                                                                    |
+|---------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `query`       | String  | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*` if omitted. |
+| `offset`      | Number  | Optional. Zero-based row offset for pagination. Defaults to `0`.                                                                                               |
+| `limit`       | Number  | Optional. Number of rows to return. Defaults to `1`.                                                                                                           |
+| `sort_by`     | String  | Optional. Field to sort by. Defaults to `completed`.                                                                                                           |
+| `sort_dir`    | Number  | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`.                                                                          |
+| `verbose`     | Boolean | Optional. If `true`, include verbose job fields (`actions`, `activity`, `input`, `files`, etc.). Defaults to `false` (i.e. these are pruned).                  |
+| `select`      | Array   | Optional.  If included, will only return the [Job](data.md#job) properties specified in the array, e.g. `["id", "files"]`.  Overrides `verbose`.               |
 
-For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Jobs Database Table](db.dm#jobs) schema for the available columns you can search on.
+For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Jobs Database Table](db.dm) schema for the available columns you can search on.
 
 Query examples for the `query` parameter:
 
-- `tags:_success`: All successful jobs. Successful jobs are tagged with the hidden `_success` system tag.
-- `tags:_error`: All failed jobs for any reason. Failed jobs are tagged with the hidden `_error` system tag.
-- `tags:_files`: All jobs with input or output files.
-- `code:warning`: All jobs with a code of `warning`.
-- `code:critical`: All jobs with a code of `critical`.
-- `code:abort`: All aborted jobs.
-- `event:emk5piv8f6j2n49y`: Jobs for a specific event by its [Event.id](data.md#event-id).
-- `category:general`: Jobs for a specific category by its [Category.id](data.md#category-id).
-- `tags:important`: Jobs tagged with a user tag by its [Tag.id](data.md#tag-id).
-- `source:scheduler`: Jobs started by a specific source (see [Job.source](data.md#job-source)).
-- `source:workflow`: All workflow sub-jobs.
-- `plugin:shellplug`: Jobs using a specific Plugin by its [Plugin.id](data.md#plugin-id).
-- `plugin:_workflow`: Special Plugin ID to search for all workflows.
-- `server:smkee2akcswxcapy`: Jobs that ran on a specific server by its [Server.id](data.md#server-id).
-- `groups:main`: Jobs that ran on a server in a group by its [Group.id](data.md#group-id).
+-  `tags:_success`: All successful jobs. Successful jobs are tagged with the hidden `_success` system tag.
+-  `tags:_error`: All failed jobs for any reason. Failed jobs are tagged with the hidden `_error` system tag.
+-  `tags:_files`: All jobs with input or output files.
+-  `code:warning`: All jobs with a code of `warning`.
+-  `code:critical`: All jobs with a code of `critical`.
+-  `code:abort`: All aborted jobs.
+-  `event:emk5piv8f6j2n49y`: Jobs for a specific event by its [Event.id](data.md#event-id).
+-  `category:general`: Jobs for a specific category by its [Category.id](data.md#category-id).
+-  `tags:important`: Jobs tagged with a user tag by its [Tag.id](data.md#tag-id).
+-  `source:scheduler`: Jobs started by a specific source (see [Job.source](data.md#job-source)).
+-  `source:workflow`: All workflow sub-jobs.
+-  `plugin:shellplug`: Jobs using a specific Plugin by its [Plugin.id](data.md#plugin-id).
+-  `plugin:_workflow`: Special Plugin ID to search for all workflows.
+-  `server:smkee2akcswxcapy`: Jobs that ran on a specific server by its [Server.id](data.md#server-id).
+-  `groups:main`: Jobs that ran on a server in a group by its [Group.id](data.md#group-id).
 
 Multiple columns can be queried by separating them with spaces. For example, `tags:_error category:general` requires both clauses to match. For multi-word columns like `tags`, you can match multiple values by separating them with spaces, e.g. `tags:flag important` (requires both tags). For an OR list on a single column, use a pipe separator, e.g. `tags:flag|important`.
 
 Date and number fields (like `date`) accept:
 
-- Unix timestamp in seconds (quantized to the nearest hour internally), e.g. `1768430906`.
-- A date in `YYYY-MM-DD` (quantized to midnight in the local server time zone).
-- `today` (midnight in the local server time zone).
-- `now` (current local server time).
+-  Unix timestamp in seconds (quantized to the nearest hour internally), e.g. `1768430906`.
+-  A date in `YYYY-MM-DD` (quantized to midnight in the local server time zone).
+-  `today` (midnight in the local server time zone).
+-  `now` (current local server time).
 
 Example date range for all jobs in the year 2025: `date:>=2025-01-01 date:<2026-01-01`.
 
@@ -3115,29 +3099,29 @@ Search historical server records. Requires a valid user session or API Key.
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `query` | String | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*`. |
-| `offset` | Number | Optional. Zero-based row offset for pagination. Defaults to `0`. |
-| `limit` | Number | Optional. Number of rows to return. Defaults to `1`. |
-| `sort_by` | String | Optional. Field to sort by. Defaults to `_id`. |
-| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
+| Property Name | Type   | Description                                                                                                                                         |
+|---------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `query`       | String | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*`. |
+| `offset`      | Number | Optional. Zero-based row offset for pagination. Defaults to `0`.                                                                                    |
+| `limit`       | Number | Optional. Number of rows to return. Defaults to `1`.                                                                                                |
+| `sort_by`     | String | Optional. Field to sort by. Defaults to `_id`.                                                                                                      |
+| `sort_dir`    | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`.                                                               |
 
-For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Servers Database Table](db.dm#servers) schema for the available columns you can search on.
+For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Servers Database Table](db.dm) schema for the available columns you can search on.
 
 Query examples for the `query` parameter:
 
-- `web` or `keywords:web`: Search the default keywords field.
-- `groups:main`: Servers in a specific group by its [Group.id](data.md#group-id).
-- `os_platform:linux`: Servers on a given OS platform.
-- `os_distro:ubuntu`: Servers running a specific OS distribution.
-- `os_release:22_04`: Servers running a specific OS release.
-- `os_arch:x86_64`: Servers with a specific CPU architecture.
-- `cpu_virt:kvm`: Servers running under a specific virtualization vendor.
-- `cpu_brand:intel`: Servers with a specific CPU brand string.
-- `cpu_cores:8`: Servers with a specific core count.
-- `created:>=2025-01-01 created:<2026-01-01`: Servers created in 2025.
-- `modified:>=today`: Servers modified today (last modified or last contact).
+-  `web` or `keywords:web`: Search the default keywords field.
+-  `groups:main`: Servers in a specific group by its [Group.id](data.md#group-id).
+-  `os_platform:linux`: Servers on a given OS platform.
+-  `os_distro:ubuntu`: Servers running a specific OS distribution.
+-  `os_release:22_04`: Servers running a specific OS release.
+-  `os_arch:x86_64`: Servers with a specific CPU architecture.
+-  `cpu_virt:kvm`: Servers running under a specific virtualization vendor.
+-  `cpu_brand:intel`: Servers with a specific CPU brand string.
+-  `cpu_cores:8`: Servers with a specific core count.
+-  `created:>=2025-01-01 created:<2026-01-01`: Servers created in 2025.
+-  `modified:>=today`: Servers modified today (last modified or last contact).
 
 You can combine columns with spaces for AND logic, e.g. `groups:main os_distro:ubuntu`. Use `|` for OR on a single column, e.g. `os_platform:linux|windows`.
 
@@ -3165,26 +3149,26 @@ Search historical or active alert invocations. Requires a valid user session or 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `query` | String | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*`. |
-| `offset` | Number | Optional. Zero-based row offset for pagination. Defaults to `0`. |
-| `limit` | Number | Optional. Number of rows to return. Defaults to `1`. |
-| `sort_by` | String | Optional. Field to sort by. Defaults to `_id`. |
-| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
+| Property Name | Type   | Description                                                                                                                                         |
+|---------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `query`       | String | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*`. |
+| `offset`      | Number | Optional. Zero-based row offset for pagination. Defaults to `0`.                                                                                    |
+| `limit`       | Number | Optional. Number of rows to return. Defaults to `1`.                                                                                                |
+| `sort_by`     | String | Optional. Field to sort by. Defaults to `_id`.                                                                                                      |
+| `sort_dir`    | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`.                                                               |
 
-For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Alerts Database Table](db.dm#alerts) schema for the available columns you can search on.
+For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Alerts Database Table](db.dm) schema for the available columns you can search on.
 
 Query examples for the `query` parameter:
 
-- `active:true`: All active alert invocations.
-- `alert:al12345`: Invocations for a specific alert definition by its [Alert.id](data.md#alert-id).
-- `server:smkee2akcswxcapy`: Invocations for a specific server by its [Server.id](data.md#server-id).
-- `groups:main`: Invocations for servers in a specific group by its [Group.id](data.md#group-id).
-- `jobs:jabc123`: Invocations related to a specific job by its [Job.id](data.md#job-id).
-- `tickets:tmgpmoorz6p`: Invocations related to a specific ticket by its [Ticket.id](data.md#ticket-id).
-- `start:>=2025-01-01 start:<2026-01-01`: Alerts that fired in 2025.
-- `end:>=today`: Alerts cleared today.
+-  `active:true`: All active alert invocations.
+-  `alert:al12345`: Invocations for a specific alert definition by its [Alert.id](data.md#alert-id).
+-  `server:smkee2akcswxcapy`: Invocations for a specific server by its [Server.id](data.md#server-id).
+-  `groups:main`: Invocations for servers in a specific group by its [Group.id](data.md#group-id).
+-  `jobs:jabc123`: Invocations related to a specific job by its [Job.id](data.md#job-id).
+-  `tickets:tmgpmoorz6p`: Invocations related to a specific ticket by its [Ticket.id](data.md#ticket-id).
+-  `start:>=2025-01-01 start:<2026-01-01`: Alerts that fired in 2025.
+-  `end:>=today`: Alerts cleared today.
 
 Date and number fields (like `start` and `end`) accept Unix timestamps, `YYYY-MM-DD`, `today`, and `now`, and are quantized to the nearest hour internally.
 
@@ -3210,30 +3194,30 @@ Search server snapshots (individual servers or group snapshots). Requires a vali
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `query` | String | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*`. |
-| `offset` | Number | Optional. Zero-based row offset for pagination. Defaults to `0`. |
-| `limit` | Number | Optional. Number of rows to return. Defaults to `1`. |
-| `sort_by` | String | Optional. Field to sort by. Defaults to `_id`. |
-| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
-| `verbose` | Boolean | Optional. If `true`, include heavy nested fields (e.g., `data.processes`, `data.mounts`, group keys). Defaults to `false` (these are pruned). |
+| Property Name | Type    | Description                                                                                                                                         |
+|---------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `query`       | String  | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*`. |
+| `offset`      | Number  | Optional. Zero-based row offset for pagination. Defaults to `0`.                                                                                    |
+| `limit`       | Number  | Optional. Number of rows to return. Defaults to `1`.                                                                                                |
+| `sort_by`     | String  | Optional. Field to sort by. Defaults to `_id`.                                                                                                      |
+| `sort_dir`    | Number  | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`.                                                               |
+| `verbose`     | Boolean | Optional. If `true`, include heavy nested fields (e.g., `data.processes`, `data.mounts`, group keys). Defaults to `false` (these are pruned).       |
 
-For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Snapshots Database Table](db.dm#snapshots) schema for the available columns you can search on.
+For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Snapshots Database Table](db.dm) schema for the available columns you can search on.
 
 Query examples for the `query` parameter:
 
-- `type:server`: Server snapshots only.
-- `type:group`: Group snapshots only.
-- `source:alert`: Snapshots created by alert actions.
-- `source:watch`: Snapshots created by watches.
-- `source:user`: Snapshots created manually by users.
-- `source:job`: Snapshots created by job actions.
-- `server:smkee2akcswxcapy`: Snapshots for a specific server by its [Server.id](data.md#server-id).
-- `groups:main`: Group snapshots for a specific group by its [Group.id](data.md#group-id).
-- `alerts:al12345`: Snapshots that captured a specific alert invocation by its [AlertInvocation.id](data.md#alertinvocation-id).
-- `jobs:jabc123`: Snapshots that captured a specific job by its [Job.id](data.md#job-id).
-- `date:>=2025-01-01 date:<2026-01-01`: Snapshots captured in 2025.
+-  `type:server`: Server snapshots only.
+-  `type:group`: Group snapshots only.
+-  `source:alert`: Snapshots created by alert actions.
+-  `source:watch`: Snapshots created by watches.
+-  `source:user`: Snapshots created manually by users.
+-  `source:job`: Snapshots created by job actions.
+-  `server:smkee2akcswxcapy`: Snapshots for a specific server by its [Server.id](data.md#server-id).
+-  `groups:main`: Group snapshots for a specific group by its [Group.id](data.md#group-id).
+-  `alerts:al12345`: Snapshots that captured a specific alert invocation by its [AlertInvocation.id](data.md#alertinvocation-id).
+-  `jobs:jabc123`: Snapshots that captured a specific job by its [Job.id](data.md#job-id).
+-  `date:>=2025-01-01 date:<2026-01-01`: Snapshots captured in 2025.
 
 Date and number fields (like `date`) accept Unix timestamps, `YYYY-MM-DD`, `today`, and `now`, and are quantized to the nearest hour internally.
 
@@ -3259,18 +3243,18 @@ Search tickets using the Unbase query syntax. Requires a valid user session or A
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `query` | String | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*`. |
-| `offset` | Number | Optional. Zero-based row offset for pagination. Defaults to `0`. |
-| `limit` | Number | Optional. Number of rows to return. Defaults to `1`. |
-| `sort_by` | String | Optional. Field to sort by. Defaults to `_id`. |
-| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
-| `compact` | Boolean | Optional. If `true` (or `1`), omit `body` and replace `changes` with its count for lighter payloads. |
+| Property Name | Type    | Description                                                                                                                                         |
+|---------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `query`       | String  | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*`. |
+| `offset`      | Number  | Optional. Zero-based row offset for pagination. Defaults to `0`.                                                                                    |
+| `limit`       | Number  | Optional. Number of rows to return. Defaults to `1`.                                                                                                |
+| `sort_by`     | String  | Optional. Field to sort by. Defaults to `_id`.                                                                                                      |
+| `sort_dir`    | Number  | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`.                                                               |
+| `compact`     | Boolean | Optional. If `true` (or `1`), omit `body` and replace `changes` with its count for lighter payloads.                                                |
 
-For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Tickets Database Table](db.dm#tickets) schema for the available columns you can search on.
+For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Tickets Database Table](db.dm) schema for the available columns you can search on.
 
-See [Tickets → Searching](tickets.md#searching) for search query examples.
+See [Tickets -> Searching](tickets.md#searching) for search query examples.
 
 Example response (compact):
 
@@ -3296,23 +3280,23 @@ Search the activity (audit) log. Admin only. Requires a valid administrator sess
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `query` | String | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*`. |
-| `offset` | Number | Optional. Zero-based row offset for pagination. Defaults to `0`. |
-| `limit` | Number | Optional. Number of rows to return. Defaults to `1`. |
-| `sort_by` | String | Optional. Field to sort by. Defaults to `_id`. |
-| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
+| Property Name | Type   | Description                                                                                                                                         |
+|---------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `query`       | String | Optional. [Unbase-style search query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*`. |
+| `offset`      | Number | Optional. Zero-based row offset for pagination. Defaults to `0`.                                                                                    |
+| `limit`       | Number | Optional. Number of rows to return. Defaults to `1`.                                                                                                |
+| `sort_by`     | String | Optional. Field to sort by. Defaults to `_id`.                                                                                                      |
+| `sort_dir`    | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`.                                                               |
 
-For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Activity Database Table](db.dm#activity) schema for the available columns you can search on.
+For formatting the `query` you can use a GitHub-style [simple query format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries), or the more advanced [PxQL format](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#pxql-queries).  See the [Activity Database Table](db.dm) schema for the available columns you can search on.
 
 Query examples for the `query` parameter:
 
-- `action:job_error`: Activity items for a specific action (see [Activity.action](data.md#activity-action)).
-- `action:alert_new|alert_cleared`: Activity items matching multiple actions.
-- `keywords:admin`: Activity items that mention a specific username or ID.
-- `date:>=2025-01-01 date:<2026-01-01`: Activity in 2025.
-- `date:>=today`: Activity logged today.
+-  `action:job_error`: Activity items for a specific action (see [Activity.action](data.md#activity-action)).
+-  `action:alert_new|alert_cleared`: Activity items matching multiple actions.
+-  `keywords:admin`: Activity items that mention a specific username or ID.
+-  `date:>=2025-01-01 date:<2026-01-01`: Activity in 2025.
+-  `date:>=today`: Activity logged today.
 
 The activity index exposes only three searchable columns: `action`, `keywords`, and `date`. Date and number fields (like `date`) accept Unix timestamps, `YYYY-MM-DD`, `today`, and `now`, and are quantized to the nearest hour internally.
 
@@ -3338,14 +3322,14 @@ Search the activity log for revision history related to a specific data type (e.
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `type` | String | **(Required)** The data type to filter by. One of: `alerts`, `categories`, `channels`, `events`, `groups`, `monitors`, `plugins`, `tags`, `web_hooks`, `buckets`, `secrets`, `tickets`, `roles`. |
-| `query` | String | Optional. Additional Unbase-style search terms to AND with the type filter. |
-| `offset` | Number | Optional. Zero-based row offset for pagination. Defaults to `0`. |
-| `limit` | Number | Optional. Number of rows to return. Defaults to `1`. |
-| `sort_by` | String | Optional. Field to sort by. Defaults to `_id`. |
-| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
+| Property Name | Type   | Description                                                                                                                                                                                      |
+|---------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `type`        | String | **(Required)** The data type to filter by. One of: `alerts`, `categories`, `channels`, `events`, `groups`, `monitors`, `plugins`, `tags`, `web_hooks`, `buckets`, `secrets`, `tickets`, `roles`. |
+| `query`       | String | Optional. Additional Unbase-style search terms to AND with the type filter.                                                                                                                      |
+| `offset`      | Number | Optional. Zero-based row offset for pagination. Defaults to `0`.                                                                                                                                 |
+| `limit`       | Number | Optional. Number of rows to return. Defaults to `1`.                                                                                                                                             |
+| `sort_by`     | String | Optional. Field to sort by. Defaults to `_id`.                                                                                                                                                   |
+| `sort_dir`    | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`.                                                                                                            |
 
 Example response:
 
@@ -3369,13 +3353,13 @@ Fetch daily snapshots from the system stats history. These are counters incremen
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `offset` | Number | Optional. Zero-based day offset for pagination. Defaults to `0`. |
-| `limit` | Number | Optional. Number of days to return. Defaults to `1`. |
-| `path` | String | Optional. Dot-path into the stats object to return a subset (e.g., `daily.jobs`). |
-| `key_prefix` | String | Optional. If set and the selected node is an object, include only keys beginning with this prefix. |
-| `current_day` | Boolean | Optional. If `true`, append in-progress counters for the current day as an extra item. |
+| Property Name | Type    | Description                                                                                        |
+|---------------|---------|----------------------------------------------------------------------------------------------------|
+| `offset`      | Number  | Optional. Zero-based day offset for pagination. Defaults to `0`.                                   |
+| `limit`       | Number  | Optional. Number of days to return. Defaults to `1`.                                               |
+| `path`        | String  | Optional. Dot-path into the stats object to return a subset (e.g., `daily.jobs`).                  |
+| `key_prefix`  | String  | Optional. If set and the selected node is an object, include only keys beginning with this prefix. |
+| `current_day` | Boolean | Optional. If `true`, append in-progress counters for the current day as an extra item.             |
 
 Example response:
 
@@ -3405,24 +3389,24 @@ Stream a bulk export of search results for any database index to the client. Req
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `index` | String | **(Required)** Database index ID to query. Supported indexes are `jobs`, `tickets`, `servers`, `alerts`, `snapshots`, and `activity`. |
-| `query` | String | Optional search query. Defaults to `*`. The query format depends on the selected index. |
-| `columns` | Array(String) or String | **(Required)** Column IDs to include in the export, in the desired order. For HTTP GET query strings, pass a comma-separated list. |
-| `sort_by` | String | Optional. Sorter ID for the index. Defaults to `_id`. |
-| `sort_dir` | Number | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`. |
-| `format` | String | **(Required)** Output format: `csv`, `tsv`, or `ndjson`. |
-| `compress` | Boolean | Optional. If set to any true value, the response is gzip-compressed. For HTTP GET query strings, use `compress=1`. |
+| Property Name | Type                    | Description                                                                                                                           |
+|---------------|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| `index`       | String                  | **(Required)** Database index ID to query. Supported indexes are `jobs`, `tickets`, `servers`, `alerts`, `snapshots`, and `activity`. |
+| `query`       | String                  | Optional search query. Defaults to `*`. The query format depends on the selected index.                                               |
+| `columns`     | Array(String) or String | **(Required)** Column IDs to include in the export, in the desired order. For HTTP GET query strings, pass a comma-separated list.    |
+| `sort_by`     | String                  | Optional. Sorter ID for the index. Defaults to `_id`.                                                                                 |
+| `sort_dir`    | Number                  | Optional. Sort direction: `1` for ascending or `-1` for descending. Defaults to `-1`.                                                 |
+| `format`      | String                  | **(Required)** Output format: `csv`, `tsv`, or `ndjson`.                                                                              |
+| `compress`    | Boolean                 | Optional. If set to any true value, the response is gzip-compressed. For HTTP GET query strings, use `compress=1`.                    |
 
 Query syntax and examples are documented in the search APIs for each index:
 
-- [search_jobs](#search_jobs)
-- [search_tickets](#search_tickets)
-- [search_servers](#search_servers)
-- [search_alerts](#search_alerts)
-- [search_snapshots](#search_snapshots)
-- [search_activity](#search_activity)
+-  [search_jobs](#search_jobs)
+-  [search_tickets](#search_tickets)
+-  [search_servers](#search_servers)
+-  [search_alerts](#search_alerts)
+-  [search_snapshots](#search_snapshots)
+-  [search_activity](#search_activity)
 
 For searchable fields and index definitions, see [Database](db.md).
 
@@ -3433,8 +3417,6 @@ GET /api/app/bulk_search_export/v1?index=jobs&query=tags:_error&columns=id,event
 ```
 
 Response: `200 OK` with a streamed file. CSV and TSV responses include a header row using the configured column titles. NDJSON responses include one JSON object per line with only the requested columns. A UTF-8 BOM is always prepended for spreadsheet compatibility. If `compress` is enabled, the response is gzip and the filename will end with `.gz`.
-
-
 
 ### marketplace
 
@@ -3448,17 +3430,17 @@ Search listings and fetch detailed product information from the [xyOps Marketpla
 
 The default action of the API is to search the marketplace for plugins.  The following parameters are used for search:
 
-| Parameter Name | Description |
-|----------------|-------------|
-| `query` | Optional keywords, matches case-insensitively against various product properties (title, description, tags, license, etc.). |
-| `type` | Optionally limit results to one specific type, e.g. `plugin`. |
-| `license` | Optionally limit results to one specific license, e.g. `mit` (case-insensitive). |
-| `tags` | Optionally limit results to one or more tags, comma separated and case-insensitive.  All must match to be included. |
-| `requires` | Optionally limit results to one or more requirements, comma separated and case-insensitive.  All must match to be included. |
-| `sort_by` | Which property to sort by (property value needs to be a string, e.g. `title`). |
-| `sort_dir` | Which direction to sort (`1` is ascending, `-1` is descending). |
-| `offset` | Pagination offset into the matched result set. |
-| `limit` | Maximum number of rows to return at once. |
+| Parameter Name | Description                                                                                                                 |
+|----------------|-----------------------------------------------------------------------------------------------------------------------------|
+| `query`        | Optional keywords, matches case-insensitively against various product properties (title, description, tags, license, etc.). |
+| `type`         | Optionally limit results to one specific type, e.g. `plugin`.                                                               |
+| `license`      | Optionally limit results to one specific license, e.g. `mit` (case-insensitive).                                            |
+| `tags`         | Optionally limit results to one or more tags, comma separated and case-insensitive.  All must match to be included.         |
+| `requires`     | Optionally limit results to one or more requirements, comma separated and case-insensitive.  All must match to be included. |
+| `sort_by`      | Which property to sort by (property value needs to be a string, e.g. `title`).                                              |
+| `sort_dir`     | Which direction to sort (`1` is ascending, `-1` is descending).                                                             |
+| `offset`       | Pagination offset into the matched result set.                                                                              |
+| `limit`        | Maximum number of rows to return at once.                                                                                   |
 
 Example:
 
@@ -3552,9 +3534,9 @@ Fetch Logo: `GET /api/app/marketplace/v1?id=pixlcore/xyplug-bluesky&logo=1`
 
 Secrets are passed to jobs as environment variables when access is granted via any of the following metadata lists on the secret:
 
-- `events`: Grant to specific [Event.id](data.md#event-id) jobs.
-- `categories`: Grant to all events in selected [Category.id](data.md#category-id)s.
-- `plugins`: Grant to specific [Plugin.id](data.md#plugin-id) jobs when these plugins are launched.
+-  `events`: Grant to specific [Event.id](data.md#event-id) jobs.
+-  `categories`: Grant to all events in selected [Category.id](data.md#category-id)s.
+-  `plugins`: Grant to specific [Plugin.id](data.md#plugin-id) jobs when these plugins are launched.
 
 Jobs automatically receive the variables without calling any API; the system decrypts and injects them at launch time. Variable names follow POSIX environment rules and are listed in [Secret.names](data.md#secret-names). To view or edit values in the UI, an administrator can use [decrypt_secret](#decrypt_secret); accesses are recorded in the activity log.
 
@@ -3609,9 +3591,9 @@ Fetch a single secret's metadata by ID. No specific privilege is required, besid
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the secret to fetch. |
+| Property Name | Type   | Description                                                |
+|---------------|--------|------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the secret to fetch. |
 
 Example request:
 
@@ -3659,9 +3641,9 @@ Access to this API is logged as a transaction in the activity log (action type `
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the secret to decrypt. |
+| Property Name | Type   | Description                                                  |
+|---------------|--------|--------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the secret to decrypt. |
 
 Example request:
 
@@ -3737,10 +3719,10 @@ See [Secret](data.md#secret) for details on the metadata properties. The request
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the secret to update. |
-| (Other) | Various | Any updatable [Secret](data.md#secret) fields (e.g. `title`, `enabled`, `fields`, `events`, `categories`, `plugins`, `web_hooks`, `icon`, `notes`). |
+| Property Name | Type    | Description                                                                                                                                         |
+|---------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The alphanumeric ID of the secret to update.                                                                                         |
+| (Other)       | Various | Any updatable [Secret](data.md#secret) fields (e.g. `title`, `enabled`, `fields`, `events`, `categories`, `plugins`, `web_hooks`, `icon`, `notes`). |
 
 Example request (metadata-only update):
 
@@ -3781,9 +3763,9 @@ Delete an existing secret, including its encrypted variable data. Admin only. Re
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the secret to delete. |
+| Property Name | Type   | Description                                                 |
+|---------------|--------|-------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the secret to delete. |
 
 Example request:
 
@@ -3796,8 +3778,6 @@ Example response:
 ```json
 { "code": 0 }
 ```
-
-
 
 ## Servers
 
@@ -3884,9 +3864,9 @@ Fetch a single active (online) server by ID. No specific privilege is required b
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The server ID to fetch. |
+| Property Name | Type   | Description                            |
+|---------------|--------|----------------------------------------|
+| `id`          | String | **(Required)** The server ID to fetch. |
 
 Example request:
 
@@ -3934,9 +3914,9 @@ Fetch a server by ID from storage, including its most recent minute of monitorin
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The server ID to fetch. |
+| Property Name | Type   | Description                            |
+|---------------|--------|----------------------------------------|
+| `id`          | String | **(Required)** The server ID to fetch. |
 
 Example request:
 
@@ -3972,15 +3952,15 @@ Update server metadata (title, enabled, icon, groups, and auto-grouping). Admin 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The server ID to update. |
-| (Other) | Various | Any updatable [Server](data.md#server) fields: e.g. `title`, `enabled`, `icon`, `groups` (array of [Group.id](data.md#group-id)), `autoGroup` (boolean). |
+| Property Name | Type    | Description                                                                                                                                              |
+|---------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The server ID to update.                                                                                                                  |
+| (Other)       | Various | Any updatable [Server](data.md#server) fields: e.g. `title`, `enabled`, `icon`, `groups` (array of [Group.id](data.md#group-id)), `autoGroup` (boolean). |
 
 Special behavior:
 
-- If `autoGroup` is `true`, groups are automatically assigned from hostname rules and any provided `groups` are overridden.
-- If `autoGroup` is `false`, you may explicitly set `groups`.
+-  If `autoGroup` is `true`, groups are automatically assigned from hostname rules and any provided `groups` are overridden.
+-  If `autoGroup` is `false`, you may explicitly set `groups`.
 
 Example request:
 
@@ -4011,17 +3991,17 @@ Delete a server and optionally its history. Admin only. Requires a valid adminis
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The server ID to delete. |
-| `history` | Boolean | Optional. If `true`, also delete the server record, monitoring data and snapshots. If omitted or `false`, only uninstall the agent when online and keep history. |
+| Property Name | Type    | Description                                                                                                                                                      |
+|---------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The server ID to delete.                                                                                                                          |
+| `history`     | Boolean | Optional. If `true`, also delete the server record, monitoring data and snapshots. If omitted or `false`, only uninstall the agent when online and keep history. |
 
 Behavior:
 
-- Online + `history: false`: Uninstalls xyOps Satellite and removes the server from the active list; the server record and monitoring history are retained.
-- Online + `history: true`: Uninstalls the Satellite, then starts a background job to delete the server record, monitoring data and snapshots.
-- Offline: You must pass `history: true` to delete; otherwise the call fails because only uninstall would be possible when online.
-- Deletion runs in the background; the response is returned immediately.
+-  Online + `history: false`: Uninstalls xyOps Satellite and removes the server from the active list; the server record and monitoring history are retained.
+-  Online + `history: true`: Uninstalls the Satellite, then starts a background job to delete the server record, monitoring data and snapshots.
+-  Offline: You must pass `history: true` to delete; otherwise the call fails because only uninstall would be possible when online.
+-  Deletion runs in the background; the response is returned immediately.
 
 Example request (delete including history):
 
@@ -4047,10 +4027,10 @@ Start or stop a watch on a server, which takes a snapshot once per minute for a 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The server ID to watch. |
-| `duration` | Number | **(Required)** Duration in seconds. Set to `0` to cancel an existing watch. |
+| Property Name | Type   | Description                                                                 |
+|---------------|--------|-----------------------------------------------------------------------------|
+| `id`          | String | **(Required)** The server ID to watch.                                      |
+| `duration`    | Number | **(Required)** Duration in seconds. Set to `0` to cancel an existing watch. |
 
 Example request:
 
@@ -4076,9 +4056,9 @@ Create a snapshot for the specified server using the most recent server data. Re
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `server` | String | **(Required)** The server ID for which to create a snapshot. |
+| Property Name | Type   | Description                                                  |
+|---------------|--------|--------------------------------------------------------------|
+| `server`      | String | **(Required)** The server ID for which to create a snapshot. |
 
 Example request:
 
@@ -4106,9 +4086,9 @@ Delete a single server or group snapshot given a [Snapshot.id](data.md#snapshot-
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The [Snapshot.id](data.md#snapshot-id) to delete. |
+| Property Name | Type   | Description                                                      |
+|---------------|--------|------------------------------------------------------------------|
+| `id`          | String | **(Required)** The [Snapshot.id](data.md#snapshot-id) to delete. |
 
 Example request:
 
@@ -4123,8 +4103,6 @@ Example response:
 ```
 
 See [Snapshots](snapshots.md) for more details.
-
-
 
 ## Tags
 
@@ -4171,9 +4149,9 @@ Fetch a single tag by ID. No specific privilege is required beyond a valid user 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The tag ID to fetch. |
+| Property Name | Type   | Description                         |
+|---------------|--------|-------------------------------------|
+| `id`          | String | **(Required)** The tag ID to fetch. |
 
 Example request:
 
@@ -4209,12 +4187,12 @@ Create a new tag. Requires the [create_tags](privileges.md#create_tags) privileg
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | Optional. Alphanumeric ID to assign; if omitted, a unique one is generated. |
-| `title` | String | **(Required)** The display title for the tag. |
-| `icon` | String | Optional icon name for the tag (Material Design Icons). |
-| `notes` | String | Optional notes or comments about the tag. |
+| Property Name | Type   | Description                                                                 |
+|---------------|--------|-----------------------------------------------------------------------------|
+| `id`          | String | Optional. Alphanumeric ID to assign; if omitted, a unique one is generated. |
+| `title`       | String | **(Required)** The display title for the tag.                               |
+| `icon`        | String | Optional icon name for the tag (Material Design Icons).                     |
+| `notes`       | String | Optional notes or comments about the tag.                                   |
 
 Example request:
 
@@ -4247,10 +4225,10 @@ Update an existing tag by ID. Requires the [edit_tags](privileges.md#edit_tags) 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The tag ID to update. |
-| (Other) | Various | Any updatable [Tag](data.md#tag) fields (e.g. `title`, `icon`, `notes`). |
+| Property Name | Type    | Description                                                              |
+|---------------|---------|--------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The tag ID to update.                                     |
+| (Other)       | Various | Any updatable [Tag](data.md#tag) fields (e.g. `title`, `icon`, `notes`). |
 
 Example request:
 
@@ -4277,9 +4255,9 @@ Delete an existing tag by ID. Requires the [delete_tags](privileges.md#delete_ta
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The tag ID to delete. |
+| Property Name | Type   | Description                          |
+|---------------|--------|--------------------------------------|
+| `id`          | String | **(Required)** The tag ID to delete. |
 
 Example request:
 
@@ -4295,8 +4273,6 @@ Example response:
 
 Deletions are permanent and cannot be undone.
 
-
-
 ## Tickets
 
 Ticket APIs manage lightweight issue tracking and comments within xyOps. Use them to create, search, fetch, update tickets, and add changes/comments. Tickets can be linked to jobs or alerts for incident response. Editing tickets requires specific privileges; searching and reading requires a valid session or API Key.
@@ -4311,10 +4287,10 @@ Fetch a single ticket by ID or ticket number. No specific privilege is required 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | The ticket ID to fetch. Required if `num` is not provided. |
-| `num` | Number | The ticket number to fetch. Required if `id` is not provided. |
+| Property Name | Type   | Description                                                   |
+|---------------|--------|---------------------------------------------------------------|
+| `id`          | String | The ticket ID to fetch. Required if `num` is not provided.    |
+| `num`         | Number | The ticket number to fetch. Required if `id` is not provided. |
 
 Example request (by ID):
 
@@ -4354,10 +4330,10 @@ Fetch multiple tickets by ID in a single request. No specific privilege is requi
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `ids` | Array | **(Required)** Array of ticket IDs to fetch. The response preserves this order. |
-| `verbose` | Boolean | Optional. If `true`, include heavy fields (`body`, full `changes`). If omitted or `false`, these are pruned. |
+| Property Name | Type    | Description                                                                                                  |
+|---------------|---------|--------------------------------------------------------------------------------------------------------------|
+| `ids`         | Array   | **(Required)** Array of ticket IDs to fetch. The response preserves this order.                              |
+| `verbose`     | Boolean | Optional. If `true`, include heavy fields (`body`, full `changes`). If omitted or `false`, these are pruned. |
 
 Example request:
 
@@ -4379,7 +4355,6 @@ Example response (non-verbose):
 
 In addition to the [Standard Response Format](#standard-response-format), this includes a `tickets` array in the same order as `ids`. When `verbose` is not set, large fields are pruned. If a ticket cannot be loaded, its array entry will contain an `err` property instead of a ticket object. See [Ticket](data.md#ticket) for field definitions.
 
-
 ### create_ticket
 
 ```
@@ -4388,19 +4363,19 @@ POST /api/app/create_ticket/v1
 
 Create a new ticket. Requires the [create_tickets](privileges.md#create_tickets) privilege and a valid user session or API Key. Send as HTTP POST. You may send either JSON, or `multipart/form-data` if uploading files:
 
-- JSON body: Post the ticket fields as JSON.
-- Multipart form-data: Send `Content-Type: multipart/form-data` and include a `json` field containing the full JSON payload (as a string), plus one or more file fields. Uploaded files are attached to the ticket.
+-  JSON body: Post the ticket fields as JSON.
+-  Multipart form-data: Send `Content-Type: multipart/form-data` and include a `json` field containing the full JSON payload (as a string), plus one or more file fields. Uploaded files are attached to the ticket.
 
 Parameters (JSON):
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | Optional. If omitted, a unique ID is generated. Must be alphanumeric if provided. |
-| `subject` | String | **(Required)** Short summary for the ticket. HTML is stripped. |
-| (Other) | Various | Any [Ticket](data.md#ticket) fields, e.g. `type`, `status`, `category`, `server`, `assignees` (array), `cc` (array), `notify` (array of email), `due` (Unix seconds), `tags` (array), `body` (Markdown). |
-| `template` | String | Optional. Auto-generate the `body` from a template. Allowed values: `job` or `alert` (see below). |
-| `job` | String | Required when `template` is `job`. The [Job.id](data.md#job-id) to use for the template content. |
-| `alert` | String | Required when `template` is `alert`. The [AlertInvocation.id](data.md#alertinvocation-id) to use for the template content. |
+| Property Name | Type    | Description                                                                                                                                                                                              |
+|---------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | Optional. If omitted, a unique ID is generated. Must be alphanumeric if provided.                                                                                                                        |
+| `subject`     | String  | **(Required)** Short summary for the ticket. HTML is stripped.                                                                                                                                           |
+| (Other)       | Various | Any [Ticket](data.md#ticket) fields, e.g. `type`, `status`, `category`, `server`, `assignees` (array), `cc` (array), `notify` (array of email), `due` (Unix seconds), `tags` (array), `body` (Markdown). |
+| `template`    | String  | Optional. Auto-generate the `body` from a template. Allowed values: `job` or `alert` (see below).                                                                                                        |
+| `job`         | String  | Required when `template` is `job`. The [Job.id](data.md#job-id) to use for the template content.                                                                                                         |
+| `alert`       | String  | Required when `template` is `alert`. The [AlertInvocation.id](data.md#alertinvocation-id) to use for the template content.                                                                               |
 
 When using `multipart/form-data`, attach one or more file fields (any field names). Files are saved and added to [Ticket.files](data.md#ticket-files) with metadata. Files auto-expire per [file_expiration](config.md#file_expiration) configuration setting.
 
@@ -4440,15 +4415,15 @@ Update an existing ticket by ID. Requires the [edit_tickets](privileges.md#edit_
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The ticket ID to update. |
-| (Other) | Various | Any updatable [Ticket](data.md#ticket) fields, e.g. `subject`, `body`, `status`, `type`, `category`, `assignees`, `cc`, `notify`, `due`, `tags`, `server`. |
+| Property Name | Type    | Description                                                                                                                                                |
+|---------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The ticket ID to update.                                                                                                                    |
+| (Other)       | Various | Any updatable [Ticket](data.md#ticket) fields, e.g. `subject`, `body`, `status`, `type`, `category`, `assignees`, `cc`, `notify`, `due`, `tags`, `server`. |
 
 Notes:
 
-- HTML in `subject` is stripped; `body` is sanitized as Markdown.
-- Changes are detected and appended to [Ticket.changes](data.md#ticket-changes) (draft tickets do not record changes).
+-  HTML in `subject` is stripped; `body` is sanitized as Markdown.
+-  Changes are detected and appended to [Ticket.changes](data.md#ticket-changes) (draft tickets do not record changes).
 
 Example request:
 
@@ -4474,10 +4449,10 @@ Add a [change](data.md#ticket-changes) to a ticket (usually a comment). Requires
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The ticket ID to update. |
-| `change` | Object | **(Required)** The change object. For comments, set `type` to `comment` and provide `body` (Markdown). See [Ticket.changes](data.md#ticket-changes) for details. |
+| Property Name | Type   | Description                                                                                                                                                      |
+|---------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String | **(Required)** The ticket ID to update.                                                                                                                          |
+| `change`      | Object | **(Required)** The change object. For comments, set `type` to `comment` and provide `body` (Markdown). See [Ticket.changes](data.md#ticket-changes) for details. |
 
 Example request (add comment):
 
@@ -4506,12 +4481,12 @@ Edit or delete an existing ticket [change](data.md#ticket-changes) (e.g., a comm
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The ticket ID. |
-| `change_id` | String | **(Required)** The change ID to edit or delete. |
-| `change` | Object | Optional. New change fields to merge (e.g., `body` for comment edits). See [Ticket.changes](data.md#ticket-changes) for details. |
-| `delete` | Boolean | Optional. If `true`, delete the specified change. |
+| Property Name | Type    | Description                                                                                                                      |
+|---------------|---------|----------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The ticket ID.                                                                                                    |
+| `change_id`   | String  | **(Required)** The change ID to edit or delete.                                                                                  |
+| `change`      | Object  | Optional. New change fields to merge (e.g., `body` for comment edits). See [Ticket.changes](data.md#ticket-changes) for details. |
+| `delete`      | Boolean | Optional. If `true`, delete the specified change.                                                                                |
 
 Example request (edit comment):
 
@@ -4543,10 +4518,10 @@ Upload ticket files. Requires the [edit_tickets](privileges.md#edit_tickets) pri
 
 Parameters (JSON):
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `ticket` | String | **(Required)** The [Ticket.id](data.md#ticket-id) to attach files to. |
-| `save` | Boolean | Optional. If present and `true` the files will be attached to the ticket.  Otherwise, they are considered to be user content dropped onto the body. |
+| Property Name | Type    | Description                                                                                                                                         |
+|---------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ticket`      | String  | **(Required)** The [Ticket.id](data.md#ticket-id) to attach files to.                                                                               |
+| `save`        | Boolean | Optional. If present and `true` the files will be attached to the ticket.  Otherwise, they are considered to be user content dropped onto the body. |
 
 Attach one or more file fields (any field names). Files are saved and added to [Ticket.files](data.md#ticket-files) with metadata. Files auto-expire per [file_expiration](config.md#file_expiration) configuration setting.
 
@@ -4590,10 +4565,10 @@ Delete a file attached to a ticket. Requires the [edit_tickets](privileges.md#ed
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The ticket ID. |
-| `path` | String | **(Required)** The storage path of the file to delete. |
+| Property Name | Type   | Description                                            |
+|---------------|--------|--------------------------------------------------------|
+| `id`          | String | **(Required)** The ticket ID.                          |
+| `path`        | String | **(Required)** The storage path of the file to delete. |
 
 Example request:
 
@@ -4619,9 +4594,9 @@ Delete an existing ticket by ID. Requires the [delete_tickets](privileges.md#del
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The ticket ID to delete. |
+| Property Name | Type   | Description                             |
+|---------------|--------|-----------------------------------------|
+| `id`          | String | **(Required)** The ticket ID to delete. |
 
 Example request:
 
@@ -4637,8 +4612,6 @@ Example response:
 
 Deletion removes the ticket permanently. References to the ticket in jobs and alerts are cleaned up by background maintenance tasks.
 
-
-
 ## Users
 
 User APIs manage user accounts.  Note that most user management APIs are handled in the [pixl-server-user](https://github.com/jhuckaby/pixl-server-user) component.  The only APIs listed here are those specific to xyOps.
@@ -4653,10 +4626,10 @@ Fetch activity log entries for the current user (e.g., logins, password changes)
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `offset` | Number | Zero-based index into the activity list (default `0`). |
-| `limit` | Number | Number of rows to return (default `50`). |
+| Property Name | Type   | Description                                            |
+|---------------|--------|--------------------------------------------------------|
+| `offset`      | Number | Zero-based index into the activity list (default `0`). |
+| `limit`       | Number | Number of rows to return (default `50`).               |
 
 Example response:
 
@@ -4689,9 +4662,9 @@ Update non-critical settings for the current user (e.g., UI preferences such as 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| (Other) | Various | Any non-critical [User](data.md#user) fields such as `language`, `region`, `num_format`, `hour_cycle`, `timezone`, `color_acc`, `privacy_mode`, `effects`, `page_info`, `contrast`, `motion`, `volume`, or `icon`. |
+| Property Name | Type    | Description                                                                                                                                                                                                        |
+|---------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| (Other)       | Various | Any non-critical [User](data.md#user) fields such as `language`, `region`, `num_format`, `hour_cycle`, `timezone`, `color_acc`, `privacy_mode`, `effects`, `page_info`, `contrast`, `motion`, `volume`, or `icon`. |
 
 Example request:
 
@@ -4725,9 +4698,9 @@ Log out all sessions associated with the current user, except the current sessio
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `password` | String | **(Required)** The current account password for verification. |
+| Property Name | Type   | Description                                                   |
+|---------------|--------|---------------------------------------------------------------|
+| `password`    | String | **(Required)** The current account password for verification. |
 
 Example request:
 
@@ -4743,11 +4716,9 @@ Example response:
 
 Notes:
 
-- The operation runs in the background after the response is returned; any connected websockets are closed and sessions are deleted.
-- A session report is emailed when sessions were actually terminated.
-- Administrators can perform the same action for another user via [admin_logout_all](#admin_logout_all).
-
-
+-  The operation runs in the background after the response is returned; any connected websockets are closed and sessions are deleted.
+-  A session report is emailed when sessions were actually terminated.
+-  Administrators can perform the same action for another user via [admin_logout_all](#admin_logout_all).
 
 ## Web Hooks
 
@@ -4809,9 +4780,9 @@ Fetch a single web hook definition by ID. No specific privilege is required beyo
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The alphanumeric ID of the web hook to fetch. |
+| Property Name | Type   | Description                                                  |
+|---------------|--------|--------------------------------------------------------------|
+| `id`          | String | **(Required)** The alphanumeric ID of the web hook to fetch. |
 
 Example request:
 
@@ -4864,9 +4835,9 @@ Create a new web hook. Requires the [create_web_hooks](privileges.md#create_web_
 
 Notes:
 
-- The server validates `id` (alphanumeric/underscore), `method` (letters only), and `url` (must be `http` or `https`).
-- If `body` is provided, any `{{ ... }}` templates are precompiled and a syntax error returns an error response.
-- Web hooks can expand secrets at runtime when allowed via [Secret.web_hooks](data.md#secret-web_hooks).
+-  The server validates `id` (alphanumeric/underscore), `method` (letters only), and `url` (must be `http` or `https`).
+-  If `body` is provided, any `{{ ... }}` templates are precompiled and a syntax error returns an error response.
+-  Web hooks can expand secrets at runtime when allowed via [Secret.web_hooks](data.md#secret-web_hooks).
 
 Example request:
 
@@ -4912,14 +4883,14 @@ Update an existing web hook by ID. Requires the [edit_web_hooks](privileges.md#e
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The web hook ID to update. |
-| (Other) | Various | Any updatable [WebHook](data.md#webhook) fields (e.g. `title`, `enabled`, `url`, `method`, `headers`, `body`, `timeout`, `retries`, `follow`, `ssl_cert_bypass`, `max_per_day`, `notes`, `icon`). |
+| Property Name | Type    | Description                                                                                                                                                                                       |
+|---------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** The web hook ID to update.                                                                                                                                                         |
+| (Other)       | Various | Any updatable [WebHook](data.md#webhook) fields (e.g. `title`, `enabled`, `url`, `method`, `headers`, `body`, `timeout`, `retries`, `follow`, `ssl_cert_bypass`, `max_per_day`, `notes`, `icon`). |
 
 Notes:
 
-- If `body` is provided, templates are precompiled; syntax errors result in an error response.
+-  If `body` is provided, templates are precompiled; syntax errors result in an error response.
 
 Example request:
 
@@ -4948,9 +4919,9 @@ Delete a web hook by ID. Requires the [delete_web_hooks](privileges.md#delete_we
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** The web hook ID to delete. |
+| Property Name | Type   | Description                               |
+|---------------|--------|-------------------------------------------|
+| `id`          | String | **(Required)** The web hook ID to delete. |
 
 Example request:
 
@@ -4976,19 +4947,19 @@ Test a web hook configuration by performing a live HTTP request and returning a 
 
 Behavior:
 
-- If the provided `id` matches an existing web hook, the server merges it with the request body, allowing you to override fields for testing without saving them.
-- Templates in `url`, `headers[].value`, and `body` are expanded using the same data as runtime actions. When testing an existing, saved hook, secrets are included if granted via [Secret.web_hooks](data.md#secret-web_hooks).
-- Timeouts, retries, redirect behavior (`follow`), and TLS validation (`ssl_cert_bypass`) are honored during the test.
+-  If the provided `id` matches an existing web hook, the server merges it with the request body, allowing you to override fields for testing without saving them.
+-  Templates in `url`, `headers[].value`, and `body` are expanded using the same data as runtime actions. When testing an existing, saved hook, secrets are included if granted via [Secret.web_hooks](data.md#secret-web_hooks).
+-  Timeouts, retries, redirect behavior (`follow`), and TLS validation (`ssl_cert_bypass`) are honored during the test.
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** Web hook ID to test (existing hook is optional, but an ID is required). |
-| `title` | String | **(Required)** A title for the test. Required even when testing an existing hook. |
-| `method` | String | **(Required)** HTTP method to use (e.g., `GET`, `POST`). |
-| `url` | String | **(Required)** Fully-qualified `http` or `https` URL to call. |
-| (Other) | Various | Any [WebHook](data.md#webhook) fields to apply for this test only (e.g., `headers`, `body`, `timeout`, `retries`, `follow`, `ssl_cert_bypass`). |
+| Property Name | Type    | Description                                                                                                                                     |
+|---------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | String  | **(Required)** Web hook ID to test (existing hook is optional, but an ID is required).                                                          |
+| `title`       | String  | **(Required)** A title for the test. Required even when testing an existing hook.                                                               |
+| `method`      | String  | **(Required)** HTTP method to use (e.g., `GET`, `POST`).                                                                                        |
+| `url`         | String  | **(Required)** Fully-qualified `http` or `https` URL to call.                                                                                   |
+| (Other)       | Various | Any [WebHook](data.md#webhook) fields to apply for this test only (e.g., `headers`, `body`, `timeout`, `retries`, `follow`, `ssl_cert_bypass`). |
 
 Example request (override headers and timeout for an existing hook):
 
@@ -5019,11 +4990,9 @@ Example response:
 
 In addition to the [Standard Response Format](#standard-response-format), this includes a `result` object with:
 
-- `code`: `0` on success, or a string error code (e.g., `"webhook"`).
-- `description`: Short summary text (e.g., HTTP status).
-- `details`: A markdown-formatted report including request/response headers and body, and performance metrics when available.
-
-
+-  `code`: `0` on success, or a string error code (e.g., `"webhook"`).
+-  `description`: Short summary text (e.g., HTTP status).
+-  `details`: A markdown-formatted report including request/response headers and body, and performance metrics when available.
 
 ## Administrative
 
@@ -5041,8 +5010,8 @@ No input parameters.
 
 In addition to the [Standard Response Format](#standard-response-format), this returns:
 
-- `servers`: Object keyed by server ID containing [Server](data.md#server) objects for all currently connected workers.
-- `masters`: Object keyed by host ID with [Conductor](data.md#conductor) objects for status, version and basic stats.
+-  `servers`: Object keyed by server ID containing [Server](data.md#server) objects for all currently connected workers.
+-  `masters`: Object keyed by host ID with [Conductor](data.md#conductor) objects for status, version and basic stats.
 
 Example response:
 
@@ -5094,9 +5063,9 @@ Update one or more conductor state values using "dot" property paths in the [Sta
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| (Other) | Various | One or more dot-path properties to update in the conductor state (e.g., `"scheduler.enabled": false`). |
+| Property Name | Type    | Description                                                                                            |
+|---------------|---------|--------------------------------------------------------------------------------------------------------|
+| (Other)       | Various | One or more dot-path properties to update in the conductor state (e.g., `"scheduler.enabled": false`). |
 
 Example request:
 
@@ -5151,7 +5120,7 @@ In addition to the [Standard Response Format](#standard-response-format), this i
 POST /api/app/test_internal_job/v1
 ```
 
-Create a dummy internal job that runs for ~60 seconds and reports progress. Admin only. This is intended to test the Internal System Jobs UI and notification mechanisms.
+Create a dummy internal job that runs for \~60 seconds and reports progress. Admin only. This is intended to test the Internal System Jobs UI and notification mechanisms.
 
 This API accepts a single `duration` parameter, which can be set to a custom amount of seconds.
 
@@ -5173,9 +5142,9 @@ Start a background job to delete completed jobs in bulk by search query. Require
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `query` | String | Optional. [Unbase-style query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*` (all jobs). |
+| Property Name | Type   | Description                                                                                                                                             |
+|---------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `query`       | String | Optional. [Unbase-style query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). Defaults to `*` (all jobs). |
 
 Example request:
 
@@ -5201,10 +5170,10 @@ Start a background job to delete records in an arbitrary index by search query. 
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `index` | String | **(Required)** Target database index ID (e.g., `jobs`, `servers`, `snapshots`, `alerts`, `activity`). |
-| `query` | String | **(Required)** [Unbase-style query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). |
+| Property Name | Type   | Description                                                                                                                      |
+|---------------|--------|----------------------------------------------------------------------------------------------------------------------------------|
+| `index`       | String | **(Required)** Target database index ID (e.g., `jobs`, `servers`, `snapshots`, `alerts`, `activity`).                            |
+| `query`       | String | **(Required)** [Unbase-style query](https://github.com/jhuckaby/pixl-server-storage/blob/master/docs/Indexer.md#simple-queries). |
 
 Example request:
 
@@ -5302,13 +5271,13 @@ No input parameters.
 
 In addition to the [Standard Response Format](#standard-response-format), this returns a `stats` object including:
 
-- `version`: xyOps version.
-- `node.version`: Node.js version.
-- `db.sqlite`: Total on-disk bytes for SQLite DB + WAL (if present).
-- `db.records`: Map of index ID → row count (e.g., `jobs`, `servers`, `snapshots`, `alerts`, `activity`).
-- `unbase`: Low-level indexer statistics.
-- `cache`: Storage cache stats (if enabled).
-- `sockets`: Connected user and server sockets with metadata (ID, IP, type, username, server, ping).
+-  `version`: xyOps version.
+-  `node.version`: Node.js version.
+-  `db.sqlite`: Total on-disk bytes for SQLite DB + WAL (if present).
+-  `db.records`: Map of index ID -> row count (e.g., `jobs`, `servers`, `snapshots`, `alerts`, `activity`).
+-  `unbase`: Low-level indexer statistics.
+-  `cache`: Storage cache stats (if enabled).
+-  `sockets`: Connected user and server sockets with metadata (ID, IP, type, username, server, ping).
 
 Example response:
 
@@ -5326,17 +5295,17 @@ Bulk import data from a local archive file. Send as `multipart/form-data` with a
 
 Parameters (multipart/form-data fields):
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `file` | File | **(Required)** NDJSON file to import (may be `.gz`). The field name may be arbitrary; only one file should be included. |
-| `format` | String | Optional. `xyops` (default) or `cronicle`. When `cronicle`, the server will convert known structures before importing. |
-| `danger` | Boolean | Optional. When set to `true` xyOps will **not** disable the schedule nor abort any running jobs for the import.  Use with caution. |
+| Property Name | Type    | Description                                                                                                                        |
+|---------------|---------|------------------------------------------------------------------------------------------------------------------------------------|
+| `file`        | File    | **(Required)** NDJSON file to import (may be `.gz`). The field name may be arbitrary; only one file should be included.            |
+| `format`      | String  | Optional. `xyops` (default) or `cronicle`. When `cronicle`, the server will convert known structures before importing.             |
+| `danger`      | Boolean | Optional. When set to `true` xyOps will **not** disable the schedule nor abort any running jobs for the import.  Use with caution. |
 
 NDJSON line formats supported:
 
-- `{ "index": INDEX, "id": ID, "record": { ... } }` to upsert a DB record.
-- `{ "key": KEY, "value": VALUE }` to write a storage key (binary values are base64-encoded).
-- `{ "cmd": CMD, "args": [ ... ] }` to execute a storage command (e.g., `listDelete`).
+-  `{ "index": INDEX, "id": ID, "record": { ... } }` to upsert a DB record.
+-  `{ "key": KEY, "value": VALUE }` to write a storage key (binary values are base64-encoded).
+-  `{ "cmd": CMD, "args": [ ... ] }` to execute a storage command (e.g., `listDelete`).
 
 Example response:
 
@@ -5348,9 +5317,9 @@ In addition to the [Standard Response Format](#standard-response-format), this i
 
 Notes:
 
-- The scheduler is automatically paused for the import, all queued jobs are flushed, and running jobs are aborted prior to import for data integrity.
-- A detailed report is attached to the internal job and emailed to the user who issued the request.
-- After import, global lists are reloaded, monitors/alerts are recompiled, and the UI is refreshed for connected users.
+-  The scheduler is automatically paused for the import, all queued jobs are flushed, and running jobs are aborted prior to import for data integrity.
+-  A detailed report is attached to the internal job and emailed to the user who issued the request.
+-  After import, global lists are reloaded, monitors/alerts are recompiled, and the UI is refreshed for connected users.
 
 ### admin_export_data
 
@@ -5362,25 +5331,25 @@ Stream a gzip-compressed NDJSON archive of selected data to the client. Admin on
 
 Parameters (choose either the high-level selectors or a custom `items` array):
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `lists` | Array(String) or String | List IDs from `config.ui.list_list` or the literal string `"all"`. Each exports the corresponding `global/NAME` list and pages. |
-| `indexes` | Array(String) or String | Database index IDs from `config.ui.database_list` or `"all"`. Exports matching DB records (newest to oldest). |
-| `extras` | Array(String) or String | Optional extras or `"all"`. Supported: `user_avatars`, `job_files`, `job_logs`, `monitor_data`, `stat_data`. |
-| `items` | Array(Object) | Advanced mode. Array of export items such as `{ type: "list", key }`, `{ type: "index", index, query?, max_rows? }`, `{ type: "users", avatars? }`, `{ type: "jobFiles", query?, max_rows?, max_size?, logs?, files? }`, `{ type: "monitorData", query? }`, `{ type: "bucketData" }`, `{ type: "bucketFiles", max_size? }`, `{ type: "secretData" }`. |
-| `token` | String | Single-use token from [get_transfer_token](#get_transfer_token). When present, parameters from the token are applied and the token is invalidated. |
+| Property Name | Type                    | Description                                                                                                                                                                                                                                                                                                                                           |
+|---------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `lists`       | Array(String) or String | List IDs from `config.ui.list_list` or the literal string `"all"`. Each exports the corresponding `global/NAME` list and pages.                                                                                                                                                                                                                       |
+| `indexes`     | Array(String) or String | Database index IDs from `config.ui.database_list` or `"all"`. Exports matching DB records (newest to oldest).                                                                                                                                                                                                                                         |
+| `extras`      | Array(String) or String | Optional extras or `"all"`. Supported: `user_avatars`, `job_files`, `job_logs`, `monitor_data`, `stat_data`.                                                                                                                                                                                                                                          |
+| `items`       | Array(Object)           | Advanced mode. Array of export items such as `{ type: "list", key }`, `{ type: "index", index, query?, max_rows? }`, `{ type: "users", avatars? }`, `{ type: "jobFiles", query?, max_rows?, max_size?, logs?, files? }`, `{ type: "monitorData", query? }`, `{ type: "bucketData" }`, `{ type: "bucketFiles", max_size? }`, `{ type: "secretData" }`. |
+| `token`       | String                  | Single-use token from [get_transfer_token](#get_transfer_token). When present, parameters from the token are applied and the token is invalidated.                                                                                                                                                                                                    |
 
 Response: A `200 OK` streaming gzip file. The content is NDJSON containing a mix of:
 
-- `{ "index": INDEX, "id": ID, "record": { ... } }` for DB records.
-- `{ "key": KEY, "value": VALUE }` for storage keys or files (binary values are base64-encoded).
+-  `{ "index": INDEX, "id": ID, "record": { ... } }` for DB records.
+-  `{ "key": KEY, "value": VALUE }` for storage keys or files (binary values are base64-encoded).
 
 Notes:
 
-- Job logs/files are exported only if under 1 MB each.
-- Bucket files are exported as base64 with a manifest of file metadata.
-- Secret data is exported as encrypted values (as stored).
-- API keys are exported as salted hashes only (as stored).
+-  Job logs/files are exported only if under 1 MB each.
+-  Bucket files are exported as base64 with a manifest of file metadata.
+-  Secret data is exported as encrypted values (as stored).
+-  API keys are exported as salted hashes only (as stored).
 
 ### admin_delete_data
 
@@ -5392,9 +5361,9 @@ Permanently delete selected data in bulk. Admin only. Runs as an internal job in
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `items` | Array(Object) | **(Required)** Array of delete actions. Supported types: `{ type: "list", key }`, `{ type: "index", index, query? }`, `{ type: "users" }`, `{ type: "bucketData" }`, `{ type: "bucketFiles" }`, `{ type: "secretData" }`. |
+| Property Name | Type          | Description                                                                                                                                                                                                               |
+|---------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `items`       | Array(Object) | **(Required)** Array of delete actions. Supported types: `{ type: "list", key }`, `{ type: "index", index, query? }`, `{ type: "users" }`, `{ type: "bucketData" }`, `{ type: "bucketFiles" }`, `{ type: "secretData" }`. |
 
 Example request:
 
@@ -5412,8 +5381,8 @@ In addition to the [Standard Response Format](#standard-response-format), this i
 
 Notes:
 
-- The scheduler is automatically paused for deletions.
-- Some types perform deep cleanup first (e.g., `users` removes avatars and security logs; bucket delete types remove data and files before the `global/buckets` list is altered).
+-  The scheduler is automatically paused for deletions.
+-  Some types perform deep cleanup first (e.g., `users` removes avatars and security logs; bucket delete types remove data and files before the `global/buckets` list is altered).
 
 ### admin_logout_all
 
@@ -5425,9 +5394,9 @@ Log out all active sessions for a specific user and deauthorize any connected so
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `username` | String | **(Required)** Username to log out. |
+| Property Name | Type   | Description                         |
+|---------------|--------|-------------------------------------|
+| `username`    | String | **(Required)** Username to log out. |
 
 Example request:
 
@@ -5453,15 +5422,15 @@ Search the local xyOps system log files (current or archived) and return matchin
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `log` | String | **(Required)** Log name to search, e.g. `xyOps`. Must match one of the standard log filenames, sans extension. |
-| `rows` | Number | **(Required)** Max rows to return, from `1` to `1000`. The API keeps the last N matching rows from the file. |
-| `match` | String | Optional. Text or pattern to search for. If omitted, all rows match. |
-| `regex` | Boolean | Optional. If `true`, interpret `match` as a regular expression. |
-| `case` | Boolean | Optional. If `true`, search is case sensitive. |
-| `cols` | Array(String) or String | Optional. Columns to return, as an array or comma-delimited list. Defaults to all [log_columns](config.md#log_columns). |
-| `date` | String | Optional. Date in `YYYY-MM-DD` format. If omitted, searches the current live log. If set, searches the archived log for that day. |
+| Property Name | Type                    | Description                                                                                                                       |
+|---------------|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| `log`         | String                  | **(Required)** Log name to search, e.g. `xyOps`. Must match one of the standard log filenames, sans extension.                    |
+| `rows`        | Number                  | **(Required)** Max rows to return, from `1` to `1000`. The API keeps the last N matching rows from the file.                      |
+| `match`       | String                  | Optional. Text or pattern to search for. If omitted, all rows match.                                                              |
+| `regex`       | Boolean                 | Optional. If `true`, interpret `match` as a regular expression.                                                                   |
+| `case`        | Boolean                 | Optional. If `true`, search is case sensitive.                                                                                    |
+| `cols`        | Array(String) or String | Optional. Columns to return, as an array or comma-delimited list. Defaults to all [log_columns](config.md#log_columns).           |
+| `date`        | String                  | Optional. Date in `YYYY-MM-DD` format. If omitted, searches the current live log. If set, searches the archived log for that day. |
 
 Example request:
 
@@ -5497,13 +5466,13 @@ Example response:
 
 In addition to the [Standard Response Format](#standard-response-format), this includes:
 
-- `rows`: Array of row objects with only the requested columns.
-- `list.length`: Total number of rows in the log file (not the number of matches).
+-  `rows`: Array of row objects with only the requested columns.
+-  `list.length`: Total number of rows in the log file (not the number of matches).
 
 Notes:
 
-- If the archive is not configured or the file is missing for a given `date`, the API returns an empty `rows` array.
-- Valid column IDs come from [log_columns](config.md#log_columns) (e.g., `hires_epoch`, `date`, `hostname`, `pid`, `component`, `category`, `code`, `msg`, `data`).
+-  If the archive is not configured or the file is missing for a given `date`, the API returns an empty `rows` array.
+-  Valid column IDs come from [log_columns](config.md#log_columns) (e.g., `hires_epoch`, `date`, `hostname`, `pid`, `component`, `category`, `code`, `msg`, `data`).
 
 ### admin_get_config
 
@@ -5517,9 +5486,9 @@ No input parameters.
 
 In addition to the [Standard Response Format](#standard-response-format), this returns:
 
-- `config`: The current configuration object with sensitive keys removed (`secret_key`, `SSO`, `Debug`, `config_overrides_file`).
-- `overrides`: The current configuration overrides object (sparse), with reserved keys removed.
-- `markdown`: The contents of `docs/config.md` used by the UI to build the editor.
+-  `config`: The current configuration object with sensitive keys removed (`secret_key`, `SSO`, `Debug`, `config_overrides_file`).
+-  `overrides`: The current configuration overrides object (sparse), with reserved keys removed.
+-  `markdown`: The contents of `docs/config.md` used by the UI to build the editor.
 
 Example response:
 
@@ -5544,9 +5513,9 @@ Update configuration overrides, save them to disk, and hot reload the new settin
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| (Other) | Various | Any configuration override key, using the same path names as `docs/config.md` (for example `ui.log_files` or `storage.engine`). Values replace the existing value at that path. |
+| Property Name | Type    | Description                                                                                                                                                                     |
+|---------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| (Other)       | Various | Any configuration override key, using the same path names as `docs/config.md` (for example `ui.log_files` or `storage.engine`). Values replace the existing value at that path. |
 
 Example request:
 
@@ -5565,9 +5534,9 @@ Example response:
 
 Notes:
 
-- Overrides are additive. Only the paths you include are updated.
-- Reserved keys cannot be set via this API: `secret_key`, `SSO`, `Debug`, `config_overrides_file`.
-- Some settings may require a full server restart to take effect (for example, changing the web server port).
+-  Overrides are additive. Only the paths you include are updated.
+-  Reserved keys cannot be set via this API: `secret_key`, `SSO`, `Debug`, `config_overrides_file`.
+-  Some settings may require a full server restart to take effect (for example, changing the web server port).
 
 ### get_api_keys
 
@@ -5595,9 +5564,9 @@ Fetch a single API Key by ID. Admin only. Supports HTTP GET with query parameter
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** API Key ID to fetch. |
+| Property Name | Type   | Description                         |
+|---------------|--------|-------------------------------------|
+| `id`          | String | **(Required)** API Key ID to fetch. |
 
 Example response:
 
@@ -5617,11 +5586,11 @@ Create a new API Key. Admin only. Send as HTTP POST with JSON. The `id`, `userna
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `title` | String | **(Required)** Visual title for the API Key. |
-| `key` | String | **(Required)** API Key string (minimum 16 characters). |
-| (Other) | Various | Optional [APIKey](data.md#apikey) fields such as `active`, `description`, `privileges`, `roles`. |
+| Property Name | Type    | Description                                                                                      |
+|---------------|---------|--------------------------------------------------------------------------------------------------|
+| `title`       | String  | **(Required)** Visual title for the API Key.                                                     |
+| `key`         | String  | **(Required)** API Key string (minimum 16 characters).                                           |
+| (Other)       | Various | Optional [APIKey](data.md#apikey) fields such as `active`, `description`, `privileges`, `roles`. |
 
 Example request:
 
@@ -5653,10 +5622,10 @@ Update an existing API Key by ID. Admin only. Send as HTTP POST with JSON. The r
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** API Key ID to update. |
-| (Other) | Various | Any updatable [APIKey](data.md#apikey) fields except `key`. |
+| Property Name | Type    | Description                                                 |
+|---------------|---------|-------------------------------------------------------------|
+| `id`          | String  | **(Required)** API Key ID to update.                        |
+| (Other)       | Various | Any updatable [APIKey](data.md#apikey) fields except `key`. |
 
 Example request:
 
@@ -5680,9 +5649,9 @@ Delete an existing API Key by ID. Admin only. This action is permanent.
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `id` | String | **(Required)** API Key ID to delete. |
+| Property Name | Type   | Description                          |
+|---------------|--------|--------------------------------------|
+| `id`          | String | **(Required)** API Key ID to delete. |
 
 Example request:
 
@@ -5708,7 +5677,7 @@ Simple health check endpoint. Returns success if the API is reachable.
 
 Notes:
 
-- Public endpoint; no authentication required.
+-  Public endpoint; no authentication required.
 
 Example response:
 
@@ -5727,15 +5696,15 @@ Diagnostic endpoint that echoes request details. Useful for testing connectivity
 
 Parameters:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `sleep` | Number | Optional delay in milliseconds before responding. Defaults to `1`. |
-| `pretty` | Number | Optional. If set to `1` will pretty-print the JSON response. |
+| Property Name | Type   | Description                                                        |
+|---------------|--------|--------------------------------------------------------------------|
+| `sleep`       | Number | Optional delay in milliseconds before responding. Defaults to `1`. |
+| `pretty`      | Number | Optional. If set to `1` will pretty-print the JSON response.       |
 
 Notes:
 
-- Public endpoint; no authentication required.
-- Returns a JSON object with the following fields: `method`, `uri`, `ips`, `headers`, `cookies`, `params`, `files`.
+-  Public endpoint; no authentication required.
+-  Returns a JSON object with the following fields: `method`, `uri`, `ips`, `headers`, `cookies`, `params`, `files`.
 
 Example response (truncated):
 
@@ -5761,8 +5730,8 @@ Simulate an error response for testing client error handling.
 
 Notes:
 
-- Public endpoint; no authentication required.
-- Always responds with a test error using the [Standard Response Format](#standard-response-format).
+-  Public endpoint; no authentication required.
+-  Always responds with a test error using the [Standard Response Format](#standard-response-format).
 
 Example error response:
 
@@ -5783,9 +5752,9 @@ Return live dashboard statistics from the primary conductor, including current-d
 
 Notes:
 
-- Requires a valid user session or API Key.
-- Primary conductor only. If called on a secondary and redirects are enabled, a `302` redirect to the primary may be returned.
-- No input parameters.
+-  Requires a valid user session or API Key.
+-  Primary conductor only. If called on a secondary and redirects are enabled, a `302` redirect to the primary may be returned.
+-  No input parameters.
 
 Example response:
 
@@ -5847,14 +5816,14 @@ app.receiveConfig({ code: 0, /* other data */ });
 
 The data passed into the `app.receiveConfig` function will contain the following properties:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `code` | Number | Zero for success, any other value for error. |
-| `version` | String | The current version of xyOps running on the conductor server. |
-| `epoch` | Number | The current Unix date/time on the conductor server. |
-| `port` | Number | The web server port currently being used by the UI. |
-| `config` | Object | The [client](config.md#client) configuration object, with various other bits merged in. |
-| `masters` | Array | An array of [Conductor](data.md#conductor) objects, one for each conductor server in the cluster. |
+| Property Name | Type   | Description                                                                                       |
+|---------------|--------|---------------------------------------------------------------------------------------------------|
+| `code`        | Number | Zero for success, any other value for error.                                                      |
+| `version`     | String | The current version of xyOps running on the conductor server.                                     |
+| `epoch`       | Number | The current Unix date/time on the conductor server.                                               |
+| `port`        | Number | The web server port currently being used by the UI.                                               |
+| `config`      | Object | The [client](config.md#client) configuration object, with various other bits merged in.           |
+| `masters`     | Array  | An array of [Conductor](data.md#conductor) objects, one for each conductor server in the cluster. |
 
 ### form_config
 

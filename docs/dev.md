@@ -1,42 +1,44 @@
-# Development
+---
+title: Development
+---
 
 ## Overview
 
 xyOps runs as a component in the [pixl-server](https://github.com/jhuckaby/pixl-server) framework.  It is highly recommended to read and understand that module and its component system before attempting to work on xyOps.  The following server components are also used:
 
-| Module Name | Description | License |
-|-------------|-------------|---------|
-| [pixl-server-api](https://github.com/jhuckaby/pixl-server-api) | A REST API component for the pixl-server framework. | MIT |
-| [pixl-server-debug](https://github.com/jhuckaby/pixl-server-debug) | An easy way to debug your pixl-server app using Chrome Dev Tools. | MIT |
-| [pixl-server-storage](https://github.com/jhuckaby/pixl-server-storage) | A key/value/list storage component for the pixl-server framework. | MIT |
-| [pixl-server-user](https://github.com/jhuckaby/pixl-server-user) | A basic user login system for the pixl-server framework. | MIT |
-| [pixl-server-web](https://github.com/jhuckaby/pixl-server-web) | A web server component for the pixl-server framework. | MIT |
-| [pixl-server-unbase](https://github.com/jhuckaby/pixl-server-unbase) | A database component for the pixl-server framework. | MIT |
+| Module Name                                                            | Description                                                       | License |
+|------------------------------------------------------------------------|-------------------------------------------------------------------|---------|
+| [pixl-server-api](https://github.com/jhuckaby/pixl-server-api)         | A REST API component for the pixl-server framework.               | MIT     |
+| [pixl-server-debug](https://github.com/jhuckaby/pixl-server-debug)     | An easy way to debug your pixl-server app using Chrome Dev Tools. | MIT     |
+| [pixl-server-storage](https://github.com/jhuckaby/pixl-server-storage) | A key/value/list storage component for the pixl-server framework. | MIT     |
+| [pixl-server-user](https://github.com/jhuckaby/pixl-server-user)       | A basic user login system for the pixl-server framework.          | MIT     |
+| [pixl-server-web](https://github.com/jhuckaby/pixl-server-web)         | A web server component for the pixl-server framework.             | MIT     |
+| [pixl-server-unbase](https://github.com/jhuckaby/pixl-server-unbase)   | A database component for the pixl-server framework.               | MIT     |
 
 In addition, xyOps uses the following server-side PixlCore utility modules:
 
-| Module Name | Description | License |
-|-------------|-------------|---------|
-| [pixl-acl](https://github.com/jhuckaby/pixl-acl) | A simple but fast implementation of IPv4 and IPv6 ACL filtering. | MIT |
-| [pixl-args](https://github.com/jhuckaby/pixl-args) | A simple module for parsing command line arguments. | MIT |
-| [pixl-boot](https://github.com/jhuckaby/pixl-boot) | Register your service to launch on server startup (Linux / macOS). | MIT |
-| [pixl-chart](https://github.com/jhuckaby/pixl-chart) | A simple time series chart renderer using HTML5 Canvas. | MIT |
-| [pixl-class-util](https://github.com/pixlcore/class-util) | Helper functions for extending classes with mixins and more. | MIT |
-| [pixl-cli](https://github.com/jhuckaby/pixl-cli) | Tools for building command-line apps for Node.js. | MIT |
-| [pixl-config](https://github.com/jhuckaby/pixl-config) | A simple JSON configuration loader. | MIT |
-| [pixl-json-stream](https://github.com/jhuckaby/pixl-json-stream) | Provides an easy API for sending and receiving JSON records over standard streams (pipes or sockets). | MIT |
-| [pixl-logger](https://github.com/jhuckaby/pixl-logger) | A simple logging class which generates bracket delimited log columns. | MIT |
-| [pixl-mail](https://github.com/jhuckaby/pixl-mail) | A very simple class for sending e-mail via SMTP. | MIT |
-| [pixl-perf](https://github.com/jhuckaby/pixl-perf) | A simple, high precision performance tracking system. | MIT |
-| [pixl-request](https://github.com/jhuckaby/pixl-request) | A very simple module for making HTTP requests. | MIT |
-| [pixl-tools](https://github.com/jhuckaby/pixl-tools) | A set of miscellaneous utility functions for Node.js. | MIT |
-| [pixl-unit](https://github.com/jhuckaby/pixl-unit) | A very simple unit test runner for Node.js. | MIT |
+| Module Name                                                      | Description                                                                                           | License |
+|------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|---------|
+| [pixl-acl](https://github.com/jhuckaby/pixl-acl)                 | A simple but fast implementation of IPv4 and IPv6 ACL filtering.                                      | MIT     |
+| [pixl-args](https://github.com/jhuckaby/pixl-args)               | A simple module for parsing command line arguments.                                                   | MIT     |
+| [pixl-boot](https://github.com/jhuckaby/pixl-boot)               | Register your service to launch on server startup (Linux / macOS).                                    | MIT     |
+| [pixl-chart](https://github.com/jhuckaby/pixl-chart)             | A simple time series chart renderer using HTML5 Canvas.                                               | MIT     |
+| [pixl-class-util](https://github.com/pixlcore/class-util)        | Helper functions for extending classes with mixins and more.                                          | MIT     |
+| [pixl-cli](https://github.com/jhuckaby/pixl-cli)                 | Tools for building command-line apps for Node.js.                                                     | MIT     |
+| [pixl-config](https://github.com/jhuckaby/pixl-config)           | A simple JSON configuration loader.                                                                   | MIT     |
+| [pixl-json-stream](https://github.com/jhuckaby/pixl-json-stream) | Provides an easy API for sending and receiving JSON records over standard streams (pipes or sockets). | MIT     |
+| [pixl-logger](https://github.com/jhuckaby/pixl-logger)           | A simple logging class which generates bracket delimited log columns.                                 | MIT     |
+| [pixl-mail](https://github.com/jhuckaby/pixl-mail)               | A very simple class for sending e-mail via SMTP.                                                      | MIT     |
+| [pixl-perf](https://github.com/jhuckaby/pixl-perf)               | A simple, high precision performance tracking system.                                                 | MIT     |
+| [pixl-request](https://github.com/jhuckaby/pixl-request)         | A very simple module for making HTTP requests.                                                        | MIT     |
+| [pixl-tools](https://github.com/jhuckaby/pixl-tools)             | A set of miscellaneous utility functions for Node.js.                                                 | MIT     |
+| [pixl-unit](https://github.com/jhuckaby/pixl-unit)               | A very simple unit test runner for Node.js.                                                           | MIT     |
 
 For the client-side, the xyOps web application is built on the [pixl-xyapp](https://github.com/pixlcore/pixl-xyapp) HTML5/CSS/JavaScript framework:
 
-| Module Name | Description | License |
-|-------------|-------------|---------|
-| [pixl-xyapp](https://github.com/pixlcore/pixl-xyapp) | A client-side JavaScript framework, designed to be a base for web applications. | MIT |
+| Module Name                                          | Description                                                                     | License |
+|------------------------------------------------------|---------------------------------------------------------------------------------|---------|
+| [pixl-xyapp](https://github.com/pixlcore/pixl-xyapp) | A client-side JavaScript framework, designed to be a base for web applications. | MIT     |
 
 ## Installing Dev Tools
 
@@ -116,23 +118,23 @@ This is useful for muting extremely loud components like `Storage` and `WebServe
 
 By default the xyOps `debug.sh` script starts a [REPL](https://nodejs.org/api/repl.html) in the console, so you can type in live JavaScript and have it execute inside the xyOps process.  You also have access to the following globals:
 
-| Global | Description |
-|--------|-------------|
-| `server` | The current global [pixl-server](https://github.com/jhuckaby/pixl-server) instance. |
-| `cli` | The [pixl-cli](https://github.com/jhuckaby/pixl-cli) global, which contains a variety of utility functions. |
-| `xyOps` | The main xyOps server component.  This is also aliased to `xy`. |
-| `Storage` | The [pixl-server-storage](https://github.com/jhuckaby/pixl-server-storage) server component. |
-| `Unbase` | The [pixl-server-unbase](https://github.com/jhuckaby/pixl-server-unbase) server component. |
-| `WebServer` | The [pixl-server-web](https://github.com/jhuckaby/pixl-server-web) server component. |
-| `API` | The [pixl-server-api](https://github.com/jhuckaby/pixl-server-api) server component. |
-| `User` | The [pixl-server-user](https://github.com/jhuckaby/pixl-server-user) server component. |
-| `Debug` | The [pixl-server-debug](https://github.com/jhuckaby/pixl-server-debug) server component. |
+| Global      | Description                                                                                                 |
+|-------------|-------------------------------------------------------------------------------------------------------------|
+| `server`    | The current global [pixl-server](https://github.com/jhuckaby/pixl-server) instance.                         |
+| `cli`       | The [pixl-cli](https://github.com/jhuckaby/pixl-cli) global, which contains a variety of utility functions. |
+| `xyOps`     | The main xyOps server component.  This is also aliased to `xy`.                                             |
+| `Storage`   | The [pixl-server-storage](https://github.com/jhuckaby/pixl-server-storage) server component.                |
+| `Unbase`    | The [pixl-server-unbase](https://github.com/jhuckaby/pixl-server-unbase) server component.                  |
+| `WebServer` | The [pixl-server-web](https://github.com/jhuckaby/pixl-server-web) server component.                        |
+| `API`       | The [pixl-server-api](https://github.com/jhuckaby/pixl-server-api) server component.                        |
+| `User`      | The [pixl-server-user](https://github.com/jhuckaby/pixl-server-user) server component.                      |
+| `Debug`     | The [pixl-server-debug](https://github.com/jhuckaby/pixl-server-debug) server component.                    |
 
 You also have access to the following REPL commands (use a leading dot to activate):
 
-| Command | Description |
-|---------|-------------|
-| `.echo` | Add or remove echo categories, e.g. `.echo add Storage WebServer`. |
+| Command   | Description                                                                                 |
+|-----------|---------------------------------------------------------------------------------------------|
+| `.echo`   | Add or remove echo categories, e.g. `.echo add Storage WebServer`.                          |
 | `.notify` | Send a notification to all users, e.g. `.notify HI THERE`.  Includes a random sound effect! |
 
 ## Running Unit Tests
@@ -178,10 +180,10 @@ Then, follow the instructions below for your development platform.
 ### Windows Cert Trust
 
 1. Press Windows + R, type `certmgr.msc`, and press Enter.
-2. In the left panel, expand: **Trusted Root Certification Authorities** → **Certificates**.
-3. Right-click **Certificates**, then choose: **All Tasks → Import...**
+2. In the left panel, expand: **Trusted Root Certification Authorities** -> **Certificates**.
+3. Right-click **Certificates**, then choose: **All Tasks -> Import...**
 4. Browse to your `tls.crt` file.
-5. Choose "Place all certificates in the following store" → make sure it's set to **Trusted Root Certification Authorities**.
+5. Choose "Place all certificates in the following store" -> make sure it's set to **Trusted Root Certification Authorities**.
 6. Finish and confirm any security prompt.
 
 ### macOS Cert Trust
@@ -189,7 +191,7 @@ Then, follow the instructions below for your development platform.
 1. Open the **Keychain Access** app.
 2. In the left sidebar, select **System** under **Keychains**.
 3. Select **Certificates** under **Category**.
-4. From the top menu, choose **File → Import Items...**
+4. From the top menu, choose **File -> Import Items...**
 5. Select your `tls.crt` file, confirm import into the System keychain.
 6. You will be prompted for your macOS password to authorize the change.
 7. After importing, double-click the certificate entry.

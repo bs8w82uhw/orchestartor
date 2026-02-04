@@ -1,4 +1,6 @@
-# xyOps Wire Protocol
+---
+title: xyOps Wire Protocol
+---
 
 ## Overview
 
@@ -6,11 +8,11 @@ This document describes the **xyOps Wire Protocol** (XYWP) v1.0, which is a stan
 
 xyOps uses the wire protocol to communicate with its Plugins, which may be written in any language.
 
-- **Title**: xyOps Wire Protocol
-- **ID**: XYWP
-- **Version**: 1.0
-- **Date**: November 16, 2025
-- **Authors**: Joseph Huckaby (PixlCore)
+-  **Title**: xyOps Wire Protocol
+-  **ID**: XYWP
+-  **Version**: 1.0
+-  **Date**: November 16, 2025
+-  **Authors**: Joseph Huckaby (PixlCore)
 
 XYWP uses [JSON](https://en.wikipedia.org/wiki/JSON) over [STDIO](https://en.wikipedia.org/wiki/Standard_streams) pipes for the basis of communication.  Specifically, [NDJSON](https://github.com/ndjson/ndjson-spec) is utilized, meaning a full JSON message is compacted onto a single line.  The sender needs to delimit the JSON with a single EOL character (ASCII 10), and the receiver needs to line-read to delimit the incoming message.  XYWP builds on this base protocol by introducing a few key properties into the top-level JSON, which allow the receiver to learn more about the message (see below).
 
@@ -26,20 +28,20 @@ The only property always present at the top-level of all XYWP messages is `xy`, 
 
 When xyOps is sending a "request" to a Plugin, the following properties will be included at the top-level of the JSON message:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `xy` | Number | **(Required)** The xyOps Wire Protocol version, which should be set to `1`. |
-| `type` | String | The type of message being sent, which varies based on the intent. |
+| Property Name | Type   | Description                                                                 |
+|---------------|--------|-----------------------------------------------------------------------------|
+| `xy`          | Number | **(Required)** The xyOps Wire Protocol version, which should be set to `1`. |
+| `type`        | String | The type of message being sent, which varies based on the intent.           |
 
 ### Responses
 
 When a Plugin is sending a "response" back to xyOps, the following properties will be included at the top-level of the JSON message:
 
-| Property Name | Type | Description |
-|---------------|------|-------------|
-| `xy` | Number | **(Required)** The xyOps Wire Protocol version, which should be set to `1`. |
-| `code` | Mixed | If the message is a response, the `code` property determines success or failure.  Any "falsey" value such as `0` or `false` indicates success.  Any "truthy" value indicates an error, and also provides the error code. |
-| `description` | String | In the event of an error, this property should contain a short human-readable description of the error.  It is optional for success. |
+| Property Name | Type   | Description                                                                                                                                                                                                              |
+|---------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `xy`          | Number | **(Required)** The xyOps Wire Protocol version, which should be set to `1`.                                                                                                                                              |
+| `code`        | Mixed  | If the message is a response, the `code` property determines success or failure.  Any "falsey" value such as `0` or `false` indicates success.  Any "truthy" value indicates an error, and also provides the error code. |
+| `description` | String | In the event of an error, this property should contain a short human-readable description of the error.  It is optional for success.                                                                                     |
 
 When a `code` property is present in a response message, it indicates that the Plugin has completed and will exit.  If the `code` property is **not** present, it indicates that the Plugin is still in progress, and is providing an intermediate update.
 
@@ -86,7 +88,7 @@ In the case of xyOps Event Plugins running jobs, "plain old JSON" can be emitted
 
 ## References
 
-- [JSON](https://en.wikipedia.org/wiki/JSON)
-- [NDJSON](https://github.com/ndjson/ndjson-spec)
-- [STDIO](https://en.wikipedia.org/wiki/Standard_streams)
-- [Wire Protocol](https://en.wikipedia.org/wiki/Wire_protocol)
+-  [JSON](https://en.wikipedia.org/wiki/JSON)
+-  [NDJSON](https://github.com/ndjson/ndjson-spec)
+-  [STDIO](https://en.wikipedia.org/wiki/Standard_streams)
+-  [Wire Protocol](https://en.wikipedia.org/wiki/Wire_protocol)
