@@ -1,0 +1,24 @@
+# Project Task Backlog
+
+## Priority Direction (Approved)
+
+Focus project development on:
+
+- AI automation capabilities inside xyOps.
+- An "Automation Manager" layer for autonomous planning/execution control.
+- Multi-agent workflows with clear role boundaries.
+- Strong regulations (SOP/runbooks/policies) and docs-as-code discipline.
+- Gramax (`https://gram.ax/ru`) as the primary knowledge base for AI agents.
+
+## Q1 Task Queue
+
+1. Define AI Automation Manager architecture (control loop, permissions, escalation model).
+2. Introduce multi-agent role model (Planner, Executor, Reviewer, Safety/Audit).
+3. Add policy enforcement points in workflows and actions (pre-check / post-check).
+4. Create a standard SOP template set (incident, rollout, rollback, access, data handling).
+5. Build agent-facing knowledge taxonomy (product, operations, security, integrations).
+6. Publish the "single source of truth" process for docs in Gramax.
+7. Add quality gates for agent knowledge (owner, version, review date, status).
+8. Define RAG-ready chunking and metadata conventions for all docs.
+9. Add automation KPIs (MTTR, automation coverage, % human escalations, policy violations).
+10. Prepare phased rollout plan: pilot team -> controlled expansion -> org standard.
