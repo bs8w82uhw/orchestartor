@@ -6,6 +6,8 @@ title: Contract Debug Stages
 
 Standardize method debugging so each method is validated against its documented contract.
 
+Russian mirror: `docs/ru-contract-debug-stages.md`.
+
 ## Stage 1: Contract Load
 
 - Open method spec (from method catalog + template).
