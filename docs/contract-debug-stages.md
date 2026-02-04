@@ -21,6 +21,9 @@ Standardize method debugging so each method is validated against its documented 
 - Run happy-path input.
 - Run malformed input.
 - Run missing required input.
+- Execute both test modes:
+  - Autonomous (scripted/API-level assertions).
+  - Manual (operator-driven scenario verification).
 
 ## Stage 4: Policy Gate Validation
 
@@ -47,3 +50,6 @@ Standardize method debugging so each method is validated against its documented 
 
 - Mark method status: `pass` / `partial` / `fail`.
 - Create remediation tasks for any contract violations.
+- Record test-mode coverage:
+  - `autonomous_coverage`: % of contract checks automated.
+  - `manual_coverage`: % of contract checks validated manually.

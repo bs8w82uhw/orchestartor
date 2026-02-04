@@ -30,6 +30,26 @@ title: Execution Evidence - Automation Manager (2026-02)
 2. Added runtime policy gates in job, action, and workflow continue stages.
 3. Added test coverage in `test/suites/test-admin.js`.
 
+## Test Modes
+
+### Autonomous Tests
+
+- API-level checks for:
+  - `get_automation_manager`
+  - `evaluate_automation_task`
+- Contract assertions:
+  - response shape,
+  - policy decision fields,
+  - risk normalization behavior.
+
+### Manual Tests
+
+- Planned operator walkthroughs:
+  1. Trigger workflow/controller continue path with policy enabled.
+  2. Validate deny/allow behavior in logs and workflow state.
+  3. Validate action-level policy block messaging.
+- Status: pending execution.
+
 ## Outputs / Artifacts
 
 - Code commits:
@@ -52,3 +72,4 @@ title: Execution Evidence - Automation Manager (2026-02)
 - Run stage-by-stage debug for each method in:
   - `docs/method-catalog-automation-manager.md`
 - Record pass/fail per method and remediation tasks.
+- Record autonomous/manual coverage for each method contract.

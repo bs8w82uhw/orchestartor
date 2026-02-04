@@ -6,6 +6,13 @@ title: Method Catalog - Automation Manager
 
 This catalog tracks methods involved in Automation Manager policy evaluation and enforcement.
 
+## Contract Debug Tracking
+
+Use the following status fields for each method:
+
+- `autonomous`: `pending` / `pass` / `partial` / `fail`
+- `manual`: `pending` / `pass` / `partial` / `fail`
+
 ## API Methods
 
 ### api_get_automation_manager

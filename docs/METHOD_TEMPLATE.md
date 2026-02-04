@@ -47,6 +47,27 @@ What business/technical outcome this method guarantees.
 
 ## Test Cases
 
+### Test Mode Matrix
+
+| Scenario | Autonomous Test | Manual Test |
+|---------|------------------|-------------|
+| Happy path | [ ] | [ ] |
+| Invalid input | [ ] | [ ] |
+| Policy denied | [ ] | [ ] |
+| Edge case | [ ] | [ ] |
+
+### Autonomous Test Notes
+
+- Test harness / script:
+- Input fixture:
+- Expected assertions:
+
+### Manual Test Notes
+
+- UI/API flow steps:
+- Human validation checkpoints:
+- Expected operator decisions:
+
 - Happy path:
 - Invalid input:
 - Policy denied:
