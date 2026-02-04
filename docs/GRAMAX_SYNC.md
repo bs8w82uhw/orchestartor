@@ -6,6 +6,10 @@ title: Gramax Sync Setup
 
 Keep Gramax aligned with this repository so AI agents always consume current documentation.
 
+## Canonical Knowledge Base URL
+
+- `https://app.gram.ax/github.com/bs8w82uhw/orchestartor/main/`
+
 ## Sync Model
 
 -  Source of truth in Git: `docs/`, `TASKS.md`, `AGENTS.md`.
