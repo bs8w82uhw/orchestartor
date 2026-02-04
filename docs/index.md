@@ -6,6 +6,10 @@ title: Documentation Index
 
 Welcome to the xyOps documentation. xyOps is a job scheduler, workflow engine, and server monitoring platform with a built-in web UI and REST API. This index organizes the docs into logical sections with short summaries to help you find what you need quickly. If you are deploying xyOps, start with Self-Hosting.
 
+Russian docs hub:
+
+- [**Документация (RU)**](ru-index.md)
+
 ## Getting Started
 
 -  [**Welcome to xyOps**](welcome.md): Introduces xyOps and provides some tips for beginners.  Shown on first login.

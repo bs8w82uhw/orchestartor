@@ -27,6 +27,7 @@ Focus project development on:
 11. Prepare phased rollout plan: pilot team -> controlled expansion -> org standard.
 12. Run contract-driven debug cycle for each Automation Manager method and capture evidence.
 13. Enforce API compatibility contract tickets for every endpoint change.
+14. Maintain Russian-language mirrors for policy/contract/API-debug documentation.
 
 ## Documentation System Rollout Tasks
 
