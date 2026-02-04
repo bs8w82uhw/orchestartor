@@ -1,0 +1,9 @@
+# Update owners to match your org/team handles if needed.
+
+# Documentation and knowledge system
+/docs/ @pixlcore
+/TASKS.md @pixlcore
+/AGENTS.md @pixlcore
+
+# GitHub automation/config
+/.github/ @pixlcore

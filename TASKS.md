@@ -22,3 +22,11 @@ Focus project development on:
 8. Define RAG-ready chunking and metadata conventions for all docs.
 9. Add automation KPIs (MTTR, automation coverage, % human escalations, policy violations).
 10. Prepare phased rollout plan: pilot team -> controlled expansion -> org standard.
+
+## Documentation System Rollout Tasks
+
+1. Configure `GRAMAX_SYNC_WEBHOOK_URL` secret in GitHub repository settings.
+2. Enable branch protection: PR required, >=1 review, CODEOWNERS, required checks.
+3. Adopt docs PR template for all documentation updates.
+4. Keep `docs/knowledge-registry.json` updated in every docs change.
+5. Review weekly "Docs Hygiene" issue and close gaps.

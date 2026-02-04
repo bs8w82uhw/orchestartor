@@ -78,19 +78,19 @@ Practical approach:
 
 ## Implementation Phases
 
-## Phase 1: Foundation (1-2 weeks)
+### Phase 1: Foundation (1-2 weeks)
 
 - Freeze role model and permission matrix.
 - Publish SOP/policy templates.
 - Create Gramax structure + naming conventions.
 
-## Phase 2: Pilot (2-4 weeks)
+### Phase 2: Pilot (2-4 weeks)
 
 - Run 2-3 high-volume automation scenarios with multi-agent flow.
 - Collect evidence and incident patterns.
 - Tighten policy checks and escalation triggers.
 
-## Phase 3: Scale (ongoing)
+### Phase 3: Scale (ongoing)
 
 - Expand to additional domains.
 - Add KPI dashboard for automation reliability and governance.

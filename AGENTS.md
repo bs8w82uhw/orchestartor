@@ -26,6 +26,8 @@ npm run dev
 - `sample_conf/`: local config and email templates.
 - `TASKS.md`: current prioritized backlog and direction.
 - `docs/ai-automation-knowledge-strategy.md`: AI automation + multi-agent governance model.
+- `docs/DOCS_GOVERNANCE.md`: docs lifecycle, review, and quality rules.
+- `docs/knowledge-registry.json`: owner/status/review metadata for all docs pages.
 
 ## Practical Workflow
 

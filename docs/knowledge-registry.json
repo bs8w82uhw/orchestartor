@@ -1,0 +1,438 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-02-04",
+  "items": [
+    {
+      "path": "docs/DOCS_GOVERNANCE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/GRAMAX_SYNC.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/actions.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/ai-automation-knowledge-strategy.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/alerts.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/api.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/buckets.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/categories.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/channels.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/cli.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/colophon.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/config.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/cronicle.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/data.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/db.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/dev.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/events.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/governance.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/groups.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/hosting.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/index.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/limits.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/logging.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/marketplace.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/monitors.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/pages.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/plugins.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/privileges.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/recipes.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/scaling.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/secrets.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/security.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/servers.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/snapshots.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/sso.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/support.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/syshooks.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/tags.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/tickets.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/triggers.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/users.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/webhooks.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/welcome.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/workflows.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/xybk.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/xyexp.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/xypdf.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/xywp.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-04",
+      "next_review_at": "2026-05-05"
+    }
+  ]
+}

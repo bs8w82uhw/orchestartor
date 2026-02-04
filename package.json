@@ -12,7 +12,7 @@
 		"debug": "bin/control.sh debug",
 		"build:dev": "node bin/build.js dev",
 		"build:dist": "node bin/build.js",
-		"dev": "npm run build:dev && bin/debug.sh",
+		"dev": "npm run build:dev && npm run debug",
 		"boot": "pixl-boot install --script bin/control.sh",
 		"unboot": "pixl-boot uninstall",
 		"test": "pixl-unit test/test.js",
