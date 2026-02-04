@@ -1,7 +1,16 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-02-04",
+  "generated_at": "2026-02-05",
   "items": [
+    {
+      "path": "docs/CONTRACT_TEMPLATE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
     {
       "path": "docs/DOCS_GOVERNANCE.md",
       "owner": "docs-core",
@@ -12,6 +21,15 @@
       "next_review_at": "2026-05-05"
     },
     {
+      "path": "docs/EXECUTION_EVIDENCE_TEMPLATE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
       "path": "docs/GRAMAX_SYNC.md",
       "owner": "docs-core",
       "status": "active",
@@ -19,6 +37,15 @@
       "risk_level": "high",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/POLICY_TEMPLATE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/actions.md",
@@ -244,6 +271,15 @@
       "risk_level": "medium",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/policies-contracts-execution.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/privileges.md",

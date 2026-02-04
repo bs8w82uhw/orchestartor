@@ -69,6 +69,10 @@ Welcome to the xyOps documentation. xyOps is a job scheduler, workflow engine, a
 -  [**Contributing**](https://github.com/pixlcore/xyops/blob/main/CONTRIBUTING.md): How to contribute to xyOps.
 -  [**Development**](dev.md): Architecture overview, component list, client framework, and local dev setup.
 -  [**AI Automation Strategy**](ai-automation-knowledge-strategy.md): Multi-agent model, governance framework, and knowledge-system approach.
+-  [**Policies, Contracts, and Execution**](policies-contracts-execution.md): Documentation standard for policy rules, role contracts, and execution evidence.
+-  [**Policy Template**](POLICY_TEMPLATE.md): Reusable template for policy documents.
+-  [**Contract Template**](CONTRACT_TEMPLATE.md): Reusable template for operational contracts.
+-  [**Execution Evidence Template**](EXECUTION_EVIDENCE_TEMPLATE.md): Reusable template for run evidence and audit trails.
 -  [**Docs Governance**](DOCS_GOVERNANCE.md): Rules for PR flow, reviews, lifecycle statuses, and weekly hygiene.
 -  [**Gramax Sync Setup**](GRAMAX_SYNC.md): Repository-to-Gramax sync workflow and webhook setup.
 -  [**Logging**](logging.md): A list of all xyOps log files including descriptions and example rows.

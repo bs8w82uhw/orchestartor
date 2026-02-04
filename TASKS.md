@@ -22,8 +22,9 @@ Focus project development on:
 6. Publish the "single source of truth" process for docs in Gramax.
 7. Add quality gates for agent knowledge (owner, version, review date, status).
 8. Define RAG-ready chunking and metadata conventions for all docs.
-9. Add automation KPIs (MTTR, automation coverage, % human escalations, policy violations).
-10. Prepare phased rollout plan: pilot team -> controlled expansion -> org standard.
+9. Standardize policy/contract/execution evidence docs and adopt templates across AI workflows.
+10. Add automation KPIs (MTTR, automation coverage, % human escalations, policy violations).
+11. Prepare phased rollout plan: pilot team -> controlled expansion -> org standard.
 
 ## Documentation System Rollout Tasks
 
