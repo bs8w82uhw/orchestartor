@@ -48,6 +48,8 @@ Welcome to the xyOps documentation. xyOps is a job scheduler, workflow engine, a
 ## API & Data
 
 -  [**REST API**](api.md): REST API endpoints, API keys, authentication, and standard response format.
+-  [**API Debug and Compatibility Contract**](api-debug-compatibility.md): Mandatory API debug documentation and compatibility workflow.
+-  [**API Compatibility Contract Ticket Template**](API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md): Template for endpoint-level compatibility sign-off.
 -  [**Data Structures**](data.md): Complete schemas for all xyOps objects (jobs, events, users, servers, alerts, etc.).
 -  [**Database Tables**](db.md): A list of all the internal xyOps database tables and column indexes.
 

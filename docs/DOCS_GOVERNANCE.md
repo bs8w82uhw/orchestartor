@@ -13,6 +13,7 @@ This policy defines how documentation is managed for humans and AI agents. If a 
 3. At least one reviewer is required for docs PRs.
 4. `docs/knowledge-registry.json` must be updated in the same PR.
 5. High-risk automation docs require explicit policy and escalation sections.
+6. API changes must include compatibility contract ticket + debug evidence (autonomous and manual).
 
 ## Branch and Review Rules
 

@@ -1,0 +1,50 @@
+---
+title: API Debug and Compatibility Contract
+---
+
+## Purpose
+
+This document defines mandatory API documentation for:
+
+- debugging,
+- compatibility control,
+- and contract sign-off.
+
+## Mandatory Rule
+
+Every API endpoint change must include:
+
+1. API reference update in `docs/api.md`.
+2. Compatibility contract ticket based on `API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md`.
+3. Autonomous and manual debug evidence.
+
+Without these artifacts, the API change is incomplete.
+
+## Debug Documentation Standard
+
+For each endpoint, document:
+
+- request/response examples,
+- error behavior and codes,
+- policy/permission checks,
+- side effects and logs.
+
+## Contract Ticket Workflow
+
+1. Open contract ticket before merge.
+2. Fill endpoint contract scope and compatibility guarantees.
+3. Attach autonomous test evidence.
+4. Attach manual test evidence.
+5. Record reviewer decision.
+
+## Compatibility Policy
+
+- Additive changes are preferred.
+- Breaking changes require explicit migration notes and approval.
+- Deprecated fields need removal timeline.
+
+## Evidence Requirements
+
+- CI test output (autonomous).
+- Manual walkthrough notes with timestamps.
+- Any deny/allow policy traces for security-sensitive endpoints.

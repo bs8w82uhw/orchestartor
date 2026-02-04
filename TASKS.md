@@ -26,6 +26,7 @@ Focus project development on:
 10. Add automation KPIs (MTTR, automation coverage, % human escalations, policy violations).
 11. Prepare phased rollout plan: pilot team -> controlled expansion -> org standard.
 12. Run contract-driven debug cycle for each Automation Manager method and capture evidence.
+13. Enforce API compatibility contract tickets for every endpoint change.
 
 ## Documentation System Rollout Tasks
 

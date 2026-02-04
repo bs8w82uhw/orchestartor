@@ -3,6 +3,15 @@
   "generated_at": "2026-02-05",
   "items": [
     {
+      "path": "docs/API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
       "path": "docs/CONTRACT_TEMPLATE.md",
       "owner": "docs-core",
       "status": "active",
@@ -91,6 +100,15 @@
       "risk_level": "medium",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/api-debug-compatibility.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/api.md",
