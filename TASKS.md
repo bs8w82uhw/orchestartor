@@ -33,6 +33,7 @@ Focus project development on:
 
 1. Canonical knowledge base URL is set: `https://app.gram.ax/github.com/bs8w82uhw/orchestartor/main/`.
 2. Configure `GRAMAX_SYNC_WEBHOOK_URL` secret in GitHub repository settings.
+2a. If webhook URL is unavailable, keep this item in `blocked` status and continue docs-as-code updates until URL is provided.
 3. Enable branch protection: PR required, >=1 review, CODEOWNERS, required checks.
 4. Adopt docs PR template for all documentation updates.
 5. Keep `docs/knowledge-registry.json` updated in every docs change.
