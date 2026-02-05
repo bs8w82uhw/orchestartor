@@ -43,6 +43,7 @@ Focus project development on:
 - Documentation structure standardized: AI automation docs moved to `docs/automation/` and separated from core xyOps docs index.
 - Gramax navigation split defined: `Product Docs` vs `Automation Governance Docs` (`docs/automation/GRAMAX_NAVIGATION.md`).
 - Gramax writing standard added: docs-as-code technical writing style and AI-agent adaptation (`docs/automation/GRAMAX_DOCS_AS_CODE_STYLE.md` + RU mirror).
+- Applied style baseline to key governance docs: policies/contracts, API debug compatibility, and method catalog (Purpose/Scope/Preconditions/Procedure/Failure/Escalation/Evidence).
 
 ## Next Tasks (Continue From Here)
 

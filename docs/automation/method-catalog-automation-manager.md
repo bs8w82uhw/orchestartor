@@ -2,6 +2,10 @@
 title: Method Catalog - Automation Manager
 ---
 
+## Purpose
+
+Track method-level contracts and debug status for Automation Manager behavior.
+
 ## Scope
 
 This catalog tracks methods involved in Automation Manager policy evaluation and enforcement.
@@ -14,6 +18,20 @@ Use the following status fields for each method:
 
 - `autonomous`: `pending` / `pass` / `partial` / `fail`
 - `manual`: `pending` / `pass` / `partial` / `fail`
+
+## Preconditions
+
+- Method contract exists (or is defined in this catalog).
+- Test scope is mapped to autonomous and manual modes.
+- Evidence targets (test file, log path, code location) are identified.
+
+## Procedure
+
+1. Select method and load contract fields (inputs, outputs, side effects).
+2. Execute autonomous checks and record status.
+3. Execute manual walkthrough and record status.
+4. Attach evidence links (tests/logs/code refs).
+5. Record remediation action for `partial`/`fail`/`pending`.
 
 ## Method-by-Method Debug Matrix (Cycle 2026-02-05)
 
@@ -34,6 +52,26 @@ Use the following status fields for each method:
 
 - Autonomous: `pass=3`, `partial=4`, `pending=3`, `fail=0`.
 - Manual: `pending=10` (operator cycle not yet executed).
+
+## Failure Modes
+
+- Method listed without evidence reference.
+- Status marked `pass` while required checks were not executed.
+- Manual and autonomous coverage diverge without remediation note.
+- Enforcement method has no deny/allow scenario coverage.
+
+## Escalation
+
+- Any `fail` on policy-gated methods escalates to Safety/Audit review.
+- `pending` on high-risk methods blocks full sign-off.
+- Create remediation ticket with owner and target date for every `partial|fail`.
+
+## Evidence Checklist
+
+- [ ] Method status updated in matrix.
+- [ ] Autonomous evidence reference is present.
+- [ ] Manual evidence reference (or pending reason) is present.
+- [ ] Remediation next step is documented for non-pass status.
 
 ## API Methods
 

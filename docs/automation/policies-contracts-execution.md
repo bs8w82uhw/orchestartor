@@ -12,7 +12,22 @@ This guide defines how to document:
 
 The goal is to make every automation decision auditable and safe for AI agents.
 
-## Core Model
+## Scope
+
+Applies to all automation governance artifacts in `docs/automation/`:
+
+- policy documents,
+- operational contracts,
+- execution evidence logs.
+
+## Preconditions
+
+- Document owner is assigned.
+- Risk level is identified (`low|medium|high`).
+- Related method/API scope is known.
+- Registry update in `docs/knowledge-registry.json` is planned in the same PR.
+
+## Procedure
 
 Each automation flow must map to three artifacts:
 
@@ -22,7 +37,7 @@ Each automation flow must map to three artifacts:
 
 If any of these is missing, the flow is not automation-ready.
 
-## Policy Documentation Standard
+### Policy Documentation Standard
 
 Each policy document must include:
 
@@ -37,7 +52,7 @@ Recommended filename pattern:
 
 - `POLICY_<domain>.md`
 
-## Contract Documentation Standard
+### Contract Documentation Standard
 
 Each contract must define:
 
@@ -52,7 +67,7 @@ Recommended filename pattern:
 
 - `CONTRACT_<domain>.md`
 
-## Execution Evidence Standard
+### Execution Evidence Standard
 
 Each execution record must include:
 
@@ -67,7 +82,7 @@ Recommended filename pattern:
 
 - `EXECUTION_<domain>_<YYYY-MM>.md`
 
-## Quality Gates
+### Quality Gates
 
 Before a document becomes `agent_ready=true`:
 
@@ -76,8 +91,28 @@ Before a document becomes `agent_ready=true`:
 3. Linked policy and contract exist.
 4. At least one execution evidence example exists.
 
-## Review Cadence
+### Review Cadence
 
 - Weekly: execution evidence completeness.
 - Monthly: policy/contract drift review.
 - Quarterly: risk-level and approval model recalibration.
+
+## Failure Modes
+
+- Missing one of three required artifacts (policy/contract/evidence).
+- Missing ownership or review dates in registry.
+- Contract without explicit acceptance criteria or rollback owner.
+- Evidence log without policy decision (`allowed|denied`) and reason.
+
+## Escalation
+
+- If artifact set is incomplete, mark status `draft` and block `agent_ready=true`.
+- For high-risk scope gaps, require Safety/Audit reviewer before merge.
+- Open remediation task with explicit owner and due date.
+
+## Evidence Checklist
+
+- [ ] Policy document exists and links to scope.
+- [ ] Contract document exists and defines responsibilities/handoffs.
+- [ ] Execution evidence example exists and is timestamped.
+- [ ] `docs/knowledge-registry.json` updated in the same PR.
