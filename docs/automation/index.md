@@ -43,6 +43,7 @@ It is intentionally separated from core xyOps product documentation.
 
 - [Testing with Docker Compose](testing-docker-compose.md)
 - [Gramax Sync Setup](GRAMAX_SYNC.md)
+- [Gramax Navigation Structure](GRAMAX_NAVIGATION.md)
 
 ## Russian Mirror
 

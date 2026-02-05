@@ -111,6 +111,15 @@
       "next_review_at": "2026-05-06"
     },
     {
+      "path": "docs/automation/GRAMAX_NAVIGATION.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
       "path": "docs/automation/GRAMAX_SYNC.md",
       "owner": "docs-core",
       "status": "active",

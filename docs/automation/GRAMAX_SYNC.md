@@ -41,3 +41,6 @@ The webhook receives JSON:
 -  If secret is missing, the workflow skips sync and exits cleanly.
 -  For manual sync, run the workflow via `workflow_dispatch`.
 -  Keep docs statuses and owners current in `docs/knowledge-registry.json`.
+-  Keep navigation split in Gramax:
+   - `Product Docs` -> `docs/index.md`
+   - `Automation Governance Docs` -> `docs/automation/index.md`

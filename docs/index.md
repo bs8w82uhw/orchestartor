@@ -10,6 +10,7 @@ Automation documentation hub:
 
 - [**AI Automation Hub**](automation/index.md)
 - [**Документация (RU)**](automation/ru/ru-index.md)
+- [**Gramax Navigation Structure**](automation/GRAMAX_NAVIGATION.md)
 
 ## Getting Started
 
