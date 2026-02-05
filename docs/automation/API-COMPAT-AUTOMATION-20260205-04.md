@@ -94,9 +94,40 @@ title: API Compatibility Contract Ticket - workflow continue policy gate
   - Resolve/contain failing autonomous runtime exception (`lib/monitor.js:908`) so workflow-continue scenarios can complete
   - Run autonomous suite in supported environment with Node.js + Docker available (WSL2/Docker/native Linux)
 
-## Evidence Update Template (Copy/Paste)
+## Evidence Update (2026-02-05)
 
-Use this block after running `docs/automation/EVIDENCE_RUNBOOK_WSL2_DOCKER.md`:
+- Autonomous run date: 2026-02-05
+- Environment: WSL2 + Docker daemon доступен
+- Autonomous commands:
+  - `docker compose -f docker-compose.test.yml --profile auto run --rm xyops-test-auto`
+  - `docker compose -f docker-compose.test.yml --profile auto run --rm xyops-test-auto sh -lc "mkdir -p conf && cp -rf sample_conf/* conf/ && npm install --include=dev && npm test"`
+- Autonomous result: test harness starts, but full suite crashes before workflow-continue scenario evidence is produced.
+- Autonomous log artifacts:
+  - `test/logs/xyOps.log`
+  - `test/logs/crash.log`
+  - `test/logs/Test.log`
+- Blocking failure:
+  - `TypeError: Cannot read properties of undefined (reading 'forEach')`
+  - `lib/monitor.js:908` (`handleQuickMonData`)
+
+- Manual run date: pending
+- Manual environment: pending
+- Scenario 1 (advisory) result: pending
+- Scenario 2 (enforced + no approval) result: pending
+- Workflow state snapshot link: pending
+- Log trace link: pending
+
+## Decision Update (after evidence run)
+
+- Status: `conditional`
+- Reviewer: docs-core
+- Date: 2026-02-05
+- Notes:
+  - Environment/tooling blockers were removed.
+  - Remaining blocker is runtime crash in monitor path, unrelated to ticket schema contract.
+  - Ticket stays `conditional` until deny/allow scenario evidence for workflow continue gate is attached.
+
+## Evidence Update Template (Copy/Paste)
 
 ```md
 ### Evidence Update (fill after run)

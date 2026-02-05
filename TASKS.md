@@ -50,6 +50,7 @@ Focus project development on:
 - Evidence execution organized with runbook: `docs/automation/EVIDENCE_RUNBOOK_WSL2_DOCKER.md`.
 - Prepared ready-to-paste evidence + approval template for ticket `API-COMPAT-AUTOMATION-20260205-04`.
 - Autonomous container run now starts and reaches test harness; current blocker is unrelated runtime exception in `lib/monitor.js:908` during full suite.
+- Ticket `API-COMPAT-AUTOMATION-20260205-04` updated with factual evidence block from WSL2+Docker runs; status remains `conditional` pending deny/allow scenario artifacts.
 
 ## Next Tasks (Continue From Here)
 
