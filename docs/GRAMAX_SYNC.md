@@ -8,7 +8,7 @@ Keep Gramax aligned with this repository so AI agents always consume current doc
 
 ## Canonical Knowledge Base URL
 
-- `https://app.gram.ax/github.com/bs8w82uhw/orchestartor/main/`
+- `https://app.gram.ax/github.com/bs8w82uhw/knowladge/master/`
 
 ## Sync Model
 

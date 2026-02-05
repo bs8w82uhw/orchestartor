@@ -8,7 +8,7 @@ title: Синхронизация с Gramax (RU)
 
 ## Канонический URL базы знаний
 
-- `https://app.gram.ax/github.com/bs8w82uhw/orchestartor/main/`
+- `https://app.gram.ax/github.com/bs8w82uhw/knowladge/master/`
 
 ## Где добавить webhook URL
 
