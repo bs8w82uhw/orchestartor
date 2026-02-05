@@ -1,0 +1,13 @@
+Thu Feb 05 2026 08:49:01 GMT+0000 (Coordinated Universal Time) - 29e30f269e35 - PID 36
+TypeError: Cannot read properties of undefined (reading 'forEach')
+    at xyOps.handleQuickMonData (/opt/xyops/lib/monitor.js:908:17)
+    at xyOps.handleSocketMessage (/opt/xyops/lib/comm.js:368:56)
+    at WebSocket.<anonymous> (/opt/xyops/lib/comm.js:89:9)
+    at WebSocket.emit (node:events:519:28)
+    at Receiver.receiverOnMessage (/opt/xyops/node_modules/ws/lib/websocket.js:1070:20)
+    at Receiver.emit (node:events:519:28)
+    at Receiver.dataMessage (/opt/xyops/node_modules/ws/lib/receiver.js:517:14)
+    at Receiver.getData (/opt/xyops/node_modules/ws/lib/receiver.js:435:17)
+    at Receiver.startLoop (/opt/xyops/node_modules/ws/lib/receiver.js:143:22)
+    at Receiver._write (/opt/xyops/node_modules/ws/lib/receiver.js:78:10)
+

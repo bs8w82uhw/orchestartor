@@ -75,10 +75,13 @@ title: API Compatibility Contract Ticket - workflow continue policy gate
   - Environment probe (2026-02-05): `node -v` -> `node: command not found`
   - Environment probe (2026-02-05): `docker version` -> `docker could not be found in this WSL distro (enable Docker Desktop WSL integration)`
   - Runbook for completion: `docs/automation/EVIDENCE_RUNBOOK_WSL2_DOCKER.md`
+  - Autonomous run (2026-02-05): `docker compose -f docker-compose.test.yml --profile auto run --rm xyops-test-auto` reached test execution but failed before ticket sign-off.
+  - Follow-up run (2026-02-05): `docker compose ... run --rm xyops-test-auto sh -lc "mkdir -p conf && cp -rf sample_conf/* conf/ && npm install --include=dev && npm test"` executed test harness and failed with runtime exception.
 - Logs/traces:
   - `lib/workflow.js:1028`
   - `lib/workflow.js:1066`
   - `docs/automation/method-catalog-automation-manager.md` (`continueWFController` row)
+  - Failure trace: `TypeError: Cannot read properties of undefined (reading 'forEach')` in `lib/monitor.js:908` via `handleQuickMonData`
 
 ## Decision
 
@@ -88,6 +91,7 @@ title: API Compatibility Contract Ticket - workflow continue policy gate
 - Conditions to move to `approved`:
   - Attach autonomous workflow continue deny/allow evidence
   - Attach manual walkthrough evidence with workflow-state snapshots
+  - Resolve/contain failing autonomous runtime exception (`lib/monitor.js:908`) so workflow-continue scenarios can complete
   - Run autonomous suite in supported environment with Node.js + Docker available (WSL2/Docker/native Linux)
 
 ## Evidence Update Template (Copy/Paste)

@@ -1,0 +1,7 @@
+[1770281341.707][2026-02-05 08:49:01][localhost][36][Satellite][debug][1][Mock satellite starting up][]
+[1770281341.707][2026-02-05 08:49:01][localhost][36][Satellite][debug][2][Config][{"host":"localhost","port":6622,"secure":false,"socket_opts":{"rejectUnauthorized":false},"temp_dir":"temp","child_kill_timeout":10,"monitoring_enabled":true,"quickmon_enabled":true,"id":"satunit1","secret_key":"UNIT_TEST","other":["test/test.js"]}]
+[1770281341.708][2026-02-05 08:49:01][localhost][36][Satellite][debug][5][Connecting to WebSocket: ws://localhost:6622/][]
+[1770281341.774][2026-02-05 08:49:01][localhost][36][Satellite][debug][1][WebSocket connected successfully: ws://localhost:6622/][]
+[1770281341.779][2026-02-05 08:49:01][localhost][36][Satellite][debug][3][We have been assigned a unique server ID: satunit1][]
+[1770281341.779][2026-02-05 08:49:01][localhost][36][Satellite][debug][9][Authenticating via secret_key + nonce hash: UNIT**** + 5628****][]
+[1770281341.782][2026-02-05 08:49:01][localhost][36][Satellite][debug][5][WebSocket auth successful!][]

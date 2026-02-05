@@ -46,11 +46,11 @@ Use the following status fields for each method:
 | `normalizeAutomationRisk` | pass | pending | Risk normalization assert (`test/suites/test-admin.js:229`) | Add malformed-risk fallback tests (`null`, unknown string). |
 | `launchJob` (policy gate) | pending | pending | Gate implementation `lib/job.js:87` | Add autonomous deny/allow tests with enforced mode. |
 | `runJobAction` (policy gate) | pending | pending | Gate implementation `lib/action.js:132` | Add autonomous deny-path tests and meta-log assertions. |
-| `continueWFController` (policy gate) | pending | pending | Gate implementation `lib/workflow.js:1057`; local evidence run blocked (`npm test`: WSL mismatch, `node` missing, `docker` unavailable) | Run autonomous suite in WSL2/Docker/native Linux with Node.js available, then execute manual walkthrough. |
+| `continueWFController` (policy gate) | partial | pending | Gate implementation `lib/workflow.js:1057`; autonomous container run reached test harness but failed on unrelated runtime exception (`lib/monitor.js:908`) before scenario completion | Stabilize autonomous baseline (monitor crash), then rerun workflow-continue deny/allow scenarios and manual walkthrough. |
 
 ### Coverage Snapshot
 
-- Autonomous: `pass=3`, `partial=4`, `pending=3`, `fail=0`.
+- Autonomous: `pass=3`, `partial=5`, `pending=2`, `fail=0`.
 - Manual: `pending=10` (operator cycle not yet executed).
 
 ## Failure Modes

@@ -1,0 +1,3 @@
+[1770281308.31][2026-02-05 08:48:28][localhost][36][Multi][debug][2][Initializing multi-server management system][{"id":"localhost"}]
+[1770281308.311][2026-02-05 08:48:28][localhost][36][Multi][debug][1][No master data found, registering ourselves (first run)][]
+[1770281308.311][2026-02-05 08:48:28][localhost][36][Multi][debug][1][We are becoming primary][{"id":"localhost"}]
