@@ -111,6 +111,15 @@
       "next_review_at": "2026-05-06"
     },
     {
+      "path": "docs/automation/GRAMAX_DOCS_AS_CODE_STYLE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
       "path": "docs/automation/GRAMAX_NAVIGATION.md",
       "owner": "docs-core",
       "status": "active",
@@ -256,6 +265,15 @@
     },
     {
       "path": "docs/automation/ru/ru-docs-governance.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-gramax-docs-as-code-style.md",
       "owner": "docs-core",
       "status": "active",
       "agent_ready": true,

@@ -15,6 +15,7 @@ title: Документация (RU)
 - [Отладка API и контракт совместимости](ru-api-debug-compatibility.md)
 - [Этапы отладки контрактов](ru-contract-debug-stages.md)
 - [Управление документацией](ru-docs-governance.md)
+- [Стандарт Gramax: Docs-as-Code и техрайтинг](ru-gramax-docs-as-code-style.md)
 - [Тестирование через Docker Compose и WSL](ru-testing-docker-compose.md)
 - [Синхронизация документации с Gramax](ru-gramax-sync.md)
 

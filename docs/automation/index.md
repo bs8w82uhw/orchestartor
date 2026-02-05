@@ -19,6 +19,7 @@ It is intentionally separated from core xyOps product documentation.
 
 - [Policies, Contracts, and Execution](policies-contracts-execution.md)
 - [Docs Governance](DOCS_GOVERNANCE.md)
+- [Gramax Docs-as-Code Style](GRAMAX_DOCS_AS_CODE_STYLE.md)
 - [Contract Debug Stages](contract-debug-stages.md)
 - [Method Catalog (Automation Manager)](method-catalog-automation-manager.md)
 

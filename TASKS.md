@@ -42,6 +42,7 @@ Focus project development on:
 - Next Tasks item 3 completed: RU mirror added for method catalog (`docs/automation/ru/ru-method-catalog-automation-manager.md`).
 - Documentation structure standardized: AI automation docs moved to `docs/automation/` and separated from core xyOps docs index.
 - Gramax navigation split defined: `Product Docs` vs `Automation Governance Docs` (`docs/automation/GRAMAX_NAVIGATION.md`).
+- Gramax writing standard added: docs-as-code technical writing style and AI-agent adaptation (`docs/automation/GRAMAX_DOCS_AS_CODE_STYLE.md` + RU mirror).
 
 ## Next Tasks (Continue From Here)
 

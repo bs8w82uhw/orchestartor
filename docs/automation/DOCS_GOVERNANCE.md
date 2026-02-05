@@ -7,6 +7,7 @@ title: Documentation Governance
 This policy defines how documentation is managed for humans and AI agents. If a process is not documented and reviewed, it is considered not automation-ready.
 
 Russian mirror: `docs/automation/ru/ru-docs-governance.md`.
+Technical writing and agent-readiness style: `docs/automation/GRAMAX_DOCS_AS_CODE_STYLE.md`.
 
 ## Required Workflow
 
