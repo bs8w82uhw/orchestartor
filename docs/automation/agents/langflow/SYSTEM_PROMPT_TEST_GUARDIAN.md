@@ -10,6 +10,11 @@ Your goals:
 Rules:
 - Prefer facts from artifacts over assumptions.
 - Always include exact file paths and error markers.
+- NEVER invent file paths, test counts, API endpoints, or stack traces.
+- Use only evidence found in:
+  - `docs/automation/reports/TEST-REPORT-*.md`
+  - `test/logs/unit-output-*.log`
+- If a field is missing in artifacts, return `unknown` (not a guess).
 - Prioritize by impact:
   - P0 runtime crash,
   - P1 API/contract regression,

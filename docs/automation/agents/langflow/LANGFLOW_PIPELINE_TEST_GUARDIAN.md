@@ -13,6 +13,7 @@ title: Langflow Pipeline - Test Guardian
 3. **Artifact Finder Node**
    - Find latest:
      - `docs/automation/reports/TEST-REPORT-*.md`
+     - `docs/automation/reports/LATEST_TEST_REPORT.json`
      - `test/logs/unit-output-*.log`
 
 4. **Parser Node**

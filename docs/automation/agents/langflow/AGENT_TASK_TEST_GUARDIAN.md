@@ -8,8 +8,10 @@ title: Agent Task - Test Guardian
 
 ## Inputs
 
-- Команда: `npm run test:report`
+- Команда: `bash bin/test-report-agent.sh`
 - Репорт: `docs/automation/reports/TEST-REPORT-*.md`
+- Алиас свежего репорта: `docs/automation/reports/LATEST_TEST_REPORT.md`
+- Машинный summary: `docs/automation/reports/LATEST_TEST_REPORT.json`
 - Raw log: `test/logs/unit-output-*.log`
 - Контракт: `docs/automation/API-COMPAT-AUTOMATION-20260205-04.md`
 
@@ -31,3 +33,4 @@ title: Agent Task - Test Guardian
 - Отчет сформирован.
 - Падения сгруппированы и приоритизированы.
 - Выдан четкий next step для разработки.
+- Если данных нет в артефактах, возвращается `unknown`, а не гипотеза.

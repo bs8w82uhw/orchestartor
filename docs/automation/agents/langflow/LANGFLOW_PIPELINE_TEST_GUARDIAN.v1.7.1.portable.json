@@ -881,7 +881,7 @@
                 "trace_as_metadata": true,
                 "track_in_telemetry": false,
                 "type": "str",
-                "value": "URL-openAPI - gpt 4.1 mini"
+                "value": "https://api.aimlapi.com/v2"
               },
               "api_key": {
                 "_input_type": "SecretStrInput",
@@ -1014,7 +1014,7 @@
                 "trace_as_metadata": true,
                 "track_in_telemetry": true,
                 "type": "str",
-                "value": ""
+                "value": "gpt-4.1-mini"
               },
               "stream": {
                 "_input_type": "BoolInput",
@@ -1923,7 +1923,7 @@
                 "trace_as_metadata": true,
                 "track_in_telemetry": false,
                 "type": "str",
-                "value": "URL-openAPI - gpt 4.1 mini"
+                "value": "https://api.aimlapi.com/v2"
               },
               "api_key": {
                 "_input_type": "SecretStrInput",
@@ -2056,7 +2056,7 @@
                 "trace_as_metadata": true,
                 "track_in_telemetry": true,
                 "type": "str",
-                "value": ""
+                "value": "gpt-4.1-mini"
               },
               "stream": {
                 "_input_type": "BoolInput",
@@ -2163,12 +2163,12 @@
       "zoom": 0.8155956067533828
     }
   },
-  "description": "Valid Langflow 1.7.1 flow: load latest test report from repo, analyze failures, output prioritized next fix and contract update draft.",
-  "endpoint_name": "test-guardian",
+  "description": "Portable variant with provider defaults and no environment-specific secrets.",
+  "endpoint_name": "test-guardian-portable",
   "id": "aa637eff-85b0-42c6-aa3a-7a52ddef79a1",
   "is_component": false,
   "last_tested_version": "1.7.1",
-  "name": "Test Guardian Pipeline (Langflow 1.7.1 Valid)",
+  "name": "Test Guardian Pipeline (Langflow 1.7.1 Portable)",
   "tags": [
     "qa",
     "tests",

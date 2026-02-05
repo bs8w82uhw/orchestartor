@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   xyops-test-auto:
     build:
@@ -30,3 +28,20 @@ services:
       - "5522:5522"
       - "5523:5523"
     profiles: ["manual"]
+
+  langflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.langflow
+    working_dir: /opt/xyops
+    command: ["langflow", "run", "--host", "0.0.0.0", "--port", "7860"]
+    environment:
+      LANGFLOW_DATABASE_URL: "sqlite:////data/langflow/langflow.db"
+      LANGFLOW_CONFIG_DIR: "/data/langflow"
+      LANGFLOW_AUTO_LOGIN: "false"
+    volumes:
+      - .:/opt/xyops
+      - ./.langflow:/data/langflow
+    ports:
+      - "7860:7860"
+    profiles: ["langflow"]
