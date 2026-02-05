@@ -69,7 +69,9 @@ title: API Compatibility Contract Ticket - workflow continue policy gate
 ## Evidence
 
 - PR link: pending
-- Test run links: pending CI/docker execution
+- Test run links:
+  - Local attempt (2026-02-05): `npm test` -> blocked in current environment
+  - Blocker output: `WSL 1 is not supported. Please upgrade to WSL 2 or above. Could not determine Node.js install directory`
 - Logs/traces:
   - `lib/workflow.js:1028`
   - `lib/workflow.js:1066`
@@ -83,3 +85,4 @@ title: API Compatibility Contract Ticket - workflow continue policy gate
 - Conditions to move to `approved`:
   - Attach autonomous workflow continue deny/allow evidence
   - Attach manual walkthrough evidence with workflow-state snapshots
+  - Run autonomous suite in supported environment (WSL2/Docker/native Linux)

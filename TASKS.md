@@ -45,6 +45,7 @@ Focus project development on:
 - Gramax writing standard added: docs-as-code technical writing style and AI-agent adaptation (`docs/automation/GRAMAX_DOCS_AS_CODE_STYLE.md` + RU mirror).
 - Applied style baseline to key governance docs: policies/contracts, API debug compatibility, and method catalog (Purpose/Scope/Preconditions/Procedure/Failure/Escalation/Evidence).
 - Applied same style baseline to RU mirrors for these key governance docs.
+- Autonomous validation blocker captured: local `npm test` blocked by WSL1 environment; move evidence runs to WSL2/Docker/native Linux.
 
 ## Next Tasks (Continue From Here)
 

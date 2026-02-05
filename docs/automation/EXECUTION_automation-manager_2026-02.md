@@ -103,3 +103,13 @@ Remediation focus for next cycle:
 1. Add autonomous tests for enforcement gates (`launchJob`, `runJobAction`, `continueWFController`).
 2. Execute manual operator walkthrough and attach deny/allow evidence with timestamps.
 3. Convert indirect method checks to direct contract tests for manager internals.
+
+## Environment Blockers (2026-02-05)
+
+- Autonomous run attempt command: `npm test`
+- Result: blocked in current environment
+- Error: `WSL 1 is not supported. Please upgrade to WSL 2 or above. Could not determine Node.js install directory`
+- Impact:
+  - Cannot attach fresh autonomous evidence from this host for workflow continue policy gate.
+- Next action:
+  - Execute the same suite in WSL2/Docker/native Linux and attach run logs to API compatibility tickets.
