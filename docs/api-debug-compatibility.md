@@ -37,6 +37,11 @@ For each endpoint, document:
 4. Attach manual test evidence.
 5. Record reviewer decision.
 
+Current ticket set:
+
+- `docs/API-COMPAT-AUTOMATION-20260205-01.md` (`evaluate_automation_task`)
+- `docs/API-COMPAT-AUTOMATION-20260205-02.md` (`get_automation_manager`)
+
 ## Compatibility Policy
 
 - Additive changes are preferred.

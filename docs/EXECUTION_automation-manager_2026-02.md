@@ -92,6 +92,9 @@ Primary evidence references:
 - `lib/job.js:87` (`launchJob` policy gate)
 - `lib/action.js:132` (`runJobAction` policy gate)
 - `lib/workflow.js:1057` (`continueWFController` policy gate)
+- API compatibility tickets:
+  - `docs/API-COMPAT-AUTOMATION-20260205-01.md`
+  - `docs/API-COMPAT-AUTOMATION-20260205-02.md`
 
 Remediation focus for next cycle:
 

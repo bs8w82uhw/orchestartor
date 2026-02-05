@@ -35,6 +35,7 @@ Focus project development on:
 - Checkpoint fixed on 2026-02-05: current documentation baseline accepted; continue from "Next Tasks" in the next cycle.
 - Next Tasks item 1 completed: role SLA/SLO contract documented (`docs/automation-role-sla-slo.md`).
 - Next Tasks item 1 (updated list) is in progress: method-by-method debug matrix published with evidence baseline (`docs/method-catalog-automation-manager.md`).
+- Next Tasks item 2 in progress: second API compatibility ticket added for `get_automation_manager` (`docs/API-COMPAT-AUTOMATION-20260205-02.md`).
 
 ## Next Tasks (Continue From Here)
 
