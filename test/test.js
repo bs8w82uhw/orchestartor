@@ -52,6 +52,7 @@ module.exports = {
 			require('./suites/test-secrets.js').tests,
 			require('./suites/test-roles.js').tests,
 			require('./suites/test-apikeys.js').tests,
+			require('./suites/test-privilege-access.js').tests,
 			require('./suites/test-tags.js').tests,
 			require('./suites/test-servers.js').tests,
 			require('./suites/test-webhooks.js').tests,
