@@ -16,8 +16,8 @@ title: Управление документацией (RU)
 5. Для high-risk документов обязательны разделы policy, escalation и evidence.
 6. Любое API-изменение требует:
    - обновления `docs/api.md`;
-   - билета совместимости по `docs/API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md`;
-   - evidence автономного и ручного теста по `docs/api-debug-compatibility.md`.
+   - билета совместимости по `docs/automation/API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md`;
+   - evidence автономного и ручного теста по `docs/automation/api-debug-compatibility.md`.
 
 ## Правила ветки и ревью
 
@@ -60,8 +60,8 @@ title: Управление документацией (RU)
 
 Документ governance обязателен как контрольная плоскость для:
 
-- `docs/api-debug-compatibility.md`
-- `docs/API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md`
-- `docs/API-COMPAT-AUTOMATION-20260205-01.md`
+- `docs/automation/api-debug-compatibility.md`
+- `docs/automation/API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md`
+- `docs/automation/API-COMPAT-AUTOMATION-20260205-01.md`
 
 Правило: API-билет и evidence считаются валидными только при соблюдении governance-процесса.

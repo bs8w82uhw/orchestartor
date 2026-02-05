@@ -54,9 +54,9 @@ Primary enforcement methods:
 Each matrix-relevant change must include:
 
 1. API doc update (`docs/api.md`).
-2. Compatibility contract ticket (`docs/API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md`).
-3. Autonomous and manual evidence (`docs/api-debug-compatibility.md`).
-4. Method-level contract debug trace (`docs/contract-debug-stages.md`).
+2. Compatibility contract ticket (`docs/automation/API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md`).
+3. Autonomous and manual evidence (`docs/automation/api-debug-compatibility.md`).
+4. Method-level contract debug trace (`docs/automation/contract-debug-stages.md`).
 
 ## Escalation Contract
 

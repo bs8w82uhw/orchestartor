@@ -3,114 +3,6 @@
   "generated_at": "2026-02-05",
   "items": [
     {
-      "path": "docs/API-COMPAT-AUTOMATION-20260205-01.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/API-COMPAT-AUTOMATION-20260205-02.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/API-COMPAT-AUTOMATION-20260205-03.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/API-COMPAT-AUTOMATION-20260205-04.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "medium",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/CONTRACT_TEMPLATE.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "medium",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/DOCS_GOVERNANCE.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/EXECUTION_EVIDENCE_TEMPLATE.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "medium",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/EXECUTION_automation-manager_2026-02.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/GRAMAX_SYNC.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/METHOD_TEMPLATE.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "medium",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/POLICY_TEMPLATE.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "medium",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
       "path": "docs/actions.md",
       "owner": "docs-core",
       "status": "active",
@@ -118,15 +10,6 @@
       "risk_level": "medium",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
-    },
-    {
-      "path": "docs/ai-automation-knowledge-strategy.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/alerts.md",
@@ -138,15 +21,6 @@
       "next_review_at": "2026-05-05"
     },
     {
-      "path": "docs/api-debug-compatibility.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
       "path": "docs/api.md",
       "owner": "docs-core",
       "status": "active",
@@ -156,7 +30,7 @@
       "next_review_at": "2026-05-05"
     },
     {
-      "path": "docs/automation-manager-architecture.md",
+      "path": "docs/automation/API-COMPAT-AUTOMATION-20260205-01.md",
       "owner": "docs-core",
       "status": "active",
       "agent_ready": true,
@@ -165,7 +39,7 @@
       "next_review_at": "2026-05-06"
     },
     {
-      "path": "docs/automation-permission-matrix.md",
+      "path": "docs/automation/API-COMPAT-AUTOMATION-20260205-02.md",
       "owner": "docs-core",
       "status": "active",
       "agent_ready": true,
@@ -174,11 +48,272 @@
       "next_review_at": "2026-05-06"
     },
     {
-      "path": "docs/automation-role-sla-slo.md",
+      "path": "docs/automation/API-COMPAT-AUTOMATION-20260205-03.md",
       "owner": "docs-core",
       "status": "active",
       "agent_ready": true,
       "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/API-COMPAT-AUTOMATION-20260205-04.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/CONTRACT_TEMPLATE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/DOCS_GOVERNANCE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/EXECUTION_EVIDENCE_TEMPLATE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/EXECUTION_automation-manager_2026-02.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/GRAMAX_SYNC.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/METHOD_TEMPLATE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/POLICY_TEMPLATE.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ai-automation-knowledge-strategy.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/api-debug-compatibility.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/automation-manager-architecture.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/automation-permission-matrix.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/automation-role-sla-slo.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/contract-debug-stages.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/index.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/method-catalog-automation-manager.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/policies-contracts-execution.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-api-compatibility-contract-ticket-template.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-api-debug-compatibility.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-contract-debug-stages.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-docs-governance.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-gramax-sync.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-index.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-method-catalog-automation-manager.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-method-template.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-policies-contracts-execution.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/ru/ru-testing-docker-compose.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
+      "path": "docs/automation/testing-docker-compose.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "medium",
       "last_reviewed_at": "2026-02-05",
       "next_review_at": "2026-05-06"
     },
@@ -235,15 +370,6 @@
       "risk_level": "medium",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
-    },
-    {
-      "path": "docs/contract-debug-stages.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/cronicle.md",
@@ -354,15 +480,6 @@
       "next_review_at": "2026-05-05"
     },
     {
-      "path": "docs/method-catalog-automation-manager.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
       "path": "docs/monitors.md",
       "owner": "docs-core",
       "status": "active",
@@ -390,15 +507,6 @@
       "next_review_at": "2026-05-05"
     },
     {
-      "path": "docs/policies-contracts-execution.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
       "path": "docs/privileges.md",
       "owner": "docs-core",
       "status": "active",
@@ -415,96 +523,6 @@
       "risk_level": "medium",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
-    },
-    {
-      "path": "docs/ru-api-compatibility-contract-ticket-template.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "medium",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/ru-api-debug-compatibility.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/ru-contract-debug-stages.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/ru-docs-governance.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/ru-gramax-sync.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/ru-index.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "medium",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/ru-method-catalog-automation-manager.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/ru-method-template.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "medium",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/ru-policies-contracts-execution.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "high",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
-    },
-    {
-      "path": "docs/ru-testing-docker-compose.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "medium",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/scaling.md",
@@ -586,15 +604,6 @@
       "risk_level": "medium",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
-    },
-    {
-      "path": "docs/testing-docker-compose.md",
-      "owner": "docs-core",
-      "status": "active",
-      "agent_ready": true,
-      "risk_level": "medium",
-      "last_reviewed_at": "2026-02-05",
-      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/tickets.md",

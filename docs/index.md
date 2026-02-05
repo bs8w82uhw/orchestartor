@@ -6,9 +6,10 @@ title: Documentation Index
 
 Welcome to the xyOps documentation. xyOps is a job scheduler, workflow engine, and server monitoring platform with a built-in web UI and REST API. This index organizes the docs into logical sections with short summaries to help you find what you need quickly. If you are deploying xyOps, start with Self-Hosting.
 
-Russian docs hub:
+Automation documentation hub:
 
-- [**Документация (RU)**](ru-index.md)
+- [**AI Automation Hub**](automation/index.md)
+- [**Документация (RU)**](automation/ru/ru-index.md)
 
 ## Getting Started
 
@@ -52,12 +53,6 @@ Russian docs hub:
 ## API & Data
 
 -  [**REST API**](api.md): REST API endpoints, API keys, authentication, and standard response format.
--  [**API Debug and Compatibility Contract**](api-debug-compatibility.md): Mandatory API debug documentation and compatibility workflow.
--  [**API Compatibility Contract Ticket Template**](API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md): Template for endpoint-level compatibility sign-off.
--  [**API Compat Ticket (evaluate_automation_task)**](API-COMPAT-AUTOMATION-20260205-01.md): First endpoint compatibility ticket with autonomous/manual test plan.
--  [**API Compat Ticket (get_automation_manager)**](API-COMPAT-AUTOMATION-20260205-02.md): Status endpoint compatibility ticket with decision-history checks.
--  [**API Compat Ticket (run_event policy gate)**](API-COMPAT-AUTOMATION-20260205-03.md): Runtime launch compatibility under Automation Manager enforcement.
--  [**API Compat Ticket (workflow continue policy gate)**](API-COMPAT-AUTOMATION-20260205-04.md): Workflow controller continue-stage compatibility under policy enforcement.
 -  [**Data Structures**](data.md): Complete schemas for all xyOps objects (jobs, events, users, servers, alerts, etc.).
 -  [**Database Tables**](db.md): A list of all the internal xyOps database tables and column indexes.
 
@@ -78,21 +73,7 @@ Russian docs hub:
 
 -  [**Contributing**](https://github.com/pixlcore/xyops/blob/main/CONTRIBUTING.md): How to contribute to xyOps.
 -  [**Development**](dev.md): Architecture overview, component list, client framework, and local dev setup.
--  [**Testing with Docker Compose**](testing-docker-compose.md): Containerized autonomous and manual test modes.
--  [**AI Automation Strategy**](ai-automation-knowledge-strategy.md): Multi-agent model, governance framework, and knowledge-system approach.
--  [**Automation Manager Architecture**](automation-manager-architecture.md): Control loop, permission matrix, escalation model, and enforcement points.
--  [**Automation Permission Matrix**](automation-permission-matrix.md): Role/action/risk approvals and decision outcomes for policy enforcement.
--  [**Automation Role SLA/SLO Contract**](automation-role-sla-slo.md): Measurable reliability targets and breach handling per AI role.
--  [**Policies, Contracts, and Execution**](policies-contracts-execution.md): Documentation standard for policy rules, role contracts, and execution evidence.
--  [**Method Template**](METHOD_TEMPLATE.md): Standard template for documenting method contracts.
--  [**Method Catalog (Automation Manager)**](method-catalog-automation-manager.md): Tracked methods with policy and enforcement contracts.
--  [**Contract Debug Stages**](contract-debug-stages.md): Step-by-step method debug process against contracts.
--  [**Policy Template**](POLICY_TEMPLATE.md): Reusable template for policy documents.
--  [**Contract Template**](CONTRACT_TEMPLATE.md): Reusable template for operational contracts.
--  [**Execution Evidence Template**](EXECUTION_EVIDENCE_TEMPLATE.md): Reusable template for run evidence and audit trails.
--  [**Execution Evidence (Automation Manager, 2026-02)**](EXECUTION_automation-manager_2026-02.md): First execution log for policy/enforcement rollout.
--  [**Docs Governance**](DOCS_GOVERNANCE.md): Rules for PR flow, reviews, lifecycle statuses, and weekly hygiene.
--  [**Gramax Sync Setup**](GRAMAX_SYNC.md): Repository-to-Gramax sync workflow and webhook setup.
+-  [**AI Automation Hub**](automation/index.md): Governance, contracts, templates, API compatibility, and execution evidence.
 -  [**Logging**](logging.md): A list of all xyOps log files including descriptions and example rows.
 -  [**Security**](security.md): How to report xyOps vulnerabilities responsibly.
 

@@ -21,7 +21,7 @@ npm run dev
 
 ## Knowledge Base
 
-- Canonical URL: `https://app.gram.ax/github.com/bs8w82uhw/orchestartor/main/`
+- Canonical URL: `https://app.gram.ax/github.com/bs8w82uhw/knowladge/master/`
 
 ## Repo Map
 
@@ -31,8 +31,9 @@ npm run dev
 -  `bin/`: operational scripts (`build`, `debug`, `control`).
 -  `sample_conf/`: local config and email templates.
 -  `TASKS.md`: current prioritized backlog and direction.
--  `docs/ai-automation-knowledge-strategy.md`: AI automation + multi-agent governance model.
--  `docs/DOCS_GOVERNANCE.md`: docs lifecycle, review, and quality rules.
+-  `docs/index.md`: core xyOps product documentation index.
+-  `docs/automation/index.md`: AI automation governance/contracts documentation hub.
+-  `docs/automation/DOCS_GOVERNANCE.md`: docs lifecycle, review, and quality rules.
 -  `docs/knowledge-registry.json`: owner/status/review metadata for all docs pages.
 
 ## Practical Workflow

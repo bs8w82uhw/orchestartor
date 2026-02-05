@@ -21,8 +21,8 @@ title: Execution Evidence - Automation Manager (2026-02)
 
 ## Contract Reference
 
-- Method catalog: `docs/method-catalog-automation-manager.md`
-- Debug process: `docs/contract-debug-stages.md`
+- Method catalog: `docs/automation/method-catalog-automation-manager.md`
+- Debug process: `docs/automation/contract-debug-stages.md`
 
 ## Actions Performed
 
@@ -70,7 +70,7 @@ title: Execution Evidence - Automation Manager (2026-02)
 ## Next Debug Cycle
 
 - Run stage-by-stage debug for each method in:
-  - `docs/method-catalog-automation-manager.md`
+  - `docs/automation/method-catalog-automation-manager.md`
 - Record pass/fail per method and remediation tasks.
 - Record autonomous/manual coverage for each method contract.
 
@@ -78,7 +78,7 @@ title: Execution Evidence - Automation Manager (2026-02)
 
 Method matrix published in:
 
-- `docs/method-catalog-automation-manager.md` (section: Method-by-Method Debug Matrix)
+- `docs/automation/method-catalog-automation-manager.md` (section: Method-by-Method Debug Matrix)
 
 Current snapshot:
 
@@ -93,10 +93,10 @@ Primary evidence references:
 - `lib/action.js:132` (`runJobAction` policy gate)
 - `lib/workflow.js:1057` (`continueWFController` policy gate)
 - API compatibility tickets:
-  - `docs/API-COMPAT-AUTOMATION-20260205-01.md`
-  - `docs/API-COMPAT-AUTOMATION-20260205-02.md`
-  - `docs/API-COMPAT-AUTOMATION-20260205-03.md`
-  - `docs/API-COMPAT-AUTOMATION-20260205-04.md`
+  - `docs/automation/API-COMPAT-AUTOMATION-20260205-01.md`
+  - `docs/automation/API-COMPAT-AUTOMATION-20260205-02.md`
+  - `docs/automation/API-COMPAT-AUTOMATION-20260205-03.md`
+  - `docs/automation/API-COMPAT-AUTOMATION-20260205-04.md`
 
 Remediation focus for next cycle:
 

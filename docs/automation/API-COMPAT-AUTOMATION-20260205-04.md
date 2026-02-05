@@ -73,7 +73,7 @@ title: API Compatibility Contract Ticket - workflow continue policy gate
 - Logs/traces:
   - `lib/workflow.js:1028`
   - `lib/workflow.js:1066`
-  - `docs/method-catalog-automation-manager.md` (`continueWFController` row)
+  - `docs/automation/method-catalog-automation-manager.md` (`continueWFController` row)
 
 ## Decision
 

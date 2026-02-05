@@ -11,7 +11,7 @@ Define the execution architecture for AI automation in xyOps:
 - escalation model,
 - and multi-agent handoff contracts.
 
-This is the implementation-level companion to `docs/ai-automation-knowledge-strategy.md`.
+This is the implementation-level companion to `docs/automation/ai-automation-knowledge-strategy.md`.
 
 ## Control Loop
 
@@ -32,7 +32,7 @@ This is the implementation-level companion to `docs/ai-automation-knowledge-stra
 
 ## Permission Matrix (Role Boundaries)
 
-Detailed matrix reference: `docs/automation-permission-matrix.md`.
+Detailed matrix reference: `docs/automation/automation-permission-matrix.md`.
 
 ### Planner
 
@@ -81,8 +81,8 @@ Current runtime enforcement points:
 
 Method-level contracts are tracked in:
 
-- `docs/method-catalog-automation-manager.md`
-- `docs/contract-debug-stages.md`
+- `docs/automation/method-catalog-automation-manager.md`
+- `docs/automation/contract-debug-stages.md`
 
 ## Contract-Driven Test Model
 
@@ -99,11 +99,11 @@ For every endpoint/method change:
 
 ## Operational Artifacts
 
-- Policy template: `docs/POLICY_TEMPLATE.md`
-- Contract template: `docs/CONTRACT_TEMPLATE.md`
-- Execution evidence template: `docs/EXECUTION_EVIDENCE_TEMPLATE.md`
-- Role SLA/SLO contract: `docs/automation-role-sla-slo.md`
-- Governance rules: `docs/DOCS_GOVERNANCE.md`
+- Policy template: `docs/automation/POLICY_TEMPLATE.md`
+- Contract template: `docs/automation/CONTRACT_TEMPLATE.md`
+- Execution evidence template: `docs/automation/EXECUTION_EVIDENCE_TEMPLATE.md`
+- Role SLA/SLO contract: `docs/automation/automation-role-sla-slo.md`
+- Governance rules: `docs/automation/DOCS_GOVERNANCE.md`
 
 ## KPI Baseline
 

@@ -31,15 +31,16 @@ Focus project development on:
 
 ## Progress Notes
 
-- Core direction advanced: Automation Manager architecture and permission matrix are now documented (`docs/automation-manager-architecture.md`, `docs/automation-permission-matrix.md`).
+- Core direction advanced: Automation Manager architecture and permission matrix are now documented (`docs/automation/automation-manager-architecture.md`, `docs/automation/automation-permission-matrix.md`).
 - Checkpoint fixed on 2026-02-05: current documentation baseline accepted; continue from "Next Tasks" in the next cycle.
-- Next Tasks item 1 completed: role SLA/SLO contract documented (`docs/automation-role-sla-slo.md`).
-- Next Tasks item 1 (updated list) is in progress: method-by-method debug matrix published with evidence baseline (`docs/method-catalog-automation-manager.md`).
-- Next Tasks item 2 in progress: second API compatibility ticket added for `get_automation_manager` (`docs/API-COMPAT-AUTOMATION-20260205-02.md`).
-- Next Tasks item 2 advanced: third API compatibility ticket added for `run_event` policy gate (`docs/API-COMPAT-AUTOMATION-20260205-03.md`).
-- Next Tasks item 2 advanced: fourth API compatibility ticket added for workflow continue policy gate (`docs/API-COMPAT-AUTOMATION-20260205-04.md`).
+- Next Tasks item 1 completed: role SLA/SLO contract documented (`docs/automation/automation-role-sla-slo.md`).
+- Next Tasks item 1 (updated list) is in progress: method-by-method debug matrix published with evidence baseline (`docs/automation/method-catalog-automation-manager.md`).
+- Next Tasks item 2 in progress: second API compatibility ticket added for `get_automation_manager` (`docs/automation/API-COMPAT-AUTOMATION-20260205-02.md`).
+- Next Tasks item 2 advanced: third API compatibility ticket added for `run_event` policy gate (`docs/automation/API-COMPAT-AUTOMATION-20260205-03.md`).
+- Next Tasks item 2 advanced: fourth API compatibility ticket added for workflow continue policy gate (`docs/automation/API-COMPAT-AUTOMATION-20260205-04.md`).
 - Next Tasks item 2 completed: API compatibility coverage expanded with four automation tickets (`...-01` to `...-04`).
-- Next Tasks item 3 completed: RU mirror added for method catalog (`docs/ru-method-catalog-automation-manager.md`).
+- Next Tasks item 3 completed: RU mirror added for method catalog (`docs/automation/ru/ru-method-catalog-automation-manager.md`).
+- Documentation structure standardized: AI automation docs moved to `docs/automation/` and separated from core xyOps docs index.
 
 ## Next Tasks (Continue From Here)
 

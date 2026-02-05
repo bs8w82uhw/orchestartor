@@ -76,7 +76,7 @@ title: API Compatibility Contract Ticket - run_event policy gate
 - Logs/traces:
   - `lib/api/events.js:373`
   - `lib/job.js:87`
-  - `docs/method-catalog-automation-manager.md` (policy-gated methods matrix)
+  - `docs/automation/method-catalog-automation-manager.md` (policy-gated methods matrix)
 
 ## Decision
 

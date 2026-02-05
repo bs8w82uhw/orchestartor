@@ -51,12 +51,12 @@ When any SLA trigger fires:
 
 - API decision payloads (`evaluate_automation_task`).
 - Runtime policy gates in job/action/workflow logs.
-- Method contract debug records (`docs/contract-debug-stages.md` outcomes).
-- Execution evidence logs (`docs/EXECUTION_automation-manager_2026-02.md` and subsequent files).
+- Method contract debug records (`docs/automation/contract-debug-stages.md` outcomes).
+- Execution evidence logs (`docs/automation/EXECUTION_automation-manager_2026-02.md` and subsequent files).
 
 ## Governance Links
 
-- Architecture: `docs/automation-manager-architecture.md`
-- Permission matrix: `docs/automation-permission-matrix.md`
-- Policy/contract/evidence standard: `docs/policies-contracts-execution.md`
-- Docs governance: `docs/DOCS_GOVERNANCE.md`
+- Architecture: `docs/automation/automation-manager-architecture.md`
+- Permission matrix: `docs/automation/automation-permission-matrix.md`
+- Policy/contract/evidence standard: `docs/automation/policies-contracts-execution.md`
+- Docs governance: `docs/automation/DOCS_GOVERNANCE.md`
