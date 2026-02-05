@@ -32,6 +32,8 @@ This is the implementation-level companion to `docs/ai-automation-knowledge-stra
 
 ## Permission Matrix (Role Boundaries)
 
+Detailed matrix reference: `docs/automation-permission-matrix.md`.
+
 ### Planner
 
 - Allowed: decompose tasks, select methods, assign risk.

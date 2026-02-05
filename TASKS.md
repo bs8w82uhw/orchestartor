@@ -29,6 +29,10 @@ Focus project development on:
 13. Enforce API compatibility contract tickets for every endpoint change.
 14. Maintain Russian-language mirrors for policy/contract/API-debug documentation.
 
+## Progress Notes
+
+- Core direction advanced: Automation Manager architecture and permission matrix are now documented (`docs/automation-manager-architecture.md`, `docs/automation-permission-matrix.md`).
+
 ## Documentation System Rollout Tasks
 
 1. Canonical knowledge base URL is set: `https://app.gram.ax/github.com/bs8w82uhw/knowladge/master/`.
