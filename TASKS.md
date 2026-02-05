@@ -38,13 +38,13 @@ Focus project development on:
 - Next Tasks item 2 in progress: second API compatibility ticket added for `get_automation_manager` (`docs/API-COMPAT-AUTOMATION-20260205-02.md`).
 - Next Tasks item 2 advanced: third API compatibility ticket added for `run_event` policy gate (`docs/API-COMPAT-AUTOMATION-20260205-03.md`).
 - Next Tasks item 2 advanced: fourth API compatibility ticket added for workflow continue policy gate (`docs/API-COMPAT-AUTOMATION-20260205-04.md`).
+- Next Tasks item 2 completed: API compatibility coverage expanded with four automation tickets (`...-01` to `...-04`).
+- Next Tasks item 3 completed: RU mirror added for method catalog (`docs/ru-method-catalog-automation-manager.md`).
 
 ## Next Tasks (Continue From Here)
 
 1. Complete method-by-method contract debug execution and fill pass/partial/fail matrix with evidence links.
-2. Expand API compatibility tickets to all changed endpoints (not only `evaluate_automation_task`).
-3. Add RU mirror for `docs/method-catalog-automation-manager.md`.
-4. Unblock Gramax webhook secret and run manual sync verification.
+2. Unblock Gramax webhook secret and run manual sync verification.
 
 ## Documentation System Rollout Tasks
 
@@ -55,7 +55,3 @@ Focus project development on:
 4. Adopt docs PR template for all documentation updates.
 5. Keep `docs/knowledge-registry.json` updated in every docs change.
 6. Review weekly "Docs Hygiene" issue and close gaps.
-
-## Deferred (Not Blocking Core Direction)
-
-- RU mirror for `docs/method-catalog-automation-manager.md` (parked, return after core architecture track completion).

@@ -10,6 +10,7 @@ title: Документация (RU)
 
 - [Политики, контракты и исполнение](ru-policies-contracts-execution.md)
 - [Шаблон метода](ru-method-template.md)
+- [Каталог методов (Automation Manager)](ru-method-catalog-automation-manager.md)
 - [Шаблон билета совместимости API](ru-api-compatibility-contract-ticket-template.md)
 - [Отладка API и контракт совместимости](ru-api-debug-compatibility.md)
 - [Этапы отладки контрактов](ru-contract-debug-stages.md)

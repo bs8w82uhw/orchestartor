@@ -6,6 +6,8 @@ title: Method Catalog - Automation Manager
 
 This catalog tracks methods involved in Automation Manager policy evaluation and enforcement.
 
+Russian mirror: `docs/ru-method-catalog-automation-manager.md`.
+
 ## Contract Debug Tracking
 
 Use the following status fields for each method:
