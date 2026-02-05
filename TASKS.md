@@ -1,5 +1,6 @@
 ---
 title: Project Task Backlog
+order: 9
 ---
 
 ## Priority Direction (Approved)

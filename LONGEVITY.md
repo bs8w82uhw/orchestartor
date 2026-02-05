@@ -1,5 +1,6 @@
 ---
 title: xyOps Longevity Pledge
+order: 7
 ---
 
 This document describes the long-term commitments that PixlCore LLC and I, Joseph Huckaby, make regarding the stewardship, licensing, and future of the xyOps project. It supplements, but does not replace, the legal terms defined in the LICENSE file. Your actual enforceable rights come from that license; this pledge explains the principles we commit to follow as maintainers.

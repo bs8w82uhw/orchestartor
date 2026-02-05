@@ -1,5 +1,6 @@
 ---
 title: xyOps Changelog
+order: 2
 ---
 
 ## Version v0.9.51

@@ -1,5 +1,6 @@
 ---
 title: Contributing to xyOps
+order: 5
 ---
 
 We love open source, and we're thrilled that you want to help make **xyOps** even better!  Please read this document carefully before contributing. It explains how to work effectively with the xyOps team and where your efforts can have the biggest impact.

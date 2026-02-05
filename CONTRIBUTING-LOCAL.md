@@ -1,5 +1,6 @@
 ---
 title: Local Contributing Workflow
+order: 4
 ---
 
 This file is a practical local workflow companion to `CONTRIBUTING.md`.

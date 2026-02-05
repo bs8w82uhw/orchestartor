@@ -1,5 +1,6 @@
 ---
 title: Contributor Covenant Code of Conduct
+order: 3
 ---
 
 ## Our Pledge

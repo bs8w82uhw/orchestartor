@@ -1,5 +1,6 @@
 ---
 title: xyOps™
+order: 8
 ---
 
 ![xyOps Screenshot](https://pixlcore.com/images/blog/xyops/workflow-edit.webp)

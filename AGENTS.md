@@ -1,5 +1,6 @@
 ---
 title: Workspace Guide for Coding Agents
+order: 1
 ---
 
 ## Quick Start
