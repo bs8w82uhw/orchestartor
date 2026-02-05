@@ -44,6 +44,7 @@ Focus project development on:
 - Gramax navigation split defined: `Product Docs` vs `Automation Governance Docs` (`docs/automation/GRAMAX_NAVIGATION.md`).
 - Gramax writing standard added: docs-as-code technical writing style and AI-agent adaptation (`docs/automation/GRAMAX_DOCS_AS_CODE_STYLE.md` + RU mirror).
 - Applied style baseline to key governance docs: policies/contracts, API debug compatibility, and method catalog (Purpose/Scope/Preconditions/Procedure/Failure/Escalation/Evidence).
+- Applied same style baseline to RU mirrors for these key governance docs.
 
 ## Next Tasks (Continue From Here)
 

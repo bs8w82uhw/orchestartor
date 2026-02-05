@@ -2,6 +2,10 @@
 title: Каталог методов — Automation Manager (RU)
 ---
 
+## Назначение
+
+Трекать контрактный статус методов Automation Manager и прогресс отладки.
+
 ## Область
 
 Каталог фиксирует методы Automation Manager для policy evaluation и enforcement.
@@ -12,6 +16,20 @@ title: Каталог методов — Automation Manager (RU)
 
 - `autonomous`: `pending` / `pass` / `partial` / `fail`
 - `manual`: `pending` / `pass` / `partial` / `fail`
+
+## Предусловия
+
+- Контракт метода определен.
+- Тестовая область разбита на autonomous/manual.
+- Определены evidence-источники (тесты/логи/код-ссылки).
+
+## Процедура
+
+1. Выбрать метод и проверить поля контракта (input/output/side effects).
+2. Выполнить autonomous проверки и записать статус.
+3. Выполнить manual walkthrough и записать статус.
+4. Привязать evidence ссылки.
+5. Для `partial|fail|pending` зафиксировать remediation-step.
 
 ## Матрица отладки по методам (цикл 2026-02-05)
 
@@ -32,6 +50,26 @@ title: Каталог методов — Automation Manager (RU)
 
 - Autonomous: `pass=3`, `partial=4`, `pending=3`, `fail=0`.
 - Manual: `pending=10`.
+
+## Сценарии отказа
+
+- У метода нет evidence-ссылки.
+- Статус `pass` проставлен без полного набора проверок.
+- Есть разрыв между manual и autonomous без remediation note.
+- Для enforcement-методов нет deny/allow покрытия.
+
+## Эскалация
+
+- Любой `fail` на policy-gated методах эскалируется в Safety/Audit review.
+- `pending` на high-risk методах блокирует full sign-off.
+- Для `partial|fail` обязательна remediation-задача с owner и датой.
+
+## Чеклист доказательств
+
+- [ ] Статус метода обновлен в матрице.
+- [ ] Есть ссылка на autonomous evidence.
+- [ ] Есть manual evidence или причина `pending`.
+- [ ] Для non-pass статуса указан remediation-step.
 
 ## API-методы
 
