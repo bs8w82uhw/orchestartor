@@ -77,11 +77,16 @@ title: API Compatibility Contract Ticket - workflow continue policy gate
   - Runbook for completion: `docs/automation/EVIDENCE_RUNBOOK_WSL2_DOCKER.md`
   - Autonomous run (2026-02-05): `docker compose -f docker-compose.test.yml --profile auto run --rm xyops-test-auto` reached test execution but failed before ticket sign-off.
   - Follow-up run (2026-02-05): `docker compose ... run --rm xyops-test-auto sh -lc "mkdir -p conf && cp -rf sample_conf/* conf/ && npm install --include=dev && npm test"` executed test harness and failed with runtime exception.
+  - Verification run (2026-02-05): `docker compose -f docker-compose.test.yml --profile auto run --rm xyops-test-auto sh -lc "mkdir -p conf && cp -rf sample_conf/* conf/ && npm install --include=dev && npm test"` completed full suite with summary:
+    - `Tests passed: 356 of 375`
+    - `Tests failed: 19 of 375`
+    - `Time Elapsed: 3 minutes, 25 seconds`
 - Logs/traces:
   - `lib/workflow.js:1028`
   - `lib/workflow.js:1066`
   - `docs/automation/method-catalog-automation-manager.md` (`continueWFController` row)
-  - Failure trace: `TypeError: Cannot read properties of undefined (reading 'forEach')` in `lib/monitor.js:908` via `handleQuickMonData`
+- Failure trace: `TypeError: Cannot read properties of undefined (reading 'forEach')` in `lib/monitor.js:908` via `handleQuickMonData`
+  - Fix applied in workspace: defensive guards for `server.groups` and delayed `last_time_code` mark in `lib/monitor.js`.
 
 ## Decision
 
@@ -124,7 +129,8 @@ title: API Compatibility Contract Ticket - workflow continue policy gate
 - Date: 2026-02-05
 - Notes:
   - Environment/tooling blockers were removed.
-  - Remaining blocker is runtime crash in monitor path, unrelated to ticket schema contract.
+- Remaining blocker is runtime crash in monitor path, unrelated to ticket schema contract.
+- Runtime crash in monitor path is fixed in workspace; autonomous suite still has 19 failing tests and requires separate stabilization before contract sign-off.
   - Ticket stays `conditional` until deny/allow scenario evidence for workflow continue gate is attached.
 
 ## Evidence Update Template (Copy/Paste)
