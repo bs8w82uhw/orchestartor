@@ -13,6 +13,26 @@ Use the following status fields for each method:
 - `autonomous`: `pending` / `pass` / `partial` / `fail`
 - `manual`: `pending` / `pass` / `partial` / `fail`
 
+## Method-by-Method Debug Matrix (Cycle 2026-02-05)
+
+| Method | Autonomous | Manual | Evidence | Remediation / Next Step |
+|--------|------------|--------|----------|--------------------------|
+| `api_get_automation_manager` | pass | pending | `test/suites/test-admin.js:208` | Add manual operator check for role visibility and recent decisions payload. |
+| `api_evaluate_automation_task` | pass | pending | `test/suites/test-admin.js:218` | Add manual deny-path checks in enforced mode and approval toggle scenarios. |
+| `automationManagerSetup` | partial | pending | `lib/automation-manager.js` + API smoke via `test/suites/test-admin.js:208` | Add direct init contract test (config permutations). |
+| `getAutomationManagerStatus` | partial | pending | Indirect via `api_get_automation_manager` (`test/suites/test-admin.js:208`) | Add direct shape/sanitization test on manager state copy. |
+| `evaluateAutomationPolicy` | partial | pending | Indirect via `api_evaluate_automation_task` (`test/suites/test-admin.js:218`) | Add autonomous matrix tests for low/medium/high + allow/deny outcomes. |
+| `recordAutomationDecision` | partial | pending | Indirect decision flow via `lib/api/automation.js:45` | Add ring-buffer limit test (100 max) and ordering assertions. |
+| `normalizeAutomationRisk` | pass | pending | Risk normalization assert (`test/suites/test-admin.js:229`) | Add malformed-risk fallback tests (`null`, unknown string). |
+| `launchJob` (policy gate) | pending | pending | Gate implementation `lib/job.js:87` | Add autonomous deny/allow tests with enforced mode. |
+| `runJobAction` (policy gate) | pending | pending | Gate implementation `lib/action.js:132` | Add autonomous deny-path tests and meta-log assertions. |
+| `continueWFController` (policy gate) | pending | pending | Gate implementation `lib/workflow.js:1057` | Add workflow-level contract tests + manual walkthrough. |
+
+### Coverage Snapshot
+
+- Autonomous: `pass=3`, `partial=4`, `pending=3`, `fail=0`.
+- Manual: `pending=10` (operator cycle not yet executed).
+
 ## API Methods
 
 ### api_get_automation_manager

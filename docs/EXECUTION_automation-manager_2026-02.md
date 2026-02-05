@@ -73,3 +73,28 @@ title: Execution Evidence - Automation Manager (2026-02)
   - `docs/method-catalog-automation-manager.md`
 - Record pass/fail per method and remediation tasks.
 - Record autonomous/manual coverage for each method contract.
+
+## Debug Cycle Update (2026-02-05, Matrix Baseline)
+
+Method matrix published in:
+
+- `docs/method-catalog-automation-manager.md` (section: Method-by-Method Debug Matrix)
+
+Current snapshot:
+
+- Autonomous coverage status: `pass=3`, `partial=4`, `pending=3`, `fail=0`.
+- Manual coverage status: `pending=10`.
+
+Primary evidence references:
+
+- `test/suites/test-admin.js:208` (`get_automation_manager`)
+- `test/suites/test-admin.js:218` (`evaluate_automation_task`)
+- `lib/job.js:87` (`launchJob` policy gate)
+- `lib/action.js:132` (`runJobAction` policy gate)
+- `lib/workflow.js:1057` (`continueWFController` policy gate)
+
+Remediation focus for next cycle:
+
+1. Add autonomous tests for enforcement gates (`launchJob`, `runJobAction`, `continueWFController`).
+2. Execute manual operator walkthrough and attach deny/allow evidence with timestamps.
+3. Convert indirect method checks to direct contract tests for manager internals.
