@@ -35,3 +35,6 @@
 /test/logs/Scheduler.log
 /test/logs/Secret.log
 /test/logs/Workflow.log
+
+# Local tooling
+/.langflow/

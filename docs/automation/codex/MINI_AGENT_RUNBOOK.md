@@ -21,6 +21,9 @@ A step-by-step conveyor flow for running the mini agent via Codex CLI (MFA login
    - Prompt is single-shot: do not reuse it after response.
 6. **Primary Assignment**
    - Refactor documentation sections and enforce one consistent structure/style across related docs.
+7. **Checklist & Dry Run**
+   - Preflight checklist runs before execution (template path, question, CLI available).
+   - Use `DRY_RUN=1` to print the resolved prompt without executing.
 
 ## Local Run
 
@@ -53,3 +56,9 @@ export NO_PROXY="localhost,127.0.0.1"
 - The shell interface stays the same; only the template changes.
 - Each request is a mini-agent single-shot interaction.
 - If you are in a headless/WSL environment, use `codex login --device-auth`.
+
+## MCP Debug Tools
+
+- Codex CLI and the IDE extension share config at `~/.codex/config.toml`.
+- List MCP servers: `codex mcp list`.
+- Add a server (example): `codex mcp add <name> --url <url>`.
