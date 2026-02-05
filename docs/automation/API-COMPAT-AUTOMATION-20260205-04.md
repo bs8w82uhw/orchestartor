@@ -89,3 +89,38 @@ title: API Compatibility Contract Ticket - workflow continue policy gate
   - Attach autonomous workflow continue deny/allow evidence
   - Attach manual walkthrough evidence with workflow-state snapshots
   - Run autonomous suite in supported environment with Node.js + Docker available (WSL2/Docker/native Linux)
+
+## Evidence Update Template (Copy/Paste)
+
+Use this block after running `docs/automation/EVIDENCE_RUNBOOK_WSL2_DOCKER.md`:
+
+```md
+### Evidence Update (fill after run)
+
+- Autonomous run date:
+- Environment:
+- Autonomous command:
+- Autonomous result:
+- Autonomous log artifact/link:
+
+- Manual run date:
+- Manual environment:
+- Scenario 1 (advisory) result:
+- Scenario 2 (enforced + no approval) result:
+- Workflow state snapshot link:
+- Log trace link:
+
+### Decision Update
+
+- Status: `approved`
+- Reviewer:
+- Date:
+- Notes:
+```
+
+## Approval Transition Checklist
+
+- [ ] Autonomous deny/allow evidence attached.
+- [ ] Manual walkthrough evidence attached.
+- [ ] Workflow state snapshots attached.
+- [ ] Decision switched from `conditional` to `approved`.

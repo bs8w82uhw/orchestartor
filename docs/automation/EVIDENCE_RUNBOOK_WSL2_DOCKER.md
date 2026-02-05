@@ -58,3 +58,31 @@ docker compose -f docker-compose.test.yml --profile manual down
 - [ ] Manual walkthrough timestamp recorded.
 - [ ] Deny/allow traces attached.
 - [ ] Ticket decision updated (`conditional` -> `approved` if complete).
+
+## Ready-to-Paste Ticket Block
+
+Paste into `docs/automation/API-COMPAT-AUTOMATION-20260205-04.md` after evidence run:
+
+```md
+### Evidence Update (fill after run)
+
+- Autonomous run date:
+- Environment:
+- Autonomous command:
+- Autonomous result:
+- Autonomous log artifact/link:
+
+- Manual run date:
+- Manual environment:
+- Scenario 1 (advisory) result:
+- Scenario 2 (enforced + no approval) result:
+- Workflow state snapshot link:
+- Log trace link:
+
+### Decision Update
+
+- Status: `approved`
+- Reviewer:
+- Date:
+- Notes:
+```

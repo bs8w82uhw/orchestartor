@@ -48,6 +48,7 @@ Focus project development on:
 - Autonomous validation blocker captured: local `npm test` blocked by WSL1 environment; move evidence runs to WSL2/Docker/native Linux.
 - Environment probe confirms tooling gap on current host: `node` and `docker` unavailable; evidence runs require WSL2 + Docker integration or native Linux.
 - Evidence execution organized with runbook: `docs/automation/EVIDENCE_RUNBOOK_WSL2_DOCKER.md`.
+- Prepared ready-to-paste evidence + approval template for ticket `API-COMPAT-AUTOMATION-20260205-04`.
 
 ## Next Tasks (Continue From Here)
 
