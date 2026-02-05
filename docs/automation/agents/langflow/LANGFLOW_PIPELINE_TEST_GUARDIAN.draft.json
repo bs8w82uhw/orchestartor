@@ -1,0 +1,164 @@
+{
+  "name": "Test Guardian Pipeline (Draft)",
+  "description": "Draft Langflow pipeline for autonomous test execution, failure analysis, and contract evidence drafting.",
+  "langflow_version": "1.x",
+  "data": {
+    "nodes": [
+      {
+        "id": "input-1",
+        "type": "TextInput",
+        "position": {
+          "x": -980,
+          "y": -40
+        },
+        "data": {
+          "label": "Input",
+          "template": {
+            "scope": "full",
+            "max_issues": 5
+          }
+        }
+      },
+      {
+        "id": "cmd-1",
+        "type": "PythonFunction",
+        "position": {
+          "x": -720,
+          "y": -40
+        },
+        "data": {
+          "label": "Run Tests",
+          "template": {
+            "code": "import subprocess\ncmd = \"npm run test:report\"\nproc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\nreturn {\"exit_code\": proc.returncode, \"stdout\": proc.stdout[-4000:], \"stderr\": proc.stderr[-4000:]}"
+          }
+        }
+      },
+      {
+        "id": "cmd-2",
+        "type": "PythonFunction",
+        "position": {
+          "x": -460,
+          "y": -40
+        },
+        "data": {
+          "label": "Find Artifacts",
+          "template": {
+            "code": "from pathlib import Path\nreports = sorted(Path('docs/automation/reports').glob('TEST-REPORT-*.md'))\nlogs = sorted(Path('test/logs').glob('unit-output-*.log'))\nreturn {\n  \"report_path\": str(reports[-1]) if reports else \"\",\n  \"log_path\": str(logs[-1]) if logs else \"\",\n  \"report_exists\": bool(reports),\n  \"log_exists\": bool(logs)\n}"
+          }
+        }
+      },
+      {
+        "id": "cmd-3",
+        "type": "PythonFunction",
+        "position": {
+          "x": -180,
+          "y": -40
+        },
+        "data": {
+          "label": "Parse Report + Log",
+          "template": {
+            "code": "import re\nfrom pathlib import Path\n\ndef read(p):\n    return Path(p).read_text(encoding='utf-8', errors='ignore') if p else ''\n\nreport = read(inputs.get('report_path', ''))\nlog = read(inputs.get('log_path', ''))\n\nsummary = {\n  'passed': re.findall(r'Tests passed:\\s*(.*)', report),\n  'failed': re.findall(r'Tests failed:\\s*(.*)', report),\n  'elapsed': re.findall(r'Time Elapsed:\\s*(.*)', report)\n}\n\nasserts = re.findall(r'Assert Failed:.*', log)\nruntime = re.findall(r'(TypeError|ReferenceError|SyntaxError|Uncaught Exception).*', log)\n\nreturn {\n  'summary': summary,\n  'assert_failures': asserts[:50],\n  'runtime_errors': runtime[:50],\n  'report_path': inputs.get('report_path', ''),\n  'log_path': inputs.get('log_path', '')\n}"
+          }
+        }
+      },
+      {
+        "id": "llm-1",
+        "type": "ChatModel",
+        "position": {
+          "x": 120,
+          "y": -140
+        },
+        "data": {
+          "label": "Prioritizer",
+          "template": {
+            "system_prompt": "You are Test Guardian. Classify failures into P0/P1/P2. P0 runtime crash, P1 contract/API regression, P2 infra/data instability. Return concise JSON.",
+            "input_template": "{{data}}"
+          }
+        }
+      },
+      {
+        "id": "llm-2",
+        "type": "ChatModel",
+        "position": {
+          "x": 420,
+          "y": -140
+        },
+        "data": {
+          "label": "Planner",
+          "template": {
+            "system_prompt": "Select exactly one primary next fix with file path, rationale, and verification command.",
+            "input_template": "{{prioritized_data}}"
+          }
+        }
+      },
+      {
+        "id": "llm-3",
+        "type": "ChatModel",
+        "position": {
+          "x": 420,
+          "y": 40
+        },
+        "data": {
+          "label": "Contract Draft",
+          "template": {
+            "system_prompt": "Draft Evidence/Decision markdown update for docs/automation/API-COMPAT-AUTOMATION-20260205-04.md based on latest run.",
+            "input_template": "{{prioritized_data}}"
+          }
+        }
+      },
+      {
+        "id": "output-1",
+        "type": "TextOutput",
+        "position": {
+          "x": 740,
+          "y": -40
+        },
+        "data": {
+          "label": "Final Output",
+          "template": {
+            "format": "Run Summary + Top Issues + Next Fix + Contract Update Draft"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "input-1",
+        "target": "cmd-1"
+      },
+      {
+        "source": "cmd-1",
+        "target": "cmd-2"
+      },
+      {
+        "source": "cmd-2",
+        "target": "cmd-3"
+      },
+      {
+        "source": "cmd-3",
+        "target": "llm-1"
+      },
+      {
+        "source": "llm-1",
+        "target": "llm-2"
+      },
+      {
+        "source": "llm-1",
+        "target": "llm-3"
+      },
+      {
+        "source": "llm-2",
+        "target": "output-1"
+      },
+      {
+        "source": "llm-3",
+        "target": "output-1"
+      }
+    ],
+    "viewport": {
+      "x": 0,
+      "y": 0,
+      "zoom": 1
+    }
+  }
+}

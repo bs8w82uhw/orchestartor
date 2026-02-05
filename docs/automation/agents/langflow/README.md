@@ -10,6 +10,7 @@ title: Langflow Agents Catalog
 
 - `SYSTEM_PROMPT_TEST_GUARDIAN.md` — системный промпт агента тестирования.
 - `LANGFLOW_PIPELINE_TEST_GUARDIAN.md` — сценарий пайплайна (узлы/шаги/маршрутизация).
+- `LANGFLOW_PIPELINE_TEST_GUARDIAN.draft.json` — JSON-черновик для импорта/адаптации в Langflow.
 - `AGENT_TASK_TEST_GUARDIAN.md` — формальная постановка задачи агента.
 
 ## Артефакты выполнения
