@@ -109,7 +109,10 @@ Remediation focus for next cycle:
 - Autonomous run attempt command: `npm test`
 - Result: blocked in current environment
 - Error: `WSL 1 is not supported. Please upgrade to WSL 2 or above. Could not determine Node.js install directory`
+- Follow-up probe:
+  - `node -v` -> `node: command not found`
+  - `docker version` -> `docker could not be found in this WSL distro (enable Docker Desktop WSL integration)`
 - Impact:
   - Cannot attach fresh autonomous evidence from this host for workflow continue policy gate.
 - Next action:
-  - Execute the same suite in WSL2/Docker/native Linux and attach run logs to API compatibility tickets.
+  - Execute the same suite in environment with Node.js and Docker available (WSL2 with integration, Docker/native Linux) and attach run logs to API compatibility tickets.

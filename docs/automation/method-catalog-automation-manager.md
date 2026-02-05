@@ -46,7 +46,7 @@ Use the following status fields for each method:
 | `normalizeAutomationRisk` | pass | pending | Risk normalization assert (`test/suites/test-admin.js:229`) | Add malformed-risk fallback tests (`null`, unknown string). |
 | `launchJob` (policy gate) | pending | pending | Gate implementation `lib/job.js:87` | Add autonomous deny/allow tests with enforced mode. |
 | `runJobAction` (policy gate) | pending | pending | Gate implementation `lib/action.js:132` | Add autonomous deny-path tests and meta-log assertions. |
-| `continueWFController` (policy gate) | pending | pending | Gate implementation `lib/workflow.js:1057`; local `npm test` blocked (`WSL 1 is not supported`) | Run autonomous suite on WSL2/Docker/native Linux, then execute manual walkthrough. |
+| `continueWFController` (policy gate) | pending | pending | Gate implementation `lib/workflow.js:1057`; local evidence run blocked (`npm test`: WSL mismatch, `node` missing, `docker` unavailable) | Run autonomous suite in WSL2/Docker/native Linux with Node.js available, then execute manual walkthrough. |
 
 ### Coverage Snapshot
 

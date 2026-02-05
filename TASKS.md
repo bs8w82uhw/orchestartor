@@ -46,6 +46,7 @@ Focus project development on:
 - Applied style baseline to key governance docs: policies/contracts, API debug compatibility, and method catalog (Purpose/Scope/Preconditions/Procedure/Failure/Escalation/Evidence).
 - Applied same style baseline to RU mirrors for these key governance docs.
 - Autonomous validation blocker captured: local `npm test` blocked by WSL1 environment; move evidence runs to WSL2/Docker/native Linux.
+- Environment probe confirms tooling gap on current host: `node` and `docker` unavailable; evidence runs require WSL2 + Docker integration or native Linux.
 
 ## Next Tasks (Continue From Here)
 
