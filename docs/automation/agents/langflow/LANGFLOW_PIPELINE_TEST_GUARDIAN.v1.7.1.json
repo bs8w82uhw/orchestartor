@@ -1,164 +1,1465 @@
 {
-  "name": "Test Guardian Pipeline (Langflow 1.7.1)",
-  "description": "Draft Langflow pipeline for autonomous test execution, failure analysis, and contract evidence drafting.",
-  "langflow_version": "1.7.1",
   "data": {
-    "nodes": [
-      {
-        "id": "input-1",
-        "type": "TextInput",
-        "position": {
-          "x": -980,
-          "y": -40
-        },
-        "data": {
-          "label": "Input",
-          "template": {
-            "scope": "full",
-            "max_issues": 5
-          }
-        }
-      },
-      {
-        "id": "cmd-1",
-        "type": "PythonFunction",
-        "position": {
-          "x": -720,
-          "y": -40
-        },
-        "data": {
-          "label": "Run Tests",
-          "template": {
-            "code": "import subprocess\ncmd = \"npm run test:report\"\nproc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\nreturn {\"exit_code\": proc.returncode, \"stdout\": proc.stdout[-4000:], \"stderr\": proc.stderr[-4000:]}"
-          }
-        }
-      },
-      {
-        "id": "cmd-2",
-        "type": "PythonFunction",
-        "position": {
-          "x": -460,
-          "y": -40
-        },
-        "data": {
-          "label": "Find Artifacts",
-          "template": {
-            "code": "from pathlib import Path\nreports = sorted(Path('docs/automation/reports').glob('TEST-REPORT-*.md'))\nlogs = sorted(Path('test/logs').glob('unit-output-*.log'))\nreturn {\n  \"report_path\": str(reports[-1]) if reports else \"\",\n  \"log_path\": str(logs[-1]) if logs else \"\",\n  \"report_exists\": bool(reports),\n  \"log_exists\": bool(logs)\n}"
-          }
-        }
-      },
-      {
-        "id": "cmd-3",
-        "type": "PythonFunction",
-        "position": {
-          "x": -180,
-          "y": -40
-        },
-        "data": {
-          "label": "Parse Report + Log",
-          "template": {
-            "code": "import re\nfrom pathlib import Path\n\ndef read(p):\n    return Path(p).read_text(encoding='utf-8', errors='ignore') if p else ''\n\nreport = read(inputs.get('report_path', ''))\nlog = read(inputs.get('log_path', ''))\n\nsummary = {\n  'passed': re.findall(r'Tests passed:\\s*(.*)', report),\n  'failed': re.findall(r'Tests failed:\\s*(.*)', report),\n  'elapsed': re.findall(r'Time Elapsed:\\s*(.*)', report)\n}\n\nasserts = re.findall(r'Assert Failed:.*', log)\nruntime = re.findall(r'(TypeError|ReferenceError|SyntaxError|Uncaught Exception).*', log)\n\nreturn {\n  'summary': summary,\n  'assert_failures': asserts[:50],\n  'runtime_errors': runtime[:50],\n  'report_path': inputs.get('report_path', ''),\n  'log_path': inputs.get('log_path', '')\n}"
-          }
-        }
-      },
-      {
-        "id": "llm-1",
-        "type": "ChatModel",
-        "position": {
-          "x": 120,
-          "y": -140
-        },
-        "data": {
-          "label": "Prioritizer",
-          "template": {
-            "system_prompt": "You are Test Guardian. Classify failures into P0/P1/P2. P0 runtime crash, P1 contract/API regression, P2 infra/data instability. Return concise JSON.",
-            "input_template": "{{data}}"
-          }
-        }
-      },
-      {
-        "id": "llm-2",
-        "type": "ChatModel",
-        "position": {
-          "x": 420,
-          "y": -140
-        },
-        "data": {
-          "label": "Planner",
-          "template": {
-            "system_prompt": "Select exactly one primary next fix with file path, rationale, and verification command.",
-            "input_template": "{{prioritized_data}}"
-          }
-        }
-      },
-      {
-        "id": "llm-3",
-        "type": "ChatModel",
-        "position": {
-          "x": 420,
-          "y": 40
-        },
-        "data": {
-          "label": "Contract Draft",
-          "template": {
-            "system_prompt": "Draft Evidence/Decision markdown update for docs/automation/API-COMPAT-AUTOMATION-20260205-04.md based on latest run.",
-            "input_template": "{{prioritized_data}}"
-          }
-        }
-      },
-      {
-        "id": "output-1",
-        "type": "TextOutput",
-        "position": {
-          "x": 740,
-          "y": -40
-        },
-        "data": {
-          "label": "Final Output",
-          "template": {
-            "format": "Run Summary + Top Issues + Next Fix + Contract Update Draft"
-          }
-        }
-      }
-    ],
     "edges": [
       {
-        "source": "input-1",
-        "target": "cmd-1"
+        "animated": false,
+        "className": "",
+        "data": {
+          "sourceHandle": {
+            "dataType": "GitLoaderComponent",
+            "id": "GitLoaderComponent-mT0IB",
+            "name": "data",
+            "output_types": [
+              "Data"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "input_data",
+            "id": "ParserComponent-MyobM",
+            "inputTypes": [
+              "DataFrame",
+              "Data"
+            ],
+            "type": "other"
+          }
+        },
+        "id": "xy-edge__GitLoaderComponent-mT0IB{\u0153dataType\u0153:\u0153GitLoaderComponent\u0153,\u0153id\u0153:\u0153GitLoaderComponent-mT0IB\u0153,\u0153name\u0153:\u0153data\u0153,\u0153output_types\u0153:[\u0153Data\u0153]}-ParserComponent-MyobM{\u0153fieldName\u0153:\u0153input_data\u0153,\u0153id\u0153:\u0153ParserComponent-MyobM\u0153,\u0153inputTypes\u0153:[\u0153DataFrame\u0153,\u0153Data\u0153],\u0153type\u0153:\u0153other\u0153}",
+        "selected": false,
+        "source": "GitLoaderComponent-mT0IB",
+        "sourceHandle": "{\u0153dataType\u0153:\u0153GitLoaderComponent\u0153,\u0153id\u0153:\u0153GitLoaderComponent-mT0IB\u0153,\u0153name\u0153:\u0153data\u0153,\u0153output_types\u0153:[\u0153Data\u0153]}",
+        "target": "ParserComponent-MyobM",
+        "targetHandle": "{\u0153fieldName\u0153:\u0153input_data\u0153,\u0153id\u0153:\u0153ParserComponent-MyobM\u0153,\u0153inputTypes\u0153:[\u0153DataFrame\u0153,\u0153Data\u0153],\u0153type\u0153:\u0153other\u0153}"
       },
       {
-        "source": "cmd-1",
-        "target": "cmd-2"
+        "animated": false,
+        "className": "",
+        "data": {
+          "sourceHandle": {
+            "dataType": "ParserComponent",
+            "id": "ParserComponent-MyobM",
+            "name": "parsed_text",
+            "output_types": [
+              "Message"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "input_value",
+            "id": "AIMLModel-n9Vv4",
+            "inputTypes": [
+              "Message"
+            ],
+            "type": "str"
+          }
+        },
+        "id": "xy-edge__ParserComponent-MyobM{\u0153dataType\u0153:\u0153ParserComponent\u0153,\u0153id\u0153:\u0153ParserComponent-MyobM\u0153,\u0153name\u0153:\u0153parsed_text\u0153,\u0153output_types\u0153:[\u0153Message\u0153]}-AIMLModel-n9Vv4{\u0153fieldName\u0153:\u0153input_value\u0153,\u0153id\u0153:\u0153AIMLModel-n9Vv4\u0153,\u0153inputTypes\u0153:[\u0153Message\u0153],\u0153type\u0153:\u0153str\u0153}",
+        "selected": false,
+        "source": "ParserComponent-MyobM",
+        "sourceHandle": "{\u0153dataType\u0153:\u0153ParserComponent\u0153,\u0153id\u0153:\u0153ParserComponent-MyobM\u0153,\u0153name\u0153:\u0153parsed_text\u0153,\u0153output_types\u0153:[\u0153Message\u0153]}",
+        "target": "AIMLModel-n9Vv4",
+        "targetHandle": "{\u0153fieldName\u0153:\u0153input_value\u0153,\u0153id\u0153:\u0153AIMLModel-n9Vv4\u0153,\u0153inputTypes\u0153:[\u0153Message\u0153],\u0153type\u0153:\u0153str\u0153}"
       },
       {
-        "source": "cmd-2",
-        "target": "cmd-3"
+        "animated": false,
+        "className": "",
+        "data": {
+          "sourceHandle": {
+            "dataType": "AIMLModel",
+            "id": "AIMLModel-n9Vv4",
+            "name": "text_output",
+            "output_types": [
+              "Message"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "input_value",
+            "id": "StructuredOutput-TIxQv",
+            "inputTypes": [
+              "Message"
+            ],
+            "type": "str"
+          }
+        },
+        "id": "xy-edge__AIMLModel-n9Vv4{\u0153dataType\u0153:\u0153AIMLModel\u0153,\u0153id\u0153:\u0153AIMLModel-n9Vv4\u0153,\u0153name\u0153:\u0153text_output\u0153,\u0153output_types\u0153:[\u0153Message\u0153]}-StructuredOutput-TIxQv{\u0153fieldName\u0153:\u0153input_value\u0153,\u0153id\u0153:\u0153StructuredOutput-TIxQv\u0153,\u0153inputTypes\u0153:[\u0153Message\u0153],\u0153type\u0153:\u0153str\u0153}",
+        "selected": false,
+        "source": "AIMLModel-n9Vv4",
+        "sourceHandle": "{\u0153dataType\u0153:\u0153AIMLModel\u0153,\u0153id\u0153:\u0153AIMLModel-n9Vv4\u0153,\u0153name\u0153:\u0153text_output\u0153,\u0153output_types\u0153:[\u0153Message\u0153]}",
+        "target": "StructuredOutput-TIxQv",
+        "targetHandle": "{\u0153fieldName\u0153:\u0153input_value\u0153,\u0153id\u0153:\u0153StructuredOutput-TIxQv\u0153,\u0153inputTypes\u0153:[\u0153Message\u0153],\u0153type\u0153:\u0153str\u0153}"
+      }
+    ],
+    "nodes": [
+      {
+        "data": {
+          "id": "GitLoaderComponent-mT0IB",
+          "node": {
+            "base_classes": [
+              "Data"
+            ],
+            "beta": false,
+            "conditional_paths": [],
+            "custom_fields": {},
+            "description": "Loads latest test report markdown from repository.",
+            "display_name": "Git",
+            "documentation": "",
+            "edited": false,
+            "field_order": [
+              "repo_source",
+              "repo_path",
+              "clone_url",
+              "branch",
+              "file_filter",
+              "content_filter"
+            ],
+            "frozen": false,
+            "icon": "GitLoader",
+            "last_updated": "2026-02-05T10:02:49.087Z",
+            "legacy": false,
+            "lf_version": "1.7.1",
+            "metadata": {
+              "code_hash": "ac5de0564a4f",
+              "dependencies": {
+                "dependencies": [
+                  {
+                    "name": "anyio",
+                    "version": "4.12.1"
+                  },
+                  {
+                    "name": "langchain_community",
+                    "version": "0.3.21"
+                  },
+                  {
+                    "name": "lfx",
+                    "version": "0.2.1"
+                  }
+                ],
+                "total_dependencies": 3
+              },
+              "module": "lfx.components.git.git.GitLoaderComponent"
+            },
+            "minimized": false,
+            "output_types": [],
+            "outputs": [
+              {
+                "allows_loop": false,
+                "cache": true,
+                "display_name": "Data",
+                "group_outputs": false,
+                "loop_types": null,
+                "method": "load_documents",
+                "name": "data",
+                "options": null,
+                "required_inputs": null,
+                "selected": "Data",
+                "tool_mode": true,
+                "types": [
+                  "Data"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "pinned": false,
+            "template": {
+              "_frontend_node_flow_id": {
+                "value": "fb6ad981-ffa2-43c8-99a1-77e5aff314d0"
+              },
+              "_frontend_node_folder_id": {
+                "value": "d7107802-5c7d-46fc-a5fe-3a5cdf319869"
+              },
+              "_type": "Component",
+              "branch": {
+                "_input_type": "MessageTextInput",
+                "advanced": false,
+                "display_name": "Branch",
+                "dynamic": false,
+                "info": "The branch to load files from. Defaults to 'main'.",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "name": "branch",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": "main"
+              },
+              "clone_url": {
+                "_input_type": "MessageTextInput",
+                "advanced": false,
+                "display_name": "Clone URL",
+                "dynamic": true,
+                "info": "The URL of the Git repository to clone (used if 'Clone' is selected).",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "name": "clone_url",
+                "override_skip": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": "https://github.com/bs8w82uhw/orchestartor.git"
+              },
+              "code": {
+                "advanced": true,
+                "dynamic": true,
+                "fileTypes": [],
+                "file_path": "",
+                "info": "",
+                "list": false,
+                "load_from_db": false,
+                "multiline": true,
+                "name": "code",
+                "password": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "type": "code",
+                "value": "import re\nimport tempfile\nfrom contextlib import asynccontextmanager\nfrom fnmatch import fnmatch\nfrom pathlib import Path\n\nimport anyio\nfrom langchain_community.document_loaders.git import GitLoader\n\nfrom lfx.custom.custom_component.component import Component\nfrom lfx.io import DropdownInput, MessageTextInput, Output\nfrom lfx.schema.data import Data\n\n\nclass GitLoaderComponent(Component):\n    display_name = \"Git\"\n    description = (\n        \"Load and filter documents from a local or remote Git repository. \"\n        \"Use a local repo path or clone from a remote URL.\"\n    )\n    trace_type = \"tool\"\n    icon = \"GitLoader\"\n\n    inputs = [\n        DropdownInput(\n            name=\"repo_source\",\n            display_name=\"Repository Source\",\n            options=[\"Local\", \"Remote\"],\n            required=True,\n            info=\"Select whether to use a local repo path or clone from a remote URL.\",\n            real_time_refresh=True,\n        ),\n        MessageTextInput(\n            name=\"repo_path\",\n            display_name=\"Local Repository Path\",\n            required=False,\n            info=\"The local path to the existing Git repository (used if 'Local' is selected).\",\n            dynamic=True,\n            show=False,\n        ),\n        MessageTextInput(\n            name=\"clone_url\",\n            display_name=\"Clone URL\",\n            required=False,\n            info=\"The URL of the Git repository to clone (used if 'Clone' is selected).\",\n            dynamic=True,\n            show=False,\n        ),\n        MessageTextInput(\n            name=\"branch\",\n            display_name=\"Branch\",\n            required=False,\n            value=\"main\",\n            info=\"The branch to load files from. Defaults to 'main'.\",\n        ),\n        MessageTextInput(\n            name=\"file_filter\",\n            display_name=\"File Filter\",\n            required=False,\n            advanced=True,\n            info=(\n                \"Patterns to filter files. For example:\\n\"\n                \"Include only .py files: '*.py'\\n\"\n                \"Exclude .py files: '!*.py'\\n\"\n                \"Multiple patterns can be separated by commas.\"\n            ),\n        ),\n        MessageTextInput(\n            name=\"content_filter\",\n            display_name=\"Content Filter\",\n            required=False,\n            advanced=True,\n            info=\"A regex pattern to filter files based on their content.\",\n        ),\n    ]\n\n    outputs = [\n        Output(name=\"data\", display_name=\"Data\", method=\"load_documents\"),\n    ]\n\n    @staticmethod\n    def is_binary(file_path: str | Path) -> bool:\n        \"\"\"Check if a file is binary by looking for null bytes.\"\"\"\n        try:\n            with Path(file_path).open(\"rb\") as file:\n                content = file.read(1024)\n                return b\"\\x00\" in content\n        except Exception:  # noqa: BLE001\n            return True\n\n    @staticmethod\n    def check_file_patterns(file_path: str | Path, patterns: str) -> bool:\n        \"\"\"Check if a file matches the given patterns.\n\n        Args:\n            file_path: Path to the file to check\n            patterns: Comma-separated list of glob patterns\n\n        Returns:\n            bool: True if file should be included, False if excluded\n        \"\"\"\n        # Handle empty or whitespace-only patterns\n        if not patterns or patterns.isspace():\n            return True\n\n        path_str = str(file_path)\n        file_name = Path(path_str).name\n        pattern_list: list[str] = [pattern.strip() for pattern in patterns.split(\",\") if pattern.strip()]\n\n        # If no valid patterns after stripping, treat as include all\n        if not pattern_list:\n            return True\n\n        # Process exclusion patterns first\n        for pattern in pattern_list:\n            if pattern.startswith(\"!\"):\n                # For exclusions, match against both full path and filename\n                exclude_pattern = pattern[1:]\n                if fnmatch(path_str, exclude_pattern) or fnmatch(file_name, exclude_pattern):\n                    return False\n\n        # Then check inclusion patterns\n        include_patterns = [p for p in pattern_list if not p.startswith(\"!\")]\n        # If no include patterns, treat as include all\n        if not include_patterns:\n            return True\n\n        # For inclusions, match against both full path and filename\n        return any(fnmatch(path_str, pattern) or fnmatch(file_name, pattern) for pattern in include_patterns)\n\n    @staticmethod\n    def check_content_pattern(file_path: str | Path, pattern: str) -> bool:\n        \"\"\"Check if file content matches the given regex pattern.\n\n        Args:\n            file_path: Path to the file to check\n            pattern: Regex pattern to match against content\n\n        Returns:\n            bool: True if content matches, False otherwise\n        \"\"\"\n        try:\n            # Check if file is binary\n            with Path(file_path).open(\"rb\") as file:\n                content = file.read(1024)\n                if b\"\\x00\" in content:\n                    return False\n\n            # Try to compile the regex pattern first\n            try:\n                # Use the MULTILINE flag to better handle text content\n                content_regex = re.compile(pattern, re.MULTILINE)\n                # Test the pattern with a simple string to catch syntax errors\n                test_str = \"test\\nstring\"\n                if not content_regex.search(test_str):\n                    # Pattern is valid but doesn't match test string\n                    pass\n            except (re.error, TypeError, ValueError):\n                return False\n\n            # If not binary and regex is valid, check content\n            with Path(file_path).open(encoding=\"utf-8\") as file:\n                file_content = file.read()\n            return bool(content_regex.search(file_content))\n        except (OSError, UnicodeDecodeError):\n            return False\n\n    def build_combined_filter(self, file_filter_patterns: str | None = None, content_filter_pattern: str | None = None):\n        \"\"\"Build a combined filter function from file and content patterns.\n\n        Args:\n            file_filter_patterns: Comma-separated glob patterns\n            content_filter_pattern: Regex pattern for content\n\n        Returns:\n            callable: Filter function that takes a file path and returns bool\n        \"\"\"\n\n        def combined_filter(file_path: str) -> bool:\n            try:\n                path = Path(file_path)\n\n                # Check if file exists and is readable\n                if not path.exists():\n                    return False\n\n                # Check if file is binary\n                if self.is_binary(path):\n                    return False\n\n                # Apply file pattern filters\n                if file_filter_patterns and not self.check_file_patterns(path, file_filter_patterns):\n                    return False\n\n                # Apply content filter\n                return not (content_filter_pattern and not self.check_content_pattern(path, content_filter_pattern))\n            except Exception:  # noqa: BLE001\n                return False\n\n        return combined_filter\n\n    @asynccontextmanager\n    async def temp_clone_dir(self):\n        \"\"\"Context manager for handling temporary clone directory.\"\"\"\n        temp_dir = None\n        try:\n            temp_dir = tempfile.mkdtemp(prefix=\"langflow_clone_\")\n            yield temp_dir\n        finally:\n            if temp_dir:\n                await anyio.Path(temp_dir).rmdir()\n\n    def update_build_config(self, build_config: dict, field_value: str, field_name: str | None = None) -> dict:\n        # Hide fields by default\n        build_config[\"repo_path\"][\"show\"] = False\n        build_config[\"clone_url\"][\"show\"] = False\n\n        if field_name == \"repo_source\":\n            if field_value == \"Local\":\n                build_config[\"repo_path\"][\"show\"] = True\n                build_config[\"repo_path\"][\"required\"] = True\n                build_config[\"clone_url\"][\"required\"] = False\n            elif field_value == \"Remote\":\n                build_config[\"clone_url\"][\"show\"] = True\n                build_config[\"clone_url\"][\"required\"] = True\n                build_config[\"repo_path\"][\"required\"] = False\n\n        return build_config\n\n    async def build_gitloader(self) -> GitLoader:\n        file_filter_patterns = getattr(self, \"file_filter\", None)\n        content_filter_pattern = getattr(self, \"content_filter\", None)\n\n        combined_filter = self.build_combined_filter(file_filter_patterns, content_filter_pattern)\n\n        repo_source = getattr(self, \"repo_source\", None)\n        if repo_source == \"Local\":\n            repo_path = self.repo_path\n            clone_url = None\n        else:\n            # Clone source\n            clone_url = self.clone_url\n            async with self.temp_clone_dir() as temp_dir:\n                repo_path = temp_dir\n\n        # Only pass branch if it's explicitly set\n        branch = getattr(self, \"branch\", None)\n        if not branch:\n            branch = None\n\n        return GitLoader(\n            repo_path=repo_path,\n            clone_url=clone_url if repo_source == \"Remote\" else None,\n            branch=branch,\n            file_filter=combined_filter,\n        )\n\n    async def load_documents(self) -> list[Data]:\n        gitloader = await self.build_gitloader()\n        data = [Data.from_document(doc) async for doc in gitloader.alazy_load()]\n        self.status = data\n        return data\n"
+              },
+              "content_filter": {
+                "_input_type": "MessageTextInput",
+                "advanced": true,
+                "display_name": "Content Filter",
+                "dynamic": false,
+                "info": "A regex pattern to filter files based on their content.",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "name": "content_filter",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": "Tests passed|Tests failed|Top Failing Assertions|First Runtime Errors|Next Fix|Contract Update"
+              },
+              "file_filter": {
+                "_input_type": "MessageTextInput",
+                "advanced": false,
+                "display_name": "File Filter",
+                "dynamic": false,
+                "info": "Patterns to filter files. For example:\nInclude only .py files: '*.py'\nExclude .py files: '!*.py'\nMultiple patterns can be separated by commas.",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "name": "file_filter",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": "docs/automation/reports/TEST-REPORT-*.md"
+              },
+              "is_refresh": false,
+              "repo_path": {
+                "_input_type": "MessageTextInput",
+                "advanced": false,
+                "display_name": "Local Repository Path",
+                "dynamic": true,
+                "info": "The local path to the existing Git repository (used if 'Local' is selected).",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "name": "repo_path",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": false,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": ""
+              },
+              "repo_source": {
+                "_input_type": "DropdownInput",
+                "advanced": false,
+                "combobox": false,
+                "dialog_inputs": {},
+                "display_name": "Repository Source",
+                "dynamic": false,
+                "external_options": {},
+                "info": "Select whether to use a local repo path or clone from a remote URL.",
+                "name": "repo_source",
+                "options": [
+                  "Local",
+                  "Remote"
+                ],
+                "options_metadata": [],
+                "override_skip": false,
+                "placeholder": "",
+                "real_time_refresh": true,
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "toggle": false,
+                "tool_mode": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": true,
+                "type": "str",
+                "value": "Remote"
+              }
+            },
+            "tool_mode": false
+          },
+          "showNode": true,
+          "type": "GitLoaderComponent"
+        },
+        "dragging": false,
+        "id": "GitLoaderComponent-mT0IB",
+        "measured": {
+          "height": 481,
+          "width": 320
+        },
+        "position": {
+          "x": -1842.12205632618,
+          "y": -193.98809199854915
+        },
+        "selected": false,
+        "type": "genericNode"
       },
       {
-        "source": "cmd-3",
-        "target": "llm-1"
+        "data": {
+          "id": "StructuredOutput-TIxQv",
+          "node": {
+            "base_classes": [
+              "Data",
+              "DataFrame"
+            ],
+            "beta": false,
+            "conditional_paths": [],
+            "custom_fields": {},
+            "description": "Structures model output for engineering execution.",
+            "display_name": "Structured Output",
+            "documentation": "https://docs.langflow.org/structured-output",
+            "edited": false,
+            "field_order": [
+              "llm",
+              "input_value",
+              "system_prompt",
+              "schema_name",
+              "output_schema"
+            ],
+            "frozen": false,
+            "icon": "braces",
+            "legacy": false,
+            "lf_version": "1.7.1",
+            "metadata": {
+              "code_hash": "ce82f9d7948c",
+              "dependencies": {
+                "dependencies": [
+                  {
+                    "name": "pydantic",
+                    "version": "2.11.10"
+                  },
+                  {
+                    "name": "trustcall",
+                    "version": "0.0.39"
+                  },
+                  {
+                    "name": "lfx",
+                    "version": "0.2.1"
+                  }
+                ],
+                "total_dependencies": 3
+              },
+              "module": "lfx.components.llm_operations.structured_output.StructuredOutputComponent"
+            },
+            "minimized": false,
+            "output_types": [],
+            "outputs": [
+              {
+                "allows_loop": false,
+                "cache": true,
+                "display_name": "Structured Output",
+                "group_outputs": false,
+                "method": "build_structured_output",
+                "name": "structured_output",
+                "tool_mode": true,
+                "types": [
+                  "Data"
+                ],
+                "value": "__UNDEFINED__"
+              },
+              {
+                "allows_loop": false,
+                "cache": true,
+                "display_name": "Structured Output",
+                "group_outputs": false,
+                "method": "build_structured_dataframe",
+                "name": "dataframe_output",
+                "selected": "DataFrame",
+                "tool_mode": true,
+                "types": [
+                  "DataFrame"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "pinned": false,
+            "template": {
+              "_type": "Component",
+              "code": {
+                "advanced": true,
+                "dynamic": true,
+                "fileTypes": [],
+                "file_path": "",
+                "info": "",
+                "list": false,
+                "load_from_db": false,
+                "multiline": true,
+                "name": "code",
+                "password": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "type": "code",
+                "value": "from pydantic import BaseModel, Field, create_model\nfrom trustcall import create_extractor\n\nfrom lfx.base.models.chat_result import get_chat_result\nfrom lfx.custom.custom_component.component import Component\nfrom lfx.helpers.base_model import build_model_from_schema\nfrom lfx.io import (\n    HandleInput,\n    MessageTextInput,\n    MultilineInput,\n    Output,\n    TableInput,\n)\nfrom lfx.log.logger import logger\nfrom lfx.schema.data import Data\nfrom lfx.schema.dataframe import DataFrame\nfrom lfx.schema.table import EditMode\n\n\nclass StructuredOutputComponent(Component):\n    display_name = \"Structured Output\"\n    description = \"Uses an LLM to generate structured data. Ideal for extraction and consistency.\"\n    documentation: str = \"https://docs.langflow.org/structured-output\"\n    name = \"StructuredOutput\"\n    icon = \"braces\"\n\n    inputs = [\n        HandleInput(\n            name=\"llm\",\n            display_name=\"Language Model\",\n            info=\"The language model to use to generate the structured output.\",\n            input_types=[\"LanguageModel\"],\n            required=True,\n        ),\n        MultilineInput(\n            name=\"input_value\",\n            display_name=\"Input Message\",\n            info=\"The input message to the language model.\",\n            tool_mode=True,\n            required=True,\n        ),\n        MultilineInput(\n            name=\"system_prompt\",\n            display_name=\"Format Instructions\",\n            info=\"The instructions to the language model for formatting the output.\",\n            value=(\n                \"You are an AI that extracts structured JSON objects from unstructured text. \"\n                \"Use a predefined schema with expected types (str, int, float, bool, dict). \"\n                \"Extract ALL relevant instances that match the schema - if multiple patterns exist, capture them all. \"\n                \"Fill missing or ambiguous values with defaults: null for missing values. \"\n                \"Remove exact duplicates but keep variations that have different field values. \"\n                \"Always return valid JSON in the expected format, never throw errors. \"\n                \"If multiple objects can be extracted, return them all in the structured format.\"\n            ),\n            required=True,\n            advanced=True,\n        ),\n        MessageTextInput(\n            name=\"schema_name\",\n            display_name=\"Schema Name\",\n            info=\"Provide a name for the output data schema.\",\n            advanced=True,\n        ),\n        TableInput(\n            name=\"output_schema\",\n            display_name=\"Output Schema\",\n            info=\"Define the structure and data types for the model's output.\",\n            required=True,\n            # TODO: remove deault value\n            table_schema=[\n                {\n                    \"name\": \"name\",\n                    \"display_name\": \"Name\",\n                    \"type\": \"str\",\n                    \"description\": \"Specify the name of the output field.\",\n                    \"default\": \"field\",\n                    \"edit_mode\": EditMode.INLINE,\n                },\n                {\n                    \"name\": \"description\",\n                    \"display_name\": \"Description\",\n                    \"type\": \"str\",\n                    \"description\": \"Describe the purpose of the output field.\",\n                    \"default\": \"description of field\",\n                    \"edit_mode\": EditMode.POPOVER,\n                },\n                {\n                    \"name\": \"type\",\n                    \"display_name\": \"Type\",\n                    \"type\": \"str\",\n                    \"edit_mode\": EditMode.INLINE,\n                    \"description\": (\"Indicate the data type of the output field (e.g., str, int, float, bool, dict).\"),\n                    \"options\": [\"str\", \"int\", \"float\", \"bool\", \"dict\"],\n                    \"default\": \"str\",\n                },\n                {\n                    \"name\": \"multiple\",\n                    \"display_name\": \"As List\",\n                    \"type\": \"boolean\",\n                    \"description\": \"Set to True if this output field should be a list of the specified type.\",\n                    \"default\": \"False\",\n                    \"edit_mode\": EditMode.INLINE,\n                },\n            ],\n            value=[\n                {\n                    \"name\": \"field\",\n                    \"description\": \"description of field\",\n                    \"type\": \"str\",\n                    \"multiple\": \"False\",\n                }\n            ],\n        ),\n    ]\n\n    outputs = [\n        Output(\n            name=\"structured_output\",\n            display_name=\"Structured Output\",\n            method=\"build_structured_output\",\n        ),\n        Output(\n            name=\"dataframe_output\",\n            display_name=\"Structured Output\",\n            method=\"build_structured_dataframe\",\n        ),\n    ]\n\n    def build_structured_output_base(self):\n        schema_name = self.schema_name or \"OutputModel\"\n\n        if not hasattr(self.llm, \"with_structured_output\"):\n            msg = \"Language model does not support structured output.\"\n            raise TypeError(msg)\n        if not self.output_schema:\n            msg = \"Output schema cannot be empty\"\n            raise ValueError(msg)\n\n        output_model_ = build_model_from_schema(self.output_schema)\n        output_model = create_model(\n            schema_name,\n            __doc__=f\"A list of {schema_name}.\",\n            objects=(\n                list[output_model_],\n                Field(\n                    description=f\"A list of {schema_name}.\",  # type: ignore[valid-type]\n                    min_length=1,  # help ensure non-empty output\n                ),\n            ),\n        )\n        # Tracing config\n        config_dict = {\n            \"run_name\": self.display_name,\n            \"project_name\": self.get_project_name(),\n            \"callbacks\": self.get_langchain_callbacks(),\n        }\n        # Generate structured output using Trustcall first, then fallback to Langchain if it fails\n        result = self._extract_output_with_trustcall(output_model, config_dict)\n        if result is None:\n            result = self._extract_output_with_langchain(output_model, config_dict)\n\n        # OPTIMIZATION NOTE: Simplified processing based on trustcall response structure\n        # Handle non-dict responses (shouldn't happen with trustcall, but defensive)\n        if not isinstance(result, dict):\n            return result\n\n        # Extract first response and convert BaseModel to dict\n        responses = result.get(\"responses\", [])\n        if not responses:\n            return result\n\n        # Convert BaseModel to dict (creates the \"objects\" key)\n        first_response = responses[0]\n        structured_data = first_response\n        if isinstance(first_response, BaseModel):\n            structured_data = first_response.model_dump()\n        # Extract the objects array (guaranteed to exist due to our Pydantic model structure)\n        return structured_data.get(\"objects\", structured_data)\n\n    def build_structured_output(self) -> Data:\n        output = self.build_structured_output_base()\n        if not isinstance(output, list) or not output:\n            # handle empty or unexpected type case\n            msg = \"No structured output returned\"\n            raise ValueError(msg)\n        if len(output) == 1:\n            return Data(data=output[0])\n        if len(output) > 1:\n            # Multiple outputs - wrap them in a results container\n            return Data(data={\"results\": output})\n        return Data()\n\n    def build_structured_dataframe(self) -> DataFrame:\n        output = self.build_structured_output_base()\n        if not isinstance(output, list) or not output:\n            # handle empty or unexpected type case\n            msg = \"No structured output returned\"\n            raise ValueError(msg)\n        if len(output) == 1:\n            # For single dictionary, wrap in a list to create DataFrame with one row\n            return DataFrame([output[0]])\n        if len(output) > 1:\n            # Multiple outputs - convert to DataFrame directly\n            return DataFrame(output)\n        return DataFrame()\n\n    def _extract_output_with_trustcall(self, schema: BaseModel, config_dict: dict) -> list[BaseModel] | None:\n        try:\n            llm_with_structured_output = create_extractor(self.llm, tools=[schema], tool_choice=schema.__name__)\n            result = get_chat_result(\n                runnable=llm_with_structured_output,\n                system_message=self.system_prompt,\n                input_value=self.input_value,\n                config=config_dict,\n            )\n        except Exception as e:  # noqa: BLE001\n            logger.warning(\n                f\"Trustcall extraction failed, falling back to Langchain: {e} \"\n                \"(Note: This may not be an error\u2014some models or configurations do not support tool calling. \"\n                \"Falling back is normal in such cases.)\"\n            )\n            return None\n        return result or None  # langchain fallback is used if error occurs or the result is empty\n\n    def _extract_output_with_langchain(self, schema: BaseModel, config_dict: dict) -> list[BaseModel] | None:\n        try:\n            llm_with_structured_output = self.llm.with_structured_output(schema)\n            result = get_chat_result(\n                runnable=llm_with_structured_output,\n                system_message=self.system_prompt,\n                input_value=self.input_value,\n                config=config_dict,\n            )\n            if isinstance(result, BaseModel):\n                result = result.model_dump()\n                result = result.get(\"objects\", result)\n        except Exception as fallback_error:\n            msg = (\n                f\"Model does not support tool calling (trustcall failed) \"\n                f\"and fallback with_structured_output also failed: {fallback_error}\"\n            )\n            raise ValueError(msg) from fallback_error\n\n        return result or None\n"
+              },
+              "input_value": {
+                "_input_type": "MultilineInput",
+                "advanced": false,
+                "ai_enabled": false,
+                "copy_field": false,
+                "display_name": "Input Message",
+                "dynamic": false,
+                "info": "The input message to the language model.",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "multiline": true,
+                "name": "input_value",
+                "override_skip": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "tool_mode": true,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": ""
+              },
+              "llm": {
+                "_input_type": "HandleInput",
+                "advanced": true,
+                "display_name": "Language Model",
+                "dynamic": false,
+                "info": "The language model to use to generate the structured output.",
+                "input_types": [
+                  "LanguageModel"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "name": "llm",
+                "override_skip": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "other",
+                "value": ""
+              },
+              "output_schema": {
+                "_input_type": "TableInput",
+                "advanced": false,
+                "display_name": "Output Schema",
+                "dynamic": false,
+                "info": "Define the structure and data types for the model's output.",
+                "is_list": true,
+                "list_add_label": "Add More",
+                "name": "output_schema",
+                "override_skip": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "table_icon": "Table",
+                "table_schema": [
+                  {
+                    "default": "field",
+                    "description": "Specify the name of the output field.",
+                    "display_name": "Name",
+                    "edit_mode": "inline",
+                    "formatter": "text",
+                    "name": "name",
+                    "type": "str"
+                  },
+                  {
+                    "default": "description of field",
+                    "description": "Describe the purpose of the output field.",
+                    "display_name": "Description",
+                    "edit_mode": "popover",
+                    "formatter": "text",
+                    "name": "description",
+                    "type": "str"
+                  },
+                  {
+                    "default": "str",
+                    "description": "Indicate the data type of the output field (e.g., str, int, float, bool, dict).",
+                    "display_name": "Type",
+                    "edit_mode": "inline",
+                    "formatter": "text",
+                    "name": "type",
+                    "options": [
+                      "str",
+                      "int",
+                      "float",
+                      "bool",
+                      "dict"
+                    ],
+                    "type": "str"
+                  },
+                  {
+                    "default": "False",
+                    "description": "Set to True if this output field should be a list of the specified type.",
+                    "display_name": "As List",
+                    "edit_mode": "inline",
+                    "formatter": "text",
+                    "name": "multiple",
+                    "type": "boolean"
+                  }
+                ],
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "trigger_icon": "Table",
+                "trigger_text": "Open table",
+                "type": "table",
+                "value": [
+                  {
+                    "name": "status",
+                    "type": "str",
+                    "description": "overall status"
+                  },
+                  {
+                    "name": "tests_passed",
+                    "type": "str",
+                    "description": "tests passed summary"
+                  },
+                  {
+                    "name": "tests_failed",
+                    "type": "str",
+                    "description": "tests failed summary"
+                  },
+                  {
+                    "name": "elapsed",
+                    "type": "str",
+                    "description": "elapsed time"
+                  },
+                  {
+                    "name": "top_issues",
+                    "type": "str",
+                    "description": "top prioritized issues",
+                    "multiple": "True"
+                  },
+                  {
+                    "name": "next_fix",
+                    "type": "str",
+                    "description": "single next fix recommendation"
+                  },
+                  {
+                    "name": "verify_command",
+                    "type": "str",
+                    "description": "command to verify fix"
+                  },
+                  {
+                    "name": "contract_update_markdown",
+                    "type": "str",
+                    "description": "markdown draft for API contract ticket"
+                  }
+                ]
+              },
+              "schema_name": {
+                "_input_type": "MessageTextInput",
+                "advanced": true,
+                "display_name": "Schema Name",
+                "dynamic": false,
+                "info": "Provide a name for the output data schema.",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "name": "schema_name",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": "test_guardian_output"
+              },
+              "system_prompt": {
+                "_input_type": "MultilineInput",
+                "advanced": false,
+                "ai_enabled": false,
+                "copy_field": false,
+                "display_name": "Format Instructions",
+                "dynamic": false,
+                "info": "The instructions to the language model for formatting the output.",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "multiline": true,
+                "name": "system_prompt",
+                "override_skip": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": "Extract structured fields from the assistant output. Fields: status, tests_passed, tests_failed, elapsed, top_issues, next_fix, verify_command, contract_update_markdown."
+              }
+            },
+            "tool_mode": false
+          },
+          "selected_output": "dataframe_output",
+          "showNode": true,
+          "type": "StructuredOutput"
+        },
+        "dragging": false,
+        "id": "StructuredOutput-TIxQv",
+        "measured": {
+          "height": 385,
+          "width": 320
+        },
+        "position": {
+          "x": -334.12166181214843,
+          "y": -742.848470601301
+        },
+        "selected": false,
+        "type": "genericNode"
       },
       {
-        "source": "llm-1",
-        "target": "llm-2"
+        "data": {
+          "id": "AIMLModel-n9Vv4",
+          "node": {
+            "base_classes": [
+              "LanguageModel",
+              "Message"
+            ],
+            "beta": false,
+            "conditional_paths": [],
+            "custom_fields": {},
+            "description": "Test Guardian analysis model.",
+            "display_name": "AI/ML API",
+            "documentation": "https://docs.aimlapi.com/api-reference",
+            "edited": false,
+            "field_order": [
+              "input_value",
+              "system_message",
+              "stream",
+              "max_tokens",
+              "model_kwargs",
+              "model_name",
+              "aiml_api_base",
+              "api_key",
+              "temperature"
+            ],
+            "frozen": false,
+            "icon": "AIML",
+            "legacy": false,
+            "lf_version": "1.7.1",
+            "metadata": {
+              "code_hash": "db72277a0d5a",
+              "dependencies": {
+                "dependencies": [
+                  {
+                    "name": "langchain_openai",
+                    "version": "0.3.35"
+                  },
+                  {
+                    "name": "pydantic",
+                    "version": "2.11.10"
+                  },
+                  {
+                    "name": "typing_extensions",
+                    "version": "4.15.0"
+                  },
+                  {
+                    "name": "lfx",
+                    "version": "0.2.1"
+                  },
+                  {
+                    "name": "openai",
+                    "version": "1.109.1"
+                  }
+                ],
+                "total_dependencies": 5
+              },
+              "keywords": [
+                "model",
+                "llm",
+                "language model",
+                "large language model"
+              ],
+              "module": "lfx.components.aiml.aiml.AIMLModelComponent"
+            },
+            "minimized": false,
+            "output_types": [],
+            "outputs": [
+              {
+                "allows_loop": false,
+                "cache": true,
+                "display_name": "Model Response",
+                "group_outputs": false,
+                "method": "text_response",
+                "name": "text_output",
+                "selected": "Message",
+                "tool_mode": true,
+                "types": [
+                  "Message"
+                ],
+                "value": "__UNDEFINED__"
+              },
+              {
+                "allows_loop": false,
+                "cache": true,
+                "display_name": "Language Model",
+                "group_outputs": false,
+                "method": "build_model",
+                "name": "model_output",
+                "tool_mode": true,
+                "types": [
+                  "LanguageModel"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "pinned": false,
+            "template": {
+              "_type": "Component",
+              "aiml_api_base": {
+                "_input_type": "StrInput",
+                "advanced": false,
+                "display_name": "AI/ML API Base",
+                "dynamic": false,
+                "info": "The base URL of the API. Defaults to https://api.aimlapi.com . You can change this to use other APIs like JinaChat, LocalAI and Prem.",
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": true,
+                "name": "aiml_api_base",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": "URL-openAPI - gpt 4.1 mini"
+              },
+              "api_key": {
+                "_input_type": "SecretStrInput",
+                "advanced": false,
+                "display_name": "AI/ML API Key",
+                "dynamic": false,
+                "info": "The AI/ML API Key to use for the OpenAI model.",
+                "input_types": [],
+                "load_from_db": true,
+                "name": "api_key",
+                "override_skip": false,
+                "password": true,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": ""
+              },
+              "code": {
+                "advanced": true,
+                "dynamic": true,
+                "fileTypes": [],
+                "file_path": "",
+                "info": "",
+                "list": false,
+                "load_from_db": false,
+                "multiline": true,
+                "name": "code",
+                "password": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "type": "code",
+                "value": "from langchain_openai import ChatOpenAI\nfrom pydantic.v1 import SecretStr\nfrom typing_extensions import override\n\nfrom lfx.base.models.aiml_constants import AimlModels\nfrom lfx.base.models.model import LCModelComponent\nfrom lfx.field_typing import LanguageModel\nfrom lfx.field_typing.range_spec import RangeSpec\nfrom lfx.inputs.inputs import (\n    DictInput,\n    DropdownInput,\n    IntInput,\n    SecretStrInput,\n    SliderInput,\n    StrInput,\n)\n\n\nclass AIMLModelComponent(LCModelComponent):\n    display_name = \"AI/ML API\"\n    description = \"Generates text using AI/ML API LLMs.\"\n    icon = \"AIML\"\n    name = \"AIMLModel\"\n    documentation = \"https://docs.aimlapi.com/api-reference\"\n\n    inputs = [\n        *LCModelComponent.get_base_inputs(),\n        IntInput(\n            name=\"max_tokens\",\n            display_name=\"Max Tokens\",\n            advanced=True,\n            info=\"The maximum number of tokens to generate. Set to 0 for unlimited tokens.\",\n            range_spec=RangeSpec(min=0, max=128000),\n        ),\n        DictInput(name=\"model_kwargs\", display_name=\"Model Kwargs\", advanced=True),\n        DropdownInput(\n            name=\"model_name\",\n            display_name=\"Model Name\",\n            advanced=False,\n            options=[],\n            refresh_button=True,\n        ),\n        StrInput(\n            name=\"aiml_api_base\",\n            display_name=\"AI/ML API Base\",\n            advanced=True,\n            info=\"The base URL of the API. Defaults to https://api.aimlapi.com . \"\n            \"You can change this to use other APIs like JinaChat, LocalAI and Prem.\",\n        ),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"AI/ML API Key\",\n            info=\"The AI/ML API Key to use for the OpenAI model.\",\n            advanced=False,\n            value=\"AIML_API_KEY\",\n            required=True,\n        ),\n        SliderInput(\n            name=\"temperature\",\n            display_name=\"Temperature\",\n            value=0.1,\n            range_spec=RangeSpec(min=0, max=2, step=0.01),\n        ),\n    ]\n\n    @override\n    def update_build_config(self, build_config: dict, field_value: str, field_name: str | None = None):\n        if field_name in {\"api_key\", \"aiml_api_base\", \"model_name\"}:\n            aiml = AimlModels()\n            aiml.get_aiml_models()\n            build_config[\"model_name\"][\"options\"] = aiml.chat_models\n        return build_config\n\n    def build_model(self) -> LanguageModel:  # type: ignore[type-var]\n        aiml_api_key = self.api_key\n        temperature = self.temperature\n        model_name: str = self.model_name\n        max_tokens = self.max_tokens\n        model_kwargs = self.model_kwargs or {}\n        aiml_api_base = self.aiml_api_base or \"https://api.aimlapi.com/v2\"\n\n        openai_api_key = aiml_api_key.get_secret_value() if isinstance(aiml_api_key, SecretStr) else aiml_api_key\n\n        # TODO: Once OpenAI fixes their o1 models, this part will need to be removed\n        # to work correctly with o1 temperature settings.\n        if \"o1\" in model_name:\n            temperature = 1\n\n        return ChatOpenAI(\n            model=model_name,\n            temperature=temperature,\n            api_key=openai_api_key,\n            base_url=aiml_api_base,\n            max_tokens=max_tokens or None,\n            **model_kwargs,\n        )\n\n    def _get_exception_message(self, e: Exception):\n        \"\"\"Get a message from an OpenAI exception.\n\n        Args:\n            e (Exception): The exception to get the message from.\n\n        Returns:\n            str: The message from the exception.\n        \"\"\"\n        try:\n            from openai.error import BadRequestError\n        except ImportError:\n            return None\n        if isinstance(e, BadRequestError):\n            message = e.json_body.get(\"error\", {}).get(\"message\", \"\")\n            if message:\n                return message\n        return None\n"
+              },
+              "input_value": {
+                "_input_type": "MessageInput",
+                "advanced": false,
+                "display_name": "Input",
+                "dynamic": false,
+                "info": "",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "name": "input_value",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": ""
+              },
+              "max_tokens": {
+                "_input_type": "IntInput",
+                "advanced": true,
+                "display_name": "Max Tokens",
+                "dynamic": false,
+                "info": "The maximum number of tokens to generate. Set to 0 for unlimited tokens.",
+                "list": false,
+                "list_add_label": "Add More",
+                "name": "max_tokens",
+                "override_skip": false,
+                "placeholder": "",
+                "range_spec": {
+                  "max": 128000,
+                  "min": 0,
+                  "step": 0.1,
+                  "step_type": "float"
+                },
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": true,
+                "type": "int",
+                "value": ""
+              },
+              "model_kwargs": {
+                "_input_type": "DictInput",
+                "advanced": true,
+                "display_name": "Model Kwargs",
+                "dynamic": false,
+                "info": "",
+                "list": false,
+                "list_add_label": "Add More",
+                "name": "model_kwargs",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "track_in_telemetry": false,
+                "type": "dict",
+                "value": {}
+              },
+              "model_name": {
+                "_input_type": "DropdownInput",
+                "advanced": false,
+                "combobox": false,
+                "dialog_inputs": {},
+                "display_name": "Model Name",
+                "dynamic": false,
+                "external_options": {},
+                "info": "",
+                "name": "model_name",
+                "options": [],
+                "options_metadata": [],
+                "override_skip": false,
+                "placeholder": "",
+                "refresh_button": true,
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "toggle": false,
+                "tool_mode": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": true,
+                "type": "str",
+                "value": "gpt-4.1-mini"
+              },
+              "stream": {
+                "_input_type": "BoolInput",
+                "advanced": true,
+                "display_name": "Stream",
+                "dynamic": false,
+                "info": "Stream the response from the model. Streaming works only in Chat.",
+                "list": false,
+                "list_add_label": "Add More",
+                "name": "stream",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": true,
+                "type": "bool",
+                "value": false
+              },
+              "system_message": {
+                "_input_type": "MultilineInput",
+                "advanced": false,
+                "ai_enabled": false,
+                "copy_field": false,
+                "display_name": "System Message",
+                "dynamic": false,
+                "info": "System message to pass to the model.",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "multiline": true,
+                "name": "system_message",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": "You are Test Guardian. Analyze the test report and return concise operational guidance. Prioritize issues as P0 runtime crash, P1 contract/API regression, P2 infra/data instability. Output: run summary, top issues, one primary next fix, verification command, and contract update draft."
+              },
+              "temperature": {
+                "_input_type": "SliderInput",
+                "advanced": false,
+                "display_name": "Temperature",
+                "dynamic": false,
+                "info": "",
+                "max_label": "",
+                "max_label_icon": "",
+                "min_label": "",
+                "min_label_icon": "",
+                "name": "temperature",
+                "override_skip": false,
+                "placeholder": "",
+                "range_spec": {
+                  "max": 2,
+                  "min": 0,
+                  "step": 0.01,
+                  "step_type": "float"
+                },
+                "required": false,
+                "show": true,
+                "slider_buttons": false,
+                "slider_buttons_options": [],
+                "slider_input": false,
+                "title_case": false,
+                "tool_mode": false,
+                "track_in_telemetry": false,
+                "type": "slider",
+                "value": 0.1
+              }
+            },
+            "tool_mode": false
+          },
+          "selected_output": "text_output",
+          "showNode": true,
+          "type": "AIMLModel"
+        },
+        "dragging": false,
+        "id": "AIMLModel-n9Vv4",
+        "measured": {
+          "height": 619,
+          "width": 320
+        },
+        "position": {
+          "x": -930.9565290031851,
+          "y": -590.0020469124162
+        },
+        "selected": false,
+        "type": "genericNode"
       },
       {
-        "source": "llm-1",
-        "target": "llm-3"
+        "data": {
+          "id": "TypeConverterComponent-nGgOd",
+          "node": {
+            "base_classes": [
+              "Message"
+            ],
+            "beta": false,
+            "conditional_paths": [],
+            "custom_fields": {},
+            "description": "Convert between different types (Message, Data, DataFrame)",
+            "display_name": "Type Convert",
+            "documentation": "https://docs.langflow.org/type-convert",
+            "edited": false,
+            "field_order": [
+              "input_data",
+              "auto_parse",
+              "output_type"
+            ],
+            "frozen": false,
+            "icon": "repeat",
+            "last_updated": "2026-02-05T12:16:32.424Z",
+            "legacy": false,
+            "lf_version": "1.7.1",
+            "metadata": {
+              "code_hash": "be7797f8df1c",
+              "dependencies": {
+                "dependencies": [
+                  {
+                    "name": "lfx",
+                    "version": "0.2.1"
+                  },
+                  {
+                    "name": "pandas",
+                    "version": "2.2.3"
+                  }
+                ],
+                "total_dependencies": 2
+              },
+              "module": "lfx.components.processing.converter.TypeConverterComponent"
+            },
+            "minimized": false,
+            "output_types": [],
+            "outputs": [
+              {
+                "allows_loop": false,
+                "cache": true,
+                "display_name": "Data Output",
+                "group_outputs": false,
+                "hidden": null,
+                "loop_types": null,
+                "method": "convert_to_data",
+                "name": "data_output",
+                "options": null,
+                "required_inputs": null,
+                "selected": "Data",
+                "tool_mode": true,
+                "types": [
+                  "Data"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "pinned": false,
+            "template": {
+              "_frontend_node_flow_id": {
+                "value": "fb6ad981-ffa2-43c8-99a1-77e5aff314d0"
+              },
+              "_frontend_node_folder_id": {
+                "value": "d7107802-5c7d-46fc-a5fe-3a5cdf319869"
+              },
+              "_type": "Component",
+              "auto_parse": {
+                "_input_type": "BoolInput",
+                "advanced": false,
+                "display_name": "Auto Parse",
+                "dynamic": false,
+                "info": "Detect and convert JSON/CSV strings automatically.",
+                "list": false,
+                "list_add_label": "Add More",
+                "name": "auto_parse",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": true,
+                "type": "bool",
+                "value": false
+              },
+              "code": {
+                "advanced": true,
+                "dynamic": true,
+                "fileTypes": [],
+                "file_path": "",
+                "info": "",
+                "list": false,
+                "load_from_db": false,
+                "multiline": true,
+                "name": "code",
+                "password": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "type": "code",
+                "value": "import json\nfrom typing import Any\n\nfrom lfx.custom import Component\nfrom lfx.io import BoolInput, HandleInput, Output, TabInput\nfrom lfx.schema import Data, DataFrame, Message\n\nMIN_CSV_LINES = 2\n\n\ndef convert_to_message(v) -> Message:\n    \"\"\"Convert input to Message type.\n\n    Args:\n        v: Input to convert (Message, Data, DataFrame, or dict)\n\n    Returns:\n        Message: Converted Message object\n    \"\"\"\n    return v if isinstance(v, Message) else v.to_message()\n\n\ndef convert_to_data(v: DataFrame | Data | Message | dict, *, auto_parse: bool) -> Data:\n    \"\"\"Convert input to Data type.\n\n    Args:\n        v: Input to convert (Message, Data, DataFrame, or dict)\n        auto_parse: Enable automatic parsing of structured data (JSON/CSV)\n\n    Returns:\n        Data: Converted Data object\n    \"\"\"\n    if isinstance(v, dict):\n        return Data(v)\n    if isinstance(v, Message):\n        data = Data(data={\"text\": v.data[\"text\"]})\n        return parse_structured_data(data) if auto_parse else data\n\n    return v if isinstance(v, Data) else v.to_data()\n\n\ndef convert_to_dataframe(v: DataFrame | Data | Message | dict, *, auto_parse: bool) -> DataFrame:\n    \"\"\"Convert input to DataFrame type.\n\n    Args:\n        v: Input to convert (Message, Data, DataFrame, or dict)\n        auto_parse: Enable automatic parsing of structured data (JSON/CSV)\n\n    Returns:\n        DataFrame: Converted DataFrame object\n    \"\"\"\n    import pandas as pd\n\n    if isinstance(v, dict):\n        return DataFrame([v])\n    if isinstance(v, DataFrame):\n        return v\n    # Handle pandas DataFrame\n    if isinstance(v, pd.DataFrame):\n        # Convert pandas DataFrame to our DataFrame by creating Data objects\n        return DataFrame(data=v)\n\n    if isinstance(v, Message):\n        data = Data(data={\"text\": v.data[\"text\"]})\n        return parse_structured_data(data).to_dataframe() if auto_parse else data.to_dataframe()\n    # For other types, call to_dataframe method\n    return v.to_dataframe()\n\n\ndef parse_structured_data(data: Data) -> Data:\n    \"\"\"Parse structured data (JSON, CSV) from Data's text field.\n\n    Args:\n        data: Data object with text content to parse\n\n    Returns:\n        Data: Modified Data object with parsed content or original if parsing fails\n    \"\"\"\n    raw_text = data.get_text() or \"\"\n    text = raw_text.lstrip(\"\\ufeff\").strip()\n\n    # Try JSON parsing first\n    parsed_json = _try_parse_json(text)\n    if parsed_json is not None:\n        return parsed_json\n\n    # Try CSV parsing\n    if _looks_like_csv(text):\n        try:\n            return _parse_csv_to_data(text)\n        except Exception:  # noqa: BLE001\n            # Heuristic misfire or malformed CSV \u2014 keep original data\n            return data\n\n    # Return original data if no parsing succeeded\n    return data\n\n\ndef _try_parse_json(text: str) -> Data | None:\n    \"\"\"Try to parse text as JSON and return Data object.\"\"\"\n    try:\n        parsed = json.loads(text)\n\n        if isinstance(parsed, dict):\n            # Single JSON object\n            return Data(data=parsed)\n        if isinstance(parsed, list) and all(isinstance(item, dict) for item in parsed):\n            # Array of JSON objects - create Data with the list\n            return Data(data={\"records\": parsed})\n\n    except (json.JSONDecodeError, ValueError):\n        pass\n\n    return None\n\n\ndef _looks_like_csv(text: str) -> bool:\n    \"\"\"Simple heuristic to detect CSV content.\"\"\"\n    lines = text.strip().split(\"\\n\")\n    if len(lines) < MIN_CSV_LINES:\n        return False\n\n    header_line = lines[0]\n    return \",\" in header_line and len(lines) > 1\n\n\ndef _parse_csv_to_data(text: str) -> Data:\n    \"\"\"Parse CSV text and return Data object.\"\"\"\n    from io import StringIO\n\n    import pandas as pd\n\n    # Parse CSV to DataFrame, then convert to list of dicts\n    parsed_df = pd.read_csv(StringIO(text))\n    records = parsed_df.to_dict(orient=\"records\")\n\n    return Data(data={\"records\": records})\n\n\nclass TypeConverterComponent(Component):\n    display_name = \"Type Convert\"\n    description = \"Convert between different types (Message, Data, DataFrame)\"\n    documentation: str = \"https://docs.langflow.org/type-convert\"\n    icon = \"repeat\"\n\n    inputs = [\n        HandleInput(\n            name=\"input_data\",\n            display_name=\"Input\",\n            input_types=[\"Message\", \"Data\", \"DataFrame\"],\n            info=\"Accept Message, Data or DataFrame as input\",\n            required=True,\n        ),\n        BoolInput(\n            name=\"auto_parse\",\n            display_name=\"Auto Parse\",\n            info=\"Detect and convert JSON/CSV strings automatically.\",\n            advanced=True,\n            value=False,\n            required=False,\n        ),\n        TabInput(\n            name=\"output_type\",\n            display_name=\"Output Type\",\n            options=[\"Message\", \"Data\", \"DataFrame\"],\n            info=\"Select the desired output data type\",\n            real_time_refresh=True,\n            value=\"Message\",\n        ),\n    ]\n\n    outputs = [\n        Output(\n            display_name=\"Message Output\",\n            name=\"message_output\",\n            method=\"convert_to_message\",\n        )\n    ]\n\n    def update_outputs(self, frontend_node: dict, field_name: str, field_value: Any) -> dict:\n        \"\"\"Dynamically show only the relevant output based on the selected output type.\"\"\"\n        if field_name == \"output_type\":\n            # Start with empty outputs\n            frontend_node[\"outputs\"] = []\n\n            # Add only the selected output type\n            if field_value == \"Message\":\n                frontend_node[\"outputs\"].append(\n                    Output(\n                        display_name=\"Message Output\",\n                        name=\"message_output\",\n                        method=\"convert_to_message\",\n                    ).to_dict()\n                )\n            elif field_value == \"Data\":\n                frontend_node[\"outputs\"].append(\n                    Output(\n                        display_name=\"Data Output\",\n                        name=\"data_output\",\n                        method=\"convert_to_data\",\n                    ).to_dict()\n                )\n            elif field_value == \"DataFrame\":\n                frontend_node[\"outputs\"].append(\n                    Output(\n                        display_name=\"DataFrame Output\",\n                        name=\"dataframe_output\",\n                        method=\"convert_to_dataframe\",\n                    ).to_dict()\n                )\n\n        return frontend_node\n\n    def convert_to_message(self) -> Message:\n        \"\"\"Convert input to Message type.\"\"\"\n        input_value = self.input_data[0] if isinstance(self.input_data, list) else self.input_data\n\n        # Handle string input by converting to Message first\n        if isinstance(input_value, str):\n            input_value = Message(text=input_value)\n\n        result = convert_to_message(input_value)\n        self.status = result\n        return result\n\n    def convert_to_data(self) -> Data:\n        \"\"\"Convert input to Data type.\"\"\"\n        input_value = self.input_data[0] if isinstance(self.input_data, list) else self.input_data\n\n        # Handle string input by converting to Message first\n        if isinstance(input_value, str):\n            input_value = Message(text=input_value)\n\n        result = convert_to_data(input_value, auto_parse=self.auto_parse)\n        self.status = result\n        return result\n\n    def convert_to_dataframe(self) -> DataFrame:\n        \"\"\"Convert input to DataFrame type.\"\"\"\n        input_value = self.input_data[0] if isinstance(self.input_data, list) else self.input_data\n\n        # Handle string input by converting to Message first\n        if isinstance(input_value, str):\n            input_value = Message(text=input_value)\n\n        result = convert_to_dataframe(input_value, auto_parse=self.auto_parse)\n        self.status = result\n        return result\n"
+              },
+              "input_data": {
+                "_input_type": "HandleInput",
+                "advanced": false,
+                "display_name": "Input",
+                "dynamic": false,
+                "info": "Accept Message, Data or DataFrame as input",
+                "input_types": [
+                  "Message",
+                  "Data",
+                  "DataFrame"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "name": "input_data",
+                "override_skip": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "other",
+                "value": ""
+              },
+              "is_refresh": false,
+              "output_type": {
+                "_input_type": "TabInput",
+                "advanced": false,
+                "display_name": "Output Type",
+                "dynamic": false,
+                "info": "Select the desired output data type",
+                "name": "output_type",
+                "options": [
+                  "Message",
+                  "Data",
+                  "DataFrame"
+                ],
+                "override_skip": false,
+                "placeholder": "",
+                "real_time_refresh": true,
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": true,
+                "type": "tab",
+                "value": "Data"
+              }
+            },
+            "tool_mode": false
+          },
+          "showNode": true,
+          "type": "TypeConverterComponent"
+        },
+        "dragging": false,
+        "id": "TypeConverterComponent-nGgOd",
+        "measured": {
+          "height": 303,
+          "width": 320
+        },
+        "position": {
+          "x": -415.21328835942273,
+          "y": -169.82725311803173
+        },
+        "selected": false,
+        "type": "genericNode"
       },
       {
-        "source": "llm-2",
-        "target": "output-1"
-      },
-      {
-        "source": "llm-3",
-        "target": "output-1"
+        "data": {
+          "id": "ParserComponent-MyobM",
+          "node": {
+            "base_classes": [
+              "Message"
+            ],
+            "beta": false,
+            "conditional_paths": [],
+            "custom_fields": {},
+            "description": "Converts report data into text for model analysis.",
+            "display_name": "Parser",
+            "documentation": "https://docs.langflow.org/parser",
+            "edited": false,
+            "field_order": [
+              "input_data",
+              "mode",
+              "pattern",
+              "sep"
+            ],
+            "frozen": false,
+            "icon": "braces",
+            "last_updated": "2026-02-05T12:34:37.402Z",
+            "legacy": false,
+            "lf_version": "1.7.1",
+            "metadata": {
+              "code_hash": "3cda25c3f7b5",
+              "dependencies": {
+                "dependencies": [
+                  {
+                    "name": "lfx",
+                    "version": "0.2.1"
+                  }
+                ],
+                "total_dependencies": 1
+              },
+              "module": "lfx.components.processing.parser.ParserComponent"
+            },
+            "minimized": false,
+            "output_types": [],
+            "outputs": [
+              {
+                "allows_loop": false,
+                "cache": true,
+                "display_name": "Parsed Text",
+                "group_outputs": false,
+                "loop_types": null,
+                "method": "parse_combined_text",
+                "name": "parsed_text",
+                "options": null,
+                "required_inputs": null,
+                "selected": "Message",
+                "tool_mode": true,
+                "types": [
+                  "Message"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "pinned": false,
+            "template": {
+              "_frontend_node_flow_id": {
+                "value": "fb6ad981-ffa2-43c8-99a1-77e5aff314d0"
+              },
+              "_frontend_node_folder_id": {
+                "value": "d7107802-5c7d-46fc-a5fe-3a5cdf319869"
+              },
+              "_type": "Component",
+              "clean_data": {
+                "_input_type": "BoolInput",
+                "advanced": true,
+                "display_name": "Clean Data",
+                "dynamic": false,
+                "info": "Enable to clean the data by removing empty rows and lines in each cell of the DataFrame/ Data object.",
+                "list": false,
+                "list_add_label": "Add More",
+                "name": "clean_data",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": true,
+                "type": "bool",
+                "value": true
+              },
+              "code": {
+                "advanced": true,
+                "dynamic": true,
+                "fileTypes": [],
+                "file_path": "",
+                "info": "",
+                "list": false,
+                "load_from_db": false,
+                "multiline": true,
+                "name": "code",
+                "password": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "type": "code",
+                "value": "from lfx.custom.custom_component.component import Component\nfrom lfx.helpers.data import safe_convert\nfrom lfx.inputs.inputs import BoolInput, HandleInput, MessageTextInput, MultilineInput, TabInput\nfrom lfx.schema.data import Data\nfrom lfx.schema.dataframe import DataFrame\nfrom lfx.schema.message import Message\nfrom lfx.template.field.base import Output\n\n\nclass ParserComponent(Component):\n    display_name = \"Parser\"\n    description = \"Extracts text using a template.\"\n    documentation: str = \"https://docs.langflow.org/parser\"\n    icon = \"braces\"\n\n    inputs = [\n        HandleInput(\n            name=\"input_data\",\n            display_name=\"Data or DataFrame\",\n            input_types=[\"DataFrame\", \"Data\"],\n            info=\"Accepts either a DataFrame or a Data object.\",\n            required=True,\n        ),\n        TabInput(\n            name=\"mode\",\n            display_name=\"Mode\",\n            options=[\"Parser\", \"Stringify\"],\n            value=\"Parser\",\n            info=\"Convert into raw string instead of using a template.\",\n            real_time_refresh=True,\n        ),\n        MultilineInput(\n            name=\"pattern\",\n            display_name=\"Template\",\n            info=(\n                \"Use variables within curly brackets to extract column values for DataFrames \"\n                \"or key values for Data.\"\n                \"For example: `Name: {Name}, Age: {Age}, Country: {Country}`\"\n            ),\n            value=\"Text: {text}\",  # Example default\n            dynamic=True,\n            show=True,\n            required=True,\n        ),\n        MessageTextInput(\n            name=\"sep\",\n            display_name=\"Separator\",\n            advanced=True,\n            value=\"\\n\",\n            info=\"String used to separate rows/items.\",\n        ),\n    ]\n\n    outputs = [\n        Output(\n            display_name=\"Parsed Text\",\n            name=\"parsed_text\",\n            info=\"Formatted text output.\",\n            method=\"parse_combined_text\",\n        ),\n    ]\n\n    def update_build_config(self, build_config, field_value, field_name=None):\n        \"\"\"Dynamically hide/show `template` and enforce requirement based on `stringify`.\"\"\"\n        if field_name == \"mode\":\n            build_config[\"pattern\"][\"show\"] = self.mode == \"Parser\"\n            build_config[\"pattern\"][\"required\"] = self.mode == \"Parser\"\n            if field_value:\n                clean_data = BoolInput(\n                    name=\"clean_data\",\n                    display_name=\"Clean Data\",\n                    info=(\n                        \"Enable to clean the data by removing empty rows and lines \"\n                        \"in each cell of the DataFrame/ Data object.\"\n                    ),\n                    value=True,\n                    advanced=True,\n                    required=False,\n                )\n                build_config[\"clean_data\"] = clean_data.to_dict()\n            else:\n                build_config.pop(\"clean_data\", None)\n\n        return build_config\n\n    def _clean_args(self):\n        \"\"\"Prepare arguments based on input type.\"\"\"\n        input_data = self.input_data\n\n        match input_data:\n            case list() if all(isinstance(item, Data) for item in input_data):\n                msg = \"List of Data objects is not supported.\"\n                raise ValueError(msg)\n            case DataFrame():\n                return input_data, None\n            case Data():\n                return None, input_data\n            case dict() if \"data\" in input_data:\n                try:\n                    if \"columns\" in input_data:  # Likely a DataFrame\n                        return DataFrame.from_dict(input_data), None\n                    # Likely a Data object\n                    return None, Data(**input_data)\n                except (TypeError, ValueError, KeyError) as e:\n                    msg = f\"Invalid structured input provided: {e!s}\"\n                    raise ValueError(msg) from e\n            case _:\n                msg = f\"Unsupported input type: {type(input_data)}. Expected DataFrame or Data.\"\n                raise ValueError(msg)\n\n    def parse_combined_text(self) -> Message:\n        \"\"\"Parse all rows/items into a single text or convert input to string if `stringify` is enabled.\"\"\"\n        # Early return for stringify option\n        if self.mode == \"Stringify\":\n            return self.convert_to_string()\n\n        df, data = self._clean_args()\n\n        lines = []\n        if df is not None:\n            for _, row in df.iterrows():\n                formatted_text = self.pattern.format(**row.to_dict())\n                lines.append(formatted_text)\n        elif data is not None:\n            # Use format_map with a dict that returns default_value for missing keys\n            class DefaultDict(dict):\n                def __missing__(self, key):\n                    return data.default_value or \"\"\n\n            formatted_text = self.pattern.format_map(DefaultDict(data.data))\n            lines.append(formatted_text)\n\n        combined_text = self.sep.join(lines)\n        self.status = combined_text\n        return Message(text=combined_text)\n\n    def convert_to_string(self) -> Message:\n        \"\"\"Convert input data to string with proper error handling.\"\"\"\n        result = \"\"\n        if isinstance(self.input_data, list):\n            result = \"\\n\".join([safe_convert(item, clean_data=self.clean_data or False) for item in self.input_data])\n        else:\n            result = safe_convert(self.input_data or False)\n        self.log(f\"Converted to string with length: {len(result)}\")\n\n        message = Message(text=result)\n        self.status = message\n        return message\n"
+              },
+              "input_data": {
+                "_input_type": "HandleInput",
+                "advanced": false,
+                "display_name": "Data or DataFrame",
+                "dynamic": false,
+                "info": "Accepts either a DataFrame or a Data object.",
+                "input_types": [
+                  "DataFrame",
+                  "Data"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "name": "input_data",
+                "override_skip": false,
+                "placeholder": "",
+                "required": true,
+                "show": true,
+                "title_case": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "other",
+                "value": ""
+              },
+              "is_refresh": false,
+              "mode": {
+                "_input_type": "TabInput",
+                "advanced": false,
+                "display_name": "Mode",
+                "dynamic": false,
+                "info": "Convert into raw string instead of using a template.",
+                "name": "mode",
+                "options": [
+                  "Parser",
+                  "Stringify"
+                ],
+                "override_skip": false,
+                "placeholder": "",
+                "real_time_refresh": true,
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_metadata": true,
+                "track_in_telemetry": true,
+                "type": "tab",
+                "value": "Stringify"
+              },
+              "pattern": {
+                "_input_type": "MultilineInput",
+                "advanced": false,
+                "ai_enabled": false,
+                "copy_field": false,
+                "display_name": "Template",
+                "dynamic": true,
+                "info": "Use variables within curly brackets to extract column values for DataFrames or key values for Data.For example: `Name: {Name}, Age: {Age}, Country: {Country}`",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "multiline": true,
+                "name": "pattern",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": false,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": "Report Data:\n{text}"
+              },
+              "sep": {
+                "_input_type": "MessageTextInput",
+                "advanced": true,
+                "display_name": "Separator",
+                "dynamic": false,
+                "info": "String used to separate rows/items.",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "name": "sep",
+                "override_skip": false,
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": false,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "track_in_telemetry": false,
+                "type": "str",
+                "value": "\n"
+              }
+            },
+            "tool_mode": false
+          },
+          "showNode": true,
+          "type": "ParserComponent"
+        },
+        "dragging": false,
+        "id": "ParserComponent-MyobM",
+        "measured": {
+          "height": 245,
+          "width": 320
+        },
+        "position": {
+          "x": -1416.1091056902549,
+          "y": 83.65814673640376
+        },
+        "selected": false,
+        "type": "genericNode"
       }
     ],
     "viewport": {
-      "x": 0,
-      "y": 0,
-      "zoom": 1
+      "x": -64.0,
+      "y": 20.0,
+      "zoom": 0.85
     }
-  }
+  },
+  "description": "Valid Langflow 1.7.1 flow: load latest test report from repo, analyze failures, output prioritized next fix and contract update draft.",
+  "endpoint_name": "test-guardian",
+  "id": "fb6ad981-ffa2-43c8-99a1-77e5aff314d0",
+  "is_component": false,
+  "last_tested_version": "1.7.1",
+  "name": "Test Guardian Pipeline (Langflow 1.7.1 Valid)",
+  "tags": [
+    "qa",
+    "tests",
+    "automation",
+    "langflow"
+  ]
 }
