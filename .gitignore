@@ -17,3 +17,21 @@
 /htdocs/css/xterm*
 /htdocs/codemirror
 /sample_conf/masters.json
+
+# Runtime test artifacts
+/docs/automation/reports/LATEST_TEST_REPORT.md
+/docs/automation/reports/LATEST_TEST_REPORT.json
+/docs/automation/reports/TEST-REPORT-*.md
+/docs/automation/reports/raw-logs/
+/test/temp/
+/test/data/files/
+/test/logs/unit-output-*.log
+/test/logs/_recovery.json
+/test/logs/Action.log
+/test/logs/Alert.log
+/test/logs/Error.log
+/test/logs/Job.log
+/test/logs/Maint.log
+/test/logs/Scheduler.log
+/test/logs/Secret.log
+/test/logs/Workflow.log
