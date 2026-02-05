@@ -43,6 +43,7 @@ It is intentionally separated from core xyOps product documentation.
 ## Operations
 
 - [Testing with Docker Compose](testing-docker-compose.md)
+- [Test Report Agent](TEST_REPORT_AGENT.md)
 - [Gramax Sync Setup](GRAMAX_SYNC.md)
 - [Gramax Navigation Structure](GRAMAX_NAVIGATION.md)
 - [Evidence Runbook (WSL2 + Docker)](EVIDENCE_RUNBOOK_WSL2_DOCKER.md)
