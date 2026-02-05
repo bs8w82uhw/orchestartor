@@ -31,5 +31,5 @@ if [ ! -f "${TEMPLATE}" ]; then
   exit 2
 fi
 
-PROMPT=$(sed "s/{{question}}/${QUESTION//\//\/}/g" "${TEMPLATE}")
+PROMPT=$(QUESTION="${QUESTION}" perl -0777 -pe 's/\\{\\{question\\}\\}/$ENV{QUESTION}/g' "${TEMPLATE}")
 printf "%s" "${PROMPT}" | codex exec -

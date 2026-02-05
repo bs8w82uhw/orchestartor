@@ -4,7 +4,7 @@ title: Mini Agent Conveyor Runbook
 
 ## Purpose
 
-A step-by-step conveyor flow for running the mini agent via Codex CLI (MFA login). You can replace the scenario (prompt template) while keeping the shell interface unchanged.
+A step-by-step conveyor flow for running the mini agent via Codex CLI (MFA login). You can replace the scenario (prompt template) while keeping the shell interface unchanged. The default use-case is refactoring documentation sections and enforcing consistent style/structure across documents.
 
 ## Conveyor Flow
 
@@ -19,6 +19,8 @@ A step-by-step conveyor flow for running the mini agent via Codex CLI (MFA login
    - Read the answer from stdout.
 5. **Reset**
    - Prompt is single-shot: do not reuse it after response.
+6. **Primary Assignment**
+   - Refactor documentation sections and enforce one consistent structure/style across related docs.
 
 ## Local Run
 
