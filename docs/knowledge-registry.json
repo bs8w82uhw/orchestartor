@@ -147,6 +147,15 @@
       "next_review_at": "2026-05-06"
     },
     {
+      "path": "docs/automation-role-sla-slo.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
+    },
+    {
       "path": "docs/buckets.md",
       "owner": "docs-core",
       "status": "active",

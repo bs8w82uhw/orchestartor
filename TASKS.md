@@ -33,14 +33,14 @@ Focus project development on:
 
 - Core direction advanced: Automation Manager architecture and permission matrix are now documented (`docs/automation-manager-architecture.md`, `docs/automation-permission-matrix.md`).
 - Checkpoint fixed on 2026-02-05: current documentation baseline accepted; continue from "Next Tasks" in the next cycle.
+- Next Tasks item 1 completed: role SLA/SLO contract documented (`docs/automation-role-sla-slo.md`).
 
 ## Next Tasks (Continue From Here)
 
-1. Formalize SLA/SLO contract per role (Planner/Executor/Reviewer/Safety) with measurable KPIs.
-2. Complete method-by-method contract debug execution and fill pass/partial/fail matrix with evidence links.
-3. Expand API compatibility tickets to all changed endpoints (not only `evaluate_automation_task`).
-4. Add RU mirror for `docs/method-catalog-automation-manager.md`.
-5. Unblock Gramax webhook secret and run manual sync verification.
+1. Complete method-by-method contract debug execution and fill pass/partial/fail matrix with evidence links.
+2. Expand API compatibility tickets to all changed endpoints (not only `evaluate_automation_task`).
+3. Add RU mirror for `docs/method-catalog-automation-manager.md`.
+4. Unblock Gramax webhook secret and run manual sync verification.
 
 ## Documentation System Rollout Tasks
 

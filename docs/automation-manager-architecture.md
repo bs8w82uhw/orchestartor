@@ -102,6 +102,7 @@ For every endpoint/method change:
 - Policy template: `docs/POLICY_TEMPLATE.md`
 - Contract template: `docs/CONTRACT_TEMPLATE.md`
 - Execution evidence template: `docs/EXECUTION_EVIDENCE_TEMPLATE.md`
+- Role SLA/SLO contract: `docs/automation-role-sla-slo.md`
 - Governance rules: `docs/DOCS_GOVERNANCE.md`
 
 ## KPI Baseline

@@ -79,6 +79,7 @@ Russian docs hub:
 -  [**AI Automation Strategy**](ai-automation-knowledge-strategy.md): Multi-agent model, governance framework, and knowledge-system approach.
 -  [**Automation Manager Architecture**](automation-manager-architecture.md): Control loop, permission matrix, escalation model, and enforcement points.
 -  [**Automation Permission Matrix**](automation-permission-matrix.md): Role/action/risk approvals and decision outcomes for policy enforcement.
+-  [**Automation Role SLA/SLO Contract**](automation-role-sla-slo.md): Measurable reliability targets and breach handling per AI role.
 -  [**Policies, Contracts, and Execution**](policies-contracts-execution.md): Documentation standard for policy rules, role contracts, and execution evidence.
 -  [**Method Template**](METHOD_TEMPLATE.md): Standard template for documenting method contracts.
 -  [**Method Catalog (Automation Manager)**](method-catalog-automation-manager.md): Tracked methods with policy and enforcement contracts.
