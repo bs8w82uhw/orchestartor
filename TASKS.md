@@ -38,3 +38,7 @@ Focus project development on:
 4. Adopt docs PR template for all documentation updates.
 5. Keep `docs/knowledge-registry.json` updated in every docs change.
 6. Review weekly "Docs Hygiene" issue and close gaps.
+
+## Deferred (Not Blocking Core Direction)
+
+- RU mirror for `docs/method-catalog-automation-manager.md` (parked, return after core architecture track completion).

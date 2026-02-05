@@ -98,8 +98,8 @@
       "status": "active",
       "agent_ready": true,
       "risk_level": "high",
-      "last_reviewed_at": "2026-02-04",
-      "next_review_at": "2026-05-05"
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/alerts.md",
@@ -127,6 +127,15 @@
       "risk_level": "medium",
       "last_reviewed_at": "2026-02-04",
       "next_review_at": "2026-05-05"
+    },
+    {
+      "path": "docs/automation-manager-architecture.md",
+      "owner": "docs-core",
+      "status": "active",
+      "agent_ready": true,
+      "risk_level": "high",
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/buckets.md",
@@ -269,8 +278,8 @@
       "status": "active",
       "agent_ready": true,
       "risk_level": "medium",
-      "last_reviewed_at": "2026-02-04",
-      "next_review_at": "2026-05-05"
+      "last_reviewed_at": "2026-02-05",
+      "next_review_at": "2026-05-06"
     },
     {
       "path": "docs/limits.md",

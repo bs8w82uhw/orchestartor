@@ -8,6 +8,8 @@ Build xyOps with a clear bias toward AI automation while keeping execution safe,
 
 This document defines the operating model where documentation is the primary control surface for AI agents, with Gramax used as the central knowledge system.
 
+Implementation architecture reference: `docs/automation-manager-architecture.md`.
+
 ## Target Operating Model
 
 -  **Automation Manager (orchestrator):** Owns planning, task routing, approvals, and escalation.

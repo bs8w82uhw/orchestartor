@@ -77,6 +77,7 @@ Russian docs hub:
 -  [**Development**](dev.md): Architecture overview, component list, client framework, and local dev setup.
 -  [**Testing with Docker Compose**](testing-docker-compose.md): Containerized autonomous and manual test modes.
 -  [**AI Automation Strategy**](ai-automation-knowledge-strategy.md): Multi-agent model, governance framework, and knowledge-system approach.
+-  [**Automation Manager Architecture**](automation-manager-architecture.md): Control loop, permission matrix, escalation model, and enforcement points.
 -  [**Policies, Contracts, and Execution**](policies-contracts-execution.md): Documentation standard for policy rules, role contracts, and execution evidence.
 -  [**Method Template**](METHOD_TEMPLATE.md): Standard template for documenting method contracts.
 -  [**Method Catalog (Automation Manager)**](method-catalog-automation-manager.md): Tracked methods with policy and enforcement contracts.
