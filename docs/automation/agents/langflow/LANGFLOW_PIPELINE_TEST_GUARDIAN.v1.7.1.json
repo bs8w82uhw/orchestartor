@@ -257,7 +257,7 @@
                 "trace_as_metadata": true,
                 "track_in_telemetry": false,
                 "type": "str",
-                "value": "Tests passed|Tests failed|Top Failing Assertions|First Runtime Errors|Next Fix|Contract Update"
+                "value": "Tests passed|Tests failed|Top Failing Assertions|First Runtime Errors|Next Fix|Contract Update|Status|Decision"
               },
               "file_filter": {
                 "_input_type": "MessageTextInput",
@@ -282,7 +282,7 @@
                 "trace_as_metadata": true,
                 "track_in_telemetry": false,
                 "type": "str",
-                "value": "docs/automation/reports/TEST-REPORT-*.md"
+                "value": "docs/automation/reports/TEST-REPORT-*.md,docs/automation/API-COMPAT-AUTOMATION-20260205-04.md"
               },
               "is_refresh": false,
               "repo_path": {

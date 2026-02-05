@@ -21,6 +21,10 @@ title: Langflow Agents Catalog
 3. Убедитесь, что в LLM-узле задан рабочий API key / provider.
 4. Запустите flow: он анализирует `docs/automation/reports/TEST-REPORT-*.md` и выдает приоритизацию + next fix + draft для контракта.
 
+Примечание:
+- Каталог `docs/automation/reports/` закреплен в репозитории через `.gitkeep`.
+- Если свежего test report нет, flow использует fallback-документ `docs/automation/API-COMPAT-AUTOMATION-20260205-04.md`.
+
 ## Артефакты выполнения
 
 - Отчеты тестов: `docs/automation/reports/`
