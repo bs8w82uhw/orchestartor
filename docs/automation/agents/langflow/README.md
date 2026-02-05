@@ -42,6 +42,12 @@ title: Langflow Agents Catalog
 - Стоп: `docker compose -f docker-compose.test.yml --profile langflow stop langflow`
 - Удалить контейнер: `docker compose -f docker-compose.test.yml --profile langflow rm -f langflow`
 
+## Troubleshooting
+
+- Ошибка `permission denied ... /var/run/docker.sock`:
+  - проверьте доступ к Docker daemon в текущем окружении (WSL/Docker Desktop integration или membership в группе `docker`);
+  - после исправления перезапустите shell и повторите `bash bin/test-report-agent.sh`.
+
 ## Smoke-check (коротко)
 
 1. `bash bin/test-report-agent.sh`

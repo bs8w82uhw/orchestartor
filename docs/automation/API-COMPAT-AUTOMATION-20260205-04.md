@@ -133,6 +133,23 @@ title: API Compatibility Contract Ticket - workflow continue policy gate
 - Runtime crash in monitor path is fixed in workspace; autonomous suite still has 19 failing tests and requires separate stabilization before contract sign-off.
   - Ticket stays `conditional` until deny/allow scenario evidence for workflow continue gate is attached.
 
+## Evidence Update (2026-02-05 16:12 UTC)
+
+- Autonomous command:
+  - `bash bin/test-report-agent.sh`
+- Generated artifacts:
+  - `docs/automation/reports/TEST-REPORT-20260205-161225.md`
+  - `docs/automation/reports/LATEST_TEST_REPORT.json`
+  - `docs/automation/reports/raw-logs/unit-output-20260205-161225.log`
+- Result:
+  - `exit_code=1`
+  - `tests_passed=unknown`
+  - `tests_failed=unknown`
+- Blocking reason:
+  - `permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock`
+- Contract decision impact:
+  - no new functional compatibility evidence; status remains `conditional`.
+
 ## Evidence Update Template (Copy/Paste)
 
 ```md
