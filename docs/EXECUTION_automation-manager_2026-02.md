@@ -96,6 +96,7 @@ Primary evidence references:
   - `docs/API-COMPAT-AUTOMATION-20260205-01.md`
   - `docs/API-COMPAT-AUTOMATION-20260205-02.md`
   - `docs/API-COMPAT-AUTOMATION-20260205-03.md`
+  - `docs/API-COMPAT-AUTOMATION-20260205-04.md`
 
 Remediation focus for next cycle:
 

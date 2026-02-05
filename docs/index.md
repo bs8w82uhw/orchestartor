@@ -57,6 +57,7 @@ Russian docs hub:
 -  [**API Compat Ticket (evaluate_automation_task)**](API-COMPAT-AUTOMATION-20260205-01.md): First endpoint compatibility ticket with autonomous/manual test plan.
 -  [**API Compat Ticket (get_automation_manager)**](API-COMPAT-AUTOMATION-20260205-02.md): Status endpoint compatibility ticket with decision-history checks.
 -  [**API Compat Ticket (run_event policy gate)**](API-COMPAT-AUTOMATION-20260205-03.md): Runtime launch compatibility under Automation Manager enforcement.
+-  [**API Compat Ticket (workflow continue policy gate)**](API-COMPAT-AUTOMATION-20260205-04.md): Workflow controller continue-stage compatibility under policy enforcement.
 -  [**Data Structures**](data.md): Complete schemas for all xyOps objects (jobs, events, users, servers, alerts, etc.).
 -  [**Database Tables**](db.md): A list of all the internal xyOps database tables and column indexes.
 

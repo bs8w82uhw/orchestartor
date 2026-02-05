@@ -1,0 +1,85 @@
+---
+title: API Compatibility Contract Ticket - workflow continue policy gate
+---
+
+## Ticket ID
+
+`API-COMPAT-AUTOMATION-20260205-04`
+
+## Endpoint
+
+- Method: `POST`
+- Path: `/api/app/run_event/v1` (workflow-type event execution path)
+- Version: `v1`
+
+## Contract Scope
+
+- Request schema:
+  - Existing `run_event` schema unchanged.
+  - Workflow controller policy context is read from workflow node data (`risk_level|risk`, `human_approved`).
+- Response schema:
+  - Launch contract remains `{ code: 0, id: <job_id> }` on accepted start.
+  - Policy decision for controller continue stage is stored in workflow state and logs.
+- Error schema:
+  - Standard API error format at endpoint level (`code`, `description`).
+  - Continue-stage deny is reflected as workflow controller error state, not transport schema change.
+- Auth and privileges:
+  - Same `run_event` auth/privileges contract (valid session/API key + `run_jobs` + category/target checks).
+
+## Compatibility Guarantees
+
+- Backward compatibility statement:
+  - No request/response schema changes for `run_event`.
+  - Policy gate is additive runtime behavior for workflow continue stage.
+- Deprecated fields (if any):
+  - None.
+- Breaking changes (if any):
+  - None in endpoint contract; behavior may deny continue stage in enforced mode.
+
+## Debug Coverage
+
+### Autonomous Tests
+
+- Contract assertions:
+  - Workflow continue policy gate implementation:
+    - `lib/workflow.js:1028` (`continueWFController`)
+    - `lib/workflow.js:1066` (`state.automation_policy`)
+  - Existing API launch contract remains covered by `run_event` behavior.
+- Negative cases:
+  - Add explicit automated test where continue threshold is met but policy denies stage.
+- Policy/security cases:
+  - Validate deny in enforced mode when high risk and `human_approved=false`.
+  - Validate advisory trace in advisory mode.
+
+### Manual Tests
+
+- Steps:
+  1. Start manual test mode.
+  2. Run workflow event via `run_event`.
+  3. Configure controller node with high-risk and no approval.
+  4. Observe continue stage under `advisory` then under `enforced`.
+- Human checkpoints:
+  - `workflow.state[node].automation_policy` is populated.
+  - Deny reason appears in workflow logs.
+  - Continue nodes are blocked when policy denies.
+- Expected outcomes:
+  - Advisory mode: continue may proceed with advisory message.
+  - Enforced mode + no approval: continue stage denied and marked error.
+
+## Evidence
+
+- PR link: pending
+- Test run links: pending CI/docker execution
+- Logs/traces:
+  - `lib/workflow.js:1028`
+  - `lib/workflow.js:1066`
+  - `docs/method-catalog-automation-manager.md` (`continueWFController` row)
+
+## Decision
+
+- Status: `conditional`
+- Reviewer: docs-core
+- Date: 2026-02-05
+- Conditions to move to `approved`:
+  - Attach autonomous workflow continue deny/allow evidence
+  - Attach manual walkthrough evidence with workflow-state snapshots
