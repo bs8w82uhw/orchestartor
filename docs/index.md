@@ -56,6 +56,7 @@ Russian docs hub:
 -  [**API Compatibility Contract Ticket Template**](API_COMPATIBILITY_CONTRACT_TICKET_TEMPLATE.md): Template for endpoint-level compatibility sign-off.
 -  [**API Compat Ticket (evaluate_automation_task)**](API-COMPAT-AUTOMATION-20260205-01.md): First endpoint compatibility ticket with autonomous/manual test plan.
 -  [**API Compat Ticket (get_automation_manager)**](API-COMPAT-AUTOMATION-20260205-02.md): Status endpoint compatibility ticket with decision-history checks.
+-  [**API Compat Ticket (run_event policy gate)**](API-COMPAT-AUTOMATION-20260205-03.md): Runtime launch compatibility under Automation Manager enforcement.
 -  [**Data Structures**](data.md): Complete schemas for all xyOps objects (jobs, events, users, servers, alerts, etc.).
 -  [**Database Tables**](db.md): A list of all the internal xyOps database tables and column indexes.
 

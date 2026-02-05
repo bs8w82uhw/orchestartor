@@ -41,6 +41,7 @@ Current ticket set:
 
 - `docs/API-COMPAT-AUTOMATION-20260205-01.md` (`evaluate_automation_task`)
 - `docs/API-COMPAT-AUTOMATION-20260205-02.md` (`get_automation_manager`)
+- `docs/API-COMPAT-AUTOMATION-20260205-03.md` (`run_event` policy gate)
 
 ## Compatibility Policy
 

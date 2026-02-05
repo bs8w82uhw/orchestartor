@@ -95,6 +95,7 @@ Primary evidence references:
 - API compatibility tickets:
   - `docs/API-COMPAT-AUTOMATION-20260205-01.md`
   - `docs/API-COMPAT-AUTOMATION-20260205-02.md`
+  - `docs/API-COMPAT-AUTOMATION-20260205-03.md`
 
 Remediation focus for next cycle:
 
