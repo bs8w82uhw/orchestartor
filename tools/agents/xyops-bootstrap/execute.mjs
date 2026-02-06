@@ -318,25 +318,25 @@ done
   const inventoryScript = `#!/bin/sh
 set -e
 
-API="\\${XYOPS_BASE_URL:-https://127.0.0.1:5523}"
-KEY="\\${XYOPS_API_KEY:-}"
+API="${'${'}XYOPS_BASE_URL:-https://127.0.0.1:5523}"
+KEY="${'${'}XYOPS_API_KEY:-}"
 
 if [ -z "$KEY" ]; then
   echo "XYOPS_API_KEY is required"
   exit 1
 fi
 
-SUM=$(curl -ksS -H "X-API-Key: \\${KEY}" -H "Content-Type: application/json" -d '{}' "\\${API}/api/app/get_groups/v1")
-BUK=$(curl -ksS -H "X-API-Key: \\${KEY}" -H "Content-Type: application/json" -d '{}' "\\${API}/api/app/get_buckets/v1")
-EVT=$(curl -ksS -H "X-API-Key: \\${KEY}" -H "Content-Type: application/json" -d '{}' "\\${API}/api/app/get_events/v1")
+SUM=$(curl -ksS -H "X-API-Key: ${'${'}KEY}" -H "Content-Type: application/json" -d '{}' "${'${'}API}/api/app/get_groups/v1")
+BUK=$(curl -ksS -H "X-API-Key: ${'${'}KEY}" -H "Content-Type: application/json" -d '{}' "${'${'}API}/api/app/get_buckets/v1")
+EVT=$(curl -ksS -H "X-API-Key: ${'${'}KEY}" -H "Content-Type: application/json" -d '{}' "${'${'}API}/api/app/get_events/v1")
 
 NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 DATA=$(node -e 'const g=JSON.parse(process.argv[1]); const b=JSON.parse(process.argv[2]); const e=JSON.parse(process.argv[3]); const out={timestamp:process.argv[4], groups:(g.rows||[]).map(r=>r.id), buckets:(b.rows||[]).map(r=>r.id), events:(e.rows||[]).map(r=>r.id)}; console.log(JSON.stringify(out));' "$SUM" "$BUK" "$EVT" "$NOW")
 
-curl -ksS -H "X-API-Key: \\${KEY}" -H "Content-Type: application/json" \\
+curl -ksS -H "X-API-Key: ${'${'}KEY}" -H "Content-Type: application/json" \\
   -d "{\\"id\\":\\"opsagentreports\\",\\"data\\":{\\"inventory\\":$DATA}}" \\
-  "\\${API}/api/app/write_bucket_data/v1" >/dev/null
+  "${'${'}API}/api/app/write_bucket_data/v1" >/dev/null
 `;
 
   record('upsert_event_inventory_check', await upsert('/api/app/create_event/v1', '/api/app/update_event/v1', {
