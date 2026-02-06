@@ -69,9 +69,9 @@ export OUT_LOG_AGENT="/tmp/privilege-check.json"
 Latest privilege-execute report (real mutations) from `/tmp/privilege-execute.json`:
 
 - baseUrl: `https://127.0.0.1:5523`
-- summary: **ok 23 / fail 19**
-- failures after `run_job`: `run_job`, `create_snapshot`, `add_servers`, and cleanup deletes failed due to TLS resets (`SSL_ERROR_SYSCALL` / `connection reset` / empty reply).
-- note: server appears to drop TLS connections under load; consider adding delay/retry.
+- summary: **ok 38 / fail 4**
+- failures: `run_job` failed with `SSL_ERROR_SYSCALL`; subsequent job operations (`tag_job`, `abort_job`, `delete_job`) skipped due to missing job id.
+- note: remaining flow (snapshots, add_servers, cleanup deletes) completed successfully after retry/delay adjustments.
 
 ## Contract Evidence Requirements
 
