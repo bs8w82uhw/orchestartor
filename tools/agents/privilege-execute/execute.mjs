@@ -1,4 +1,11 @@
-const baseUrl = process.env.XYOPS_BASE_URL || 'http://localhost:5522';
+const rawBaseUrl = process.env.XYOPS_BASE_URL || 'https://127.0.0.1:5523';
+const baseUrl = rawBaseUrl
+  .replace('https://localhost', 'https://127.0.0.1')
+  .replace('http://localhost', 'http://127.0.0.1');
+
+if (!process.env.XYOPS_BASE_URL) {
+  console.log(`Using default XYOPS_BASE_URL: ${baseUrl}`);
+}
 const apiKey = process.env.XYOPS_API_KEY;
 
 if (!apiKey) {
@@ -8,24 +15,62 @@ if (!apiKey) {
 
 const headers = {
   'Content-Type': 'application/json',
+  'Connection': 'close',
   'X-Session-ID': '',
   'X-API-Key': apiKey
 };
 
+const stepDelayMs = Number.parseInt(process.env.XYOPS_STEP_DELAY_MS || '100', 10);
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const redactKey = (text) => {
+  if (!text) return text;
+  return text.split(apiKey).join('[REDACTED]');
+};
+
 async function post(path, body) {
-  const res = await fetch(baseUrl + path, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(body || {})
-  });
-  const text = await res.text();
-  let data;
-  try {
-    data = JSON.parse(text);
-  } catch (err) {
-    data = { code: 'parse', description: text.slice(0, 200) };
+  const { execFile } = await import('node:child_process');
+  const { promisify } = await import('node:util');
+  const execFileAsync = promisify(execFile);
+  const url = baseUrl + path;
+  const payload = JSON.stringify(body || {});
+
+  const args = [
+    '-sS',
+    '-X', 'POST',
+    '-H', `X-API-Key: ${apiKey}`,
+    '-H', 'Content-Type: application/json',
+    '-d', payload,
+    url
+  ];
+  if (process.env.NODE_TLS_REJECT_UNAUTHORIZED === '0') {
+    args.unshift('-k');
   }
-  return { ok: res.ok, status: res.status, data };
+
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    if (stepDelayMs) await sleep(stepDelayMs);
+    try {
+      const { stdout } = await execFileAsync('curl', args, { maxBuffer: 10 * 1024 * 1024 });
+      let data;
+      try {
+        data = JSON.parse(stdout);
+      } catch (err) {
+        data = { code: 'parse', description: stdout.slice(0, 200) };
+      }
+      return { ok: data.code === 0, status: data.code === 0 ? 200 : 400, data };
+    } catch (err) {
+      const stderr = err && err.stderr ? err.stderr.toString() : '';
+      const message = stderr || (err && err.message ? err.message : 'curl failed');
+      if (attempt < 3) {
+        await sleep(250 * attempt);
+        continue;
+      }
+      return {
+        ok: false,
+        status: 'n/a',
+        data: { code: 'curl', description: redactKey(message) }
+      };
+    }
+  }
 }
 
 const stamp = Date.now().toString(36);

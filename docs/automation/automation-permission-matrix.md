@@ -68,10 +68,10 @@ export OUT_LOG_AGENT="/tmp/privilege-check.json"
 
 Latest privilege-execute report (real mutations) from `/tmp/privilege-execute.json`:
 
-- baseUrl: `http://localhost:5522`
-- summary: **ok 2 / fail 40**
-- common failure: `Missing parameter: title/id/subject/group`
-- note: report indicates run against `5522` (not `https://localhost:5523`).
+- baseUrl: `https://127.0.0.1:5523`
+- summary: **ok 23 / fail 19**
+- failures after `run_job`: `run_job`, `create_snapshot`, `add_servers`, and cleanup deletes failed due to TLS resets (`SSL_ERROR_SYSCALL` / `connection reset` / empty reply).
+- note: server appears to drop TLS connections under load; consider adding delay/retry.
 
 ## Contract Evidence Requirements
 
