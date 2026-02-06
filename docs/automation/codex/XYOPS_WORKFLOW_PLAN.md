@@ -188,6 +188,7 @@ version: 1
 - All changes are documented in `docs/automation/...`.
 - Privilege expansions require review and explicit approval.
 - Use `privilege-check` and `privilege-execute` for evidence collection.
+- Agent roles and prompts are defined in `docs/automation/codex/XYOPS_AGENT_ROLES_WORKFLOW.md`.
 
 ## Operational Checklist
 
