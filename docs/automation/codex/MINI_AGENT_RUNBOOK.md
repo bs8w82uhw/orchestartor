@@ -76,6 +76,7 @@ export NO_PROXY="localhost,127.0.0.1"
 - The shell interface stays the same; only the template changes.
 - Each request is a mini-agent single-shot interaction.
 - If you are in a headless/WSL environment, use `codex login --device-auth`.
+- Use `tools/agents/agent-report/update_inventory.sh` to refresh `XYOPS_INVENTORY_SNAPSHOT.md` from `/tmp/xyops_check_summary.json`.
 
 ## MCP Debug Tools
 
