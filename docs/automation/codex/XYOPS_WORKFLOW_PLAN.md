@@ -138,6 +138,8 @@ version: 1
 - `event-daily-healthcheck`: daily health checks
 - `event-weekly-report`: weekly reporting
 - `event-on-demand-debug`: manual diagnostics
+- `event-incident-triage`: incident triage workflow (tag + ticket)
+- `event-change-approval`: change approval workflow (tag + ticket)
 
 ### Event Template
 
@@ -192,6 +194,8 @@ version: 1
 - Privilege expansions require review and explicit approval.
 - Use `privilege-check` and `privilege-execute` for evidence collection.
 - Agent roles and prompts are defined in `docs/automation/codex/XYOPS_AGENT_ROLES_WORKFLOW.md`.
+- Groups are the primary organizing unit for servers, users, and workflows.
+- Tickets and tags are required for incident/change workflows.
 
 ## Operational Checklist
 
@@ -199,12 +203,15 @@ version: 1
 
 - Create roles and API keys
 - Set up buckets and retention
+- Create baseline groups (ops-app, ops-db, ops-infra)
+- Create baseline tags (incident, change, maintenance, audit)
 - Create base events
 
 ### Day‑1
 
 - Configure notifications
 - Validate `run_job` / `abort_job`
+- Validate ticket creation and tag assignment flows
 
 ### Day‑2
 

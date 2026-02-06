@@ -95,6 +95,7 @@ These agents are bound to the xyOps workflow and execute steps in the following 
 - **Reviewer**: read-only, approves or rejects.
 - **Executor**: only explicit actions; uses runbooks and privilege-checked tools.
 - **Recorder**: documentation updates only.
+ - **All agents**: must reference group, tag, and ticket conventions in outputs.
 
 ## Evidence Requirements
 
@@ -102,6 +103,7 @@ These agents are bound to the xyOps workflow and execute steps in the following 
 - Reports must be referenced in `docs/automation/automation-permission-matrix.md`.
 - Any privilege changes must include new evidence run.
 - Agent outputs are archived in bucket `ops-agent-reports` (agent summaries, diffs, evidence pointers).
+ - Each workflow action must include tags (`incident`, `change`, `maintenance`, `audit`) and ticket linkage when applicable.
 
 ## Orchestration Rule
 

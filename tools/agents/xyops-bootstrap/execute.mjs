@@ -98,6 +98,21 @@ async function main() {
     title: 'Ops',
     hostname_match: '.*'
   }));
+  record('upsert_group_ops_app', await upsert('/api/app/create_group/v1', '/api/app/update_group/v1', {
+    id: 'opsapp',
+    title: 'Ops App',
+    hostname_match: '.*'
+  }));
+  record('upsert_group_ops_db', await upsert('/api/app/create_group/v1', '/api/app/update_group/v1', {
+    id: 'opsdb',
+    title: 'Ops DB',
+    hostname_match: '.*'
+  }));
+  record('upsert_group_ops_infra', await upsert('/api/app/create_group/v1', '/api/app/update_group/v1', {
+    id: 'opsinfra',
+    title: 'Ops Infra',
+    hostname_match: '.*'
+  }));
 
   // buckets
   record('upsert_bucket_raw', await upsert('/api/app/create_bucket/v1', '/api/app/update_bucket/v1', {
@@ -115,6 +130,24 @@ async function main() {
   record('upsert_bucket_agentreports', await upsert('/api/app/create_bucket/v1', '/api/app/update_bucket/v1', {
     id: 'opsagentreports',
     title: 'Ops Agent Reports'
+  }));
+
+  // tags
+  record('upsert_tag_incident', await upsert('/api/app/create_tag/v1', '/api/app/update_tag/v1', {
+    id: 'incident',
+    title: 'Incident'
+  }));
+  record('upsert_tag_change', await upsert('/api/app/create_tag/v1', '/api/app/update_tag/v1', {
+    id: 'change',
+    title: 'Change'
+  }));
+  record('upsert_tag_maintenance', await upsert('/api/app/create_tag/v1', '/api/app/update_tag/v1', {
+    id: 'maintenance',
+    title: 'Maintenance'
+  }));
+  record('upsert_tag_audit', await upsert('/api/app/create_tag/v1', '/api/app/update_tag/v1', {
+    id: 'audit',
+    title: 'Audit'
   }));
 
   // notification endpoints
