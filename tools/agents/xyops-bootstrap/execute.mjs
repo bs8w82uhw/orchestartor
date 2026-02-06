@@ -131,6 +131,20 @@ async function main() {
     id: 'opsagentreports',
     title: 'Ops Agent Reports'
   }));
+  record('upsert_bucket_agentprompts', await upsert('/api/app/create_bucket/v1', '/api/app/update_bucket/v1', {
+    id: 'opsagentprompts',
+    title: 'Ops Agent Prompts'
+  }));
+
+  record('write_bucket_agentprompts', await post('/api/app/write_bucket_data/v1', {
+    id: 'opsagentprompts',
+    data: {
+      platform_architect: 'You are the xyOps Platform Architect. Produce plan + templates only.',
+      ops_executor: 'You are the xyOps Ops Executor. Execute approved actions only and write report.',
+      policy_reviewer: 'You are the xyOps Policy Reviewer. Approve or reject with rationale.',
+      evidence_recorder: 'You are the xyOps Evidence Recorder. Update docs with evidence links.'
+    }
+  }));
 
   // tags
   record('upsert_tag_incident', await upsert('/api/app/create_tag/v1', '/api/app/update_tag/v1', {
@@ -308,6 +322,141 @@ done
     plugin: 'shellplug',
     params: {
       script: orchestratorScript
+    },
+    triggers: [
+      { type: 'schedule', enabled: true, minutes: [0,5,10,15,20,25,30,35,40,45,50,55] },
+      { type: 'manual', enabled: true }
+    ]
+  }));
+
+  const agentBaseScript = `#!/bin/sh
+set -e
+
+API="${'${'}XYOPS_BASE_URL:-https://127.0.0.1:5523}"
+KEY="${'${'}XYOPS_API_KEY:-}"
+ROLE="${'${'}ROLE:-unknown}"
+QUESTION="${'${'}QUESTION:-}"
+
+if [ -z "$KEY" ]; then
+  echo "XYOPS_API_KEY is required"
+  exit 1
+fi
+
+PROMPTS=$(curl -ksS -H "X-API-Key: ${'${'}KEY}" -H "Content-Type: application/json" -d '{"id":"opsagentprompts"}' "${'${'}API}/api/app/get_bucket/v1")
+PROMPT=$(printf "%s" "$PROMPTS" | node -e 'const fs=require("fs");const d=JSON.parse(fs.readFileSync(0,"utf8")); const key=process.env.ROLE; const p=(d.data||{})[key]||\"\"; console.log(p);')
+
+echo "ROLE: $ROLE"
+echo "PROMPT: $PROMPT"
+echo "QUESTION: $QUESTION"
+
+# Placeholder for actual agent execution (codex/cli or AI plugin)
+# Result should be uploaded via opsagentreports bucket by external runner.
+`;
+
+  record('upsert_event_agent_architect', await upsert('/api/app/create_event/v1', '/api/app/update_event/v1', {
+    id: 'eventagentarchitect',
+    title: 'Agent: Platform Architect',
+    enabled: 1,
+    category: 'ops',
+    targets: ['ops'],
+    algo: 'all',
+    plugin: 'shellplug',
+    params: {
+      script: agentBaseScript
+    },
+    triggers: [
+      { type: 'manual', enabled: true }
+    ]
+  }));
+
+  record('upsert_event_agent_executor', await upsert('/api/app/create_event/v1', '/api/app/update_event/v1', {
+    id: 'eventagentexecutor',
+    title: 'Agent: Ops Executor',
+    enabled: 1,
+    category: 'ops',
+    targets: ['ops'],
+    algo: 'all',
+    plugin: 'shellplug',
+    params: {
+      script: agentBaseScript
+    },
+    triggers: [
+      { type: 'manual', enabled: true }
+    ]
+  }));
+
+  record('upsert_event_agent_reviewer', await upsert('/api/app/create_event/v1', '/api/app/update_event/v1', {
+    id: 'eventagentreviewer',
+    title: 'Agent: Policy Reviewer',
+    enabled: 1,
+    category: 'ops',
+    targets: ['ops'],
+    algo: 'all',
+    plugin: 'shellplug',
+    params: {
+      script: agentBaseScript
+    },
+    triggers: [
+      { type: 'manual', enabled: true }
+    ]
+  }));
+
+  record('upsert_event_agent_recorder', await upsert('/api/app/create_event/v1', '/api/app/update_event/v1', {
+    id: 'eventagentrecorder',
+    title: 'Agent: Evidence Recorder',
+    enabled: 1,
+    category: 'ops',
+    targets: ['ops'],
+    algo: 'all',
+    plugin: 'shellplug',
+    params: {
+      script: agentBaseScript
+    },
+    triggers: [
+      { type: 'manual', enabled: true }
+    ]
+  }));
+
+  const listenerScript = `#!/bin/sh
+set -e
+
+API="${'${'}XYOPS_BASE_URL:-https://127.0.0.1:5523}"
+KEY="${'${'}XYOPS_API_KEY:-}"
+
+if [ -z "$KEY" ]; then
+  echo "XYOPS_API_KEY is required"
+  exit 1
+fi
+
+# Pull open tickets tagged incident or change
+RESP=$(curl -ksS -H "X-API-Key: ${'${'}KEY}" -H "Content-Type: application/json" \\
+  -d '{"query":"status:open (tags:incident OR tags:change)","limit":5,"compact":1}' \\
+  "${'${'}API}/api/app/search_tickets/v1")
+
+IDS=$(printf "%s" "$RESP" | node -e 'const fs=require(\"fs\");const d=JSON.parse(fs.readFileSync(0,\"utf8\"));console.log((d.rows||[]).map(r=>r.id).join(\" \"));')
+
+for id in $IDS; do
+  curl -ksS -H "X-API-Key: ${'${'}KEY}" -H "Content-Type: application/json" \\
+    -d "{\\"id\\":\\"$id\\",\\"change\\":{\\"type\\":\\"comment\\",\\"body\\":\\"Agent listener received ticket.\\"}}" \\
+    "${'${'}API}/api/app/add_ticket_change/v1" >/dev/null || true
+
+  # Dispatch to executor (placeholder)
+  curl -ksS -H "X-API-Key: ${'${'}KEY}" -H "Content-Type: application/json" \\
+    -d "{\\"id\\":\\"eventagentexecutor\\",\\"test\\":true,\\"input\\":{\\"data\\":{\\"ticket_id\\":\\"$id\\"}}}" \\
+    "${'${'}API}/api/app/run_event/v1" >/dev/null || true
+done
+`;
+
+  record('upsert_event_agent_listener', await upsert('/api/app/create_event/v1', '/api/app/update_event/v1', {
+    id: 'eventagentlistener',
+    title: 'Agent: Listener',
+    enabled: 1,
+    category: 'ops',
+    targets: ['ops'],
+    algo: 'all',
+    plugin: 'shellplug',
+    params: {
+      script: listenerScript
     },
     triggers: [
       { type: 'schedule', enabled: true, minutes: [0,5,10,15,20,25,30,35,40,45,50,55] },

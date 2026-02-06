@@ -142,6 +142,11 @@ version: 1
 - `eventchangeapproval`: change approval workflow (tag + ticket)
 - `eventticketscheduler`: ticket orchestrator scheduler (polls tickets, triggers triage)
 - `eventinventorycheck`: scheduled inventory verification (writes snapshot to opsagentreports)
+- `eventagentarchitect`: agent role event (platform architect)
+- `eventagentexecutor`: agent role event (ops executor)
+- `eventagentreviewer`: agent role event (policy reviewer)
+- `eventagentrecorder`: agent role event (evidence recorder)
+- `eventagentlistener`: listens for incident/change tickets and dispatches agents
 
 ### Event Template
 
