@@ -109,12 +109,14 @@ version: 1
 - `ops-raw`: inbound artifacts (logs, dumps)
 - `ops-processed`: processed outputs and reports
 - `ops-temp`: short‑lived files
+- `ops-agent-reports`: agent outputs (summaries, deltas, evidence pointers)
 
 ### Retention
 
 - `ops-raw`: 30 days
 - `ops-processed`: 90 days
 - `ops-temp`: 7 days
+- `ops-agent-reports`: 90 days (audit trail)
 
 ### Bucket Template
 
@@ -123,7 +125,8 @@ version: 1
   "buckets": [
     {"id": "ops-raw", "title": "Ops Raw", "retention_days": 30},
     {"id": "ops-processed", "title": "Ops Processed", "retention_days": 90},
-    {"id": "ops-temp", "title": "Ops Temp", "retention_days": 7}
+    {"id": "ops-temp", "title": "Ops Temp", "retention_days": 7},
+    {"id": "ops-agent-reports", "title": "Ops Agent Reports", "retention_days": 90}
   ]
 }
 ```

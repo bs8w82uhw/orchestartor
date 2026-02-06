@@ -101,3 +101,13 @@ These agents are bound to the xyOps workflow and execute steps in the following 
 - All execution steps must store logs in `OUT_LOG_AGENT`.
 - Reports must be referenced in `docs/automation/automation-permission-matrix.md`.
 - Any privilege changes must include new evidence run.
+- Agent outputs are archived in bucket `ops-agent-reports` (agent summaries, diffs, evidence pointers).
+
+## Orchestration Rule
+
+- The orchestrator triggers mini agents using approved templates and prompts.
+- Each mini agent must emit:
+  - Plan summary
+  - Actions executed
+  - Evidence file paths or IDs
+  - Follow-up items

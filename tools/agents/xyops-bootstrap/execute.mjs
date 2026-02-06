@@ -112,6 +112,10 @@ async function main() {
     id: 'opstemp',
     title: 'Ops Temp'
   }));
+  record('upsert_bucket_agentreports', await upsert('/api/app/create_bucket/v1', '/api/app/update_bucket/v1', {
+    id: 'opsagentreports',
+    title: 'Ops Agent Reports'
+  }));
 
   // notification endpoints
   record('upsert_web_hook_ops', await upsert('/api/app/create_web_hook/v1', '/api/app/update_web_hook/v1', {
