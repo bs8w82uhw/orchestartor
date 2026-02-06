@@ -49,6 +49,15 @@ Primary enforcement methods:
 - `runJobAction` policy gate (`lib/action.js`)
 - `continueWFController` policy gate (`lib/workflow.js`)
 
+## Privilege Validation (Runtime)
+
+Latest automated privilege check (HTTPS `https://localhost:5523`):
+
+- Result: **pass** for all listed privileges.
+- Exception: `comment_jobs` was **skipped** (no matching privilege/endpoint in docs/code).
+
+Summary source: `tools/agents/privilege-check/run.sh --insecure` (output JSON).
+
 ## Contract Evidence Requirements
 
 Each matrix-relevant change must include:
