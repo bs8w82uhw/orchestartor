@@ -207,7 +207,10 @@ async function main() {
     targets: [ids.group],
     algo: 'all',
     plugin: eventPluginId,
-    params: eventPluginParams
+    params: eventPluginParams,
+    triggers: [
+      { type: 'manual', enabled: true }
+    ]
   });
   record('create_event', eventCreate);
   record('edit_event', await post('/api/app/update_event/v1', { id: ids.event, title: 'UT Event Updated' }));

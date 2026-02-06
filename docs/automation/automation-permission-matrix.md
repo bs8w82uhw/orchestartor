@@ -69,9 +69,9 @@ export OUT_LOG_AGENT="/tmp/privilege-check.json"
 Latest privilege-execute report (real mutations) from `/tmp/privilege-execute.json`:
 
 - baseUrl: `https://127.0.0.1:5523`
-- summary: **ok 38 / fail 4**
-- failures: `run_job` failed with `SSL_ERROR_SYSCALL`; subsequent job operations (`tag_job`, `abort_job`, `delete_job`) skipped due to missing job id.
-- note: remaining flow (snapshots, add_servers, cleanup deletes) completed successfully after retry/delay adjustments.
+- summary: **ok 41 / fail 1**
+- failures: `abort_job` returned `Job not found or is no longer active` (job completed before abort).
+- note: full flow succeeded (run_job, tag_job, delete_job, snapshots, add_servers, cleanup deletes).
 
 ## Contract Evidence Requirements
 
