@@ -238,6 +238,83 @@ async function main() {
     ]
   }));
 
+  const orchestratorScript = `#!/bin/sh
+set -e
+
+API="${XYOPS_BASE_URL:-https://127.0.0.1:5523}"
+KEY="${XYOPS_API_KEY:-}"
+
+if [ -z "$KEY" ]; then
+  echo "XYOPS_API_KEY is required"
+  exit 1
+fi
+
+RESP=$(curl -ksS -H "X-API-Key: $KEY" -H "Content-Type: application/json" \\
+  -d '{"query":"status:open tags:incident","limit":5,"compact":1}' \\
+  "$API/api/app/search_tickets/v1")
+
+IDS=$(printf "%s" "$RESP" | node -e 'const fs=require("fs");const d=JSON.parse(fs.readFileSync(0,"utf8"));console.log((d.rows||[]).map(r=>r.id).join(" "));')
+
+for id in $IDS; do
+  curl -ksS -H "X-API-Key: $KEY" -H "Content-Type: application/json" \\
+    -d "{\\"id\\":\\"$id\\",\\"change\\":{\\"type\\":\\"comment\\",\\"body\\":\\"Orchestrator picked up this ticket.\\"}}" \\
+    "$API/api/app/add_ticket_change/v1" >/dev/null || true
+
+  curl -ksS -H "X-API-Key: $KEY" -H "Content-Type: application/json" \\
+    -d "{\\"id\\":\\"eventincidenttriage\\",\\"test\\":true,\\"input\\":{\\"data\\":{\\"ticket_id\\":\\"$id\\"}}}" \\
+    "$API/api/app/run_event/v1" >/dev/null || true
+done
+`;
+
+  record('upsert_event_incident_triage', await upsert('/api/app/create_event/v1', '/api/app/update_event/v1', {
+    id: 'eventincidenttriage',
+    title: 'Incident Triage',
+    enabled: 1,
+    category: 'ops',
+    targets: ['ops'],
+    algo: 'all',
+    plugin: 'shellplug',
+    params: {
+      script: '#!/bin/sh\\n\\n# TODO: implement triage steps; input ticket_id is in $XYOPS_INPUT_DATA (if provided).\\n\\necho \"Incident triage placeholder\"'
+    },
+    triggers: [
+      { type: 'manual', enabled: true }
+    ]
+  }));
+
+  record('upsert_event_change_approval', await upsert('/api/app/create_event/v1', '/api/app/update_event/v1', {
+    id: 'eventchangeapproval',
+    title: 'Change Approval',
+    enabled: 1,
+    category: 'ops',
+    targets: ['ops'],
+    algo: 'all',
+    plugin: 'shellplug',
+    params: {
+      script: '#!/bin/sh\\n\\n# TODO: implement change approval steps.\\n\\necho \"Change approval placeholder\"'
+    },
+    triggers: [
+      { type: 'manual', enabled: true }
+    ]
+  }));
+
+  record('upsert_event_ticket_scheduler', await upsert('/api/app/create_event/v1', '/api/app/update_event/v1', {
+    id: 'eventticketscheduler',
+    title: 'Ticket Orchestrator Scheduler',
+    enabled: 1,
+    category: 'ops',
+    targets: ['ops'],
+    algo: 'all',
+    plugin: 'shellplug',
+    params: {
+      script: orchestratorScript
+    },
+    triggers: [
+      { type: 'schedule', enabled: true, minutes: [0,5,10,15,20,25,30,35,40,45,50,55] },
+      { type: 'manual', enabled: true }
+    ]
+  }));
+
   // summary
   report.finishedAt = new Date().toISOString();
   report.summary = {

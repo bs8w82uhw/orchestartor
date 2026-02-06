@@ -138,8 +138,9 @@ version: 1
 - `event-daily-healthcheck`: daily health checks
 - `event-weekly-report`: weekly reporting
 - `event-on-demand-debug`: manual diagnostics
-- `event-incident-triage`: incident triage workflow (tag + ticket)
-- `event-change-approval`: change approval workflow (tag + ticket)
+- `eventincidenttriage`: incident triage workflow (tag + ticket)
+- `eventchangeapproval`: change approval workflow (tag + ticket)
+- `eventticketscheduler`: ticket orchestrator scheduler (polls tickets, triggers triage)
 
 ### Event Template
 

@@ -66,6 +66,7 @@ version: 1
 - Create `event-incident-triage`
 - Create `event-change-approval`
 - Apply tags `incident`, `change`
+ - Ensure `eventticketscheduler` runs every 5 minutes
 
 **Outputs**
 - Execution log (`OUT_LOG_AGENT`)
