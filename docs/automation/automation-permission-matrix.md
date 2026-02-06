@@ -76,8 +76,8 @@ Latest privilege-execute report (real mutations) from `/tmp/privilege-execute.js
 Latest xyops-bootstrap run (test env) from `/tmp/xyops-bootstrap.json`:
 
 - baseUrl: `https://127.0.0.1:5523`
-- summary: **ok 12 / fail 0**
-- scope: roles, buckets, channels, webhook, daily healthcheck event
+- summary: **ok 13 / fail 0**
+- scope: roles, buckets (including ops-agent-reports), channels, webhook, daily healthcheck event
 
 ## Contract Evidence Requirements
 
