@@ -58,6 +58,21 @@ Latest automated privilege check (HTTPS `https://localhost:5523`):
 
 Summary source: `tools/agents/privilege-check/run.sh --insecure` (output JSON).
 
+Recommended execution pattern (stores the JSON report for audit):
+
+```bash
+export XYOPS_API_KEY="...api key..."
+export OUT_LOG_AGENT="/tmp/privilege-check.json"
+./tools/agents/privilege-check/run.sh --insecure
+```
+
+Latest privilege-execute report (real mutations) from `/tmp/privilege-execute.json`:
+
+- baseUrl: `http://localhost:5522`
+- summary: **ok 2 / fail 40**
+- common failure: `Missing parameter: title/id/subject/group`
+- note: report indicates run against `5522` (not `https://localhost:5523`).
+
 ## Contract Evidence Requirements
 
 Each matrix-relevant change must include:
