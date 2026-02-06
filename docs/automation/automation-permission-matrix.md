@@ -69,9 +69,9 @@ export OUT_LOG_AGENT="/tmp/privilege-check.json"
 Latest privilege-execute report (real mutations) from `/tmp/privilege-execute.json`:
 
 - baseUrl: `https://127.0.0.1:5523`
-- summary: **ok 41 / fail 1**
-- failures: `abort_job` returned `Job not found or is no longer active` (job completed before abort).
-- note: full flow succeeded (run_job, tag_job, delete_job, snapshots, add_servers, cleanup deletes).
+- summary: **ok 41 / fail 2**
+- failures: `tag_job` and `delete_job` failed because the job was still active.
+- note: all other steps completed successfully (including `run_job` and `abort_job`).
 
 ## Contract Evidence Requirements
 

@@ -215,17 +215,45 @@ async function main() {
   record('create_event', eventCreate);
   record('edit_event', await post('/api/app/update_event/v1', { id: ids.event, title: 'UT Event Updated' }));
 
-  const run = await post('/api/app/run_event/v1', { id: ids.event, test: true });
+  const getJob = async (id) => post('/api/app/get_job/v1', { id });
+  const waitForState = async (id, states, timeoutMs = 8000) => {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      const res = await getJob(id);
+      if (res.data && res.data.code === 0 && res.data.job && states.includes(res.data.job.state)) {
+        return res;
+      }
+      await sleep(300);
+    }
+    return null;
+  };
+
+  // Run a long job for abort testing
+  const runAbort = await post('/api/app/run_event/v1', { id: ids.event, test: true, params: { duration: 60 } });
+  record('run_job_abort', runAbort);
+  const abortJobId = runAbort.data && runAbort.data.id ? runAbort.data.id : null;
+  if (abortJobId) {
+    await waitForState(abortJobId, ['active', 'finishing', 'complete']);
+    record('abort_job', await post('/api/app/abort_job/v1', { id: abortJobId }));
+  } else {
+    record('abort_job', { status: 'n/a', data: { code: 'no_job' } }, { note: 'No abort job id returned' });
+  }
+
+  // Run a short job for tag/delete testing
+  const run = await post('/api/app/run_event/v1', { id: ids.event, test: true, params: { duration: 1 } });
   record('run_job', run);
   const jobId = run.data && run.data.id ? run.data.id : null;
-
   if (jobId) {
-    record('tag_job', await post('/api/app/manage_job_tags/v1', { id: jobId, tags: ['ut'] }));
-    record('abort_job', await post('/api/app/abort_job/v1', { id: jobId }));
-    record('delete_job', await post('/api/app/delete_job/v1', { id: jobId }));
+    const completed = await waitForState(jobId, ['complete'], 20000);
+    if (!completed) {
+      record('tag_job', { status: 'n/a', data: { code: 'job' } }, { note: 'Job did not complete in time for tag/delete' });
+      record('delete_job', { status: 'n/a', data: { code: 'job' } }, { note: 'Job did not complete in time for tag/delete' });
+    } else {
+      record('tag_job', await post('/api/app/manage_job_tags/v1', { id: jobId, tags: ['ut'] }));
+      record('delete_job', await post('/api/app/delete_job/v1', { id: jobId }));
+    }
   } else {
     record('tag_job', { status: 'n/a', data: { code: 'no_job' } }, { note: 'No job id returned' });
-    record('abort_job', { status: 'n/a', data: { code: 'no_job' } }, { note: 'No job id returned' });
     record('delete_job', { status: 'n/a', data: { code: 'no_job' } }, { note: 'No job id returned' });
   }
 
