@@ -141,6 +141,7 @@ version: 1
 - `eventincidenttriage`: incident triage workflow (tag + ticket)
 - `eventchangeapproval`: change approval workflow (tag + ticket)
 - `eventticketscheduler`: ticket orchestrator scheduler (polls tickets, triggers triage)
+- `eventinventorycheck`: scheduled inventory verification (writes snapshot to opsagentreports)
 
 ### Event Template
 
