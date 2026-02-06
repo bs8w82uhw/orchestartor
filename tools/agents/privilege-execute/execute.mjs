@@ -229,12 +229,22 @@ async function main() {
   };
 
   // Run a long job for abort testing
-  const runAbort = await post('/api/app/run_event/v1', { id: ids.event, test: true, params: { duration: 60 } });
+  const runAbort = await post('/api/app/run_event/v1', { id: ids.event, test: true, params: { duration: 300 } });
   record('run_job_abort', runAbort);
   const abortJobId = runAbort.data && runAbort.data.id ? runAbort.data.id : null;
   if (abortJobId) {
-    await waitForState(abortJobId, ['active', 'finishing', 'complete']);
-    record('abort_job', await post('/api/app/abort_job/v1', { id: abortJobId }));
+    const active = await waitForState(abortJobId, ['active'], 8000);
+    if (active) {
+      // Try to abort quickly while the job is active.
+      record('abort_job', await post('/api/app/abort_job/v1', { id: abortJobId }));
+    } else {
+      const finished = await waitForState(abortJobId, ['complete', 'finishing'], 2000);
+      if (finished) {
+        record('abort_job', { status: 'n/a', data: { code: 'job' } }, { note: 'Job completed before abort could be applied' });
+      } else {
+        record('abort_job', { status: 'n/a', data: { code: 'job' } }, { note: 'Job did not reach active state in time' });
+      }
+    }
   } else {
     record('abort_job', { status: 'n/a', data: { code: 'no_job' } }, { note: 'No abort job id returned' });
   }
