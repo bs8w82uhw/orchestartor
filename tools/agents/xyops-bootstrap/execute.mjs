@@ -241,28 +241,28 @@ async function main() {
   const orchestratorScript = `#!/bin/sh
 set -e
 
-API="${XYOPS_BASE_URL:-https://127.0.0.1:5523}"
-KEY="${XYOPS_API_KEY:-}"
+API="\${XYOPS_BASE_URL:-https://127.0.0.1:5523}"
+KEY="\${XYOPS_API_KEY:-}"
 
 if [ -z "$KEY" ]; then
   echo "XYOPS_API_KEY is required"
   exit 1
 fi
 
-RESP=$(curl -ksS -H "X-API-Key: $KEY" -H "Content-Type: application/json" \\
+RESP=$(curl -ksS -H "X-API-Key: \${KEY}" -H "Content-Type: application/json" \\
   -d '{"query":"status:open tags:incident","limit":5,"compact":1}' \\
-  "$API/api/app/search_tickets/v1")
+  "\${API}/api/app/search_tickets/v1")
 
 IDS=$(printf "%s" "$RESP" | node -e 'const fs=require("fs");const d=JSON.parse(fs.readFileSync(0,"utf8"));console.log((d.rows||[]).map(r=>r.id).join(" "));')
 
 for id in $IDS; do
-  curl -ksS -H "X-API-Key: $KEY" -H "Content-Type: application/json" \\
+  curl -ksS -H "X-API-Key: \${KEY}" -H "Content-Type: application/json" \\
     -d "{\\"id\\":\\"$id\\",\\"change\\":{\\"type\\":\\"comment\\",\\"body\\":\\"Orchestrator picked up this ticket.\\"}}" \\
-    "$API/api/app/add_ticket_change/v1" >/dev/null || true
+    "\${API}/api/app/add_ticket_change/v1" >/dev/null || true
 
-  curl -ksS -H "X-API-Key: $KEY" -H "Content-Type: application/json" \\
+  curl -ksS -H "X-API-Key: \${KEY}" -H "Content-Type: application/json" \\
     -d "{\\"id\\":\\"eventincidenttriage\\",\\"test\\":true,\\"input\\":{\\"data\\":{\\"ticket_id\\":\\"$id\\"}}}" \\
-    "$API/api/app/run_event/v1" >/dev/null || true
+    "\${API}/api/app/run_event/v1" >/dev/null || true
 done
 `;
 
