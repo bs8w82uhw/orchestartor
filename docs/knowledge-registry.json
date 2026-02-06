@@ -903,6 +903,15 @@
          "agent_ready": "true",
          "last_reviewed_at": "2026-02-06",
          "next_review_at": "2026-05-06"
+      },
+      {
+         "path": "docs/automation/codex/XYOPS_INVENTORY_SNAPSHOT.md",
+         "owner": "docs-core",
+         "status": "active",
+         "risk_level": "low",
+         "agent_ready": "true",
+         "last_reviewed_at": "2026-02-06",
+         "next_review_at": "2026-05-06"
       }
    ]
 }
