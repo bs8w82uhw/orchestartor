@@ -73,6 +73,12 @@ Latest privilege-execute report (real mutations) from `/tmp/privilege-execute.js
 - failure: `abort_job` can race if the job completes too quickly; treat as acceptable in this test.
 - note: all other steps completed successfully.
 
+Latest xyops-bootstrap run (test env) from `/tmp/xyops-bootstrap.json`:
+
+- baseUrl: `https://127.0.0.1:5523`
+- summary: **ok 12 / fail 0**
+- scope: roles, buckets, channels, webhook, daily healthcheck event
+
 ## Contract Evidence Requirements
 
 Each matrix-relevant change must include:
