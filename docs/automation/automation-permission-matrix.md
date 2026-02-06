@@ -79,6 +79,16 @@ Latest xyops-bootstrap run (test env) from `/tmp/xyops-bootstrap.json`:
 - summary: **ok 20 / fail 0**
 - scope: roles, buckets (including ops-agent-reports), groups, tags, channels, webhook, daily healthcheck event
 
+Verification snapshot (inventory) from `/tmp/xyops_check_summary.json`:
+
+- groups: `ops`, `opsapp`, `opsdb`, `opsinfra` (+ `main`)
+- buckets: `opsraw`, `opsprocessed`, `opstemp`, `opsagentreports`
+- channels: `opsemail`, `opswebhookchan` (+ `sev1`)
+- webhooks: includes `opswebhook`
+- events: includes `eventdailyhealthcheck`
+- tags: `incident`, `change`, `maintenance`, `audit`
+- roles: `platform_admin`, `ops_executor`, `observer`
+
 ## Contract Evidence Requirements
 
 Each matrix-relevant change must include:
