@@ -17,6 +17,9 @@ A step-by-step conveyor flow for running the mini agent via Codex CLI (MFA login
    - Run the mini agent script (Codex CLI).
 4. **Output**
    - Read the answer from stdout.
+5. **Report**
+   - Create a JSON report using `MINI_AGENT_REPORT_TEMPLATE.md`.
+   - Upload the report to the `opsagentreports` bucket.
 5. **Reset**
    - Prompt is single-shot: do not reuse it after response.
 6. **Primary Assignment**
@@ -32,6 +35,23 @@ A step-by-step conveyor flow for running the mini agent via Codex CLI (MFA login
 codex login
 
 ./tools/agents/mini-agent/run.sh docs/automation/codex/templates/MINI_AGENT_PROMPT_TEMPLATE.md "Как проверить статус?"
+
+# create report file (example)
+cat <<'JSON' > /tmp/agent-report.json
+{
+  "timestamp": "2026-02-06T10:00:00Z",
+  "agent": "ops-executor",
+  "workflow": "mini-agent",
+  "scope": "test",
+  "summary": "ok",
+  "result": "success",
+  "evidence": ["/tmp/privilege-execute.json"],
+  "notes": "baseline run"
+}
+JSON
+
+export OUT_LOG_AGENT="/tmp/agent-report.json"
+./tools/agents/agent-report/upload_report.sh --insecure
 ```
 
 ## Container Run (with proxy + login check)

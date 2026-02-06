@@ -876,6 +876,24 @@
          "agent_ready": "true",
          "last_reviewed_at": "2026-02-06",
          "next_review_at": "2026-05-06"
+      },
+      {
+         "path": "docs/automation/codex/templates/MINI_AGENT_REPORT_TEMPLATE.md",
+         "owner": "docs-core",
+         "status": "active",
+         "risk_level": "low",
+         "agent_ready": "true",
+         "last_reviewed_at": "2026-02-06",
+         "next_review_at": "2026-05-06"
+      },
+      {
+         "path": "docs/automation/codex/templates/MINI_AGENT_REPORT_CARD.md",
+         "owner": "docs-core",
+         "status": "active",
+         "risk_level": "low",
+         "agent_ready": "true",
+         "last_reviewed_at": "2026-02-06",
+         "next_review_at": "2026-05-06"
       }
    ]
 }

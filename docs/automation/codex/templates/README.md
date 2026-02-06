@@ -16,6 +16,8 @@ Every template must have a corresponding Service Card documenting purpose, const
   - Card: `MINI_AGENT_DOCS_REFACTOR_CARD.md`
 - `MINI_AGENT_XYOPS_ARCHITECT_TEMPLATE.md`
   - Card: `MINI_AGENT_XYOPS_ARCHITECT_CARD.md`
+- `MINI_AGENT_REPORT_TEMPLATE.md`
+  - Card: `MINI_AGENT_REPORT_CARD.md`
 - `TEMPLATE_CARD_TEMPLATE.md`
   - Card: N/A (meta template)
 
