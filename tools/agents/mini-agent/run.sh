@@ -36,8 +36,8 @@ echo "[mini-agent] - Template exists: ${TEMPLATE}" >&2
 echo "[mini-agent] - Question provided: ${QUESTION}" >&2
 echo "[mini-agent] - Codex CLI available" >&2
 
-# Replace {{VAR}} placeholders using environment variables (QUESTION set from input).
-PROMPT=$(QUESTION="${QUESTION}" perl -0777 -pe 's/\\{\\{([A-Za-z0-9_]+)\\}\\}/$ENV{$1} || $&/ge' "${TEMPLATE}")
+# Replace {{VAR}} placeholders using environment variables (QUESTION/question set from input).
+PROMPT=$(QUESTION="${QUESTION}" question="${QUESTION}" perl -0777 -pe 's/\{\{([A-Za-z0-9_]+)\}\}/$ENV{$1} || $&/ge' "${TEMPLATE}")
 
 if [ "${DRY_RUN:-0}" = "1" ]; then
   echo "[mini-agent] DRY_RUN=1, not executing. Resolved prompt:" >&2
